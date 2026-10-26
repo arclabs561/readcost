@@ -57,6 +57,27 @@ def parse_line_ranges(spec: str | None) -> list[tuple[int, int]] | None:
     return out
 
 
+TERM_FEATURES = ("stacked-nouns", "hyphen-compound")
+
+
+def _first_use_only(findings: list[Finding]) -> list[Finding]:
+    """Keep a compound's first use; later uses are a term the reader has met.
+
+    Technical prose repeats compressed terms on purpose (Biber and Gray 2010);
+    the cost falls on the first, unexplained use.
+    """
+    seen: set[tuple[str, str]] = set()
+    out = []
+    for f in findings:
+        if f.feature in TERM_FEATURES:
+            key = (f.feature, " ".join(f.excerpt.lower().replace("-", " ").split()))
+            if key in seen:
+                continue
+            seen.add(key)
+        out.append(f)
+    return out
+
+
 class Analyzer:
     def __init__(self, config: Config | None = None, profile: Profile | None = None):
         self.cfg = config or load_config()
@@ -116,6 +137,7 @@ class Analyzer:
                         sentence=sent.text.strip(), path=path, line=tok_line, label=seg.label,
                         suggestion=FEATURES[feature].fix,
                     ))
+        result.findings = _first_use_only(result.findings)
         zs = ctx.stats.get("dep_z", [])
         result.mean_dep_z = statistics.mean(zs) if zs else 0.0
         # The verdict uses every finding; min_severity only trims what is shown.

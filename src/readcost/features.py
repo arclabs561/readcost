@@ -188,6 +188,9 @@ def stacked_nouns(sent, ctx: Context, taken: set[int],
         stack = _noun_stack(t)
         if len(stack) < minimum:
             continue
+        if any(x.lower_ in ("et", "al", "al.") for x in stack) or \
+                any(c.lower_ in ("et", "al", "al.") for x in stack for c in x.children):
+            continue  # a citation such as "Chen et al"
         capitals = sum(1 for x in stack if x.text[:1].isupper() and x.i != sent.start)
         if capitals >= 2:
             continue  # a proper name such as "Apple M3 Max"
@@ -303,7 +306,11 @@ def inanimate_subjects(sent, ctx: Context) -> list[tuple[str, str, list]]:
             # "the engineer that owns": the relative pronoun stands for its antecedent.
             ante = t.head
             animate = lexicon.noun_animacy(ante.lemma_.lower()) if ante.pos_ == "NOUN" else None
-        elif s.text == CODE or (s.pos_ == "PRON" and s.lower_ in lexicon.INANIMATE_PRONOUNS):
+        elif s.text == CODE or any(c.text == CODE for c in s.children):
+            # An identifier as subject ("`parse()` returns") is the normal
+            # register of technical docs, where readers anchor on names.
+            animate = None
+        elif s.pos_ == "PRON" and s.lower_ in lexicon.INANIMATE_PRONOUNS:
             animate = False
         elif s.pos_ == "NOUN":
             animate = lexicon.noun_animacy(s.lemma_.lower())

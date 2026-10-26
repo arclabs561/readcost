@@ -211,3 +211,25 @@ def test_directory_check_skips_gitignored_files(tmp_path):
     (tmp_path / "README.md").write_text(PLAIN)
     out = run_cli(["check", "--fail-on", "never", "."], cwd=tmp_path).stdout
     assert "README.md" in out and "build/notes.md" not in out
+
+
+# --------------------------------------------------------------- terminology
+
+def test_a_repeated_compound_is_reported_once_per_document():
+    text = ("The region index sidecar keeps one record per segment.\n\n"
+            "Each query reads the region index sidecar before it scans.\n\n"
+            "A missing region index sidecar is rebuilt on open.\n")
+    stacked = [f for f in _findings(text, "stacked-nouns") if "region index sidecar" in f.excerpt]
+    assert len(stacked) == 1 and stacked[0].line == 1
+
+
+def test_identifier_subjects_are_not_inanimate_subject_findings():
+    assert not _findings("The `parse()` function decides which branch to take next.\n",
+                         "inanimate-subject")
+    assert not _findings("`parse()` decides which branch the reader takes next.\n",
+                         "inanimate-subject")
+
+
+def test_citations_are_not_noun_stacks():
+    assert not _findings("The rewrite keeps rationale clauses, as Chen et al recommend for comments.\n",
+                         "stacked-nouns")
