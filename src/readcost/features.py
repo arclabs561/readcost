@@ -13,9 +13,14 @@ import math
 import re
 import statistics
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
 
 from . import lexicon
 from .extract import CODE
+
+if TYPE_CHECKING:
+    from .config import Config
+    from .profile import Profile
 
 
 @dataclass(frozen=True)
@@ -124,8 +129,8 @@ class Finding:
 
 @dataclass
 class Context:
-    cfg: object
-    profile: object
+    cfg: Config
+    profile: Profile
     allow: set[str]
     enabled: set[str]
     stats: dict = field(default_factory=dict)
@@ -140,17 +145,6 @@ def _allowed(text: str, allow: set[str]) -> bool:
     return _norm(text) in {_norm(a) for a in allow}
 
 
-def _allowed_units(text: str, allow: set[str]) -> int:
-    """Words saved by treating allowed terms inside ``text`` as single units."""
-    t = f" {_norm(text)} "
-    saved = 0
-    for a in sorted({_norm(x) for x in allow}, key=len, reverse=True):
-        if f" {a} " in t:
-            saved += len(a.split()) - 1
-            t = t.replace(f" {a} ", " _ ")
-    return saved
-
-
 def _excerpt(doc, tokens) -> str:
     lo = min(t.i for t in tokens)
     hi = max(t.i for t in tokens)
@@ -159,15 +153,33 @@ def _excerpt(doc, tokens) -> str:
 
 # --------------------------------------------------------------- detectors
 
+def _allowed_spans(sent, allow: set[str]) -> list[set[int]]:
+    """Token indices of each allowed term found in the sentence, hyphens included."""
+    words = [t for t in sent if t.text != "-"]
+    spans = []
+    for phrase in {_norm(a) for a in allow}:
+        parts = phrase.split()
+        n = len(parts)
+        for k in range(len(words) - n + 1):
+            if [w.lower_ for w in words[k:k + n]] == parts:
+                spans.append(set(range(words[k].i, words[k + n - 1].i + 1)))
+    return spans
+
+
 def _noun_stack(token) -> list:
-    out = [token]
-    for child in token.children:
-        if child.dep_ == "compound" and child.pos_ in ("NOUN", "PROPN") and child.text != CODE:
-            out.extend(_noun_stack(child))
+    # Iterative: a very long run of nouns would overflow Python's recursion limit.
+    out, todo = [], [token]
+    while todo:
+        t = todo.pop()
+        out.append(t)
+        todo.extend(c for c in t.children
+                    if c.dep_ == "compound" and c.pos_ in ("NOUN", "PROPN") and c.text != CODE)
     return out
 
 
-def stacked_nouns(sent, ctx: Context, taken: set[int]) -> list[tuple[str, str, list]]:
+def stacked_nouns(sent, ctx: Context, taken: set[int],
+                  spans: list[set[int]] | None = None) -> list[tuple[str, str, list]]:
+    spans = spans or []
     out = []
     minimum = ctx.cfg.stacked_nouns_min
     for t in sent:
@@ -180,8 +192,13 @@ def stacked_nouns(sent, ctx: Context, taken: set[int]) -> list[tuple[str, str, l
         if capitals >= 2:
             continue  # a proper name such as "Apple M3 Max"
         excerpt = _excerpt(sent.doc, stack)
-        if len(stack) - _allowed_units(excerpt, ctx.allow) < minimum:
-            continue  # e.g. "write-ahead log" counts as one unit
+        # An allowed term ("write-ahead log") counts as one unit, even when only
+        # part of it is in the stack ("key-value store cache").
+        ids = {x.i for x in stack}
+        touched = [s for s in spans if s & ids]
+        units = len(ids - set().union(*touched)) + len(touched)
+        if units < minimum:
+            continue
         taken.update(x.i for x in stack)
         sev = "error" if len(stack) >= minimum + 2 else "warn"
         out.append((sev, f"{len(stack)} nouns stacked: '{excerpt}'", stack))
@@ -212,9 +229,12 @@ def hyphen_compounds(sent, ctx: Context, taken: set[int]) -> list[tuple[str, str
             continue
         while head.dep_ == "compound" and head.head.pos_ in ("NOUN", "PROPN") and head.head.i > head.i:
             head = head.head
+        if head.i in taken:
+            continue  # this noun phrase is already reported
         excerpt = sent.doc[a.i:head.i + 1].text
         if _allowed(excerpt, ctx.allow) or _allowed(f"{a.text}-{b.text}", ctx.allow):
             continue
+        taken.update((a.i, b.i, head.i))
         out.append(("warn", f"coined compound modifier: '{excerpt}'", [a, b, head]))
     return out
 
@@ -279,7 +299,11 @@ def inanimate_subjects(sent, ctx: Context) -> list[tuple[str, str, list]]:
         if not subjects or not lexicon.is_animate_verb(t.lemma_.lower()):
             continue
         s = subjects[0]
-        if s.text == CODE or (s.pos_ == "PRON" and s.lower_ in lexicon.INANIMATE_PRONOUNS):
+        if s.lower_ in ("that", "which") and t.dep_ == "relcl":
+            # "the engineer that owns": the relative pronoun stands for its antecedent.
+            ante = t.head
+            animate = lexicon.noun_animacy(ante.lemma_.lower()) if ante.pos_ == "NOUN" else None
+        elif s.text == CODE or (s.pos_ == "PRON" and s.lower_ in lexicon.INANIMATE_PRONOUNS):
             animate = False
         elif s.pos_ == "NOUN":
             animate = lexicon.noun_animacy(s.lemma_.lower())
@@ -344,8 +368,12 @@ def detect(sent, ctx: Context) -> list[tuple[str, str, str, list]]:
         for sev, msg, toks in items:
             results.append((feature, sev, msg, toks))
 
+    # Tokens of allow-listed terms are taken before any detector runs, so no
+    # detector reports part of "write-ahead log" or "key-value store".
+    spans = _allowed_spans(sent, ctx.allow)
+    taken.update(i for span in spans for i in span)
     if "stacked-nouns" in on:
-        add("stacked-nouns", stacked_nouns(sent, ctx, taken))
+        add("stacked-nouns", stacked_nouns(sent, ctx, taken, spans))
     if "hyphen-compound" in on:
         add("hyphen-compound", hyphen_compounds(sent, ctx, taken))
     lists = inline_lists(sent, ctx) if "inline-list" in on else []

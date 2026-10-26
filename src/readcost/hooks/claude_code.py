@@ -20,7 +20,7 @@ from __future__ import annotations
 import hashlib
 import os
 import re
-import tempfile
+import stat
 from pathlib import Path
 
 from . import _log, emit, read_payload
@@ -58,7 +58,9 @@ def _edited_ranges(payload: dict, text: str) -> list[tuple[int, int]] | None:
         if found and not ti.get("replace_all"):
             found = found[:1]
         ranges.extend(found)
-    return ranges or [(0, 0)]
+    # new_string not verbatim on disk (another hook reflowed it, quotes changed):
+    # judge the whole file rather than silently checking nothing.
+    return ranges or None
 
 
 def post_tool_use(payload: dict, cfg, cwd: str) -> int:
@@ -123,10 +125,16 @@ def stop(payload: dict, cfg) -> int:
 
 
 def _state_dir() -> Path:
+    # Message text lands here, so keep it in the user's own state directory,
+    # owner-only, never in a shared, predictable /tmp path.
     base = os.environ.get("CLAUDE_PLUGIN_DATA") or os.environ.get("XDG_STATE_HOME") \
-        or os.path.join(tempfile.gettempdir(), f"readcost-{os.getuid() if hasattr(os, 'getuid') else 'u'}")
+        or os.path.join(os.path.expanduser("~"), ".local", "state")
     d = Path(base) / "readcost-display"
-    d.mkdir(parents=True, exist_ok=True)
+    d.mkdir(mode=0o700, parents=True, exist_ok=True)
+    st = d.lstat()
+    if not stat.S_ISDIR(st.st_mode) or (hasattr(os, "getuid") and st.st_uid != os.getuid()):
+        raise OSError(f"refusing state directory not owned by this user: {d}")
+    os.chmod(d, 0o700)
     return d
 
 
@@ -138,7 +146,8 @@ def message_display(payload: dict, cfg) -> int:
         hashlib.sha1(str(payload.get("session_id", "")).encode()).hexdigest()[:16]
     state = _state_dir() / f"{mid}.md"
     delta = payload.get("delta") or ""
-    with open(state, "a", encoding="utf-8") as fh:
+    flags = os.O_WRONLY | os.O_APPEND | os.O_CREAT | getattr(os, "O_NOFOLLOW", 0)
+    with os.fdopen(os.open(state, flags, 0o600), "a", encoding="utf-8") as fh:
         fh.write(delta)
     if not payload.get("final"):
         return 0

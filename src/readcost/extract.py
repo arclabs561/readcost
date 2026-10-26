@@ -328,7 +328,11 @@ def extract_source(text: str, path: str, label: str = "", comments: str = "doc")
     """Prose from comments. ``comments`` is "doc" (doc comments only) or "all"."""
     lang = LANG_BY_EXT.get(Path(path).suffix.lower(), "c")
     lines = text.splitlines()
+    # Doc comments are Markdown: code in them sits in fences, which
+    # markdown_lines skips. Plain comments often hold commented-out code, so
+    # only they get the line-level CODEISH filter.
     blocks: list[list[tuple[str, int]]] = []
+    plain: list[list[tuple[str, int]]] = []
     if lang == "python":
         try:
             tree = ast.parse(text)
@@ -343,18 +347,20 @@ def extract_source(text: str, path: str, label: str = "", comments: str = "doc")
         except SyntaxError:
             pass
         if comments == "all":
-            blocks.extend(_comment_blocks(lines, ("#",)))
+            plain.extend(_comment_blocks(lines, ("#",)))
     elif lang == "rust":
         blocks.extend(_comment_blocks(lines, ("///", "//!")))
         if comments == "all":
-            blocks.extend(_comment_blocks(lines, ("//",)))
+            plain.extend(_comment_blocks(lines, ("//",)))
     elif lang == "hash":
-        blocks.extend(_comment_blocks(lines, ("#",)))
+        plain.extend(_comment_blocks(lines, ("#",)))
     else:
         blocks.extend(_block_comments(text))
-        blocks.extend(_comment_blocks(lines, ("///", "//")))
+        plain.extend(_comment_blocks(lines, ("///", "//")))
     segments: list[Segment] = []
     for block in blocks:
+        segments.extend(markdown_lines(block, path, label))
+    for block in plain:
         prose = [(b, n) for b, n in block if not CODEISH.search(b) and not b.strip().startswith("#!")]
         segments.extend(markdown_lines(prose, path, label))
     return segments

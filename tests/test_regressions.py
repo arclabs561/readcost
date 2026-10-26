@@ -125,3 +125,67 @@ def test_git_pre_commit_survives_a_non_utf8_staged_file(tmp_path):
     git("add", "README.md", "notes.txt")
     proc = _pre_commit(tmp_path)
     assert proc.returncode == 1 and "stacked-nouns" in proc.stderr
+
+
+# --------------------------------------------------------------- batch B
+
+def _findings(text, feature=None, **cfg):
+    found = Analyzer(Config(**cfg)).check_text(text, "markdown").findings
+    return [f for f in found if feature is None or f.feature == feature]
+
+
+def test_allow_listed_terms_stay_whole_inside_longer_compounds():
+    assert not _findings("The write-ahead log file grows with every committed write.\n",
+                         "hyphen-compound")
+    assert not _findings("The key-value store cache keeps the hot entries in memory.\n",
+                         "stacked-nouns")
+
+
+def test_one_noun_phrase_is_reported_once():
+    # stacked-nouns and hyphen-compound both judge noun phrases; one phrase
+    # must not score under both. Other detectors measure other things.
+    found = [f for f in _findings("The test recreates the old region-index, storage-shrink cache layout.\n")
+             if f.feature in ("stacked-nouns", "hyphen-compound")]
+    assert len(found) == 1, found
+
+
+def test_relative_pronoun_subject_takes_its_antecedents_animacy():
+    assert not _findings("The engineer that owns the build reviews every change on Friday.\n",
+                         "inanimate-subject")
+
+
+def test_very_long_noun_runs_do_not_overflow_the_stack():
+    text = "The " + " ".join(["data"] * 4000) + " grows quickly every day.\n"
+    Analyzer(Config()).check_text(text, "markdown")
+
+
+def test_doc_comment_lines_that_look_like_code_are_kept():
+    from readcost.extract import extract_source
+
+    src = ("/// Returns the offset of the current record so that callers can seek;\n"
+           "/// the buffer is flushed\n"
+           "/// for every write before the call returns.\n"
+           "fn offset() -> u64 { 0 }\n")
+    text = " ".join(s.text for s in extract_source(src, "lib.rs"))
+    assert "callers can seek" in text and "for every write" in text
+
+
+def test_claude_edit_hook_checks_the_file_when_the_edit_cannot_be_located():
+    from readcost.hooks.claude_code import _edited_ranges
+
+    payload = {"tool_name": "Edit", "tool_input": {"new_string": "text the formatter reflowed"}}
+    assert _edited_ranges(payload, "Different text on disk.\n") is None
+
+
+def test_display_state_is_private_to_the_user(tmp_path, monkeypatch):
+    import os
+    import stat
+
+    from readcost.hooks import claude_code
+
+    for var in ("CLAUDE_PLUGIN_DATA", "XDG_STATE_HOME"):
+        monkeypatch.delenv(var, raising=False)
+    monkeypatch.setenv("HOME", str(tmp_path))
+    d = claude_code._state_dir()
+    assert str(d).startswith(str(tmp_path))
+    assert stat.S_IMODE(os.stat(d).st_mode) == 0o700
