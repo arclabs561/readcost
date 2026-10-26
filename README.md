@@ -155,7 +155,9 @@ On held-out paragraphs its error is about 19 ms per word against a mean of
 about 200 (OneStop), and 10 ms on a separate corpus (Provo). Always predicting
 the average would score 22 and 17, so treat it as a document-level estimate,
 useful for comparing two versions of the same text, not as a judgement of one
-sentence. The number does not affect the verdict. Code spans are left out. See
+sentence. When ten models from different labs each rewrote the same 53
+paragraphs, every one raised the predicted time per word (by 2 to 19 ms);
+readcost's findings did not tell the rewrites apart. The number does not affect the verdict. Code spans are left out. See
 [docs/evaluation.md](docs/evaluation.md) for how it was built and tested.
 
 ## Configuration

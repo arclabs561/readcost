@@ -577,22 +577,34 @@ models on OneStop test. Word length (0.59) and frequency (0.22) carry most of
 the trees' importance. Surprisal adds nothing here, so readcost ships the
 lexical model, which needs neither torch nor a language model.
 
-Applied to the paired rewrites (the `reading_ms_per_word` and
-`reading_seconds` rows of `scripts/paired_score.py`), the rewrites cost more per word and less in total, the
-pattern Cekini et al. report:
+Applied to the paired rewrites (the `reading_ms_per_word`, `reading_seconds`
+and `cost_index` rows of `scripts/paired_score.py`), with eight more
+rewriters from the OpenRouter ensemble (`scripts/rater_ensemble.py rewrite`,
+same prompt). Medians, rewrite minus original; all 53 pairs are scored now
+that HTML paragraphs are extracted, and MiniMax M3 returned 37 rewrites:
 
-| Rewriter | Pairs | ms/word, original | ms/word, rewrite | Rewrite higher | p | Total s, original | Total s, rewrite | Rewrite higher | p |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Codex `gpt-6.1-sol` | 50 | 193 | 214 | 98% | <0.001 | 26.4 | 25.3 | 34% | 0.005 |
-| Claude `claude-sonnet-5-5` | 50 | 193 | 198 | 76% | <0.001 | 26.4 | 23.9 | 4% | <0.001 |
+| Rewriter | Pairs | ms/word | Higher | p | Total s | Higher | p | Cost index p |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Codex `gpt-6.1-sol` | 53 | +19.2 | 98% | <0.001 | -1.1 | 32% | 0.003 | 0.78 |
+| Gemini 4 Argon | 53 | +17.0 | 94% | <0.001 | +1.3 | 64% | 0.004 | 0.45 |
+| Mistral Large 4 | 53 | +17.0 | 94% | <0.001 | +0.4 | 58% | 0.61 | 0.12 |
+| Llama 4 Maverick | 53 | +16.7 | 92% | <0.001 | -8.7 | 0% | <0.001 | 0.98 |
+| MiniMax M3 | 37 | +8.6 | 84% | <0.001 | -0.2 | 49% | 0.91 | 0.61 |
+| Kimi K3.1 Pro | 53 | +6.8 | 89% | <0.001 | -0.5 | 36% | 0.008 | 0.32 |
+| DeepSeek V4.1 Flash | 53 | +5.3 | 72% | <0.001 | -0.7 | 28% | <0.001 | 0.57 |
+| Claude `claude-sonnet-5-5` | 53 | +4.4 | 75% | <0.001 | -2.2 | 4% | <0.001 | 0.60 |
+| GLM 5.3 FlashX | 53 | +2.7 | 68% | 0.002 | -0.1 | 47% | 0.34 | 0.90 |
+| Grok 4.7 | 53 | +2.4 | 75% | <0.001 | -1.2 | 21% | <0.001 | 0.05 |
 
-Medians; three of the 53 pairs are left out because their originals are
-HTML paragraphs (Effective Go), which readcost does not extract from
-Markdown. Cekini et al. found +1.6% per word and -1.2% in total; here the
-median per-word rise is +19 ms (Codex) and +5 ms (Claude), and both lower
-the total. The model is trained on
-newspaper paragraphs read by native speakers; technical prose, code-heavy
-text and non-native readers are outside its data.
+Every rewriter raises predicted reading time per word, from +2 ms (Grok,
+GLM) to +19 ms (Codex), against originals near 194 ms; every one also uses
+longer words. The total depends on how much a model shortens: six lower it,
+Gemini raises it and three show no clear change, so Cekini et al.'s "less in
+total" does not generalize while "more per word" does. readcost's cost index
+separates none of the ten (Grok's p = 0.05 is in the direction of fewer
+findings in the rewrite). The model is trained on newspaper paragraphs read
+by native speakers; technical prose, code-heavy text and non-native readers
+are outside its data.
 
 ## Contexts
 
