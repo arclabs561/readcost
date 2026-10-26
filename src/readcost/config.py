@@ -28,7 +28,8 @@ class HookConfig:
     paths: list[str] = field(default_factory=lambda: [
         "*.md", "*.markdown", "*.mdx", "*.rst", "*.txt", "COMMIT_EDITMSG"])
     exclude: list[str] = field(default_factory=lambda: [
-        "CHANGELOG*", "*/node_modules/*", "*/target/*", "*/.git/*", "*/vendor/*"])
+        "CHANGELOG*", "*/node_modules/*", "*/target/*", "*/.git/*", "*/vendor/*",
+        "*/.venv/*", "*/venv/*", "*/.tox/*"])
     max_items: int = 8
     max_chars: int = 2500
     edited_lines_only: bool = True
@@ -57,11 +58,12 @@ class Config:
     source: str = ""                # where the config came from
 
     def wants(self, path: str) -> bool:
-        p = path.replace(os.sep, "/")
-        name = Path(p).name
-        if any(fnmatch.fnmatch(p, g) or fnmatch.fnmatch(name, g) for g in self.hooks.exclude):
+        p = path.replace(os.sep, "/").removeprefix("./")
+        # A leading "/" lets "*/node_modules/*" match a top-level node_modules too.
+        candidates = (p, "/" + p.lstrip("/"), Path(p).name)
+        if any(fnmatch.fnmatch(c, g) for c in candidates for g in self.hooks.exclude):
             return False
-        return any(fnmatch.fnmatch(p, g) or fnmatch.fnmatch(name, g) for g in self.hooks.paths)
+        return any(fnmatch.fnmatch(c, g) for c in candidates for g in self.hooks.paths)
 
 
 def _apply(obj, data: dict) -> None:

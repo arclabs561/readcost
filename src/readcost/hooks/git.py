@@ -12,7 +12,9 @@ HUNK = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@", re.M)
 
 
 def _git(*args: str) -> str:
-    return subprocess.run(["git", *args], check=True, capture_output=True, text=True).stdout
+    # Decode leniently: one non-UTF-8 staged file must not abort the whole check.
+    return subprocess.run(["git", *args], check=True, capture_output=True, text=True,
+                          encoding="utf-8", errors="replace").stdout
 
 
 def handle(event: str, rest: list[str]) -> int:
@@ -39,18 +41,37 @@ def _report(results, cfg) -> int:
     return 0
 
 
+def _staged_files() -> list[tuple[str, tuple[str, ...]]]:
+    """(new path, pathspec) for added, copied, modified and renamed files."""
+    fields = _git("diff", "--cached", "--name-status", "--diff-filter=ACMR", "-M", "-z").split("\0")
+    out, i = [], 0
+    while i < len(fields) and fields[i]:
+        status = fields[i]
+        if status[:1] in ("R", "C"):
+            old, new = fields[i + 1], fields[i + 2]
+            out.append((new, (old, new)))
+            i += 3
+        else:
+            out.append((fields[i + 1], (fields[i + 1],)))
+            i += 2
+    return out
+
+
 def pre_commit(cfg) -> int:
     if cfg.hooks.mode == "off":
         return 0
-    names = _git("diff", "--cached", "--name-only", "--diff-filter=ACM", "-z").split("\0")
     results = []
-    for name in filter(None, names):
+    for name, paths in _staged_files():
         if not cfg.wants(name):
             continue
         staged = _git("show", f":{name}")
         lines = None
         if cfg.hooks.edited_lines_only:
-            diff = _git("diff", "--cached", "-U0", "--", name)
+            # --no-color/--no-ext-diff: user config (color.ui=always, difftastic)
+            # would otherwise hide the hunk headers. A rename needs both paths
+            # in the pathspec so -M can pair them and report only edited lines.
+            diff = _git("diff", "--cached", "-U0", "-M", "--no-color", "--no-ext-diff",
+                        "--", *paths)
             lines = [(int(s), int(s) + max(int(c or 1), 1) - 1) for s, c in HUNK.findall(diff) if c != "0"]
             if not lines:
                 continue

@@ -178,6 +178,9 @@ def main(argv: list[str] | None = None) -> int:
     except (OSError, ValueError, RuntimeError) as exc:
         print(f"readcost: {exc}", file=sys.stderr)
         return EXIT_USAGE
+    except Exception as exc:  # noqa: BLE001 - exit 1 means "findings"; a crash must not
+        print(f"readcost: internal error: {type(exc).__name__}: {exc}", file=sys.stderr)
+        return EXIT_USAGE
 
 
 if __name__ == "__main__":

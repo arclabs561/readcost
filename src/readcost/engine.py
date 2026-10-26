@@ -98,15 +98,19 @@ class Analyzer:
                 if len(words) < 4 or not any(t.pos_ in ("VERB", "AUX") for t in sent):
                     continue
                 line = seg.line_at(sent.start_char)
-                if lines and not any(lo <= line <= hi for lo, hi in lines):
+                # A hard-wrapped sentence spans several lines; keep it when any
+                # of them was edited, not only its first.
+                last_line = seg.line_at(max(sent.end_char - 1, sent.start_char))
+                if lines and not any(lo <= last_line and line <= hi for lo, hi in lines):
                     continue
                 result.sentences += 1
                 result.words += len(words)
                 for feature, sev, msg, toks in detect(sent, ctx):
-                    if severity_rank(sev) < floor:
-                        continue
-                    tok_line = seg.line_at(toks[0].idx) if toks else line
-                    excerpt = sent.doc[min(t.i for t in toks):max(t.i for t in toks) + 1].text if toks else ""
+                    tok_line, excerpt = line, ""
+                    if toks:
+                        first = min(toks, key=lambda t: t.i)
+                        tok_line = seg.line_at(first.idx)
+                        excerpt = sent.doc[first.i:max(t.i for t in toks) + 1].text
                     result.findings.append(Finding(
                         feature=feature, severity=sev, message=msg, excerpt=excerpt,
                         sentence=sent.text.strip(), path=path, line=tok_line, label=seg.label,
@@ -114,7 +118,9 @@ class Analyzer:
                     ))
         zs = ctx.stats.get("dep_z", [])
         result.mean_dep_z = statistics.mean(zs) if zs else 0.0
+        # The verdict uses every finding; min_severity only trims what is shown.
         self._verdict(result)
+        result.findings = [f for f in result.findings if severity_rank(f.severity) >= floor]
         if not lexicon.has_wordnet():
             result.notes.append("lexicon data missing: denominal-verb disabled, inanimate-subject reduced")
         return result
