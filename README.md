@@ -37,7 +37,7 @@ not on PyPI yet.
 
 ```sh
 readcost check README.md docs/
-readcost check --lines 40-80 README.md      # only sentences touching these lines
+readcost check --lines 40-80 README.md      # only sentences touching these lines; 40- runs to the end
 some-model-cli "explain X" | readcost check -        # model output on stdin
 readcost check --format transcript --last session.jsonl
 readcost check --format jsonl --field response --per-record evals.jsonl
@@ -129,11 +129,18 @@ readcost check --profile myprofile.json README.md
 ## Configuration
 
 Put a `readcost.toml` at the repository root, or a `[tool.readcost]` table in
-`pyproject.toml`. `readcost.toml.example` lists every key. The useful ones:
+`pyproject.toml`. `readcost.toml.example` lists every key with its default. The
+useful ones:
 
 - `allow`: phrases never flagged, such as product names or terms of art.
 - `disable` and `enable`: turn features off or on.
+- `advise_severity`: the verdict is at least `advise` when any finding reaches
+  this severity; `off` turns that rule off.
+- `profile`: a relative path is read from the config file's directory.
 - `hooks.mode`: `off`, `advise` or `block`.
+
+readcost warns about unknown keys and stops with exit code 2 on a value of the
+wrong type or outside its choices, naming the file and the key.
 
 To skip text, put `<!-- readcost: ignore -->` before a paragraph, or wrap a
 section in `<!-- readcost: off -->` and `<!-- readcost: on -->`.
