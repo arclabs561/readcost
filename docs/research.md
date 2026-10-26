@@ -25,7 +25,14 @@ code changes cover that (Wen et al. 2019; Panthaplackel et al. 2021).
 - Shorter is not the goal. Compressed rewrites can raise reading cost per word
   (Cekini et al., arXiv 2610.23715). Rewrites restore optional words such as
   "that" and keep rationale clauses, which are rare and valuable in comments
-  (Chen et al., TOSEM).
+  (Chen et al., TOSEM). Done: when a long-dependency or inline-list sentence
+  gives a reason, the suggestion says to keep it.
+- Three opt-in detectors count constructions that language models overuse:
+  nominalizations and present participial clauses (1.5 to 2 and 2 to 5 times
+  the human rate in Reinhart et al. 2025, over general genres), and sentence
+  frames repeated within one document. Shaib et al. 2024 count templates
+  across many outputs of one model, not within one document, and they make
+  no claim about reading time; repeated-frame is a style signal only.
 
 ## Contexts and reference profiles
 
@@ -132,8 +139,12 @@ index while adding words is reported, not rewarded.
 - Peitek et al. 2021. Program comprehension and code complexity metrics: an
   fMRI study. ICSE.
 - Rani et al. 2022. A decade of code comment quality assessment. JSS.
+- Reinhart et al. 2025. Do LLMs write like humans? Variation in grammatical
+  and rhetorical styles. PNAS 122(8), e2422455122.
 - Scalabrino et al. 2017. Automatically assessing code understandability: how
   far are we? ASE.
+- Shaib et al. 2024. Detection and measurement of syntactic templates in
+  generated text. EMNLP; arXiv 2407.00211.
 - Shepperd 1988. A critique of cyclomatic complexity as a software metric.
   Software Engineering Journal.
 - Steidl, Hummel and Juergens 2013. Quality analysis of source code comments.
