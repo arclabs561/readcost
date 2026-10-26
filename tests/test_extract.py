@@ -14,7 +14,7 @@ def test_markdown_drops_code_tables_headings_and_keeps_lines():
         "```",                           # 7
         "",                              # 8
         "| a | b |",                     # 9
-        "",                              # 10
+        "|---|---|",                     # 10: a pipe line alone is a paragraph, not a table
         "- Call `search` with a query",  # 11
         "  and read the [docs](https://example.com) first.",  # 12
     ])

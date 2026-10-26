@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT OR Apache-2.0"
 license-files = ["LICENSE-MIT", "LICENSE-APACHE"]
-dependencies = ["spacy>=3.7,<4"]
+dependencies = ["spacy>=3.7,<4", "markdown-it-py>=3,<5", "mdit-py-plugins>=0.4,<1"]
 
 [project.optional-dependencies]
 test = ["pytest>=8"]
