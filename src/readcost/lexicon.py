@@ -148,9 +148,19 @@ def noun_animacy(lemma: str) -> bool | None:
     return lemma in nouns
 
 
+# Verbs that take a thing as subject in ordinary prose: linking verbs ("if a
+# line feels too long") and terms of art ("the program panics", "the process
+# dies"). Found as false positives in docs/evaluation.md.
+THING_SUBJECT_VERBS = {
+    "feel", "seem", "look", "sound", "appear",
+    "panic", "die", "respond", "behave", "rely", "suffer", "link", "catch",
+    "resolve", "remind", "surprise", "overwhelm", "perturb", "react", "crash",
+}
+
+
 @lru_cache(maxsize=4096)
 def is_animate_verb(lemma: str) -> bool:
-    if lemma in TECHNICAL_VERBS:
+    if lemma in TECHNICAL_VERBS or lemma in THING_SUBJECT_VERBS:
         return False
     if lemma in ANIMATE_VERBS:
         return True
