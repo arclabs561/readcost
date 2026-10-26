@@ -3,11 +3,11 @@
 readcost points at sentences that are likely to slow a reader down: three or
 more nouns in a row, related words far apart, things doing a person's action,
 and four other constructions. The list comes from "Why is AI-generated
-language so hard to understand?" ([arXiv 2610.29162](https://arxiv.org/abs/2610.29162)),
-which links these constructions to measured reading difficulty and finds that
-recent language models use them more than people do.
+language so hard to understand?" ([arXiv 2610.29162](https://arxiv.org/abs/2610.29162)).
+The paper finds that recent language models use these constructions more than
+people do; earlier reading studies tie each of them to slower reading.
 
-It is for two jobs: checking documentation you write, and checking text a
+It is for two jobs: checking documentation that you write, and checking text a
 model writes before you or your users read it. It reads Markdown,
 reStructuredText, HTML, plain text, doc comments in source files, commit
 messages, and model output as raw text, chat JSON, or Claude Code transcripts.
@@ -17,9 +17,11 @@ GitHub Actions.
 It is not a grammar or style checker. Vale and proselint enforce style rules
 and word lists; readcost parses each sentence and looks at its structure. It is
 also not a readability formula: it says which sentence to change and how, not
-a grade level.
+a grade level. It cannot tell whether text is complete, correct or up to date,
+which developers rate as the worst documentation failures.
 
-Status: experimental, version 0.1.0.
+Status: experimental, version 0.1.0. [docs/research.md](docs/research.md) has
+the evidence behind each choice and the roadmap.
 
 ## Install
 
@@ -28,13 +30,14 @@ pip install git+https://github.com/arclabs561/readcost   # or: pip install -e . 
 readcost setup              # downloads the spaCy English model (about 13 MB)
 ```
 
-Python 3.11 or later. The only dependency is spaCy. readcost is not on PyPI yet.
+Python 3.11 or later. The dependencies are spaCy and markdown-it-py. readcost is
+not on PyPI yet.
 
 ## Use
 
 ```sh
 readcost check README.md docs/
-readcost check --lines 40-80 README.md      # only sentences starting on these lines
+readcost check --lines 40-80 README.md      # only sentences touching these lines
 some-model-cli "explain X" | readcost check -        # model output on stdin
 readcost check --format transcript --last session.jsonl
 readcost check --format jsonl --field response --per-record evals.jsonl
@@ -47,11 +50,27 @@ tools, and `-o agent` is short feedback written for a model. The exit status is
 1 when a file reaches the `--fail-on` verdict (default `block`), 2 on an error,
 and 0 otherwise.
 
-A finding looks like this:
+For example, this sentence from a README:
 
 ```text
-README.md:117: warn: [stacked-nouns] 3 nouns stacked: 'source-segment rebuilds'
-README.md: advise; 6 findings in 41 sentences (612 words); cost index 18.0 per 1k words
+For store restart measurement, the example prints first snapshot-query cost
+with persisted WAND sidecars present versus after deleting those sidecars and
+forcing source-segment rebuilds.
+```
+
+```text
+notes.md:1: warn: [stacked-nouns] 3 nouns stacked: 'store restart measurement'
+notes.md:1: warn: [stacked-nouns] 3 nouns stacked: 'source-segment rebuilds'
+notes.md: advise; 2 findings in 1 sentences (26 words); cost index 76.9 per 1k words
+```
+
+The rewrite that README adopted keeps every fact and passes:
+
+```text
+To measure a store restart, the example reopens a checkpointed store and
+prints the duration of its first snapshot query. It does this twice: once
+with the persisted WAND sidecars present, and once after deleting those
+sidecars, which forces each segment to be rebuilt from its source vectors.
 ```
 
 From Python:
@@ -82,6 +101,11 @@ those constructions show up in technical writing. `long-sentence` is
 available but off by default. `readcost explain` prints why each one costs the
 reader and how to fix it.
 
+Technical writing repeats compressed terms on purpose, so a stacked or
+hyphenated compound is reported once per document, at its first use. An
+identifier as a subject (`` `parse()` returns ``) is not reported as an
+inanimate subject. Code spans, URLs and file paths count as single words.
+
 ## Verdicts
 
 Each finding counts 0.5 (info), 1 (warn) or 2 (error). The cost index is that
@@ -95,7 +119,7 @@ A rate is noisy for a short text: one finding in a 20-word comment is 50 per
 more gets "advise" and 3 or more gets "block".
 
 Dependency length is judged against a reference profile built from those
-READMEs. To compare against writing you prefer, build your own:
+READMEs. To compare against writing that you prefer, build your own:
 
 ```sh
 readcost profile build path/to/good/*.md -o myprofile.json --name mine
@@ -116,8 +140,8 @@ section in `<!-- readcost: off -->` and `<!-- readcost: on -->`.
 
 ## Hooks
 
-`docs/hooks.md` describes each adapter, what it sends back, and the rules they
-share: advisory by default, only edited lines, fail open, at most one revision
+`docs/hooks.md` describes each adapter, what it sends back, and the rules that
+they share: advisory by default, only edited lines, fail open, at most one revision
 per turn. In short:
 
 - Claude Code: `integrations/claude-code-plugin/`, or the settings snippet in
@@ -135,8 +159,13 @@ per turn. In short:
   `model = "en_core_web_trf"` for better parses at several times the cost.
 - inanimate-subject and denominal-verb use word lists derived from WordNet.
   Treat their findings as prompts to reread, not verdicts.
-- The paper also measures rare word pairs. readcost does not, because that
-  needs a large reference corpus.
+- Precision is modest. In one reader's audit of 210 findings on 87 READMEs
+  (version 0.1.0), 27% were clearly right and 65% defensible; several fixes
+  since then target the noisiest cases, but no new audit has been run.
+- The paper's findings are about how often text uses these constructions,
+  not about any single sentence, and it ran no reading study on model text.
+- The paper also measures rare word pairs. readcost does not yet; the roadmap
+  in docs/research.md describes how it will.
 - The default profile is one writer's READMEs. A cost index for chat answers
   is not comparable to one for READMEs.
 
@@ -144,6 +173,7 @@ per turn. In short:
 
 ```sh
 pip install -e '.[test]' && python3 -m pytest
+readcost check . --fail-on block               # CI runs readcost on its own repo
 python3 scripts/build_lexicon.py               # needs nltk and its WordNet data
 python3 scripts/build_default_profile.py ref/  # needs the BurntSushi clones
 ```

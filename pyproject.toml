@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "readcost"
 version = "0.1.0"
-description = "Find prose constructions that slow readers down: stacked nouns, long dependencies, and others from arXiv 2610.29162"
+description = "Flag prose constructions that slow readers down"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT OR Apache-2.0"

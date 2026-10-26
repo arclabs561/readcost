@@ -138,7 +138,7 @@ def build_parser() -> argparse.ArgumentParser:
     c.add_argument("--enable", help="comma-separated features to turn on")
     c.add_argument("--disable", help="comma-separated features to turn off")
     c.add_argument("--profile", help="reference profile JSON (default: built-in)")
-    c.add_argument("--lines", help="only report sentences starting on these lines, e.g. 10-24,40")
+    c.add_argument("--lines", help="only report sentences touching these lines, e.g. 10-24,40")
     c.add_argument("--field", help="for JSON/JSONL: dotted path of the text field, e.g. response or output.text")
     c.add_argument("--last", action="store_true", help="for transcripts: only the last assistant message")
     c.add_argument("--per-record", action="store_true",
@@ -161,7 +161,7 @@ def build_parser() -> argparse.ArgumentParser:
     e.add_argument("feature", nargs="?")
     e.set_defaults(func=_cmd_explain)
 
-    s = sub.add_parser("setup", help="download the spaCy model and WordNet")
+    s = sub.add_parser("setup", help="download the spaCy model if it is missing")
     s.add_argument("--model", default="en_core_web_sm")
     s.set_defaults(func=_cmd_setup)
 
