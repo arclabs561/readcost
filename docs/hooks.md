@@ -20,7 +20,7 @@ Nothing is denied or blocked until `hooks.mode = "block"`, and then only on a
 **Verdicts.** Each finding has a weight: info 0.5, warn 1, error 2. The cost
 index is the weighted count per 1,000 words.
 
-| Verdict | Rule (defaults) | BurntSushi READMEs (10 with 150+ words) | arclabs561 READMEs (58 with 150+ words) |
+| Verdict | Rule (defaults) | BurntSushi READMEs (10 with 150+ words) | arclabs561 READMEs (58 with 150+ words; measured with 0.1.0) |
 | --- | --- | --- | --- |
 | pass | cost index below 15 | 10 | 18 |
 | advise | cost index 15 or more, or any error | 0 | 37 |

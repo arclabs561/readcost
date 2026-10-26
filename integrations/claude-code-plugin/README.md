@@ -11,7 +11,8 @@ until you configure it.
 | Stop | off | `hooks.stop = "report"` or `"revise"` |
 | MessageDisplay | off | `hooks.display = "note"` |
 
-Requirements: `pip install readcost` (or `pip install -e` from a checkout) and
+Requirements: `pip install git+https://github.com/arclabs561/readcost` (or
+`pip install -e` from a checkout) and
 `readcost setup`, so that `readcost` is on the PATH Claude Code uses.
 
 See `docs/hooks.md` for what each hook sends back.

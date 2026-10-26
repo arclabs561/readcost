@@ -24,11 +24,11 @@ Status: experimental, version 0.1.0.
 ## Install
 
 ```sh
-pip install readcost        # or: pip install -e . from a checkout
+pip install git+https://github.com/arclabs561/readcost   # or: pip install -e . from a checkout
 readcost setup              # downloads the spaCy English model (about 13 MB)
 ```
 
-Python 3.11 or later. The only dependency is spaCy.
+Python 3.11 or later. The only dependency is spaCy. readcost is not on PyPI yet.
 
 ## Use
 
@@ -86,9 +86,9 @@ reader and how to fix it.
 
 Each finding counts 0.5 (info), 1 (warn) or 2 (error). The cost index is that
 count per 1,000 words. A file passes below 15, gets "advise" at 15 or more, and
-gets "block" at 30 or more with at least 3 weighted findings. Ten BurntSushi
-READMEs score between 5.5 and 12.5, so the defaults treat that level of
-writing as the bar.
+gets "block" at 30 or more with at least 3 weighted findings. The ten BurntSushi
+READMEs of 150 words or more score at most 12.5 (median 7.3, measured
+2026-10-26), so the defaults treat that level of writing as the bar.
 
 Dependency length is judged against a reference profile built from those
 READMEs. To compare against writing you prefer, build your own:

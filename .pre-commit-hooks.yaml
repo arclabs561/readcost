@@ -3,6 +3,7 @@
   description: Flag hard-to-read sentences on the lines you changed.
   entry: readcost hook git pre-commit
   language: python
+  minimum_pre_commit_version: "3.2.0"
   pass_filenames: false
   always_run: true
   stages: [pre-commit]
@@ -12,6 +13,7 @@
   name: readcost (commit message)
   entry: readcost hook git commit-msg
   language: python
+  minimum_pre_commit_version: "3.2.0"
   stages: [commit-msg]
   additional_dependencies:
     - "en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl"
