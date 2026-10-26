@@ -381,6 +381,37 @@ item 6 needs the reference profile refitted. Each change needs a regression
 test built from the sentences quoted here, and from the paper's examples
 that the rule should still report.
 
+## After the first fixes
+
+The next change applied proposals 1 to 5 (in part), 7, 8, 9, 11 and 13 as
+code rather than filters:
+
+- reduced-object-relative skips pronoun subjects and light heads;
+- inline-list counts parser conjuncts or verbless comma chunks only, and
+  skips lists whose items average under three words or are mostly code;
+- stacked-nouns skips a leading name or acronym and counts a hyphenated word
+  as one unit;
+- inanimate-subject skips linking verbs and verbs that take things as
+  subjects;
+- denominal-verb skips phrasal verbs and is now opt-in.
+
+Rerunning the whole corpus with the same labels (essay and docs only):
+
+| | Before | After |
+| --- | --- | --- |
+| Findings in essay and docs | 6,156 | 2,234 |
+| Labeled correct still reported | 3 of 3 | 3 of 3 |
+| Labeled defensible still reported | 21 of 30 | 18 of 30 |
+| Labeled wrong still reported | 132 of 177 | 46 of 177 |
+| Correct or defensible, of those reported | 15% | 31% |
+
+"Before" is `20199a9`. The remaining wrong findings are mostly stacked nouns
+(13), hyphen compounds (14) and long dependencies (9). Counting a hyphenated
+word as one unit moved established terms such as "product-market fit" and
+"name-value pairs" from stacked-nouns to hyphen-compound (18 to 74 findings);
+telling them from coinages needs word-pair frequencies, which readcost does
+not have yet. Proposals 6, 10, 12 and 14 are not applied.
+
 ## Limits
 
 - One automated rater, no second rater, and no agreement statistic. The

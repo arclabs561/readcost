@@ -91,22 +91,23 @@ if result.verdict != "pass":
 | stacked-nouns | forcing source segment rebuilds | forcing each segment to be rebuilt from its source |
 | long-dependency | The index, which is built once from every document in the corpus at startup and then rebuilt only when the compactor runs, serves all queries. | The index serves all queries. It is built once at startup and rebuilt only when the compactor runs. |
 | inanimate-subject | It does not own indexing or compaction. | Indexing and compaction are left to the caller. |
-| denominal-verb | The script will bucket the requests by hour. | The script will group the requests by hour. |
+| denominal-verb (opt-in) | The script will bucket the requests by hour. | The script will group the requests by hour. |
 | reduced-object-relative | the format the reader expects | the format that the reader expects |
-| hyphen-compound (with stacked-nouns off) | the storage-shrink job | the job that shrinks storage |
+| hyphen-compound | the storage-shrink job | the job that shrinks storage |
 | inline-list | supports standard/Sugeno/Yager negations, OWA, power means, and uninorms | a bulleted list |
 | nominalization (opt-in) | The tool performs validation of the input. | The tool validates the input. |
 | participial-clause (opt-in) | The parser caches every token, making lookups faster. | The parser caches every token, so lookups are faster. |
 | repeated-frame (opt-in) | This change reduces the latency of the cache. This change improves the speed of the parser. This change lowers the cost of the build. | This change makes the cache faster, the parser quicker and the build cheaper. |
 
-The first five come from the paper. The next two are rules derived from where
-those constructions show up in technical writing. The opt-in three are
-constructions that language models use more often than people (Reinhart et
-al. 2025; Shaib et al. 2024); turn them on with `--enable`. `long-sentence` is
-also available but off by default. A hyphenated noun-noun compound followed
-by another noun is three nouns in a row, so with the defaults it is reported
-as stacked-nouns; hyphen-compound reports the rest. `readcost explain` prints why each one
-costs the reader and how to fix it. When a long-dependency or inline-list
+The first five come from the paper; denominal-verb is opt-in because on
+well-edited prose nearly all its hits were settled verbs. The next two are
+rules derived from where those constructions show up in technical writing. A
+hyphenated word counts as one noun, so "storage-shrink job" is a hyphen
+compound, not three stacked nouns. The other opt-in three are constructions
+that language models use more often than people (Reinhart et al. 2025; Shaib
+et al. 2024). Turn any opt-in rule on with `--enable`. `long-sentence` is also
+available but off by default. `readcost explain` prints why each one costs the
+reader and how to fix it. When a long-dependency or inline-list
 sentence gives a reason (because, since, so that, otherwise), the suggestion
 says to keep that reason when splitting the sentence.
 
@@ -175,9 +176,12 @@ per turn. In short:
   `model = "en_core_web_trf"` for better parses at several times the cost.
 - inanimate-subject and denominal-verb use word lists derived from WordNet.
   Treat their findings as prompts to reread, not verdicts.
-- Precision is modest. In one reader's audit of 210 findings on 87 READMEs
-  (version 0.1.0), 27% were clearly right and 65% defensible; several fixes
-  since then target the noisiest cases, but no new audit has been run.
+- Precision is low on well-edited prose. On 210 findings sampled from essays
+  and documentation by well-regarded writers, labeled by one automated rater,
+  3 were correct and 30 defensible. After the fixes that evaluation prompted,
+  31% of the findings still reported are correct or defensible. Most of the
+  rest are established hyphenated terms, noun stacks and long but clear
+  sentences. See [docs/evaluation.md](docs/evaluation.md).
 - The paper's findings are about how often text uses these constructions,
   not about any single sentence, and it ran no reading study on model text.
 - The paper also measures rare word pairs. readcost does not yet; the roadmap
