@@ -457,6 +457,49 @@ lists of short items and an opt-in denominal verb. Kappa near 0.4 is moderate
 agreement; neither rater is ground truth.
 
 
+## Paired rewrites
+
+Does readcost score model text as costlier than human text with the same
+content? Following Cekini et al. 2026, 53 human paragraphs (120 to 260 words,
+13 sources, essays and docs) were each rewritten by two models with the
+instruction to keep the same facts and audience in their own words: Codex
+`gpt-6.1-sol` and Claude `claude-sonnet-5-5`, both run headless with the
+user's global instruction files kept out (`scripts/paired_rewrite.py`). The
+hypotheses were written down before any rewrite was scored. Paired two-sided
+Wilcoxon tests, rewrite minus original (`scripts/paired_score.py`):
+
+| Measure | Model | Original median | Rewrite median | Rewrite higher | p |
+| --- | --- | --- | --- | --- | --- |
+| words | Codex | 134 | 120 | 8% | <0.001 |
+| words | Claude | 134 | 119 | 4% | <0.001 |
+| cost index | Codex | 3.6 | 2.9 | 40% | 0.75 |
+| cost index | Claude | 3.6 | 3.5 | 36% | 0.99 |
+| mean word length | Codex | 4.62 | 5.23 | 100% | <0.001 |
+| mean word length | Claude | 4.62 | 4.79 | 64% | <0.001 |
+| surprisal, bits per token (SmolLM2-135M) | Codex | 4.56 | 5.22 | 92% | <0.001 |
+| surprisal, bits per token (SmolLM2-135M) | Claude | 4.56 | 4.94 | 87% | <0.001 |
+
+- H1 failed. readcost's cost index does not tell the rewrites from the
+  originals. Pooled over all 53 paragraphs the weighted findings per 1,000
+  words are 4.4 for the originals and 4.2 (Codex) and 4.4 (Claude) for the
+  rewrites.
+- H2 was not detected. Nominalizations were found in no paragraph on either
+  side. Participial clauses rose from 6 to 13 (Codex) and 8 (Claude) in total,
+  the direction Reinhart et al. 2025 report, but at these counts the test is
+  not significant (p = 0.08 and 0.31).
+- H3 was half confirmed. Rewrites use longer words, as Cekini et al. found,
+  and in every pair for Codex. Surprisal went up, the opposite of their
+  result with OPT-125M. The rise holds in all 13 sources, docs included, so
+  memorization of famous essays by the scoring model does not explain it,
+  though the largest rise is for Paul Graham's essays (+0.86 bits).
+- H4 was not detected: coined hyphen pairs are rare on both sides.
+
+The rewrites shift word choice (longer, less predictable words) rather than
+the syntactic constructions readcost counts. The detectors work as a
+checklist of constructions to reread; on this evidence they are not a
+measure of whether text was written by a model. Limits: one prompt, 53 short
+paragraphs from well-edited sources, and one scoring model for surprisal.
+
 ## Limits
 
 - One automated rater, no second rater, and no agreement statistic. The
