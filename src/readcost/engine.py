@@ -77,8 +77,10 @@ TERM_FEATURES = ("stacked-nouns", "hyphen-compound")
 def _first_use_only(findings: list[Finding]) -> list[Finding]:
     """Keep a compound's first use; later uses are a term the reader has met.
 
-    Technical prose repeats compressed terms on purpose (Biber and Gray 2010);
-    the cost falls on the first, unexplained use.
+    Technical prose repeats compressed terms on purpose, so the cost is taken
+    to fall on the first, unexplained use. This is a design choice: Biber and
+    Gray 2010 show such noun phrases are efficient for expert readers and
+    costly for newcomers, but do not study repeated use.
     """
     seen: set[tuple[str, str]] = set()
     out = []
