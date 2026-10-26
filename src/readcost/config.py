@@ -54,6 +54,11 @@ class Config:
     long_sentence_words: int = 32
     block_cost_index: float = 30.0  # weighted findings per 1,000 words
     block_min_points: float = 3.0   # and at least this many weighted findings
+    # Below this many words a per-1,000 density is too noisy (one finding in a
+    # 20-word comment scores 50), so short texts are judged by weighted points:
+    # advise at short_advise_points, block at block_min_points.
+    short_text_words: int = 40
+    short_advise_points: float = 2.0
     hooks: HookConfig = field(default_factory=HookConfig)
     source: str = ""                # where the config came from
 

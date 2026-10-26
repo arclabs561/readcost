@@ -151,6 +151,15 @@ class Analyzer:
         result.points = sum(WEIGHTS.get(f.severity, 0.5) for f in result.findings)
         result.cost_index = 1000.0 * result.points / result.words if result.words else 0.0
         advise_at = severity_rank(self.cfg.advise_severity)
+        severe = any(severity_rank(f.severity) >= advise_at for f in result.findings)
+        if result.words < self.cfg.short_text_words:
+            if result.points >= self.cfg.block_min_points:
+                result.verdict = "block"
+            elif result.points >= self.cfg.short_advise_points or severe:
+                result.verdict = "advise"
+            else:
+                result.verdict = "pass"
+            return
         if result.points >= self.cfg.block_min_points and result.cost_index >= self.cfg.block_cost_index:
             result.verdict = "block"
         elif (result.cost_index >= self.cfg.advise_cost_index and result.points >= 1) \

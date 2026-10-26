@@ -90,6 +90,10 @@ gets "block" at 30 or more with at least 3 weighted findings. The ten BurntSushi
 READMEs of 150 words or more score at most 12.5 (median 7.3, measured
 2026-10-26), so the defaults treat that level of writing as the bar.
 
+A rate is noisy for a short text: one finding in a 20-word comment is 50 per
+1,000 words. Below 40 words, readcost counts weighted findings instead: 2 or
+more gets "advise" and 3 or more gets "block".
+
 Dependency length is judged against a reference profile built from those
 READMEs. To compare against writing you prefer, build your own:
 
