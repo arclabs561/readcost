@@ -373,6 +373,8 @@ def hyphen_compounds(sent, ctx: Context, taken: set[int],
 
 
 SLASH_LIST = re.compile(r"(?<![\w./])([A-Za-z][\w-]*)(?:/[A-Za-z][\w-]*){2,}(?![\w/.])")
+# "cmd/compile/internal/ssa", "x/net/http2": a package path, not a list.
+PATH_LIKE = re.compile(r"[a-z][a-z0-9_.-]*(?:/[a-z0-9_.-]+){2,}|[a-z0-9_.-]*[0-9_][a-z0-9_.-]*(?:/[a-z0-9_.-]+)+")
 SLASH_OK = {"and/or", "input/output", "i/o", "read/write", "tcp/ip", "km/h", "on/off", "yes/no"}
 
 
@@ -450,7 +452,7 @@ def inline_lists(sent, ctx: Context) -> list[tuple[str, str, list]]:
                     [t for c in chunks for t in c]))
         return out
     for m in SLASH_LIST.finditer(sent.text):
-        if m.group(0).lower() in SLASH_OK:
+        if m.group(0).lower() in SLASH_OK or PATH_LIKE.fullmatch(m.group(0)):
             continue
         out.append(("info", f"slash-joined items: '{m.group(0)}'", []))
     return out

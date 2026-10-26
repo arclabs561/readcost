@@ -124,6 +124,12 @@ gets "block" at 30 or more with at least 3 weighted findings. The ten BurntSushi
 READMEs of 150 words or more score at most 12.5 (median 7.3, measured
 2026-10-26), so the defaults treat that level of writing as the bar.
 
+Commit messages (`--format commit`, the commit-msg hook) are judged against
+their own thresholds, 50 and 100, because they are terser than prose: in 1,000
+Go commit messages the 99th percentile cost index is 49, against 8 to 16 for
+essays, docs, READMEs and discussion. Benchmark tables, shell commands and the
+`pkg/path:` scope prefix of the subject line are not read as prose.
+
 A rate is noisy for a short text: one finding in a 20-word comment is 50 per
 1,000 words. Below 40 words, readcost counts weighted findings instead: 2 or
 more gets "advise" and 3 or more gets "block".

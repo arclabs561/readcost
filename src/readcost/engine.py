@@ -8,7 +8,7 @@ from pathlib import Path
 
 from . import lexicon, readtime
 from .config import Config, load_config, severity_rank
-from .extract import Segment, extract
+from .extract import Segment, detect_format, extract
 from .features import (
     FEATURES,
     Context,
@@ -122,7 +122,7 @@ class Analyzer:
             yield sent
 
     def analyze(self, segments: list[Segment], path: str,
-                lines: list[tuple[int, int]] | None = None) -> Result:
+                lines: list[tuple[int, int]] | None = None, *, context: str = "prose") -> Result:
         result = Result(path=path)
         ctx = Context(self.cfg, self.profile, self.allow, self.enabled)
         floor = severity_rank(self.cfg.min_severity)
@@ -158,7 +158,7 @@ class Analyzer:
         zs = ctx.stats.get("dep_z", [])
         result.mean_dep_z = statistics.mean(zs) if zs else None
         # The verdict uses every finding; min_severity only trims what is shown.
-        self._verdict(result)
+        self._verdict(result, context)
         result.findings = [f for f in result.findings if severity_rank(f.severity) >= floor]
         if not lexicon.has_wordnet():
             result.notes.append("lexicon data missing: denominal-verb disabled, inanimate-subject reduced")
@@ -178,7 +178,7 @@ class Analyzer:
         return Finding(feature=feature, severity=sev, message=msg, excerpt=excerpt, sentence=text,
                        path=path, line=line, label=seg.label, suggestion=suggestion(feature, text))
 
-    def _verdict(self, result: Result) -> None:
+    def _verdict(self, result: Result, context: str = "prose") -> None:
         result.points = sum(WEIGHTS.get(f.severity, 0.5) for f in result.findings)
         result.cost_index = 1000.0 * result.points / result.words if result.words else 0.0
         advise_at = severity_rank(self.cfg.advise_severity)
@@ -191,9 +191,12 @@ class Analyzer:
             else:
                 result.verdict = "pass"
             return
-        if result.points >= self.cfg.block_min_points and result.cost_index >= self.cfg.block_cost_index:
+        advise_ci, block_ci = self.cfg.advise_cost_index, self.cfg.block_cost_index
+        if context == "commit":
+            advise_ci, block_ci = self.cfg.commit_advise_cost_index, self.cfg.commit_block_cost_index
+        if result.points >= self.cfg.block_min_points and result.cost_index >= block_ci:
             result.verdict = "block"
-        elif (result.cost_index >= self.cfg.advise_cost_index and result.points >= 1) \
+        elif (result.cost_index >= advise_ci and result.points >= 1) \
                 or any(severity_rank(f.severity) >= advise_at for f in result.findings):
             result.verdict = "advise"
         else:
@@ -203,7 +206,8 @@ class Analyzer:
                    lines=None, field_path=None, last_only=False) -> Result:
         segments = extract(text, path, fmt, field_path=field_path, last_only=last_only,
                            comments=self.cfg.comments)
-        return self.analyze(segments, path, lines)
+        context = "commit" if (fmt or detect_format(path, text)) == "commit" else "prose"
+        return self.analyze(segments, path, lines, context=context)
 
     def check_records(self, text: str, fmt: str, path: str, *, field_path=None) -> list[Result]:
         """One result per message or JSONL record, labeled ``path#label``."""

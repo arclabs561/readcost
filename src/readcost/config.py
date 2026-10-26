@@ -76,6 +76,11 @@ class Config:
     # advise at short_advise_points, block at block_min_points.
     short_text_words: int = 40
     short_advise_points: float = 2.0
+    # Commit messages are terser than prose: in 1,000 Go commit messages of
+    # 40+ words the 99th percentile cost index is 49, against 8 to 16 for
+    # essays, docs, READMEs and discussion (docs/evaluation.md, "Contexts").
+    commit_advise_cost_index: float = 50.0
+    commit_block_cost_index: float = 100.0
     hooks: HookConfig = field(default_factory=HookConfig)
     source: str = ""                # where the config came from
 

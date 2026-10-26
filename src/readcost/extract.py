@@ -469,6 +469,22 @@ def extract_source(text: str, path: str, label: str = "", comments: str = "doc")
 
 # --------------------------------------------------------------- commit messages
 
+# "net/http: fix ...", "cmd/compile, runtime: ...": a scope prefix, not prose.
+COMMIT_SCOPE = re.compile(r"^[\w./+,{} -]*[\w}]: (?=\S)")
+SHELL_START = re.compile(r"^\s*(\$ |cd |git |go |make |sed |rf |cat |echo |\./)")
+
+
+def _commit_prose(line: str) -> bool:
+    """False for benchmark tables, command lines and other lines that are not sentences."""
+    s = line.strip()
+    if not s:
+        return True
+    if SHELL_START.match(line) or "±" in s or re.search(r"\S {2,}\S.* {2,}\S", s):
+        return False  # a shell command, or columns of a table such as benchstat output
+    letters = sum(ch.isalpha() for ch in s)
+    return letters >= 0.6 * len(s.replace(" ", ""))
+
+
 def extract_commit(text: str, path: str, label: str = "") -> list[Segment]:
     kept = []
     for i, line in enumerate(text.splitlines()):
@@ -478,6 +494,12 @@ def extract_commit(text: str, path: str, label: str = "") -> list[Segment]:
             continue
         if re.match(r"^[\w-]+:\s", line) and i > 0:  # trailers: Signed-off-by:, Co-Authored-By:
             continue
+        if i == 0:
+            scope = COMMIT_SCOPE.match(line)
+            if scope and " " not in scope.group(0).rstrip(": ").replace(", ", ","):
+                line = line[scope.end():]
+        elif not _commit_prose(line):
+            line = ""
         kept.append((line, i + 1))
     return markdown_lines(kept, path, label)
 

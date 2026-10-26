@@ -550,6 +550,37 @@ the total. The model is trained on
 newspaper paragraphs read by native speakers; technical prose, code-heavy
 text and non-native readers are outside its data.
 
+## Contexts
+
+The verdict thresholds (advise at 15, block at 30) were set on ten READMEs.
+Following Alves et al. 2010, a threshold should sit at a high percentile of
+good writing of the same kind. Cost index per text on the corpus (texts of
+40+ words, after the fixes above):
+
+| Context | Texts | p90 | p95 | p99 |
+| --- | --- | --- | --- | --- |
+| essays | 118 | 5.4 | 7.0 | 8.4 |
+| docs | 81 | 6.2 | 7.8 | 11.4 |
+| READMEs | 41 | 13.0 | 14.0 | 16.1 |
+| discussion (HN, Stack Overflow) | 174 | 8.3 | 11.7 | 14.5 |
+| code comments (CPython, Rust std) | 30 | 6.7 | 8.7 | 9.9 |
+| Go commit messages | 549 | 23.9 | 32.5 | 48.9 |
+
+The prose thresholds already sit near the 99th percentile of every prose
+context, so they stay. Commit messages are terser and get their own:
+advise at 50 and block at 100, keeping the prose ratio of two. Thirty code
+files are too few to justify a separate threshold for comments.
+
+Most commit-message noise came from extraction, not prose: benchstat tables,
+shell commands and the `pkg/path:` scope prefix were read as sentences, and
+package paths such as `cmd/compile/internal/ssa` as slash lists. The commit
+extractor now drops lines that are not sentences and strips the scope, and
+a slash group of three or more lowercase identifiers counts as a path (so
+"read/write/execute" is no longer flagged either). On the 1,000 Go commit
+messages, the share not passing fell from 16.4% to 12.9% with the extraction
+fixes and to 1.6% with the commit thresholds; of the 16 left, 6 are short
+messages, 6 exceed the rate and 4 hold an error-level noun stack.
+
 ## Limits
 
 - One automated rater, no second rater, and no agreement statistic. The
