@@ -47,24 +47,24 @@ def test_claude_post_tool_use_blocks_only_in_block_mode(tmp_path):
 def test_claude_post_tool_use_silent_on_plain_or_unwatched(tmp_path):
     f = tmp_path / "README.md"
     f.write_text(PLAIN)
-    rc, out, _ = hook(["claude-code", "post-tool-use"],
-                      {"tool_name": "Write", "tool_input": {"file_path": str(f)}, "cwd": str(tmp_path)}, tmp_path)
-    assert rc == 0 and out is None
+    rc, out, err = hook(["claude-code", "post-tool-use"],
+                        {"tool_name": "Write", "tool_input": {"file_path": str(f)}, "cwd": str(tmp_path)}, tmp_path)
+    assert rc == 0 and out is None and err == ""
     g = tmp_path / "main.rs"
     g.write_text(DENSE)
-    rc, out, _ = hook(["claude-code", "post-tool-use"],
-                      {"tool_name": "Write", "tool_input": {"file_path": str(g)}, "cwd": str(tmp_path)}, tmp_path)
-    assert rc == 0 and out is None
+    rc, out, err = hook(["claude-code", "post-tool-use"],
+                        {"tool_name": "Write", "tool_input": {"file_path": str(g)}, "cwd": str(tmp_path)}, tmp_path)
+    assert rc == 0 and out is None and err == ""
 
 
 def test_claude_edit_checks_only_edited_lines(tmp_path):
     f = tmp_path / "README.md"
     f.write_text(DENSE + "\n" + PLAIN)
-    _, out, _ = hook(["claude-code", "post-tool-use"],
-                     {"tool_name": "Edit", "tool_input": {"file_path": str(f), "old_string": "x",
-                                                          "new_string": PLAIN.strip()},
-                      "cwd": str(tmp_path)}, tmp_path)
-    assert out is None
+    rc, out, err = hook(["claude-code", "post-tool-use"],
+                        {"tool_name": "Edit", "tool_input": {"file_path": str(f), "old_string": "x",
+                                                             "new_string": PLAIN.strip()},
+                         "cwd": str(tmp_path)}, tmp_path)
+    assert rc == 0 and out is None and err == ""
 
 
 def test_claude_pre_tool_use_denies_in_block_mode(tmp_path):
@@ -82,8 +82,8 @@ def test_claude_stop_revise_once(tmp_path):
     _, out, _ = hook(["claude-code", "stop"], payload, tmp_path)
     assert out["decision"] == "block"
     payload["stop_hook_active"] = True
-    _, out, _ = hook(["claude-code", "stop"], payload, tmp_path)
-    assert out is None
+    rc, out, err = hook(["claude-code", "stop"], payload, tmp_path)
+    assert rc == 0 and out is None and err == ""
 
 
 def test_claude_stop_report_uses_system_message(tmp_path):
@@ -97,8 +97,8 @@ def test_claude_message_display_accumulates_and_notes(tmp_path):
     env = {"CLAUDE_PLUGIN_DATA": str(tmp_path / "data")}
     half = len(DENSE) // 2
     base = {"message_id": "m1", "cwd": str(tmp_path)}
-    _, out, _ = hook(["claude-code", "message-display"], {**base, "index": 0, "final": False, "delta": DENSE[:half]}, tmp_path, env)
-    assert out is None
+    rc, out, err = hook(["claude-code", "message-display"], {**base, "index": 0, "final": False, "delta": DENSE[:half]}, tmp_path, env)
+    assert rc == 0 and out is None and err == ""
     _, out, _ = hook(["claude-code", "message-display"], {**base, "index": 1, "final": True, "delta": DENSE[half:]}, tmp_path, env)
     assert out["displayContent"].startswith(DENSE[half:]) and "readcost:" in out["displayContent"]
 

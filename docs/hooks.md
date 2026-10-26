@@ -12,10 +12,15 @@ on the same day.
 
 ## Shared rules
 
-**Advisory by default.** With no configuration, the only active hook is
-Claude Code's PostToolUse, and it only adds text next to the tool result.
-Nothing is denied or blocked until `hooks.mode = "block"`, and then only on a
-"block" verdict.
+**Advisory by default.** With no configuration, these hooks are active and
+only advise: Claude Code's PostToolUse adds text next to the tool result,
+piku's PreToolUse allows the write and adds context, piku's PostToolUse
+appends to a log, and git pre-commit and commit-msg print findings without
+failing. The Stop and MessageDisplay hooks and Claude Code's PreToolUse do
+nothing until configured. Nothing is denied or blocked until
+`hooks.mode = "block"`, and then only on a "block" verdict.
+`hooks.mode = "off"` turns every hook off, including Stop, MessageDisplay and
+the piku log.
 
 **Verdicts.** Each finding has a weight: info 0.5, warn 1, error 2. The cost
 index is the weighted count per 1,000 words.
@@ -32,8 +37,9 @@ set. Change the lines with `advise_cost_index`, `block_cost_index` and
 `block_min_points`.
 
 **Only the lines that changed.** On an edit, readcost judges sentences that
-start on the edited lines, so a hook does not repeat complaints about text
-nobody touched. Set `hooks.edited_lines_only = false` to judge the whole file.
+overlap the edited lines, so a hook does not repeat complaints about text
+nobody touched. A Write over an existing file counts as an edit of the lines
+it changes. Set `hooks.edited_lines_only = false` to judge the whole file.
 
 **Fail open.** Bad input, a missing spaCy model, or any exception ends the
 hook with exit 0 and no output. The error goes to stderr and, if
@@ -55,21 +61,22 @@ caps `additionalContext` at 10,000 characters.
 
 **Local only.** No hook uses the network. The MessageDisplay hook keeps the
 message that it is assembling in `$CLAUDE_PLUGIN_DATA/readcost-display/` (or
-in the system's temporary directory) and deletes it after the final batch. The piku
+under `$XDG_STATE_HOME` or `~/.local/state`, owner-only) and deletes it after
+the final batch. State left by an interrupted message is deleted after a day. The piku
 PostToolUse hook appends to `.piku/readcost.jsonl` in the project.
 
 ## Event map
 
 | Harness | Event | readcost reads | readcost returns | Active when |
 | --- | --- | --- | --- | --- |
-| Claude Code | PostToolUse on Write, Edit, MultiEdit | the file on disk; the edited lines | `hookSpecificOutput.additionalContext`; in block mode, `decision: "block"` with `reason` | `hooks.mode` is advise (default) or block |
-| Claude Code | PreToolUse on Write, Edit, MultiEdit | `tool_input.content` or `new_string` | `permissionDecision: "deny"` with the findings as the reason | `hooks.mode = "block"` |
-| Claude Code | Stop | `last_assistant_message` | report: `systemMessage` to the user; revise: `decision: "block"` once | `hooks.stop` is report or revise |
-| Claude Code | MessageDisplay | each `delta`, joined per `message_id` | `displayContent`: the final delta plus a one-line note | `hooks.display = "note"` |
-| piku | PreToolUse on write_file, edit_file | `tool_input.content` or `new_string` | `permissionDecision: "allow"` with `additionalContext`; in block mode, `"deny"` | `hooks.mode` is advise or block |
-| piku | PostToolUse on write_file, edit_file | the file on disk | a line in `.piku/readcost.jsonl` (piku ignores stdout) | configured |
-| git | pre-commit | staged content of changed lines | report on stderr; exit 1 on block in block mode | `hooks.mode` |
-| git | commit-msg | the message file | the same | `hooks.mode` |
+| Claude Code | PostToolUse on Write, Edit | the file on disk; the edited lines | `hookSpecificOutput.additionalContext`; in block mode, `decision: "block"` with `reason` | `hooks.mode` is advise (default) or block |
+| Claude Code | PreToolUse on Write, Edit | the lines `content` changes, or `new_string` | `permissionDecision: "deny"` with the findings as the reason | `hooks.mode = "block"` |
+| Claude Code | Stop | `last_assistant_message` | report: `systemMessage` to the user; revise: `decision: "block"` once | `hooks.stop` is report or revise, and `hooks.mode` is not off |
+| Claude Code | MessageDisplay | each `delta`, joined in `index` order per `message_id` | `displayContent`: the final delta plus a one-line note | `hooks.display = "note"`, `hooks.mode` not off, and the hook registered by hand (see Setup) |
+| piku | PreToolUse on write_file, edit_file | the lines `content` changes, or `new_string` | `permissionDecision: "allow"` with `additionalContext`; in block mode, `"deny"` | `hooks.mode` is advise or block |
+| piku | PostToolUse on write_file, edit_file | the file on disk | a line in `.piku/readcost.jsonl` (piku ignores stdout) | `hooks.mode` is advise or block |
+| git | pre-commit | staged content of changed lines; with file arguments, whole files that have nothing staged | report on stderr; exit 1 on block in block mode | `hooks.mode` is advise or block |
+| git | commit-msg | the message file | the same | `hooks.mode` is advise or block |
 | GitHub Actions | `action.yml` | the paths you give | annotations; exit 1 at `fail-on` | always |
 | any | `readcost hook generic` | `{"text"}` or `{"path"}` | verdict, counts, findings, feedback | always |
 | Python | `readcost.hooks.generic.review()` | a string or path | the same, as a dict | always |
@@ -94,11 +101,21 @@ PostToolUse hook appends to `.piku/readcost.jsonl` in the project.
 
 ### Claude Code
 
-As a plugin: install `integrations/claude-code-plugin/`. It registers all four
-hooks; each does nothing until `readcost.toml` turns it on, except PostToolUse.
+As a plugin: install `integrations/claude-code-plugin/`. In settings: merge
+`integrations/claude-code/settings.json` into `.claude/settings.json`
+(project) or `~/.claude/settings.json` (user). Both register PostToolUse,
+PreToolUse and Stop. PostToolUse advises by default; the other two do nothing
+until `readcost.toml` turns them on.
 
-In settings: merge `integrations/claude-code/settings.json` into
-`.claude/settings.json` (project) or `~/.claude/settings.json` (user).
+Neither registers MessageDisplay, because Claude Code would start it for
+every streamed batch of every answer. To use `hooks.display = "note"`, add it
+to your settings:
+
+```json
+"MessageDisplay": [
+  { "hooks": [ { "type": "command", "command": "readcost hook claude-code message-display", "timeout": 10 } ] }
+]
+```
 
 Either way `readcost` must be on the PATH that Claude Code runs hooks with.
 Matchers filter by tool name only; readcost filters paths itself using
@@ -115,8 +132,19 @@ model load.
 
 With the pre-commit framework, add this repository with hook ids `readcost` and
 `readcost-commit-msg`; `.pre-commit-hooks.yaml` installs the spaCy model as an
-additional dependency. Without it, copy `integrations/git/pre-commit` and
-`integrations/git/commit-msg` into `.git/hooks/`.
+additional dependency. `pre-commit install` installs only the pre-commit
+stage, so install both:
+
+```sh
+pre-commit install --hook-type pre-commit --hook-type commit-msg
+```
+
+or set `default_install_hook_types: [pre-commit, commit-msg]` in
+`.pre-commit-config.yaml`. In a commit, the `readcost` hook judges the changed
+lines of staged files. `pre-commit run --all-files` and pre-commit.ci stage
+nothing, so there it judges each file whole. Without the framework, copy
+`integrations/git/pre-commit` and `integrations/git/commit-msg` into
+`.git/hooks/`.
 
 ### CI
 
@@ -139,8 +167,10 @@ Send one JSON object on stdin to `readcost hook generic`:
 {"text": "...", "format": "markdown", "lines": "10-24"}
 ```
 
-The reply is one JSON object. Exit status is 0 for every verdict and 2 for a
-malformed request, so the caller decides what a verdict means.
+The reply is one JSON object. Exit status is 0 for every verdict, so the
+caller decides what a verdict means. A malformed request exits 2 and an
+environment error (a missing spaCy model, an unreadable file or config) exits
+3; both reply `{"error": "..."}`.
 
 ```json
 {"verdict": "advise", "cost_index": 21.4, "words": 233, "points": 5.0,
@@ -184,5 +214,9 @@ no change beyond pointing the piku adapter at the new fields.
 - The reference profile is one writer's READMEs. A cost index from chat answers
   or papers is not comparable to one from READMEs; build a profile from text you
   consider readable with `readcost profile build`.
+- After a Write, Claude Code's PostToolUse finds the changed lines by diffing
+  against `tool_response.originalFile`. That field appears in session
+  transcripts but not in the hooks documentation; without it, readcost judges
+  the whole file.
 - On an Edit, readcost locates the edited lines by searching for `new_string`.
   If that text also appears earlier in the file, it checks the earlier copy.

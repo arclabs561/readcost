@@ -7,7 +7,8 @@ Policy shared by every adapter (see docs/hooks.md):
 
 - Fail open. Any error, missing model, or unparseable input exits 0 with no
   output, so a broken linter never blocks an agent. Errors go to stderr and,
-  if ``READCOST_HOOK_LOG`` is set, to that file.
+  if ``READCOST_HOOK_LOG`` is set, to that file. The generic adapter is the
+  exception: its caller asked for a verdict, so it exits 3 with ``{"error"}``.
 - Cheap when irrelevant. Path filtering happens before spaCy is imported.
 - Advisory by default. ``hooks.mode = "block"`` is needed before an adapter
   denies or blocks anything, and only a "block" verdict does so.
@@ -65,4 +66,7 @@ def run(harness: str, event: str, rest: list[str]) -> int:
         _log(f"{harness} {event}: {type(exc).__name__}: {exc}")
         if os.environ.get("READCOST_HOOK_DEBUG"):
             traceback.print_exc()
-        return 2 if harness == "generic" else 0
+        if harness == "generic":
+            emit({"error": f"{type(exc).__name__}: {exc}"})
+            return 3
+        return 0
