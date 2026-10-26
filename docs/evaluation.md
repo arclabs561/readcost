@@ -1,0 +1,404 @@
+# Evaluation on well-regarded writing
+
+This report runs readcost over about 817,000 words of technical writing that
+people widely cite as clear, then reads a sample of its findings to see where
+the rules fail. Text that is already good should get few findings, so nearly
+every finding here is a candidate false positive. The report measures how the
+rules fail on such text. It does not measure how often they are right on model
+output, which is what the paper studied.
+
+Measured 2026-10-26. Distributions are for readcost `20199a9` (main after
+PR 7). The hand-labeled sample was drawn from `a4c609a` (main before PRs 5 to
+7); each sampled finding is also marked as still reported or not on
+`20199a9`.
+
+## Method
+
+1. `scripts/fetch_eval_corpus.py` downloads the corpus to a local directory
+   and writes `manifest.json`: URL, author, license, fetch time, SHA-256 and,
+   for GitHub files, the commit SHA. Web pages are reduced to Markdown with
+   trafilatura. Hacker News and Stack Overflow items are pinned by ID. The
+   text stays local and is never committed.
+2. `scripts/eval_corpus.py` runs readcost with its default settings over every
+   manifest entry, offline. Source files use `comments = "all"`. It writes
+   per-text results, every finding, and per-category and per-source tables
+   (median, 90th percentile and maximum of the cost index over texts of 150
+   words or more, verdict
+   shares, findings per 1,000 words for each feature). With `--sample N` it
+   draws findings from the essay and docs categories, spread evenly over
+   features and then over sources. The seed fixes the draw.
+3. One rater labeled 210 sampled findings (seed 1), reading each in its
+   sentence and, where needed, in the source:
+   - correct: a real reading cost that an editor would fix;
+   - defensible: arguable either way;
+   - wrong: a misparse, idiom, term of art, quotation, code-like text or
+     intentional style.
+
+   A second label records whether the construction that the rule names is
+   really there, apart from whether it costs the reader.
+4. Each proposed rule change was coded as a filter over the findings: the
+   sentence is reparsed with the same spaCy model and the finding is dropped
+   if the filter matches. The counts below are findings that the filter would
+   drop in the essay and docs categories on `20199a9`, and how the dropped
+   findings in the labeled sample split by label.
+
+The rater is Claude, an automated model. These labels are one rater's
+judgment, not ground truth; no second rater has checked them. The labels and
+the filter script are kept with the corpus, outside the repository.
+
+To reproduce:
+
+```sh
+python3 scripts/fetch_reference_corpora.py ref   # READMEs and Go commit messages (needs gh)
+uv run scripts/fetch_eval_corpus.py ref/eval
+python3 scripts/eval_corpus.py ref/eval --sample 210 --seed 1
+```
+
+## Corpus
+
+| Category | Sources | Texts | Words |
+| --- | --- | --- | --- |
+| essay | Paul Graham, Julia Evans, Dan Luu, Simon Willison, Russ Cox, Raymond Chen, Hillel Wayne, Joel Spolsky, Martin Fowler, Andrew Gallant, Dan Abramov, Brendan Gregg, Eli Bendersky | 118 | 391,411 |
+| docs | Go blog, Effective Go, Rust book, Python tutorial, Django docs, SQLite docs, GOV.UK publishing guidance, Stripe docs | 83 | 179,649 |
+| discussion | Hacker News top comments on 60 best stories; 100 highest-voted Stack Overflow answers | 218 | 40,011 |
+| code | CPython 3.15 standard library (24 modules), Rust `core` and `std` (6 files) | 30 | 104,679 |
+| readme | 42 READMEs of popular projects (earlier fetch) | 42 | 37,165 |
+| commit | 1,000 Go commit messages (earlier fetch) | 1,000 | 64,125 |
+
+Words are the words readcost analyzed, after code, tables and headings are
+removed. Each essayist contributes 3 to 14 posts. Recent posts were taken from
+each author's feed; older ones are well-known essays. Licenses range from
+public domain (SQLite) and open licenses (Go blog CC BY 4.0, Rust book MIT or
+Apache-2.0, Stack Overflow CC BY-SA 4.0, GOV.UK OGL v3) to all rights reserved
+for most essays. That is why the text stays local. This document quotes
+single sentences with attribution.
+
+Not fetched: the GOV.UK page of writing guidelines, from which the extractor
+got under 100 words. Paul Graham's pages need trafilatura's default mode rather than its
+precision mode, which drops their table layout.
+
+## Distributions
+
+Cost index is weighted findings per 1,000 words. Feature columns are findings
+per 1,000 words: stack (stacked-nouns), dep (long-dependency), inan
+(inanimate-subject), denom (denominal-verb), rel (reduced-object-relative),
+hyph (hyphen-compound), list (inline-list).
+
+| Category | CI p50 | CI p90 | CI max | advise | block | stack | dep | inan | denom | rel | hyph | list |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| essay | 7.0 | 11.9 | 17.4 | 5% | 0% | 2.23 | 0.72 | 1.11 | 1.08 | 4.20 | 0.04 | 2.11 |
+| docs | 6.2 | 10.4 | 20.8 | 7% | 0% | 3.27 | 0.56 | 0.67 | 0.68 | 2.34 | 0.02 | 1.70 |
+| discussion | 5.0 | 13.3 | 20.0 | 9% | 0% | 2.17 | 0.62 | 0.57 | 0.77 | 3.67 | 0.02 | 1.97 |
+| code | 6.4 | 8.6 | 13.8 | 7% | 0% | 1.65 | 1.71 | 0.88 | 0.63 | 1.09 | 0.01 | 1.56 |
+| readme | 8.6 | 15.7 | 27.6 | 19% | 0% | 6.22 | 0.57 | 0.38 | 0.65 | 1.10 | 0.19 | 3.69 |
+| commit | 11.4 | 28.2 | 110.7 | 21% | 4% | 9.19 | 1.82 | 1.48 | 0.56 | 1.15 | 0.12 | 5.55 |
+
+Selected sources (cost index over texts of 150+ words):
+
+| Source | Texts | Words | CI p50 | CI p90 | advise |
+| --- | --- | --- | --- | --- | --- |
+| essay/andrew-gallant | 8 | 76,579 | 5.3 | 6.4 | 0% |
+| essay/paul-graham | 14 | 56,854 | 6.5 | 8.9 | 0% |
+| essay/dan-luu | 9 | 100,550 | 8.6 | 10.1 | 11% |
+| essay/brendan-gregg | 7 | 11,657 | 12.2 | 14.5 | 14% |
+| docs/rust-book | 16 | 34,886 | 5.9 | 6.9 | 0% |
+| docs/python-tutorial | 11 | 21,968 | 4.6 | 9.4 | 0% |
+| docs/sqlite-docs | 10 | 35,144 | 7.8 | 14.4 | 30% |
+| docs/stripe-docs | 10 | 15,361 | 8.2 | 16.2 | 10% |
+| code/rust-std | 6 | 61,479 | 4.3 | 5.7 | 0% |
+
+What stands out:
+
+- The advise threshold of 15 sits above the 90th percentile of essays (11.9)
+  and docs (10.4). This matches the README's claim that writing as clear as
+  the BurntSushi READMEs passes. 95% of essays and 93% of docs pass.
+- Reduced object relatives are the most frequent finding in essays (4.2 per
+  1,000 words; Paul Graham 8.0 on `a4c609a`). Stacked nouns lead in commits
+  (9.2), READMEs (6.2), and the SQLite and Stripe docs (about 6).
+- Commit messages are the only category with block verdicts (4%). Stacked
+  nouns drive them: 42 of the 44 blocked messages have 40 or more words,
+  and both the subject ("net/http: rewrite the transport connection pool")
+  and the dense body add stacks.
+- Some essays and docs get "advise" with a cost index well under 15, because
+  one finding of severity error is enough. All 9 such texts on `20199a9` were
+  tipped by a five-noun stack, and several of those stacks are misparses that
+  run across a verb or a dash ("Go language specification defines slices").
+- PRs 5 to 7 cut findings on this corpus from 10,485 to 9,087 (13%), mostly
+  long-dependency (down 38%) and reduced-object-relative (down 27%).
+
+## Precision of the sample
+
+Precision is the share of sampled findings labeled correct; "c+d" adds
+defensible ones. "Present" is the share where the named construction is
+really there in the finding. "Kept" counts the sampled findings that
+`20199a9` still reports, with their labels.
+
+| Feature | n | correct | defensible | wrong | precision | c+d | present | kept on 20199a9 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| stacked-nouns | 31 | 1 | 6 | 24 | 3% | 23% | 65% | 26 (1 c, 5 d, 20 w) |
+| long-dependency | 32 | 0 | 9 | 23 | 0% | 28% | 28% | 14 (0 c, 5 d, 9 w) |
+| inanimate-subject | 32 | 1 | 6 | 25 | 3% | 22% | 31% | 27 (1 c, 4 d, 22 w) |
+| denominal-verb | 32 | 0 | 1 | 31 | 0% | 3% | 3% | 29 (0 c, 1 d, 28 w) |
+| reduced-object-relative | 32 | 0 | 1 | 31 | 0% | 3% | 56% | 20 (0 c, 1 d, 19 w) |
+| hyphen-compound | 19 | 1 | 3 | 15 | 5% | 21% | 21% | 17 (1 c, 2 d, 14 w) |
+| inline-list | 32 | 0 | 4 | 28 | 0% | 12% | 41% | 23 (0 c, 3 d, 20 w) |
+| all | 210 | 3 | 30 | 177 | 1% | 16% | 36% | 156 (3 c, 21 d, 132 w) |
+
+Hyphen-compound fired only 19 times in the essay and docs categories, so its
+row is the whole population, not a sample. On `20199a9`, 3 of the 156 kept
+findings are correct (2%) and 24 are correct or defensible (15%).
+
+Read the precision column against the selection: these writers are chosen
+for clarity, so a low rate is expected. The "present" column says more. Where
+it is high (stacked-nouns, reduced-object-relative) the parser finds the
+construction and the rule's claim about cost is what fails. Where it is low
+(denominal-verb, long-dependency, inanimate-subject) the rule fires on
+something other than what it names.
+
+The three correct findings:
+
+<!-- readcost: off -->
+- "the database file format version numbers" ([SQLite](https://sqlite.org/wal.html))
+- "User research by GDS noticed users use and understand the word 'page'" ([GOV.UK](https://guidance.publishing.service.gov.uk/writing-to-gov-uk-standards/style-guides/a-to-z-style-guide/))
+- "a subsecond-offset heatmap of profile samples" ([Brendan Gregg](https://www.brendangregg.com/blog/2025-05-01/doom-gpu-flame-graphs.html))
+<!-- readcost: on -->
+
+## Where the rules break down
+
+Causes of the 207 wrong or defensible findings, grouped. Counts are from the
+sample.
+
+### Reduced object relative: idiomatic pronoun subjects (17), wh-relatives (8), temporal heads (2)
+
+Most hits are short relatives with a pronoun subject. Gordon, Hendrick and
+Johnson (2001) found that the reading cost of object relatives depends on the
+mix of types of noun phrase: a description head with a pronoun subject costs
+far less than two descriptions. Editors do not add "that" to these.
+
+<!-- readcost: off -->
+- "If the code is written by someone I trust, ..." ([Andrew Gallant](https://burntsushi.net/foss/))
+- "a standard ... is all you need" ([Django docs](https://github.com/django/django/blob/5c13b5a19864807cae7266339554c14e151e5961/docs/topics/db/models.txt))
+<!-- readcost: on -->
+
+Most of the rest have "where" or "whose", which `a4c609a` did not
+recognize. PR 7 fixed 7 of these 8. Two more are temporal nouns that head an
+adverbial ("each time it is evaluated", [Effective Go](https://github.com/golang/website/blob/52d470bcf26e41fd5a38199c5463268fb61b67ae/_content/doc/effective_go.html)).
+A reduced passive also reads as an object relative: on `a4c609a`, readcost
+flags "the commit SHA resolved at fetch time" in this repository's own
+`scripts/fetch_eval_corpus.py`.
+
+### Denominal verb: settled verbs (15), phrasal verbs (10), idioms, misparses and participles (6)
+
+The WordNet test marks a verb as denominal when its noun senses outnumber its
+verb senses. That catches "figure" (87 of 543 hits in essays and docs),
+"reference", "scale", "exit" and "host", which every reader knows as verbs.
+Phrasal verbs are worse: the particle that marks "figure out" as a verb is
+taken as evidence of a verb use.
+
+<!-- readcost: off -->
+- "information than you can figure out from the screen" ([Joel Spolsky](https://www.joelonsoftware.com/2000/10/02/painless-functional-specifications-part-1-why-bother/))
+- "doing something that really doesn't scale" ([Paul Graham](https://paulgraham.com/ds.html))
+- "Use numbered steps instead of bullet points" ([GOV.UK](https://guidance.publishing.service.gov.uk/writing-to-gov-uk-standards/style-guides/a-to-z-style-guide/))
+<!-- readcost: on -->
+
+The only real denominal verb in the sample is intentional wit: "you can't
+credential your way into it" ([Martin Fowler](https://martinfowler.com/articles/practitioner-voice.html)).
+In READMEs the same rule fires on plural nouns in fragments, as in
+"Threading and synchronization primitives". It also fires on "alias", "fork",
+"bundle" and "version".
+
+### Inline list: three-item and comma-count overcounts (17), short items (7), quoted or code items (4)
+
+The comma fallback counts every comma in a long sentence that ends in "and"
+or "or". Lists of one-word items read fine in prose, and so do rhetorical
+triads.
+
+<!-- readcost: off -->
+- "Microsoft, Apple, Yahoo, Google, and Facebook all began this way." ([Paul Graham](https://paulgraham.com/startupideas.html))
+- "guidelines for naming packages, types, functions, and variables" ([Go blog](https://github.com/golang/website/blob/52d470bcf26e41fd5a38199c5463268fb61b67ae/_content/blog/package-names.md))
+- "The gods Hadad and El and Rašap and Rākib-El and Šamaš supported me." (a quoted inscription, [Hillel Wayne](https://www.hillelwayne.com/post/tale-of-daniel/))
+<!-- readcost: on -->
+
+### Inanimate subject: verbs that take things as subjects (10), copular "feel" (5), terms of art (3)
+
+The animate-verb list from WordNet includes verbs that ordinary English uses
+with inanimate subjects: suffer from, rely on, respond, link, perturb,
+overwhelm. "Feel" as a linking verb ("it feels like") has no agent at all.
+"Panic" and "die" are terms of art for programs.
+
+<!-- readcost: off -->
+- "If a line feels too long, wrap it" ([Effective Go](https://github.com/golang/website/blob/52d470bcf26e41fd5a38199c5463268fb61b67ae/_content/doc/effective_go.html))
+- "Systems under load can respond with exponential latency" ([Brendan Gregg](https://www.brendangregg.com/blog/2025-08-04/when-to-hire-a-computer-performance-engineering-team-2025-part1.html))
+- "will cause the program to panic" ([Rust book](https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch08-01-vectors.md))
+<!-- readcost: on -->
+
+Defensible ones are conventional personification that technical readers
+expect: "the database layer knows nothing about data display" ([Django docs](https://github.com/django/django/blob/5c13b5a19864807cae7266339554c14e151e5961/docs/misc/design-philosophies.txt)).
+
+### Stacked nouns: names and established terms (13), parser errors (9), headlines (2)
+
+A name or acronym in front of a term of two nouns reads as one unit: "Go
+programming language", "HTTP status codes", "Monte Carlo methods". Hyphenated
+modifiers ("compile-time restriction", "client-side apps") are split into
+nouns by the tokenizer, and adjectives and verbs get tagged as nouns ("custom
+data type", "bisect hash patterns default to"). The allow list misses
+plurals: "error message" is allowed but "validation error messages" is
+flagged.
+
+<!-- readcost: off -->
+- "Because of the compile-time restriction, ..." ([Effective Go](https://github.com/golang/website/blob/52d470bcf26e41fd5a38199c5463268fb61b67ae/_content/doc/effective_go.html))
+- "Instead, bisect hash patterns default to a 'quiet' mode" ([Russ Cox](https://research.swtch.com/bisect))
+- "Bonus bonus chatter: ..." (a recurring section label, [Raymond Chen](https://devblogs.microsoft.com/oldnewthing/20261012-00/?p=112767))
+<!-- readcost: on -->
+
+### Long dependency: fronted adverbials (10), coordinated clauses (5), misparses and fragments (8)
+
+The longest arc is often from a sentence-initial connective ("However", "In
+other words", "For example") to the main verb, or between two coordinated
+clauses. Neither has to be held in memory. PR 7, with arcs between words
+only and a refitted profile, removed 18 of the 32 sampled findings. The
+defensible ones are real interruptions that the writer chose, such as an
+aside in dashes between subject and verb.
+
+<!-- readcost: off -->
+- "However, for ListView, the automatically generated context variable is ..." ([Django docs](https://github.com/django/django/blob/5c13b5a19864807cae7266339554c14e151e5961/docs/intro/tutorial04.txt))
+- "You do tend to get a certain bulk discount if you buy the economy-size pain, but you can't evade the fundamental conservation law." ([Paul Graham](https://paulgraham.com/wealth.html))
+- Defensible: "the thing it's made of, accumulated consequence-bearing experience stated plainly, has to be earned" (dashes replaced with commas; [Martin Fowler](https://martinfowler.com/articles/practitioner-voice.html))
+<!-- readcost: on -->
+
+### Hyphen compound: established compounds (7), names and defined terms (6), misparses (2)
+
+Some compounds are established but missing from WordNet: "set-top boxes",
+"quad-core processor", "message-digest algorithm". A compound in quotes is
+being named or defined, as in "the 'bisect-reduce' algorithm" ([Russ
+Cox](https://research.swtch.com/bisect)). The first-use rule then misses its
+next use, because the key keeps the closing quote. The rule also fires on
+names of repositories and tools ("clang-format/clangd") and on the suffix
+"-ish".
+
+### Extraction
+
+The essay corpus has extraction artifacts of its own. trafilatura drops
+blockquote markers, so quoted material (the C89 standard in a Russ Cox post)
+counts as the author's prose. Some sites separate paragraphs with single
+newlines, which the fetcher splits with a heuristic.
+
+## Proposed rule changes
+
+Ranked by findings dropped in the essay and docs categories on `20199a9`
+(about 571,000 words). "Sample" gives the labels of the dropped sampled
+findings that `20199a9` still reports. No filter dropped any of the three
+correct findings. Each was coded and run except where marked untested.
+
+1. Reduced object relative: skip the clause when its subject is a pronoun.
+   Drops 1,684 of 2,065 (82%). Sample: 15 wrong, 1 defensible, 0 correct.
+   Fixes "someone I trust" (Gallant), "the people I call Architecture
+   Astronauts" ([Joel Spolsky](https://www.joelonsoftware.com/2001/04/21/dont-let-architecture-astronauts-scare-you/)),
+   "the dataset we've used" ([Andrew Gallant](https://burntsushi.net/csv/)).
+   It also drops one defensible finding from Fowler, "the thing no one had
+   time to notice". Clauses with a full noun phrase as subject, such as "the
+   format the reader expects", are still reported.
+2. Inline list: require four conjuncts from the parser, drop the fallback
+   that counts commas, and skip lists whose items average under three words.
+   Together with item 11, drops 1,035 of 1,131 (92%). Sample: 20 wrong, 3
+   defensible. Fixes Graham's list of companies, the Go blog's "packages, types,
+   functions, and variables", and Stripe's "fulfilling orders, granting
+   account access, or modifying records" ([Stripe](https://docs.stripe.com/webhooks.md)).
+   Wrongly lets through Effective Go's seven-item list of key types, which
+   would read better as a bulleted list.
+3. Stacked nouns: do not count a leading name or acronym. Drops 362
+   of 1,461 (25%). Sample: 5 wrong. Fixes "Go programming language" ([Go
+   blog](https://github.com/golang/website/blob/52d470bcf26e41fd5a38199c5463268fb61b67ae/_content/blog/errors-are-values.md)),
+   "Bluesky client app" ([Dan Abramov](https://overreacted.io/open-social/)),
+   "HTTP status codes" (Django docs). Wrongly lets through "SEO spam clone"
+   ([Dan Luu](https://danluu.com/diseconomies-scale/)), which is a real stack.
+4. Reduced object relative: skip clauses on light or temporal heads (time,
+   way, reason, all). Drops 364 (18%), mostly the same findings as item 1. Fixes
+   "the first time you write code like that" ([Russ Cox](https://research.swtch.com/nih)),
+   "the way you'd ask the question" ([Dan Luu](https://danluu.com/ai-coding/)), "is all you need" (Django
+   docs, Rust book).
+5. Denominal verb: treat a verb as settled when it is tagged as a verb in
+   three or more texts of a held-out corpus, and skip verbs with a
+   particle. The coded version used the readme, commit, code and
+   discussion categories as the held-out corpus. Drops 304 of 543 (56%).
+   Sample: 18 wrong. Among them are "figure out" (Spolsky, Fowler, Rust
+   book), "doesn't scale" (Graham) and "goroutines to exit" ([Go
+   blog](https://github.com/golang/website/blob/52d470bcf26e41fd5a38199c5463268fb61b67ae/_content/blog/context.md)).
+   Keeps "credential your way into it". A held-out list built from a larger
+   corpus would do better than this small one.
+6. Long dependency: leave out arcs from fronted adverbials and
+   connectives, and arcs between coordinated clauses, before computing z.
+   Drops 252 of 384 (66%). Sample: 6 wrong, 4 defensible. It drops the
+   Django "However" sentence above, Gallant's "In other words, ..." ([Andrew
+   Gallant](https://burntsushi.net/regex-internals/)) and Graham's two
+   coordinated clauses. The profile must be refitted with the same arcs.
+   Risk: on `a4c609a` the coordination filter also dropped a 49-word SQLite
+   sentence whose subject waits behind two parentheticals ([SQLite](https://sqlite.org/wal.html)).
+7. Inanimate subject: remove verbs that take inanimate subjects in
+   ordinary English (rely, respond, suffer, link, catch, resolve, remind,
+   surprise, overwhelm, perturb, react, behave) and terms of art (panic,
+   die, crash). Drops 114 (21%). Sample: 11 wrong. It drops Gregg's
+   "respond", the Rust book's "panic" and Gallant's "doesn't suffer from that
+   weakness".
+8. Inanimate subject: skip linking verbs (feel, seem, look, sound,
+   appear). Drops 67 (12%). Sample: 4 wrong. It drops the Effective Go line
+   above, "how magical it feels" ([Russ Cox](https://research.swtch.com/bisect))
+   and "Wouldn't it feel satisfying?" (Fowler).
+9. Stacked nouns: count a hyphenated word as one unit, and leave coined ones
+   to hyphen-compound. Drops 130 (9%). Sample: 2 wrong. Fixes
+   "compile-time restriction" (Effective Go), "client-side apps" (Abramov),
+   "world-class team" (Dan Luu). Coinages such as "caller-side bug" and
+   "meat-proxy development" would then be judged by hyphen-compound.
+10. Stacked nouns: a stack of severity error must not cross a dash or end in
+    a word that can be a verb, and one such finding should not make a long
+    text "advise". Untested at the level of findings; it changes the verdict
+    of 9 texts. Examples are "Go language specification defines slices" (Go
+    blog) and a Django stack that runs across a dash.
+11. Inline list: skip lists whose items are code spans or quoted terms.
+    Drops 14 on top of item 2. Fixes "four columns 'a', 'b', 'c', and 'd'"
+    (SQLite docs) and the Gallant "yes"/"no" quotes ([Andrew
+    Gallant](https://burntsushi.net/transducers/)).
+12. Hyphen compound: skip compounds in quotes or next to a slash, an
+    expansion in parentheses after an acronym, and "-ish"; strip quotes from
+    the first-use key. Drops 5 of 18. Fixes "'bisect-reduce' algorithm"
+    (Russ Cox), "CSBI (context-situation-behaviour-impact)" (Fowler),
+    "clang-format/clangd" (Dan Luu), "standard-ish" (Abramov).
+13. Match terms in the allow list by lemma, so that plurals match. Drops 4. Fixes "validation
+    error messages" (GOV.UK), "API rate limits" (Stripe), "niche use cases"
+    (Abramov).
+14. Treat text in quotation marks as opaque, as code spans already are.
+    Untested on the corpus. Quoted lists, quoted terms and quoted titles
+    account for several wrong findings above; this document gets most of its
+    own findings from the sentences it quotes.
+
+One tested idea failed. Treating a hyphen pair as established when it occurs
+in two or more other sources of this corpus dropped nothing: the corpus is too
+small for "set-top" or "quad-core" to recur. An established-compound list
+needs a much larger reference corpus.
+
+Items 1, 2, 5 and 7 change what the README says about those features, and
+item 6 needs the reference profile refitted. Each change needs a regression
+test built from the sentences quoted here, and from the paper's examples
+that the rule should still report.
+
+## Limits
+
+- One automated rater, no second rater, and no agreement statistic. The
+  research roadmap's "labeled findings with a second rater" is still open.
+- The sample is 210 findings from the essay and docs categories; commit,
+  README, code and discussion findings were not labeled.
+- The corpus is curated for quality. It cannot show how well the rules
+  separate model text from human text.
+- Filters reparse each sentence alone, which can differ slightly from the
+  parse inside the document.
+- Recent posts (2026) are included; their authors may have used writing
+  tools.
+- Each count is from one run of a deterministic pipeline; there is no
+  variance to report, but a different sample seed would give different
+  labeled examples.
+
+## References
+
+- Gordon, Hendrick and Johnson 2001. Memory interference during language
+  processing. Journal of Experimental Psychology: Learning, Memory, and
+  Cognition 27(6), doi 10.1037/0278-7393.27.6.1411.
