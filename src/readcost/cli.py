@@ -157,18 +157,24 @@ def _cmd_explain(args) -> int:
 
 
 def _cmd_setup(args) -> int:
-    status = EXIT_OK
+    from . import modelstore
+
     model = args.model
     try:
         import spacy
 
         spacy.load(model)
         print(f"spaCy model {model}: installed")
+        return EXIT_OK
     except OSError:
-        print(f"spaCy model {model}: downloading")
-        rc = subprocess.call([sys.executable, "-m", "spacy", "download", model])
-        status = status or (EXIT_USAGE if rc else EXIT_OK)
-    return status
+        pass
+    if model == modelstore.MODEL:
+        # No pip needed, so this also works under uvx.
+        path = modelstore.cached_path() or modelstore.fetch()
+        print(f"spaCy model {model}: {path}")
+        return EXIT_OK
+    print(f"spaCy model {model}: downloading")
+    return EXIT_USAGE if subprocess.call([sys.executable, "-m", "spacy", "download", model]) else EXIT_OK
 
 
 def _cmd_hook(args) -> int:

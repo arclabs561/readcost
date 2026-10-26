@@ -27,11 +27,14 @@ the evidence behind each choice and the roadmap.
 
 ```sh
 pip install git+https://github.com/arclabs561/readcost   # or: pip install -e . from a checkout
-readcost setup              # downloads the spaCy English model (about 13 MB)
 ```
 
-Python 3.11 or later. The dependencies are spaCy and markdown-it-py. readcost is
-not on PyPI yet.
+Python 3.11 or later. The dependencies are spaCy and markdown-it-py. On first
+use readcost downloads spaCy's English model (about 13 MB, checksum verified)
+into `~/.cache/readcost`; no pip is needed, so it also works under `uvx`.
+`readcost setup` does the download ahead of time. Set `READCOST_NO_DOWNLOAD=1`
+to forbid it, for example on an offline machine with the model installed as a
+package. readcost is not on PyPI yet.
 
 ## Use
 
