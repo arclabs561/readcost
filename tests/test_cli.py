@@ -4,7 +4,8 @@ import sys
 
 DENSE = ("It does not own indexing, segment selection, compaction, or reader visibility. "
          "The example prints the first snapshot-search cost with persisted region-index sidecars "
-         "present versus after deleting those sidecars and forcing source-segment rebuilds.\n")
+         "present versus after deleting those sidecars and forcing source-segment rebuilds. "
+         "We tune the shard compaction retry budget by hand.\n")
 
 
 def run(args, stdin=None, cwd=None):

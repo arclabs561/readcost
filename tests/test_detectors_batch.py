@@ -228,7 +228,7 @@ def test_two_repeats_are_not_a_frame(full):
 # ---------------------------------------------------------------- rationale-keeping suggestions
 
 def test_inline_list_suggestion_keeps_the_reason(analyzer):
-    fs = found(analyzer, "It supports negations, implications, OWA, power means, and uninorms, "
+    fs = found(analyzer, "It supports negations from three families, implications defined by residuation, ordered weighted averages, and uninorms with any neutral element, "
                          "because fuzzy logic needs all of them.", "inline-list")
     assert fs
     s = fs[0].suggestion.lower()
@@ -243,7 +243,7 @@ def test_long_dependency_suggestion_keeps_the_reason(analyzer):
 
 
 def test_suggestion_without_a_reason_is_the_plain_fix(analyzer):
-    fs = found(analyzer, "It supports negations, implications, OWA, power means, and uninorms.", "inline-list")
+    fs = found(analyzer, "It supports negations from three families, implications defined by residuation, ordered weighted averages, and uninorms with any neutral element.", "inline-list")
     assert fs and fs[0].suggestion == "Use a bulleted list."
 
 

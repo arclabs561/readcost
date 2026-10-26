@@ -12,7 +12,8 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 DENSE = ("It does not own indexing, segment selection, compaction, or reader visibility. "
          "The example prints the first snapshot-search cost with persisted region-index sidecars "
-         "present versus after deleting those sidecars and forcing source-segment rebuilds.\n")
+         "present versus after deleting those sidecars and forcing source-segment rebuilds. "
+         "We tune the shard compaction retry budget by hand.\n")
 PLAIN = "The index stores one list of documents for each term.\n"
 HAS_GIT = subprocess.run(["git", "--version"], capture_output=True).returncode == 0
 
