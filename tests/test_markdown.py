@@ -8,7 +8,7 @@ import json
 
 from readcost.config import Config
 from readcost.engine import Analyzer
-from readcost.extract import CODE, extract, extract_source
+from readcost.extract import CODE, extract, extract_markdown, extract_source
 
 
 def texts(md):
@@ -251,3 +251,21 @@ def test_url_keeps_its_own_balanced_paren():
 def test_home_and_relative_paths_are_placeholders():
     assert texts("Copy ~/x and ../up/dir before you run the build.\n") == \
         [f"Copy {CODE} and {CODE} before you run the build."]
+
+
+def test_prose_inside_html_blocks_is_extracted():
+    # Effective Go and many READMEs write paragraphs as HTML inside Markdown.
+    md = ("Intro.\n\n<p align=\"center\"><img src=\"logo.png\"></p>\n\n"
+          "<p>\nConcurrent programming is a large topic, and there is space only for\n"
+          "some highlights here.\n</p>\n")
+    segs = extract_markdown(md, "x.md")
+    texts = [s.text.strip() for s in segs]
+    assert any(t.startswith("Concurrent programming is a large topic") for t in texts)
+    assert not any("img" in t or "logo" in t for t in texts)
+    para = next(s for s in segs if "Concurrent" in s.text)
+    assert para.line_at(0) == 5  # the <p> line
+
+
+def test_readcost_off_covers_html_blocks():
+    md = "<!-- readcost: off -->\n<p>This paragraph is switched off for the checker.</p>\n<!-- readcost: on -->\n"
+    assert extract_markdown(md, "x.md") == []

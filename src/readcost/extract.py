@@ -224,6 +224,16 @@ def _markdown(src: str, path: str, label: str, line_no) -> list[Segment]:
                 if tok.nesting == 1:
                     skip_level = tok.level
                 continue
+        if tok.type == "html_block" and not disabled:
+            # Prose inside HTML in Markdown (<p>...</p>, <details>) is still prose.
+            base = tok.map[0] if tok.map else 0
+            parser = _HTMLProse()
+            parser.feed(tok.content)
+            parser._flush()
+            for seg in markdown_lines([(t, line_no(base + n - 1)) for t, n in parser.lines], path, label):
+                seg.in_list = items > 0
+                segments.append(seg)
+            continue
         if disabled or tok.type != "inline" or i == 0 or tokens[i - 1].type != "paragraph_open":
             continue  # headings, table cells and definition terms are not prose
         seg = _segment(_inline_pieces(tok, line_no), path, label)
