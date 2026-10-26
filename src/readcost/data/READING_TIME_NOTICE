@@ -1,0 +1,19 @@
+reading_time_model.json.gz is a gradient-boosted tree model fitted to word
+reading times from the OneStop Eye Movements dataset, ordinary reading
+regime (Berzak et al., OneStop: A 360-Participant English Eye Tracking
+Dataset with Different Reading Regimes, Scientific Data 12, 1995 (2025);
+https://github.com/lacclab/OneStop-Eye-Movements; data at
+https://osf.io/2prdq/). The eye-tracking data is licensed under Creative
+Commons Attribution 4.0 International. The model contains no text.
+
+The model was also tested on the Provo Corpus (Luke and Christianson 2018,
+Behavior Research Methods 50, 826-833; https://osf.io/sjefs/), licensed
+under Creative Commons Attribution 4.0 International. Provo data was not
+used for fitting.
+
+word_freq.txt.gz holds word counts from two shards of FineWeb-Edu
+(CC-MAIN-2019-04); see FINEWEB_NOTICE for its licence (ODC-By 1.0).
+
+Built with scripts/reading_time_prep.py, scripts/reading_time_train.py and
+scripts/build_word_freq.py. The feature set follows Cekini et al. 2026,
+"The Cognitive Cost of LLM Writing" (arXiv 2610.23715).
