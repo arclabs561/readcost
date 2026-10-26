@@ -67,12 +67,14 @@ FEATURES: dict[str, Feature] = {f.id: f for f in [
         "Indexing and compaction are left to the caller.",
     ),
     Feature(
-        "denominal-verb", "Noun used as a verb", "info", True, "paper",
+        "denominal-verb", "Noun used as a verb", "info", False, "paper",
         "A noun pressed into service as a verb (calendar it, footnote it) "
-        "makes the reader re-parse the word. Established verbs are not flagged.",
+        "makes the reader re-parse the word. Off by default: on well-edited "
+        "prose almost every hit was a settled verb (scale, host, fork), because "
+        "the lexicon cannot tell a new coinage from an old one (docs/evaluation.md).",
         "Use an ordinary verb phrase.",
-        "Footnote the exception.",
-        "Add a footnote about the exception.",
+        "The script will bucket the requests by hour.",
+        "The script will group the requests by hour.",
     ),
     Feature(
         "reduced-object-relative", "Object relative clause without 'that'", "info", True, "paper",
@@ -282,9 +284,10 @@ def _noun_stack(token) -> list:
 
 def stacked_nouns(sent, ctx: Context, taken: set[int],
                   spans: list[set[int]] | None = None) -> list[tuple[str, str, list]]:
-    # An allowed term ("write-ahead log") and a hyphenated package name
-    # ("markdown-it-py") each count as one unit.
-    spans = _merge((spans or []) + [s for s in _hyphen_spans(sent) if _looks_like_package(sent.doc, s)])
+    # An allowed term ("write-ahead log") and a hyphenated word ("reader-patience",
+    # "markdown-it-py") each count as one unit; a coined hyphen pair in front
+    # of a noun is hyphen-compound's to report.
+    spans = _merge((spans or []) + _hyphen_spans(sent))
     out = []
     minimum = ctx.cfg.stacked_nouns_min
     caps = _mostly_upper(sent)
@@ -313,6 +316,13 @@ def stacked_nouns(sent, ctx: Context, taken: set[int],
             continue  # a proper name such as "Apple M3 Max"
         excerpt = _excerpt(sent.doc, stack, ctx)
         ids = {x.i for x in stack}
+        # A leading name or acronym classifies the rest ("Go programming
+        # language", "SQLite database file"); count the units after it.
+        for x in sorted(stack, key=lambda x: x.i):
+            is_name = x.pos_ == "PROPN" or (x.is_upper and len(x.text) > 1) or x.text == CODE
+            if caps or not is_name or (x.i == sent.start and not x.is_upper) or len(ids) == 1:
+                break
+            ids.discard(x.i)
         touched = [s for s in spans if s & ids]
         units = len(ids - set().union(*touched)) + len(touched)
         if units < minimum:
@@ -323,7 +333,8 @@ def stacked_nouns(sent, ctx: Context, taken: set[int],
     return out
 
 
-def hyphen_compounds(sent, ctx: Context, taken: set[int]) -> list[tuple[str, str, list]]:
+def hyphen_compounds(sent, ctx: Context, taken: set[int],
+                     allowed: set[int] = frozenset()) -> list[tuple[str, str, list]]:
     out = []
     toks = list(sent)
     for k in range(1, len(toks) - 1):
@@ -349,8 +360,10 @@ def hyphen_compounds(sent, ctx: Context, taken: set[int]) -> list[tuple[str, str
             continue
         while head.dep_ == "compound" and head.head.pos_ in ("NOUN", "PROPN") and head.head.i > head.i:
             head = head.head
-        if head.i in taken:
-            continue  # this noun phrase is already reported
+        if head.i in taken and head.i not in allowed:
+            # Already reported. A head inside an allowed term ("storage-shrink
+            # use case") is still a coined modifier on that term.
+            continue
         excerpt = show(ctx, sent.doc, a.i, head.i)
         if _allowed(excerpt, ctx.allow) or _allowed(f"{a.text}-{b.text}", ctx.allow):
             continue
@@ -361,6 +374,54 @@ def hyphen_compounds(sent, ctx: Context, taken: set[int]) -> list[tuple[str, str
 
 SLASH_LIST = re.compile(r"(?<![\w./])([A-Za-z][\w-]*)(?:/[A-Za-z][\w-]*){2,}(?![\w/.])")
 SLASH_OK = {"and/or", "input/output", "i/o", "read/write", "tcp/ip", "km/h", "on/off", "yes/no"}
+
+
+def _short_items(items) -> bool:
+    """True when the items average under three words, or half of them are code."""
+    own = []
+    for t in items:
+        others = {x.i for o in items if o is not t for x in o.subtree}
+        own.append([x for x in t.subtree if x.i not in others and not x.is_punct and x.dep_ != "cc"])
+    if sum(1 for words in own if any(x.text == CODE for x in words)) >= len(items) / 2:
+        return True
+    return statistics.mean(len(words) for words in own) < 3
+
+
+# A chunk with a subject or a modal is a clause, not a list item.
+CLAUSE_DEPS = {"nsubj", "nsubjpass", "csubj", "expl"}
+
+
+def _comma_items(sent) -> list[list]:
+    """The verbless comma-separated chunks that end in an "and"/"or" item.
+
+    Returns the items after the first one; the first item shares its chunk
+    with the verb that introduces the list ("It supports A, B, and C").
+    """
+    chunks, cur = [], []
+    for t in sent:
+        if t.text == ",":
+            chunks.append(cur)
+            cur = []
+        elif not (t.is_punct and t.i == sent.end - 1):
+            cur.append(t)
+    chunks.append(cur)
+    last = next((k for k in range(len(chunks) - 1, 0, -1)
+                 if chunks[k] and chunks[k][0].lower_ in ("and", "or")), None)
+    if last is None:
+        return []
+    items = []
+    for k in range(last, 0, -1):
+        words = [t for t in chunks[k] if t.lower_ not in ("and", "or") or t.i != chunks[k][0].i]
+        if not words or any(t.dep_ in CLAUSE_DEPS or t.tag_ == "MD" for t in words):
+            break
+        items.insert(0, words)
+    return items
+
+
+def _short_chunks(chunks) -> bool:
+    if sum(1 for c in chunks if any(t.text == CODE for t in c)) >= len(chunks) / 2:
+        return True
+    return statistics.mean(sum(1 for t in c if not t.is_punct) for c in chunks) < 3
 
 
 def inline_lists(sent, ctx: Context) -> list[tuple[str, str, list]]:
@@ -375,14 +436,19 @@ def inline_lists(sent, ctx: Context) -> list[tuple[str, str, list]]:
         seen.update(x.i for x in items)
         if len(items) > len(best):
             best = items
-    # The parser often splits one long list into two groups; count commas too.
-    text = sent.text
-    last = text.rfind(",")
-    comma_items = text.count(",") + 1 if last > 0 and re.search(r"\b(and|or)\b", text[last:]) else 0
-    n = max(len(best), comma_items)
-    if n >= minimum:
-        out.append(("info", f"{n} items listed in one sentence", best if len(best) >= 2 else []))
+    # The small parser often splits one long list into groups, so comma-separated
+    # chunks count too, but only verbless ones: counting every comma flagged
+    # clauses and asides as lists. A list of short items ("packages, types,
+    # functions, and variables") or of code names reads like a list already
+    # (docs/evaluation.md).
+    chunks = _comma_items(sent)
+    if len(best) >= minimum and not _short_items(best):
+        out.append(("info", f"{len(best)} items listed in one sentence", best))
         return out  # slash-joined items in the same sentence are part of that list
+    if len(chunks) + 1 >= minimum and not _short_chunks(chunks):
+        out.append(("info", f"{len(chunks) + 1} items listed in one sentence",
+                    [t for c in chunks for t in c]))
+        return out
     for m in SLASH_LIST.finditer(sent.text):
         if m.group(0).lower() in SLASH_OK:
             continue
@@ -462,9 +528,15 @@ def denominal_verbs(sent, ctx: Context) -> list[tuple[str, str, list]]:
         inflected = t.tag_ in ("VBD", "VBG", "VBN") or (t.tag_ == "VBZ" and t.text.lower().endswith("es"))
         if not inflected and not any(c.dep_ in ("aux", "auxpass") for c in t.children) and t.i != sent.start:
             continue  # bare base-form "verbs" here are usually mis-tagged nouns
+        nxt = sent.doc[t.i + 1] if t.i + 1 < len(sent.doc) else None
+        if any(c.dep_ == "prt" for c in t.children) or (nxt is not None and nxt.dep_ == "prt"):
+            continue  # phrasal verbs: "figure out", "wind up", "light up"
         if lexicon.is_denominal_candidate(t.lemma_.lower()):
             out.append(("info", f"'{t.text}' is mainly a noun used here as a verb", [t]))
     return out
+
+
+LIGHT_RELATIVE_HEADS = {"time", "way", "all", "reason", "day", "moment", "place"}
 
 
 def _relativizer(verb):
@@ -483,9 +555,15 @@ def reduced_object_relatives(sent, ctx: Context) -> list[tuple[str, str, list]]:
             continue  # "prints how long the search takes", "the reason why it exists"
         rel = _relativizer(t)
         subj = [c for c in t.children if c.dep_ in ("nsubj", "nsubjpass") and (rel is None or c.i != rel.i)]
-        if subj and rel is None and subj[0].i > t.head.i:
-            out.append(("info", f"'{_w(ctx, t.head)} {_w(ctx, subj[0])} {t.text}': object relative without 'that'",
-                        [t.head, subj[0], t]))
+        if not subj or rel is not None or subj[0].i <= t.head.i:
+            continue
+        if subj[0].pos_ == "PRON" or t.head.lemma_.lower() in LIGHT_RELATIVE_HEADS:
+            # "someone I trust", "all you need", "the first time we met": a
+            # pronoun subject makes an object relative easy to read (Gordon,
+            # Hendrick and Johnson 2001), and these heads are fixed phrases.
+            continue
+        out.append(("info", f"'{_w(ctx, t.head)} {_w(ctx, subj[0])} {t.text}': object relative without 'that'",
+                    [t.head, subj[0], t]))
     return out
 
 
@@ -619,7 +697,7 @@ def detect(sent, ctx: Context) -> list[tuple[str, str, str, list]]:
     if "stacked-nouns" in on:
         add("stacked-nouns", stacked_nouns(sent, ctx, taken, spans))
     if "hyphen-compound" in on:
-        add("hyphen-compound", hyphen_compounds(sent, ctx, taken))
+        add("hyphen-compound", hyphen_compounds(sent, ctx, taken, {i for span in spans for i in span}))
     # List detection always runs: it decides whether long-dependency applies,
     # so turning inline-list off must not change long-dependency.
     lists = inline_lists(sent, ctx)
