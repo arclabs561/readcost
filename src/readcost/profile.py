@@ -79,6 +79,7 @@ def fit_dependency(points: list[tuple[int, float]]) -> tuple[float, float, float
 def build_profile(paths: list[str], name: str, analyzer_factory, fmt: str | None = None) -> Profile:
     """Measure reference documents. ``analyzer_factory`` returns an Analyzer."""
     from .extract import extract
+    from .features import dependency_arcs
 
     analyzer = analyzer_factory()
     points: list[tuple[int, float]] = []
@@ -88,10 +89,11 @@ def build_profile(paths: list[str], name: str, analyzer_factory, fmt: str | None
         text = Path(p).read_text(encoding="utf-8", errors="ignore")
         for seg in extract(text, p, fmt, comments=analyzer.cfg.comments):
             for sent in analyzer.sentences(seg):
-                content = [t for t in sent if not t.is_punct and not t.is_space]
-                arcs = [abs(t.i - t.head.i) for t in content if t.head is not t and not t.head.is_punct]
+                # The same arcs dependency_z scores with, or every z shifts.
+                n = sum(1 for t in sent if not t.is_punct and not t.is_space)
+                arcs = [d for d, _, _ in dependency_arcs(sent)]
                 if arcs:
-                    points.append((len(content), statistics.mean(arcs)))
+                    points.append((n, statistics.mean(arcs)))
     fit = fit_dependency(points)
     profile = Profile(name, 0, 0, fit, {}, [str(p) for p in paths])
     # Second pass for feature rates, now that the dependency fit exists.
