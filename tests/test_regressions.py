@@ -233,3 +233,22 @@ def test_identifier_subjects_are_not_inanimate_subject_findings():
 def test_citations_are_not_noun_stacks():
     assert not _findings("The rewrite keeps rationale clauses, as Chen et al recommend for comments.\n",
                          "stacked-nouns")
+
+
+# --------------------------------------------------------------- short units
+
+def test_one_finding_in_a_short_text_does_not_make_it_advise():
+    # About 20 words with one stacked compound: per-1k density alone would say
+    # "advise" (index ~50); short texts are judged by absolute points instead.
+    text = "Run the parser once. It keeps the source line numbers that each finding reports later.\n"
+    result = Analyzer(Config()).check_text(text, "markdown")
+    assert result.words < 40 and len(result.findings) == 1
+    assert result.verdict == "pass"
+
+
+def test_several_findings_in_a_short_text_still_advise():
+    text = ("The region index sidecar cache rebuild path forces source segment rebuilds "
+            "during store restart measurement runs.\n")
+    result = Analyzer(Config()).check_text(text, "markdown")
+    assert result.words < 40 and result.points >= 2
+    assert result.verdict in ("advise", "block")

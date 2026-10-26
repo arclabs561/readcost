@@ -10,6 +10,8 @@ comments = "doc"                # source files: "doc" comments only, or "all"
 advise_cost_index = 15.0        # verdict "advise" at this many weighted findings per 1k words
 block_cost_index = 30.0         # verdict "block" at this rate ...
 block_min_points = 3.0          # ... and at least this many weighted findings
+short_text_words = 40           # below this many words, judge by weighted findings, not the rate:
+short_advise_points = 2.0       # "advise" at this many; "block" at block_min_points
 
 [readcost.hooks]
 mode = "advise"                 # off | advise | block
