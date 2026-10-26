@@ -7,6 +7,12 @@ every finding here is a candidate false positive. The report measures how the
 rules fail on such text. It does not measure how often they are right on model
 output, which is what the paper studied.
 
+Every table can be regenerated from the fetched corpus with
+`python3 -I scripts/eval_report.py ref/eval ref/eval/results-RUN`, which
+also prints example diagnostics per rule; rater labels are in
+`eval/labels/`, keyed by a hash of each finding, with no source text.
+`--check` makes the respected-authors table a local regression gate.
+
 Measured 2026-10-26. Distributions are for readcost `20199a9` (main after
 PR 7). The hand-labeled sample was drawn from `a4c609a` (main before PRs 5 to
 7); each sampled finding is also marked as still reported or not on
@@ -636,6 +642,39 @@ a slash group of three or more lowercase identifiers counts as a path (so
 messages, the share not passing fell from 16.4% to 12.9% with the extraction
 fixes and to 1.6% with the commit thresholds; of the 16 left, 6 are short
 messages, 6 exceed the rate and 4 hold an error-level noun stack.
+
+## Example diagnostics
+
+Real output on the corpus at `8ccf0ac`, with how many of the eight raters
+call each finding correct or defensible (`scripts/eval_report.py`):
+
+```text
+brendan-gregg:11: info: [inline-list] 5 items listed in one sentence
+  > The main ROIs are infrastructure cost savings, latency reductions, improved scalability and reliability, and faster engineering.
+  raters: 7 of 8 call it correct or defensible
+```
+
+```text
+joel-spolsky:34: info: [inanimate-subject] 'code ... smells': a person's verb with a non-person subject
+  > That code smells a little bit dirty.
+  raters: 0 of 8 call it correct or defensible
+```
+
+```text
+dan-luu:36: warn: [long-dependency] 'have' and 'course' are 21 words apart (z = 3.2)
+  > Of course, since the issue is not the number of clicks it takes and there's some underlying emotional motivation, other people have different reasons.
+  raters: 2 of 8 call it correct or defensible
+```
+
+The first is the kind of finding the rules are for. The second is a fixed
+idiom. The third measures an arc from the fronted "Of course" (proposal 6,
+not applied) rather than any subject held apart from its verb.
+
+All ten raters score the current rules higher than those before the fixes:
+the share of reported sample findings each calls correct or defensible rose
+for every rater (Claude 15% to 31%, Codex 22% to 31%, DeepSeek 22% to 32%,
+Gemini 20% to 28%, Mistral 14% to 23%, Kimi 8% to 13%, Grok 14% to 25%, GLM
+30% to 41%, and the two lenient raters 63% to 71% and 53% to 71%).
 
 ## Limits
 

@@ -194,6 +194,10 @@ per turn. In short:
 
 ## Limits
 
+- readcost is not an AI-text detector. Construction rates and reading-time
+  estimates must not be used to judge who wrote a text: the same patterns
+  appear in human writing, and treating them as markers penalizes non-native
+  English writers in particular.
 - English only.
 - The default spaCy model misparses some sentences. A sentence parsed with no
   verb is skipped, and a misparse can produce a false finding. Set
