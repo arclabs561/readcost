@@ -136,6 +136,22 @@ readcost profile build path/to/good/*.md -o myprofile.json --name mine
 readcost check --profile myprofile.json README.md
 ```
 
+## Predicted reading time
+
+Each whole-document check also reports a predicted reading time, for example
+`predicted reading time 211 s (222 ms per word)`, and the JSON output has
+`reading_seconds` and `reading_ms_per_word`. A small tree model predicts how
+long readers look at each word from its length, its frequency and its
+neighbours. It was fitted to eye-tracking data from 360 native English readers
+of newspaper paragraphs (OneStop) and takes about 15 ms for 1,000 words.
+
+On held-out paragraphs its error is about 19 ms per word against a mean of
+about 200 (OneStop), and 10 ms on a separate corpus (Provo). Always predicting
+the average would score 22 and 17, so treat it as a document-level estimate,
+useful for comparing two versions of the same text, not as a judgement of one
+sentence. The number does not affect the verdict. Code spans are left out. See
+[docs/evaluation.md](docs/evaluation.md) for how it was built and tested.
+
 ## Configuration
 
 Put a `readcost.toml` at the repository root, or a `[tool.readcost]` table in

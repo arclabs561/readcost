@@ -6,7 +6,7 @@ import statistics
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import lexicon
+from . import lexicon, readtime
 from .config import Config, load_config, severity_rank
 from .extract import Segment, extract
 from .features import (
@@ -34,6 +34,10 @@ class Result:
     points: float = 0.0           # weighted findings
     verdict: str = "pass"         # pass | advise | block
     notes: list[str] = field(default_factory=list)
+    # Predicted reading time from eye-tracking data (readtime.py); None when
+    # only some lines were checked or the model data is missing.
+    reading_ms_per_word: float | None = None
+    reading_seconds: float | None = None
 
     def counts(self) -> dict[str, int]:
         out: dict[str, int] = {}
@@ -47,6 +51,8 @@ class Result:
             "verdict": self.verdict, "cost_index": round(self.cost_index, 2),
             "points": self.points, "mean_dep_z": None if self.mean_dep_z is None else round(self.mean_dep_z, 3),
             "counts": self.counts(), "notes": self.notes,
+            "reading_ms_per_word": None if self.reading_ms_per_word is None else round(self.reading_ms_per_word, 1),
+            "reading_seconds": None if self.reading_seconds is None else round(self.reading_seconds, 1),
             "findings": [vars(f) for f in self.findings],
         }
 
@@ -156,6 +162,10 @@ class Analyzer:
         result.findings = [f for f in result.findings if severity_rank(f.severity) >= floor]
         if not lexicon.has_wordnet():
             result.notes.append("lexicon data missing: denominal-verb disabled, inanimate-subject reduced")
+        if lines is None and readtime.available():
+            words, ms = readtime.estimate([seg.text for seg in segments])
+            if words:
+                result.reading_ms_per_word, result.reading_seconds = ms / words, ms / 1000
         return result
 
     @staticmethod

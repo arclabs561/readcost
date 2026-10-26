@@ -480,7 +480,8 @@ Wilcoxon tests, rewrite minus original (`scripts/paired_score.py`):
 | surprisal, bits per token (SmolLM2-135M) | Claude | 4.56 | 4.94 | 87% | <0.001 |
 
 - H1 failed. readcost's cost index does not tell the rewrites from the
-  originals. Pooled over all 53 paragraphs the weighted findings per 1,000
+  originals. (Three pairs are HTML paragraphs that readcost extracts nothing
+  from; leaving them out, p = 0.46 and 0.99 on 50 pairs, the same result.) Pooled over all 53 paragraphs the weighted findings per 1,000
   words are 4.4 for the originals and 4.2 (Codex) and 4.4 (Claude) for the
   rewrites.
 - H2 was not detected. Nominalizations were found in no paragraph on either
@@ -499,6 +500,55 @@ the syntactic constructions readcost counts. The detectors work as a
 checklist of constructions to reread; on this evidence they are not a
 measure of whether text was written by a model. Limits: one prompt, 53 short
 paragraphs from well-edited sources, and one scoring model for surprisal.
+
+## Reading-time model
+
+The paired test above shows that the detectors do not measure what changes
+when a model rewrites a text. readcost now also predicts reading time from
+eye-tracking data, following the feature model of Cekini et al. 2026: per
+word, its length, digits, hyphen, closing punctuation, position, frequency
+(from 1.2 billion FineWeb-Edu tokens), stopword status, and the length,
+frequency and closing punctuation of the words before and after it. The
+target is a word's mean total reading time across readers, counting a skipped
+word as 0 ms.
+
+Fitting data is OneStop Eye Movements, ordinary reading: 324 paragraphs and
+35,188 word occurrences, split by article 60/20/20 into training, validation
+and test. The Provo Corpus (55 passages, 84 readers) is an external test that
+was not used for fitting. Error is the mean absolute difference between
+predicted and observed mean reading time per word of each text, in ms/word,
+as in the paper (`scripts/reading_time_train.py`):
+
+| Model | OneStop validation | OneStop test | Provo |
+| --- | --- | --- | --- |
+| always the training mean | 27.1 | 22.3 | 16.9 |
+| word length only (ridge) | 23.7 | 20.7 | 12.3 |
+| all features (ridge) | 23.4 | 19.6 | 10.6 |
+| gradient-boosted trees (shipped) | 22.8 | 19.1 | 9.6 |
+| trees plus SmolLM2-135M surprisal | 22.8 | 19.1 | 10.7 |
+
+Observed means are 198 to 205 ms/word. Cekini et al. report 15.0 on OneStop
+test and 16.1 on Provo for their RoBERTa model and about 19 for feature
+models on OneStop test. Word length (0.59) and frequency (0.22) carry most of
+the trees' importance. Surprisal adds nothing here, so readcost ships the
+lexical model, which needs neither torch nor a language model.
+
+Applied to the paired rewrites (the `reading_ms_per_word` and
+`reading_seconds` rows of `scripts/paired_score.py`), the rewrites cost more per word and less in total, the
+pattern Cekini et al. report:
+
+| Rewriter | Pairs | ms/word, original | ms/word, rewrite | Rewrite higher | p | Total s, original | Total s, rewrite | Rewrite higher | p |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Codex `gpt-6.1-sol` | 50 | 193 | 214 | 98% | <0.001 | 26.4 | 25.3 | 34% | 0.005 |
+| Claude `claude-sonnet-5-5` | 50 | 193 | 198 | 76% | <0.001 | 26.4 | 23.9 | 4% | <0.001 |
+
+Medians; three of the 53 pairs are left out because their originals are
+HTML paragraphs (Effective Go), which readcost does not extract from
+Markdown. Cekini et al. found +1.6% per word and -1.2% in total; here the
+median per-word rise is +19 ms (Codex) and +5 ms (Claude), and both lower
+the total. The model is trained on
+newspaper paragraphs read by native speakers; technical prose, code-heavy
+text and non-native readers are outside its data.
 
 ## Limits
 

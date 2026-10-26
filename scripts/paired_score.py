@@ -44,7 +44,8 @@ def measures(text: str) -> dict:
               if not lexicon.is_established_pair(a, b) and not lexicon.is_lexicalized(a, b)]
     out = {"words": len(words), "cost_index": r.cost_index, "points": r.points,
            "word_len": statistics.mean(len(w) for w in words), "surprisal": surprisal(text),
-           "coined_pairs_per_1k": 1000 * len(coined) / max(len(words), 1)}
+           "coined_pairs_per_1k": 1000 * len(coined) / max(len(words), 1),
+           "reading_ms_per_word": r.reading_ms_per_word, "reading_seconds": r.reading_seconds}
     counts = r.counts()
     for f in ["stacked-nouns", "long-dependency", "inanimate-subject", "reduced-object-relative",
               "hyphen-compound", "inline-list", *OPT_IN]:
@@ -60,6 +61,11 @@ def main(d: Path) -> None:
             rows.append({"model": p["model"], "source": p["source"], "i": p["i"],
                          "orig": measures(p["text"]), "rw": measures(p["rewrite"])})
     (d / "scores.json").write_text(json.dumps(rows, indent=1))
+    # A paragraph readcost extracts nothing from (an HTML block in Markdown) has
+    # no reading time and a cost index of 0; leave its pair out of every test.
+    skipped = [r for r in rows if r["orig"]["reading_seconds"] is None or r["rw"]["reading_seconds"] is None]
+    rows = [r for r in rows if r not in skipped]
+    print(f"{len(skipped)} pairs left out: no prose extracted", file=sys.stderr)
     keys = list(rows[0]["orig"])
     lines = ["| measure | model | n | original median | rewrite median | median diff | rewrite higher | p |",
              "| --- | --- | --- | --- | --- | --- | --- | --- |"]
