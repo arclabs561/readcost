@@ -1,0 +1,12 @@
+hyphen_pairs.txt.gz lists hyphenated word pairs that occur in at least five
+documents of two shards of FineWeb-Edu (CC-MAIN-2019-04), built with
+scripts/build_word_pairs.py. It contains no document text.
+
+FineWeb-Edu (HuggingFaceFW/fineweb-edu) is made available under the Open Data
+Commons Attribution License (ODC-By) v1.0:
+https://opendatacommons.org/licenses/by/1-0/
+Its use is also subject to the CommonCrawl Terms of Use:
+https://commoncrawl.org/terms-of-use
+
+Penedo et al. 2024, "The FineWeb Datasets: Decanting the Web for the Finest
+Text Data at Scale", arXiv 2406.17557.

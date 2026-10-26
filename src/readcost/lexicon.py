@@ -131,6 +131,26 @@ def is_lexicalized(a: str, b: str) -> bool:
     return f"{a} {b}" in _lex().get("lexicalized_pairs", ())
 
 
+_PAIRS: frozenset[str] | None = None
+
+
+def _hyphen_pairs() -> frozenset[str]:
+    """Hyphenated pairs used in 5+ FineWeb-Edu documents (data/FINEWEB_NOTICE)."""
+    global _PAIRS
+    if _PAIRS is None:
+        try:
+            raw = resources.files("readcost").joinpath("data/hyphen_pairs.txt.gz").read_bytes()
+            _PAIRS = frozenset(gzip.decompress(raw).decode().split())
+        except (OSError, ValueError, EOFError):
+            _PAIRS = frozenset()
+    return _PAIRS
+
+
+def is_established_pair(a: str, b: str) -> bool:
+    """True if "a-b" is in common use ("key-value", "set-top"), not a coinage."""
+    return f"{a}-{b}" in _hyphen_pairs()
+
+
 def is_denominal_candidate(lemma: str) -> bool:
     if lemma in CONVENTIONAL_VERBS or not lemma.isalpha() or len(lemma) < 3:
         return False

@@ -88,3 +88,17 @@ def test_slash_list_is_reported_beside_a_short_comma_list(analyzer):
         "It supports standard/Sugeno/Yager negations, OWA, power means, and uninorms.", "markdown").findings
         if f.feature == "inline-list"]
     assert len(fs) == 1 and "slash" in fs[0].message
+
+
+@pytest.mark.parametrize("text", [
+    "It uses a key-value store for sessions.",
+    "See the product-market fit discussion below.",
+    "The name-value pairs are sorted by key.",
+])
+def test_established_hyphen_pair_is_not_a_coinage(analyzer, text):
+    # Pairs used in 5+ FineWeb-Edu documents (data/hyphen_pairs.txt.gz).
+    assert "hyphen-compound" not in feats(analyzer, text)
+
+
+def test_coined_hyphen_pair_is_still_reported(analyzer):
+    assert "hyphen-compound" in feats(analyzer, "It runs the storage-shrink job every night.")
