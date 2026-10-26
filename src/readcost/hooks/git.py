@@ -1,4 +1,11 @@
-"""git hooks: pre-commit (staged prose, changed lines only) and commit-msg."""
+"""git hooks: pre-commit (staged prose, changed lines only) and commit-msg.
+
+pre-commit with no file arguments (a plain git hook) judges the changed lines
+of every staged file. With file arguments (the pre-commit framework) it judges
+the changed lines of each named file that has staged changes, and the whole
+working-tree file otherwise, which is what ``pre-commit run --all-files`` and
+pre-commit.ci need: they pass every file and stage nothing.
+"""
 
 from __future__ import annotations
 
@@ -13,7 +20,8 @@ HUNK = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@", re.M)
 
 def _git(*args: str) -> str:
     # Decode leniently: one non-UTF-8 staged file must not abort the whole check.
-    return subprocess.run(["git", *args], check=True, capture_output=True, text=True,
+    # --literal-pathspecs: a file named "[WIP] plan.md" must not match "W plan.md".
+    return subprocess.run(["git", "--literal-pathspecs", *args], check=True, capture_output=True, text=True,
                           encoding="utf-8", errors="replace").stdout
 
 
@@ -22,7 +30,7 @@ def handle(event: str, rest: list[str]) -> int:
     if event == "commit-msg":
         return commit_msg(rest[0] if rest else ".git/COMMIT_EDITMSG", cfg)
     if event in ("pre-commit", ""):
-        return pre_commit(cfg)
+        return pre_commit(cfg, rest)
     print(f"readcost: unknown git event {event!r}", file=sys.stderr)
     return 0
 
@@ -57,26 +65,38 @@ def _staged_files() -> list[tuple[str, tuple[str, ...]]]:
     return out
 
 
-def pre_commit(cfg) -> int:
+def pre_commit(cfg, files: list[str] | None = None) -> int:
     if cfg.hooks.mode == "off":
         return 0
+    staged = dict(_staged_files())
     results = []
-    for name, paths in _staged_files():
+    for name in files or list(staged):
         if not cfg.wants(name):
             continue
-        staged = _git("show", f":{name}")
-        lines = None
-        if cfg.hooks.edited_lines_only:
-            # --no-color/--no-ext-diff: user config (color.ui=always, difftastic)
-            # would otherwise hide the hunk headers. A rename needs both paths
-            # in the pathspec so -M can pair them and report only edited lines.
-            diff = _git("diff", "--cached", "-U0", "-M", "--no-color", "--no-ext-diff",
-                        "--", *paths)
-            lines = [(int(s), int(s) + max(int(c or 1), 1) - 1) for s, c in HUNK.findall(diff) if c != "0"]
-            if not lines:
-                continue
-        results.append(analyze(cfg, path=name, text=staged, lines=lines))
+        if name in staged:
+            result = _check_staged(cfg, name, staged[name])
+        else:
+            with open(name, encoding="utf-8", errors="replace") as fh:
+                result = analyze(cfg, path=name, text=fh.read())
+        if result is not None:
+            results.append(result)
     return _report(results, cfg)
+
+
+def _check_staged(cfg, name: str, paths: tuple[str, ...]):
+    """The staged content of ``name``, judged on its changed lines; None if none changed."""
+    staged = _git("show", f":{name}")
+    lines = None
+    if cfg.hooks.edited_lines_only:
+        # --no-color/--no-ext-diff: user config (color.ui=always, difftastic)
+        # would otherwise hide the hunk headers. A rename needs both paths
+        # in the pathspec so -M can pair them and report only edited lines.
+        diff = _git("diff", "--cached", "-U0", "-M", "--no-color", "--no-ext-diff",
+                    "--", *paths)
+        lines = [(int(s), int(s) + max(int(c or 1), 1) - 1) for s, c in HUNK.findall(diff) if c != "0"]
+        if not lines:
+            return None
+    return analyze(cfg, path=name, text=staged, lines=lines)
 
 
 def commit_msg(path: str, cfg) -> int:

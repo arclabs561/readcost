@@ -1,11 +1,10 @@
 - id: readcost
-  name: readcost (staged prose)
-  description: Flag hard-to-read sentences on the lines you changed.
+  name: readcost (prose)
+  description: Flag hard-to-read sentences on the lines you changed; on files with nothing staged (pre-commit run --all-files, pre-commit.ci), the whole file.
   entry: readcost hook git pre-commit
   language: python
   minimum_pre_commit_version: "3.2.0"
-  pass_filenames: false
-  always_run: true
+  types: [text]
   stages: [pre-commit]
   additional_dependencies:
     - "en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl"
