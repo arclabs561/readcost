@@ -676,6 +676,54 @@ for every rater (Claude 15% to 31%, Codex 22% to 31%, DeepSeek 22% to 32%,
 Gemini 20% to 28%, Mistral 14% to 23%, Kimi 8% to 13%, Grok 14% to 25%, GLM
 30% to 41%, and the two lenient raters 63% to 71% and 53% to 71%).
 
+## Text difficulty benchmarks
+
+Two public datasets test whether readcost tracks how hard a text is, as
+opposed to whether its findings are real reading costs.
+
+OneStopEnglish (Vajjala and Lucic 2018) has 189 news articles, each written
+at elementary, intermediate and advanced level. Paired across the three
+versions (`scripts/eval_onestop_levels.py`, readcost `ca847be`):
+
+| Measure | Elementary | Intermediate | Advanced | Advanced higher | p |
+| --- | --- | --- | --- | --- | --- |
+| words per sentence | 16.6 | 19.6 | 22.0 | 99% | <0.001 |
+| mean word length | 4.47 | 4.67 | 4.68 | 96% | <0.001 |
+| predicted ms per word | 170 | 173 | 173 | 74% | <0.001 |
+| readcost cost index | 2.99 | 3.49 | 3.66 | 61% | <0.001 |
+
+The CLEAR corpus (Crossley et al. 2022) has 4,724 school reading excerpts
+with an ease score fitted from teachers' pairwise judgments. Spearman
+correlation with that ease (`scripts/eval_commonlit.py`; a cost should be
+negative):
+
+| Measure | rho |
+| --- | --- |
+| readcost cost index, default rules | -0.06 |
+| readcost cost index, with long-sentence, nominalization and participial-clause | -0.25 |
+| readcost predicted ms per word | -0.37 |
+| words per sentence | -0.41 |
+| mean word length | -0.43 |
+| Flesch-Kincaid grade | -0.55 |
+| Dale-Chall | -0.60 |
+
+readcost's default cost index barely tracks judged difficulty: the
+constructions it counts are not what makes school texts easy or hard, and
+sentence length, which separates the OneStopEnglish levels best, is behind an
+opt-in rule. Formulas built from word familiarity and sentence length track
+teachers' judgments far better. That is not the same as tracking
+comprehension: Guo et al. 2025 found formulas rated GPT-4 summaries easier
+while readers understood the human ones better. readcost reports what to
+reread and a reading-time estimate; it should not be read as a difficulty
+grade.
+
+## Speed
+
+`scripts/bench_speed.py` on an Apple M3 Max: a new `readcost check` process
+on a short file takes 0.74 s (median of 5; most of it loading spaCy), which
+is what a hook pays per edit; a loaded Analyzer checks about 5,100 words per
+second.
+
 ## Limits
 
 - One automated rater, no second rater, and no agreement statistic. The
