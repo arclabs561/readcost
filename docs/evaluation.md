@@ -388,7 +388,8 @@ code rather than filters:
 
 - reduced-object-relative skips pronoun subjects and light heads;
 - inline-list counts parser conjuncts or verbless comma chunks only, and
-  skips lists whose items average under three words or are mostly code;
+  skips lists that are mostly code (a rule skipping lists of short items
+  was reverted after the ten-rater check below);
 - stacked-nouns skips a leading name or acronym and counts a hyphenated word
   as one unit;
 - inanimate-subject skips linking verbs and verbs that take things as
@@ -456,6 +457,49 @@ reading cost. Three findings both raters accepted were dropped: two real
 lists of short items and an opt-in denominal verb. Kappa near 0.4 is moderate
 agreement; neither rater is ground truth.
 
+
+## Ten raters
+
+Two raters from two labs are a narrow base, so eight more model families
+labelled the same 210 findings blind, through OpenRouter with the same rubric:
+Kimi K3.1 Pro, Gemini 4 Argon, DeepSeek V4.1 Flash, Grok 4.7, Mistral Large 4,
+GLM 5.3 FlashX, Llama 4 Maverick and MiniMax M3 (Qwen was not reachable).
+
+| Rater | Correct | Defensible | Wrong | Kappa with the majority of the others |
+| --- | --- | --- | --- | --- |
+| Claude (rater 1) | 3 | 30 | 177 | 0.43 |
+| Codex gpt-6.1-sol | 5 | 41 | 164 | 0.54 |
+| DeepSeek V4.1 Flash | 4 | 37 | 169 | 0.50 |
+| Gemini 4 Argon | 7 | 30 | 173 | 0.44 |
+| GLM 5.3 FlashX | 5 | 49 | 156 | 0.52 |
+| Grok 4.7 | 3 | 23 | 184 | 0.56 |
+| Kimi K3.1 Pro | 3 | 10 | 197 | 0.44 |
+| Mistral Large 4 | 5 | 21 | 184 | 0.36 |
+| Llama 4 Maverick | 36 | 94 | 80 | 0.13 |
+| MiniMax M3 | 19 | 86 | 105 | 0.10 |
+
+Fleiss' kappa over all ten is 0.23; Llama 4 Maverick and MiniMax M3 accept
+far more than the rest and agree with them little, and without those two it is
+0.40. The eight-rater majority calls 2 findings correct and 24 defensible: the
+low base rate holds across model families.
+
+The majority also changes a conclusion. It accepts inline-list findings more
+than any other (10 of 32; 1 to 5 of 32 for the other rules), including lists
+of short items such as "Microsoft, Apple, Yahoo, Google, and Facebook", which
+rater 1 had labelled wrong and the precision fixes had dropped. The
+short-items rule is reverted; the rules that skip clauses joined by commas and
+lists of code stay. Share of reported sample findings the eight-rater majority
+accepts:
+
+| Version | Reported | Majority correct or defensible |
+| --- | --- | --- |
+| `20199a9`, before the fixes | 156 | 18 (11.5%) |
+| precision fixes, word pairs, contexts (`30631c7`) | 63 | 9 (14.3%) |
+| short-items rule reverted | 75 | 15 (20.0%) |
+
+The fixes judged by one rater gained 3 points by the majority; reverting the
+one rule the majority disagreed with gains 6 more. The scripts are
+`scripts/second_rater.py` and `scripts/rater_ensemble.py`.
 
 ## Paired rewrites
 
