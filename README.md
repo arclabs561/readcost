@@ -89,17 +89,26 @@ if result.verdict != "pass":
 | Feature | Example | Rewrite |
 | --- | --- | --- |
 | stacked-nouns | forcing source segment rebuilds | forcing each segment to be rebuilt from its source |
-| long-dependency | The index, built once from all documents and rebuilt only on compaction, serves queries. | The index serves queries. It is built once and rebuilt only on compaction. |
+| long-dependency | The index, which is built once from every document in the corpus at startup and then rebuilt only when the compactor runs, serves all queries. | The index serves all queries. It is built once at startup and rebuilt only when the compactor runs. |
 | inanimate-subject | It does not own indexing or compaction. | Indexing and compaction are left to the caller. |
-| denominal-verb | Footnote the exception. | Add a footnote about the exception. |
+| denominal-verb | The script will bucket the requests by hour. | The script will group the requests by hour. |
 | reduced-object-relative | the format the reader expects | the format that the reader expects |
-| hyphen-compound | the storage-shrink use case | the main use: storing ID sets in less space |
+| hyphen-compound (with stacked-nouns off) | the storage-shrink job | the job that shrinks storage |
 | inline-list | supports standard/Sugeno/Yager negations, OWA, power means, and uninorms | a bulleted list |
+| nominalization (opt-in) | The tool performs validation of the input. | The tool validates the input. |
+| participial-clause (opt-in) | The parser caches every token, making lookups faster. | The parser caches every token, so lookups are faster. |
+| repeated-frame (opt-in) | This change reduces the latency of the cache. This change improves the speed of the parser. This change lowers the cost of the build. | This change makes the cache faster, the parser quicker and the build cheaper. |
 
-The first five come from the paper. The last two are rules derived from where
-those constructions show up in technical writing. `long-sentence` is
-available but off by default. `readcost explain` prints why each one costs the
-reader and how to fix it.
+The first five come from the paper. The next two are rules derived from where
+those constructions show up in technical writing. The opt-in three are
+constructions that language models use more often than people (Reinhart et
+al. 2025; Shaib et al. 2024); turn them on with `--enable`. `long-sentence` is
+also available but off by default. A hyphenated noun-noun compound followed
+by another noun is three nouns in a row, so with the defaults it is reported
+as stacked-nouns; hyphen-compound reports the rest. `readcost explain` prints why each one
+costs the reader and how to fix it. When a long-dependency or inline-list
+sentence gives a reason (because, since, so that, otherwise), the suggestion
+says to keep that reason when splitting the sentence.
 
 Technical writing repeats compressed terms on purpose, so a stacked or
 hyphenated compound is reported once per document, at its first use. An

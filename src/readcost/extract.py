@@ -37,6 +37,8 @@ class Segment:
     path: str
     anchors: list[tuple[int, int]] = field(default_factory=list)  # (offset, line)
     label: str = ""  # e.g. "assistant[3]" for a message inside a transcript
+    codes: dict[int, str] = field(default_factory=dict)  # CODE offset -> original text
+    in_list: bool = False  # a Markdown list item, not running prose
 
     def line_at(self, offset: int) -> int:
         if not self.anchors:
@@ -89,8 +91,34 @@ def _url(m: re.Match) -> str:
     return CODE + close
 
 
-def _plain(text: str) -> str:
-    return PATH_CANDIDATE.sub(_path, URL.sub(_url, text))
+SENTINEL = re.compile(r"\x00(\d+)\x00")
+
+
+def _plain(text: str) -> list[tuple[str, str | None]]:
+    """Split text into prose and CODE pieces; a CODE piece carries the original."""
+    originals: list[str] = []
+
+    def keep(sub):
+        def repl(m: re.Match) -> str:
+            out = sub(m)
+            if not out.startswith(CODE):
+                return out  # a word list such as and/or stays prose
+            # Whatever follows CODE (a closing paren, a full stop) stays prose.
+            originals.append(m.group()[:len(m.group()) - (len(out) - len(CODE))])
+            return f"\x00{len(originals) - 1}\x00" + out[len(CODE):]
+        return repl
+
+    marked = PATH_CANDIDATE.sub(keep(_path), URL.sub(keep(_url), text.replace("\x00", "")))
+    pieces: list[tuple[str, str | None]] = []
+    last = 0
+    for m in SENTINEL.finditer(marked):
+        if m.start() > last:
+            pieces.append((marked[last:m.start()], None))
+        pieces.append((CODE, originals[int(m.group(1))]))
+        last = m.end()
+    if last < len(marked):
+        pieces.append((marked[last:], None))
+    return pieces
 
 
 def _is_yaml(body: str) -> bool:
@@ -98,7 +126,7 @@ def _is_yaml(body: str) -> bool:
     return bool(lines) and bool(YAML_KEY.match(lines[0])) and all(YAML_LINE.match(l) for l in lines)
 
 
-def _inline_pieces(inline, line_no) -> list[tuple[str, int]]:
+def _inline_pieces(inline, line_no) -> list[tuple[str, int, str | None]]:
     """Prose pieces of one paragraph, each paired with its source line.
 
     The paragraph starts on ``inline.map[0]``; each soft or hard break moves
@@ -108,18 +136,18 @@ def _inline_pieces(inline, line_no) -> list[tuple[str, int]]:
     raw = inline.content  # the paragraph's source lines, container markers removed
     starts = [0] + [i + 1 for i, c in enumerate(raw) if c == "\n"]
     k, cursor, in_autolink = first, 0, False
-    pieces: list[tuple[str, int]] = []
+    pieces: list[tuple[str, int, str | None]] = []
     for child in inline.children or []:
         kind = child.type
         if in_autolink:
             in_autolink = kind != "link_close"
         elif kind == "text":
-            pieces.append((_plain(child.content), line_no(k)))
+            pieces.extend((text, line_no(k), orig) for text, orig in _plain(child.content))
         elif kind in ("softbreak", "hardbreak"):
             k += 1
-            pieces.append((" ", line_no(k)))
+            pieces.append((" ", line_no(k), None))
         elif kind == "code_inline":
-            pieces.append((CODE, line_no(k)))
+            pieces.append((CODE, line_no(k), f"{child.markup}{child.content}{child.markup}"))
             # markdown-it folds newlines in a code span into spaces; count
             # them in the raw source instead.
             cursor = max(cursor, starts[min(k - first, len(starts) - 1)])
@@ -129,10 +157,10 @@ def _inline_pieces(inline, line_no) -> list[tuple[str, int]]:
                 k += raw.count("\n", opened, closed)
                 cursor = closed + len(child.markup)
         elif kind in ("math_inline", "math_inline_double"):
-            pieces.append((CODE, line_no(k)))
+            pieces.append((CODE, line_no(k), f"{child.markup}{child.content}{child.markup}"))
             k += child.content.count("\n")
         elif kind == "link_open" and child.markup == "autolink":
-            pieces.append((CODE, line_no(k)))
+            pieces.append((CODE, line_no(k), str(child.attrs.get("href", "")) or None))
             in_autolink = True
         elif kind == "image":
             k += sum(c.type in ("softbreak", "hardbreak") for c in child.children or [])
@@ -142,10 +170,13 @@ def _inline_pieces(inline, line_no) -> list[tuple[str, int]]:
     return pieces
 
 
-def _segment(pieces: list[tuple[str, int]], path: str, label: str) -> Segment | None:
+def _segment(pieces: list[tuple[str, int, str | None]], path: str, label: str) -> Segment | None:
     chars: list[str] = []
     anchors: list[tuple[int, int]] = []
-    for piece, line in pieces:
+    codes: dict[int, str] = {}
+    for piece, line, original in pieces:
+        if original is not None:
+            codes[len(chars)] = original
         for ch in piece:
             if ch.isspace():
                 if chars and chars[-1] != " ":
@@ -157,7 +188,7 @@ def _segment(pieces: list[tuple[str, int]], path: str, label: str) -> Segment | 
     text = "".join(chars).rstrip()
     if len(text.split()) < 4:
         return None
-    return Segment(text, path, anchors, label)
+    return Segment(text, path, anchors, label, codes)
 
 
 def _markdown(src: str, path: str, label: str, line_no) -> list[Segment]:
@@ -168,7 +199,10 @@ def _markdown(src: str, path: str, label: str, line_no) -> list[Segment]:
     disabled = False
     ignore_level: int | None = None  # a readcost: ignore waits at this nesting level
     skip_level: int | None = None  # inside the block that ignore applies to
+    items = 0  # open list items
     for i, tok in enumerate(tokens):
+        if tok.type in ("list_item_open", "list_item_close"):
+            items += tok.nesting
         if skip_level is not None:
             if tok.level == skip_level and tok.nesting == -1:
                 skip_level = None
@@ -194,6 +228,7 @@ def _markdown(src: str, path: str, label: str, line_no) -> list[Segment]:
             continue  # headings, table cells and definition terms are not prose
         seg = _segment(_inline_pieces(tok, line_no), path, label)
         if seg:
+            seg.in_list = items > 0
             segments.append(seg)
     return segments
 
@@ -265,14 +300,24 @@ def extract_rst(text: str, path: str, label: str = "") -> list[Segment]:
                 out[-1] = ("", out[-1][1])  # previous line was a title
             out.append(("", i + 1))
             continue
-        body = RST_ROLE.sub(lambda m: CODE, line)
+        # Roles become Markdown code spans, so findings can show the original;
+        # ``literal`` already is one.
+        body = RST_ROLE.sub(lambda m: _code_span(m.group(1)), line)
         body = RST_LINK.sub(r"\1", body)
-        body = re.sub(r"``[^`]+``", CODE, body)
         if body.rstrip().endswith("::"):
             body = body.rstrip()[:-1]
             skip_indent = indent
         out.append((body, i + 1))
     return markdown_lines(out, path, label)
+
+
+def _code_span(text: str) -> str:
+    """Markdown code span for text; CODE when there is nothing to show."""
+    if not text.strip():
+        return CODE
+    fence = "`" * (max((len(r) for r in re.findall(r"`+", text)), default=0) + 1)
+    pad = " " if text.startswith("`") or text.endswith("`") else ""
+    return f"{fence}{pad}{text}{pad}{fence}"
 
 
 # --------------------------------------------------------------- HTML
@@ -286,6 +331,7 @@ class _HTMLProse(HTMLParser):
         self.lines: list[tuple[str, int]] = []
         self.skip = 0
         self.in_code = 0
+        self.code: list[str] = []
         self.buffer: list[str] = []
         self.start_line = 1
 
@@ -301,8 +347,8 @@ class _HTMLProse(HTMLParser):
             self.skip += 1
         elif tag == "code":
             self.in_code += 1
-            if not self.skip:
-                self.buffer.append(f" {CODE} ")
+            if self.in_code == 1:
+                self.code = []
         elif tag in self.BLOCK:
             self._flush()
             self.start_line = self.getpos()[0]
@@ -312,11 +358,17 @@ class _HTMLProse(HTMLParser):
             self.skip = max(0, self.skip - 1)
         elif tag == "code":
             self.in_code = max(0, self.in_code - 1)
+            if not self.in_code and not self.skip:
+                code = re.sub(r"\s+", " ", "".join(self.code)).strip()
+                self.buffer.append(f" {_code_span(code)} ")
         elif tag in self.BLOCK:
             self._flush()
 
     def handle_data(self, data):
-        if self.skip or self.in_code:
+        if self.skip:
+            return
+        if self.in_code:
+            self.code.append(data)
             return
         if not "".join(self.buffer).strip():
             self.start_line = self.getpos()[0]

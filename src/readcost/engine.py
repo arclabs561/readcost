@@ -9,7 +9,15 @@ from pathlib import Path
 from . import lexicon
 from .config import Config, load_config, severity_rank
 from .extract import Segment, extract
-from .features import FEATURES, Context, Finding, detect
+from .features import (
+    FEATURES,
+    Context,
+    Finding,
+    detect,
+    repeated_frames,
+    show,
+    suggestion,
+)
 from .profile import Profile, load_profile
 
 WEIGHTS = {"info": 0.5, "warn": 1.0, "error": 2.0}
@@ -21,7 +29,7 @@ class Result:
     words: int = 0
     sentences: int = 0
     findings: list[Finding] = field(default_factory=list)
-    mean_dep_z: float = 0.0
+    mean_dep_z: float | None = None  # None when long-dependency is off
     cost_index: float = 0.0       # weighted findings per 1,000 words
     points: float = 0.0           # weighted findings
     verdict: str = "pass"         # pass | advise | block
@@ -37,7 +45,7 @@ class Result:
         return {
             "path": self.path, "words": self.words, "sentences": self.sentences,
             "verdict": self.verdict, "cost_index": round(self.cost_index, 2),
-            "points": self.points, "mean_dep_z": round(self.mean_dep_z, 3),
+            "points": self.points, "mean_dep_z": None if self.mean_dep_z is None else round(self.mean_dep_z, 3),
             "counts": self.counts(), "notes": self.notes,
             "findings": [vars(f) for f in self.findings],
         }
@@ -113,7 +121,9 @@ class Analyzer:
         ctx = Context(self.cfg, self.profile, self.allow, self.enabled)
         floor = severity_rank(self.cfg.min_severity)
         docs = self.nlp.pipe([s.text for s in segments])
+        framed: list[tuple[Segment, object]] = []  # prose sentences for repeated-frame
         for seg, doc in zip(segments, docs):
+            ctx.codes = seg.codes
             for sent in doc.sents:
                 words = [t for t in sent if t.is_alpha]
                 if len(words) < 4 or not any(t.pos_ in ("VERB", "AUX") for t in sent):
@@ -126,26 +136,37 @@ class Analyzer:
                     continue
                 result.sentences += 1
                 result.words += len(words)
+                if not seg.in_list:
+                    framed.append((seg, sent))
+                text = show(ctx, sent.doc, sent.start, sent.end - 1)
                 for feature, sev, msg, toks in detect(sent, ctx):
-                    tok_line, excerpt = line, ""
-                    if toks:
-                        first = min(toks, key=lambda t: t.i)
-                        tok_line = seg.line_at(first.idx)
-                        excerpt = sent.doc[first.i:max(t.i for t in toks) + 1].text
-                    result.findings.append(Finding(
-                        feature=feature, severity=sev, message=msg, excerpt=excerpt,
-                        sentence=sent.text.strip(), path=path, line=tok_line, label=seg.label,
-                        suggestion=FEATURES[feature].fix,
-                    ))
+                    result.findings.append(self._finding(ctx, seg, sent, text, path, line,
+                                                         feature, sev, msg, toks))
+        if "repeated-frame" in self.enabled:
+            for seg, sent, msg, toks in repeated_frames(framed):
+                ctx.codes = seg.codes
+                text = show(ctx, sent.doc, sent.start, sent.end - 1)
+                result.findings.append(self._finding(ctx, seg, sent, text, path, seg.line_at(sent.start_char),
+                                                     "repeated-frame", "info", msg, toks))
         result.findings = _first_use_only(result.findings)
         zs = ctx.stats.get("dep_z", [])
-        result.mean_dep_z = statistics.mean(zs) if zs else 0.0
+        result.mean_dep_z = statistics.mean(zs) if zs else None
         # The verdict uses every finding; min_severity only trims what is shown.
         self._verdict(result)
         result.findings = [f for f in result.findings if severity_rank(f.severity) >= floor]
         if not lexicon.has_wordnet():
             result.notes.append("lexicon data missing: denominal-verb disabled, inanimate-subject reduced")
         return result
+
+    @staticmethod
+    def _finding(ctx, seg, sent, text, path, line, feature, sev, msg, toks) -> Finding:
+        excerpt = ""
+        if toks:
+            first = min(toks, key=lambda t: t.i)
+            line = seg.line_at(first.idx)
+            excerpt = show(ctx, sent.doc, first.i, max(t.i for t in toks))
+        return Finding(feature=feature, severity=sev, message=msg, excerpt=excerpt, sentence=text,
+                       path=path, line=line, label=seg.label, suggestion=suggestion(feature, text))
 
     def _verdict(self, result: Result) -> None:
         result.points = sum(WEIGHTS.get(f.severity, 0.5) for f in result.findings)

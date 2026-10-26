@@ -1,19 +1,19 @@
 {
  "name": "readme-burntsushi",
- "words": 7626,
- "sentences": 491,
+ "words": 7637,
+ "sentences": 492,
  "dep_fit": [
-  -0.01643738749803525,
-  0.7787824474675684,
-  0.4160384515803583
+  0.42904024577212496,
+  0.6294131701416716,
+  0.4046211834021799
  ],
  "rates": {
   "denominal-verb": 0.131,
-  "inanimate-subject": 0.525,
-  "inline-list": 1.967,
-  "long-dependency": 1.049,
-  "reduced-object-relative": 2.098,
-  "stacked-nouns": 4.59
+  "inanimate-subject": 0.524,
+  "inline-list": 1.964,
+  "long-dependency": 0.786,
+  "reduced-object-relative": 0.655,
+  "stacked-nouns": 4.583
  },
  "sources": [
   "github.com/BurntSushi/aho-corasick/README.md",

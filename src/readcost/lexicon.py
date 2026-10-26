@@ -23,7 +23,7 @@ def _lex() -> dict:
             raw = resources.files("readcost").joinpath("data/lexicon.json.gz").read_bytes()
             data = json.loads(gzip.decompress(raw))
             _LEX = {k: set(v) for k, v in data.items() if isinstance(v, list)}
-        except (OSError, ValueError):
+        except (OSError, ValueError, EOFError):  # EOFError: a truncated gzip
             _LEX = {}
     return _LEX
 
@@ -95,6 +95,8 @@ DEFAULT_ALLOW = {
     "rate limit", "hash map", "hash table", "search engine", "file system",
     "machine learning", "nearest neighbor", "nearest-neighbor",
     "dependency graph", "language model", "data set", "code base",
+    # Tool and package names spelled with hyphens.
+    "tree-sitter", "markdown-it", "pre-commit",
 }
 
 # Hyphen prefixes that make ordinary words, not noun-noun coinages.
@@ -140,9 +142,10 @@ def noun_animacy(lemma: str) -> bool | None:
     """True for people, organisms and groups; False otherwise; None without data."""
     if lemma in ANIMATE_NOUNS_EXTRA:
         return True
-    if not has_wordnet():
-        return None
-    return lemma in _lex()["animate_nouns"]
+    nouns = _lex().get("animate_nouns")
+    if nouns is None:
+        return None  # no data: neither person nor thing
+    return lemma in nouns
 
 
 @lru_cache(maxsize=4096)
@@ -152,3 +155,35 @@ def is_animate_verb(lemma: str) -> bool:
     if lemma in ANIMATE_VERBS:
         return True
     return lemma in _lex().get("animate_verbs", ())
+
+
+# Verbs that carry little meaning of their own and take an action noun as
+# object: "performs validation" for "validates".
+LIGHT_VERBS = {
+    "perform", "make", "do", "carry", "conduct", "provide", "give", "undergo",
+    "achieve", "effect", "facilitate", "enable", "allow", "undertake",
+}
+
+# Nouns WordNet relates to a verb or adjective that are not used as actions.
+NOT_NOMINALIZATIONS = {
+    "community", "position", "station", "statement", "government", "argument",
+    "environment", "document", "element", "department", "sentence", "instance",
+    "experience", "audience", "evidence", "reference", "difference", "license",
+    "requirement", "dependency", "entity", "identity", "quality", "quantity",
+    "property", "city", "university", "authority", "majority", "minority",
+    "priority", "facility", "utility", "capacity", "function", "question",
+    "section", "option", "condition", "version", "session", "permission",
+    "business", "witness",
+}
+
+
+@lru_cache(maxsize=1)
+def _nominalizations() -> dict[str, str]:
+    return dict(p.split(" ", 1) for p in _lex().get("nominalizations", ()))
+
+
+def nominalization_base(lemma: str) -> str | None:
+    """The verb or adjective behind an action noun: validation -> validate."""
+    if lemma in NOT_NOMINALIZATIONS:
+        return None
+    return _nominalizations().get(lemma)
