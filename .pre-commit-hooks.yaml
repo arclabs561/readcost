@@ -1,0 +1,17 @@
+- id: readcost
+  name: readcost (staged prose)
+  description: Flag hard-to-read sentences on the lines you changed.
+  entry: readcost hook git pre-commit
+  language: python
+  pass_filenames: false
+  always_run: true
+  stages: [pre-commit]
+  additional_dependencies:
+    - "en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl"
+- id: readcost-commit-msg
+  name: readcost (commit message)
+  entry: readcost hook git commit-msg
+  language: python
+  stages: [commit-msg]
+  additional_dependencies:
+    - "en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl"

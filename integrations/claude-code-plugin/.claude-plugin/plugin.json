@@ -1,0 +1,5 @@
+{
+  "name": "readcost",
+  "version": "0.1.0",
+  "description": "Flags hard-to-read prose in files Claude writes and, if enabled, in its final answers. Needs `readcost` on PATH."
+}

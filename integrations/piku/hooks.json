@@ -1,0 +1,18 @@
+{
+  "PreToolUse": [
+    {
+      "matcher": "write_file|edit_file",
+      "hooks": [
+        { "command": "readcost hook piku pre-tool-use", "timeout": 15 }
+      ]
+    }
+  ],
+  "PostToolUse": [
+    {
+      "matcher": "write_file|edit_file",
+      "hooks": [
+        { "command": "readcost hook piku post-tool-use", "async": true, "timeout": 30 }
+      ]
+    }
+  ]
+}

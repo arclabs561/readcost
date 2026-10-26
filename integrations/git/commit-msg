@@ -1,0 +1,4 @@
+#!/bin/sh
+# Copy to .git/hooks/commit-msg and make it executable.
+command -v readcost >/dev/null 2>&1 || exit 0
+exec readcost hook git commit-msg "$1"

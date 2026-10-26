@@ -1,0 +1,33 @@
+{
+ "name": "readme-burntsushi",
+ "words": 7626,
+ "sentences": 491,
+ "dep_fit": [
+  -0.01643738749803525,
+  0.7787824474675684,
+  0.4160384515803583
+ ],
+ "rates": {
+  "denominal-verb": 0.131,
+  "inanimate-subject": 0.525,
+  "inline-list": 1.967,
+  "long-dependency": 1.049,
+  "reduced-object-relative": 2.098,
+  "stacked-nouns": 4.59
+ },
+ "sources": [
+  "github.com/BurntSushi/aho-corasick/README.md",
+  "github.com/BurntSushi/bstr/README.md",
+  "github.com/BurntSushi/byteorder/README.md",
+  "github.com/BurntSushi/fst/README.md",
+  "github.com/BurntSushi/jiff/README.md",
+  "github.com/BurntSushi/memchr/README.md",
+  "github.com/BurntSushi/regex/README.md",
+  "github.com/BurntSushi/ripgrep/README.md",
+  "github.com/BurntSushi/rust-csv/README.md",
+  "github.com/BurntSushi/same-file/README.md",
+  "github.com/BurntSushi/termcolor/README.md",
+  "github.com/BurntSushi/walkdir/README.md"
+ ],
+ "note": "Twelve READMEs from github.com/BurntSushi, shallow clones of 2026-10-26. One writer; build a profile from your own reference set with `readcost profile build`."
+}

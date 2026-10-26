@@ -1,0 +1,22 @@
+# Copy to readcost.toml at the repository root. Every key is optional.
+[readcost]
+model = "en_core_web_sm"        # "en_core_web_trf" parses better and is slower
+profile = "default"             # or a JSON file from `readcost profile build`
+min_severity = "info"           # drop findings below this
+enable = []                     # e.g. ["long-sentence"]
+disable = []                    # e.g. ["reduced-object-relative"]
+allow = ["write-ahead log", "Block-Max WAND"]   # phrases never flagged
+comments = "doc"                # source files: "doc" comments only, or "all"
+advise_cost_index = 15.0        # verdict "advise" at this many weighted findings per 1k words
+block_cost_index = 30.0         # verdict "block" at this rate ...
+block_min_points = 3.0          # ... and at least this many weighted findings
+
+[readcost.hooks]
+mode = "advise"                 # off | advise | block
+stop = "off"                    # off | report | revise   (Claude Code Stop hook)
+display = "off"                 # off | note             (Claude Code MessageDisplay)
+paths = ["*.md", "*.markdown", "*.mdx", "*.rst", "*.txt", "COMMIT_EDITMSG"]
+exclude = ["CHANGELOG*", "*/node_modules/*", "*/target/*", "*/vendor/*"]
+edited_lines_only = true        # judge only the lines an edit touched
+max_items = 8                   # findings sent back to a model
+max_chars = 2500

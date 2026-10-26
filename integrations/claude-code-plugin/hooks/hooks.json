@@ -1,0 +1,34 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": "readcost hook claude-code post-tool-use", "timeout": 30, "statusMessage": "readcost: checking prose" }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": "readcost hook claude-code pre-tool-use", "timeout": 30 }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "readcost hook claude-code stop", "timeout": 30 }
+        ]
+      }
+    ],
+    "MessageDisplay": [
+      {
+        "hooks": [
+          { "type": "command", "command": "readcost hook claude-code message-display", "timeout": 10 }
+        ]
+      }
+    ]
+  }
+}
