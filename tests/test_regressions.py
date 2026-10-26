@@ -189,3 +189,25 @@ def test_display_state_is_private_to_the_user(tmp_path, monkeypatch):
     d = claude_code._state_dir()
     assert str(d).startswith(str(tmp_path))
     assert stat.S_IMODE(os.stat(d).st_mode) == 0o700
+
+
+# --------------------------------------------------------------- self-application
+
+def test_config_files_contribute_only_their_comments():
+    from readcost.extract import detect_format, extract
+
+    yml = "# Flags the slow prose.\nname: readcost\ndescription: \"Flag prose constructions that slow readers\"\n"
+    assert detect_format("ci.yml") == "source"
+    text = " ".join(s.text for s in extract(yml, "ci.yml"))
+    assert "description" not in text and "Flag prose constructions" not in text
+
+
+@pytest.mark.skipif(not HAS_GIT, reason="git missing")
+def test_directory_check_skips_gitignored_files(tmp_path):
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    (tmp_path / ".gitignore").write_text("build/\n")
+    (tmp_path / "build").mkdir()
+    (tmp_path / "build" / "notes.md").write_text(DENSE)
+    (tmp_path / "README.md").write_text(PLAIN)
+    out = run_cli(["check", "--fail-on", "never", "."], cwd=tmp_path).stdout
+    assert "README.md" in out and "build/notes.md" not in out

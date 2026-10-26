@@ -478,8 +478,8 @@ def detect_format(path: str, text: str | None = None) -> str:
         return "transcript"
     if suffix == ".json":
         return "messages"
-    if suffix in LANG_BY_EXT and suffix not in (".toml", ".yaml", ".yml"):
-        return "source"
+    if suffix in LANG_BY_EXT:
+        return "source"  # config files too: only their # comments are prose
     return "text"
 
 

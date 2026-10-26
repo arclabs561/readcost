@@ -11,6 +11,17 @@ EXIT_OK, EXIT_FINDINGS, EXIT_USAGE = 0, 1, 2
 VERDICT_RANK = {"pass": 0, "advise": 1, "block": 2}
 
 
+def _walk(root: Path) -> list[Path]:
+    """Files under ``root``: what git tracks or would track, else non-hidden files."""
+    proc = subprocess.run(["git", "-C", str(root), "ls-files", "-z", "--cached", "--others",
+                           "--exclude-standard"], capture_output=True)
+    if proc.returncode == 0:
+        names = [n for n in proc.stdout.decode("utf-8", "replace").split("\0") if n]
+        return sorted(p for p in (root / n for n in names) if p.is_file())
+    return sorted(p for p in root.rglob("*")
+                  if p.is_file() and not any(part.startswith(".") for part in p.relative_to(root).parts))
+
+
 def _cmd_check(args) -> int:
     from .config import load_config
     from .engine import Analyzer, parse_line_ranges
@@ -34,8 +45,8 @@ def _cmd_check(args) -> int:
             results.append(analyzer.check_text(text, args.format or "markdown", args.stdin_name,
                                                lines=lines, field_path=args.field, last_only=args.last))
         elif Path(path).is_dir():
-            for p in sorted(Path(path).rglob("*")):
-                if p.is_file() and cfg.wants(str(p)):
+            for p in _walk(Path(path)):
+                if cfg.wants(str(p)):
                     results.append(analyzer.check_file(str(p), args.format, lines=lines,
                                                        field_path=args.field, last_only=args.last))
         elif args.per_record:
