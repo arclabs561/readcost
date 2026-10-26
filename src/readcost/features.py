@@ -353,8 +353,8 @@ def hyphen_compounds(sent, ctx: Context, taken: set[int],
             continue
         if b.lower_ in lexicon.HYPHEN_SECONDS or (a.text[:1].isupper() and b.text[:1].isupper()):
             continue  # "X-based", "build-time"; names such as Elias-Fano
-        if lexicon.is_lexicalized(a.lower_, b.lower_):
-            continue  # "trade-off", "data-processing"
+        if lexicon.is_lexicalized(a.lower_, b.lower_) or lexicon.is_established_pair(a.lower_, b.lower_):
+            continue  # "trade-off", "key-value", "product-market": in common use
         head = b.head
         if not (head.pos_ in ("NOUN", "PROPN") and head.i > b.i and b.dep_ in ("compound", "amod", "nmod")):
             continue

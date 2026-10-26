@@ -177,11 +177,13 @@ per turn. In short:
 - inanimate-subject and denominal-verb use word lists derived from WordNet.
   Treat their findings as prompts to reread, not verdicts.
 - Precision is low on well-edited prose. On 210 findings sampled from essays
-  and documentation by well-regarded writers, labeled by one automated rater,
-  3 were correct and 30 defensible. After the fixes that evaluation prompted,
-  31% of the findings still reported are correct or defensible. Most of the
-  rest are established hyphenated terms, noun stacks and long but clear
-  sentences. See [docs/evaluation.md](docs/evaluation.md).
+  and documentation by well-regarded writers, two automated raters from
+  different model families (agreement kappa 0.41) found 1 to 3% correct and
+  16 to 22% correct or defensible. After the fixes that evaluation prompted,
+  25 to 33% of the findings still reported are correct or defensible, at
+  about 40% of the earlier volume. See [docs/evaluation.md](docs/evaluation.md).
+- hyphen-compound skips pairs found in 5+ documents of a 2019 FineWeb-Edu
+  crawl (ODC-By; see `src/readcost/data/FINEWEB_NOTICE`).
 - The paper's findings are about how often text uses these constructions,
   not about any single sentence, and it ran no reading study on model text.
 - The paper also measures rare word pairs. readcost does not yet; the roadmap

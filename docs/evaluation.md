@@ -412,6 +412,51 @@ word as one unit moved established terms such as "product-market fit" and
 telling them from coinages needs word-pair frequencies, which readcost does
 not have yet. Proposals 6, 10, 12 and 14 are not applied.
 
+## Word pairs
+
+The next change gave hyphen-compound a list of hyphenated pairs in common
+use: those found in five or more of 1,598,350 FineWeb-Edu documents from a
+2019 crawl (`scripts/build_word_pairs.py`, 105,277 pairs, 0.4 MB). In that
+crawl, 17 coinages taken from model-written READMEs and from this corpus
+("storage-shrink", "region-index", "capability-tractability") occur in no
+document, while established compounds mostly occur in ten or more
+("product-market" 11, "write-ahead" 10, "trade-off" 1,958). On the corpus,
+hyphen-compound findings in essays and docs fall from 74 to 50, and no
+finding labelled correct or defensible is lost. Most of the remaining 50 are
+coinages ("quality-velocity trade-off space") or tool and repository names
+("oss-fuzz", "git-rev-list").
+
+## Second rater
+
+A second rater from a different model family, Codex (`gpt-6.1-sol`, run
+headless by `scripts/second_rater.py`), labelled the same 210 findings with
+the same rubric, without seeing the first labels.
+
+| | Agreement | Cohen's kappa |
+| --- | --- | --- |
+| correct / defensible / wrong | 81% | 0.41 |
+| correct or defensible / wrong | 83% | 0.46 |
+| construction present | 81% | 0.61 |
+
+The second rater labelled 5 correct, 41 defensible and 164 wrong (first
+rater: 3, 30, 177), so the main result holds: few findings on this text are
+real costs. The raters differ on how much the fixes helped. Of the findings
+each version still reports:
+
+| | Reported | Rater 1 correct or defensible | Rater 2 correct or defensible | Both raters |
+| --- | --- | --- | --- | --- |
+| `20199a9` | 156 | 15% | 22% | 16 |
+| precision fixes | 67 | 31% | 25% | 13 |
+| plus word pairs | 63 | 33% | 25% | 13 |
+
+The second rater called most of the dropped reduced-object-relative and
+inline-list findings defensible, with reasons such as "clear object relative;
+'that' is optional" and "five names remain easy to scan", which describe no
+reading cost. Three findings both raters accepted were dropped: two real
+lists of short items and an opt-in denominal verb. Kappa near 0.4 is moderate
+agreement; neither rater is ground truth.
+
+
 ## Limits
 
 - One automated rater, no second rater, and no agreement statistic. The
