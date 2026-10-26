@@ -378,15 +378,13 @@ PATH_LIKE = re.compile(r"[a-z][a-z0-9_.-]*(?:/[a-z0-9_.-]+){2,}|[a-z0-9_.-]*[0-9
 SLASH_OK = {"and/or", "input/output", "i/o", "read/write", "tcp/ip", "km/h", "on/off", "yes/no"}
 
 
-def _short_items(items) -> bool:
-    """True when the items average under three words, or half of them are code."""
+def _code_items(items) -> bool:
+    """True when half or more of the items are code."""
     own = []
     for t in items:
         others = {x.i for o in items if o is not t for x in o.subtree}
         own.append([x for x in t.subtree if x.i not in others and not x.is_punct and x.dep_ != "cc"])
-    if sum(1 for words in own if any(x.text == CODE for x in words)) >= len(items) / 2:
-        return True
-    return statistics.mean(len(words) for words in own) < 3
+    return sum(1 for words in own if any(x.text == CODE for x in words)) >= len(items) / 2
 
 
 # A chunk with a subject or a modal is a clause, not a list item.
@@ -420,10 +418,8 @@ def _comma_items(sent) -> list[list]:
     return items
 
 
-def _short_chunks(chunks) -> bool:
-    if sum(1 for c in chunks if any(t.text == CODE for t in c)) >= len(chunks) / 2:
-        return True
-    return statistics.mean(sum(1 for t in c if not t.is_punct) for c in chunks) < 3
+def _code_chunks(chunks) -> bool:
+    return sum(1 for c in chunks if any(t.text == CODE for t in c)) >= len(chunks) / 2
 
 
 def inline_lists(sent, ctx: Context) -> list[tuple[str, str, list]]:
@@ -440,14 +436,14 @@ def inline_lists(sent, ctx: Context) -> list[tuple[str, str, list]]:
             best = items
     # The small parser often splits one long list into groups, so comma-separated
     # chunks count too, but only verbless ones: counting every comma flagged
-    # clauses and asides as lists. A list of short items ("packages, types,
-    # functions, and variables") or of code names reads like a list already
-    # (docs/evaluation.md).
+    # clauses and asides as lists. A list of code names reads like a list
+    # already. Lists of short items are still reported: most raters in the
+    # ten-model evaluation call them defensible (docs/evaluation.md).
     chunks = _comma_items(sent)
-    if len(best) >= minimum and not _short_items(best):
+    if len(best) >= minimum and not _code_items(best):
         out.append(("info", f"{len(best)} items listed in one sentence", best))
         return out  # slash-joined items in the same sentence are part of that list
-    if len(chunks) + 1 >= minimum and not _short_chunks(chunks):
+    if len(chunks) + 1 >= minimum and not _code_chunks(chunks):
         out.append(("info", f"{len(chunks) + 1} items listed in one sentence",
                     [t for c in chunks for t in c]))
         return out

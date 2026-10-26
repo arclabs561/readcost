@@ -66,13 +66,16 @@ def test_denominal_verb_is_off_by_default(analyzer):
     assert "denominal-verb" not in feats(analyzer, "The script will bucket the requests by hour.")
 
 
-@pytest.mark.parametrize("text", [
-    "Effective Go provides guidelines for naming packages, types, functions, and variables.",
-    "But it's still a challenge for models, because drawing pelicans is difficult, drawing "
-    "bicycles is difficult, and pelicans can't ride bicycles in the first place.",
-])
-def test_short_items_and_clauses_are_not_inline_lists(analyzer, text):
+def test_clauses_joined_by_commas_are_not_an_inline_list(analyzer):
+    text = ("But it's still a challenge for models, because drawing pelicans is difficult, drawing "
+            "bicycles is difficult, and pelicans can't ride bicycles in the first place.")
     assert "inline-list" not in feats(analyzer, text)
+
+
+def test_list_of_short_items_is_still_an_inline_list(analyzer):
+    # Most of ten raters call these defensible (docs/evaluation.md, "Ten raters").
+    text = "Effective Go provides guidelines for naming packages, types, functions, and variables."
+    assert "inline-list" in feats(analyzer, text)
 
 
 def test_list_the_parser_splits_is_still_counted(analyzer):
@@ -83,11 +86,11 @@ def test_list_the_parser_splits_is_still_counted(analyzer):
     assert "inline-list" in feats(analyzer, text)
 
 
-def test_slash_list_is_reported_beside_a_short_comma_list(analyzer):
+def test_slash_and_comma_list_in_one_sentence_is_reported_once(analyzer):
     fs = [f for f in Analyzer(Config()).check_text(
         "It supports standard/Sugeno/Yager negations, OWA, power means, and uninorms.", "markdown").findings
         if f.feature == "inline-list"]
-    assert len(fs) == 1 and "slash" in fs[0].message
+    assert len(fs) == 1
 
 
 @pytest.mark.parametrize("text", [

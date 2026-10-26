@@ -53,9 +53,8 @@ def test_hyphen_compound(analyzer):
 
 
 def test_inline_list(analyzer):
-    # Short items and clauses joined by commas are not inline lists.
-    assert "inline-list" not in feats(analyzer, "It supports negations, implications, OWA, power means, and uninorms.")
-    assert "inline-list" not in feats(analyzer, "They hired people from Microsoft, Apple, Yahoo, Google, and Facebook.")
+    # Clauses joined by commas are not an inline list; short items are.
+    assert "inline-list" in feats(analyzer, "They hired people from Microsoft, Apple, Yahoo, Google, and Facebook.")
     assert "inline-list" not in feats(
         analyzer, "When the cache is cold, the first request is slow, the second is faster, and the third is instant.")
     assert "inline-list" in feats(analyzer, "It supports negations from three families, implications defined by residuation, ordered weighted averages, and uninorms with any neutral element.")
