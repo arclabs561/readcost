@@ -1,24 +1,33 @@
-# Copy to readcost.toml at the repository root. Every key is optional.
+# Copy to readcost.toml at the repository root. Every key is optional; the
+# values below are the defaults (tests/test_config_cli.py checks that).
 [readcost]
 model = "en_core_web_sm"        # "en_core_web_trf" parses better and is slower
-profile = "default"             # or a JSON file from `readcost profile build`
-min_severity = "info"           # drop findings below this
+profile = "default"             # or a JSON file from `readcost profile build`, relative to this file
+min_severity = "info"           # info | warn | error: drop findings below this
+advise_severity = "error"       # info | warn | error | off: any finding this severe makes the verdict "advise"
 enable = []                     # e.g. ["long-sentence"]
 disable = []                    # e.g. ["reduced-object-relative"]
-allow = ["write-ahead log", "Block-Max WAND"]   # phrases never flagged
+allow = []                      # phrases never flagged, e.g. ["write-ahead log", "Block-Max WAND"]
 comments = "doc"                # source files: "doc" comments only, or "all"
 advise_cost_index = 15.0        # verdict "advise" at this many weighted findings per 1k words
 block_cost_index = 30.0         # verdict "block" at this rate ...
 block_min_points = 3.0          # ... and at least this many weighted findings
 short_text_words = 40           # below this many words, judge by weighted findings, not the rate:
 short_advise_points = 2.0       # "advise" at this many; "block" at block_min_points
+stacked_nouns_min = 3           # stacked-nouns: this many nouns in a row
+long_dependency_z = 2.5         # long-dependency: z-score against the profile's fit
+long_dependency_min_tokens = 10 # long-dependency: skip sentences with fewer tokens
+inline_list_min_items = 4       # inline-list: this many conjoined items
+long_sentence_words = 32        # long-sentence (opt-in): more than this many words
 
 [readcost.hooks]
 mode = "advise"                 # off | advise | block
 stop = "off"                    # off | report | revise   (Claude Code Stop hook)
 display = "off"                 # off | note             (Claude Code MessageDisplay)
 paths = ["*.md", "*.markdown", "*.mdx", "*.rst", "*.txt", "COMMIT_EDITMSG"]
-exclude = ["CHANGELOG*", "*/node_modules/*", "*/target/*", "*/vendor/*"]
+exclude = ["CHANGELOG*", "*/node_modules/*", "*/target/*", "*/.git/*", "*/vendor/*",
+           "*/.venv/*", "*/venv/*", "*/.tox/*"]
 edited_lines_only = true        # judge only the lines an edit touched
 max_items = 8                   # findings sent back to a model
 max_chars = 2500
+timeout_seconds = 8.0           # not read yet

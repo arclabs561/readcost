@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 import json
+import os
+from pathlib import Path
+from urllib.parse import quote
 
 from .engine import Result
 from .features import FEATURES
@@ -31,15 +34,34 @@ def as_json(results: list[Result], **_) -> str:
     return json.dumps([r.to_dict() for r in results], indent=1)
 
 
+def _gh_data(s: str) -> str:
+    # Same escaping as actions/toolkit's escapeData.
+    return s.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+
+
+def _gh_property(s: str) -> str:
+    # actions/toolkit's escapeProperty: data escaping plus the property separators.
+    return _gh_data(s).replace(":", "%3A").replace(",", "%2C")
+
+
 def github(results: list[Result], **_) -> str:
     level = {"info": "notice", "warn": "warning", "error": "error"}
     lines = []
     for r in results:
         for f in r.findings:
-            msg = f"{f.message}. {f.suggestion}".replace("%", "%25").replace("\n", "%0A")
-            lines.append(f"::{level[f.severity]} file={f.path},line={max(f.line, 1)},"
-                         f"title=readcost {f.feature}::{msg}")
+            props = (f"file={_gh_property(f.path)},line={max(f.line, 1)},"
+                     f"title={_gh_property(f'readcost {f.feature}')}")
+            lines.append(f"::{level[f.severity]} {props}::{_gh_data(f'{f.message}. {f.suggestion}')}")
     return "\n".join(lines)
+
+
+def _artifact_location(path: str) -> dict:
+    """A SARIF artifactLocation: a valid URI reference, relative to %SRCROOT% when relative."""
+    if path.startswith("<") and path.endswith(">"):  # <stdin>, <text>: not a file
+        return {"uri": quote(path, safe="")}
+    if Path(path).is_absolute():
+        return {"uri": Path(path).as_uri()}
+    return {"uri": quote(path.replace(os.sep, "/").removeprefix("./")), "uriBaseId": "%SRCROOT%"}
 
 
 def sarif(results: list[Result], **_) -> str:
@@ -62,7 +84,7 @@ def sarif(results: list[Result], **_) -> str:
                 "level": level[f.severity],
                 "message": {"text": f"{f.message}. {f.suggestion}"},
                 "locations": [{"physicalLocation": {
-                    "artifactLocation": {"uri": f.path},
+                    "artifactLocation": _artifact_location(f.path),
                     "region": {"startLine": max(f.line, 1)},
                 }}],
             })
@@ -84,15 +106,22 @@ def agent(results: list[Result], max_items: int = 8, max_chars: int = 2500, **_)
     items = sorted((f for r in results for f in r.findings), key=lambda f: (order[f.severity], f.path, f.line))
     if not items:
         return ""
+    max_items, max_chars = max(max_items, 0), max(max_chars, 0)
+    several = len({f.path for f in items}) > 1
     total = len(items)
     words = sum(r.words for r in results)
     head = (f"readcost: {total} hard-to-read construction{'s' if total != 1 else ''} "
             f"in {words} words. Rewrite these sentences; keep the meaning and the facts.")
     lines = [head]
     for f in items[:max_items]:
-        loc = f"line {f.line}" if f.line else (f.label or f.path)
+        if several:
+            loc = f"{f.path}:{f.line}" if f.line else f.path + (f"#{f.label}" if f.label else "")
+        else:
+            loc = f"line {f.line}" if f.line else (f.label or f.path)
         lines.append(f"- {loc} [{f.feature}] {f.message}. Fix: {f.suggestion}")
     if total > max_items:
         lines.append(f"- ...and {total - max_items} more (run `readcost check` for the full list)")
     body = "\n".join(lines)
-    return body if len(body) <= max_chars else body[: max_chars - 3] + "..."
+    if len(body) <= max_chars:
+        return body
+    return body[:max_chars] if max_chars <= 3 else body[: max_chars - 3] + "..."

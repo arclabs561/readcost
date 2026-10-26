@@ -3,12 +3,48 @@
 from __future__ import annotations
 
 import argparse
+import os
+import re
 import subprocess
 import sys
 from pathlib import Path
 
 EXIT_OK, EXIT_FINDINGS, EXIT_USAGE = 0, 1, 2
+EXIT_BROKEN_PIPE = 141  # 128 + SIGPIPE, what a shell reports for a reader that went away
 VERDICT_RANK = {"pass": 0, "advise": 1, "block": 2}
+RECORD_FORMATS = ("transcript", "messages", "jsonl")
+LAST_LINE = 10**9  # stands in for "end of file" in an open range such as 40-
+
+
+def _line_spec(spec: str | None) -> str | None:
+    """Validate --lines and close open ranges: "40-" -> to the end, "-5" -> 1-5."""
+    if spec is None:
+        return None
+    parts = []
+    for part in spec.split(","):
+        part = part.strip()
+        m = re.fullmatch(r"(\d*)(-?)(\d*)", part)
+        if not part or not m or not (m[1] or m[3]) or (not m[2] and not m[1]):
+            raise ValueError(f"--lines: {part!r} is not a line or range; use e.g. 10-24,40 or 40-")
+        lo = int(m[1]) if m[1] else 1
+        hi = int(m[3]) if m[3] else (LAST_LINE if m[2] else lo)
+        if lo < 1 or hi < lo:
+            raise ValueError(f"--lines: {part!r} is not a valid range; lines start at 1 and a range "
+                             "runs low to high")
+        parts.append(f"{lo}-{hi}")
+    return ",".join(parts)
+
+
+def _feature_ids(value: str, flag: str) -> list[str]:
+    from .config import unknown_features
+
+    ids = [i.strip() for i in value.split(",") if i.strip()]
+    bad = unknown_features(ids)
+    if bad:
+        from .features import FEATURES
+
+        raise ValueError(f"{flag}: unknown feature {', '.join(map(repr, bad))}; known: {', '.join(FEATURES)}")
+    return ids
 
 
 def _walk(root: Path) -> list[Path]:
@@ -25,42 +61,63 @@ def _walk(root: Path) -> list[Path]:
 def _cmd_check(args) -> int:
     from .config import load_config
     from .engine import Analyzer, parse_line_ranges
+    from .extract import detect_format
     from .report import render
 
+    if args.per_record and (args.last or args.lines):
+        raise ValueError("--per-record cannot be combined with --last or --lines")
+    lines = parse_line_ranges(_line_spec(args.lines))
     cfg = load_config(args.config, start=args.paths[0] if args.paths and args.paths[0] != "-" else None)
     if args.min_severity:
         cfg.min_severity = args.min_severity
     if args.enable:
-        cfg.enable += args.enable.split(",")
+        cfg.enable += _feature_ids(args.enable, "--enable")
     if args.disable:
-        cfg.disable += args.disable.split(",")
+        cfg.disable += _feature_ids(args.disable, "--disable")
     if args.profile:
         cfg.profile = args.profile
     analyzer = Analyzer(cfg)
-    lines = parse_line_ranges(args.lines)
-    results = []
+
+    def check(text: str, path: str, name: str) -> list:
+        fmt = args.format or ("markdown" if path == "-" else detect_format(path))
+        if args.per_record:
+            out = analyzer.check_records(text, fmt, name, field_path=args.field)
+        else:
+            out = [analyzer.check_text(text, fmt, name, lines=lines, field_path=args.field,
+                                       last_only=args.last)]
+        if fmt in RECORD_FORMATS and not any(r.words for r in out):
+            what = "records with that --field" if args.field else "assistant messages"
+            print(f"readcost: warning: {name}: no prose found in {what} (format {fmt}); "
+                  "is --format right?", file=sys.stderr)
+        return out
+
+    results, failed = [], False
     for path in args.paths or ["-"]:
         if path == "-":
-            text = sys.stdin.read()
-            results.append(analyzer.check_text(text, args.format or "markdown", args.stdin_name,
-                                               lines=lines, field_path=args.field, last_only=args.last))
-        elif Path(path).is_dir():
-            for p in _walk(Path(path)):
-                if cfg.wants(str(p)):
-                    results.append(analyzer.check_file(str(p), args.format, lines=lines,
-                                                       field_path=args.field, last_only=args.last))
-        elif args.per_record:
-            from .extract import detect_format
-
-            text = Path(path).read_text(encoding="utf-8", errors="ignore")
-            results.extend(analyzer.check_records(text, args.format or detect_format(path), path,
-                                                  field_path=args.field))
+            results.extend(check(sys.stdin.read(), "-", args.stdin_name))
+            continue
+        if Path(path).is_dir():
+            # --per-record also takes JSONL, which hooks.paths leaves out.
+            files = [p for p in _walk(Path(path))
+                     if cfg.wants(str(p)) or (args.per_record and p.suffix == ".jsonl"
+                                              and not cfg.excluded(str(p)))]
+            if not files:
+                print(f"readcost: {path}: no files matched hooks.paths", file=sys.stderr)
         else:
-            results.append(analyzer.check_file(path, args.format, lines=lines,
-                                               field_path=args.field, last_only=args.last))
+            files = [Path(path)]
+        for p in files:
+            try:
+                text = p.read_text(encoding="utf-8", errors="ignore")
+                results.extend(check(text, str(p), str(p)))
+            except (OSError, ValueError) as exc:
+                failed = True
+                detail = exc.strerror if isinstance(exc, OSError) and exc.strerror else exc
+                print(f"readcost: {p}: {detail}", file=sys.stderr)
     out = render(results, args.output, max_items=cfg.hooks.max_items, max_chars=cfg.hooks.max_chars)
     if out:
         print(out)
+    if failed:
+        return EXIT_USAGE
     worst = max((VERDICT_RANK[r.verdict] for r in results), default=0)
     threshold = {"never": 99, "advise": 1, "block": 2}[args.fail_on]
     return EXIT_FINDINGS if worst >= threshold else EXIT_OK
@@ -185,7 +242,14 @@ def main(argv: list[str] | None = None) -> int:
         parser.print_help()
         return EXIT_USAGE
     try:
-        return args.func(args)
+        code = args.func(args)
+        sys.stdout.flush()
+        return code
+    except BrokenPipeError:
+        # The reader (e.g. `| head`) left. Point stdout at devnull so the
+        # interpreter's final flush does not print a second error.
+        os.dup2(os.open(os.devnull, os.O_WRONLY), sys.stdout.fileno())
+        return EXIT_BROKEN_PIPE
     except (OSError, ValueError, RuntimeError) as exc:
         print(f"readcost: {exc}", file=sys.stderr)
         return EXIT_USAGE

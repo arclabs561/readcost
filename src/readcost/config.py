@@ -8,7 +8,9 @@ found walking up from the start directory.
 from __future__ import annotations
 
 import fnmatch
+import math
 import os
+import sys
 import tomllib
 from dataclasses import dataclass, field, fields
 from pathlib import Path
@@ -17,7 +19,22 @@ SEVERITIES = ("info", "warn", "error")
 
 
 def severity_rank(s: str) -> int:
+    """Rank of a severity; "off" ranks above every severity, so nothing reaches it."""
+    if s == "off":
+        return len(SEVERITIES)
     return SEVERITIES.index(s) if s in SEVERITIES else 0
+
+
+# Allowed values for string settings that are enums.
+CHOICES = {
+    "mode": ("off", "advise", "block"),
+    "stop": ("off", "report", "revise"),
+    "display": ("off", "note"),
+    "min_severity": SEVERITIES,
+    "advise_severity": (*SEVERITIES, "off"),
+    "comments": ("doc", "all"),
+}
+FEATURE_LISTS = ("enable", "disable")
 
 
 @dataclass
@@ -63,22 +80,68 @@ class Config:
     source: str = ""                # where the config came from
 
     def wants(self, path: str) -> bool:
-        p = path.replace(os.sep, "/").removeprefix("./")
-        # A leading "/" lets "*/node_modules/*" match a top-level node_modules too.
-        candidates = (p, "/" + p.lstrip("/"), Path(p).name)
-        if any(fnmatch.fnmatch(c, g) for c in candidates for g in self.hooks.exclude):
+        if self.excluded(path):
             return False
-        return any(fnmatch.fnmatch(c, g) for c in candidates for g in self.hooks.paths)
+        return any(fnmatch.fnmatch(c, g) for c in _candidates(path) for g in self.hooks.paths)
+
+    def excluded(self, path: str) -> bool:
+        return any(fnmatch.fnmatch(c, g) for c in _candidates(path) for g in self.hooks.exclude)
 
 
-def _apply(obj, data: dict) -> None:
-    known = {f.name: f for f in fields(obj)}
+def _candidates(path: str) -> tuple[str, str, str]:
+    p = path.replace(os.sep, "/").removeprefix("./")
+    # A leading "/" lets "*/node_modules/*" match a top-level node_modules too.
+    return (p, "/" + p.lstrip("/"), Path(p).name)
+
+
+def _check(name: str, default, value):
+    """Return an error message when ``value`` cannot stand in for ``default``."""
+    if isinstance(default, bool):
+        ok, want = isinstance(value, bool), "true or false"
+    elif isinstance(default, int):
+        ok, want = isinstance(value, int) and not isinstance(value, bool), "an integer"
+    elif isinstance(default, float):
+        ok = isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+        want = "a number"
+    elif isinstance(default, list):
+        ok = isinstance(value, list) and all(isinstance(v, str) for v in value)
+        want = "a list of strings, e.g. [\"a\", \"b\"]"
+    else:
+        ok, want = isinstance(value, str), "a string"
+    if not ok:
+        return f"must be {want}, not {value!r}"
+    if name in CHOICES and value not in CHOICES[name]:
+        return f"must be one of {', '.join(CHOICES[name])}, not {value!r}"
+    if name in FEATURE_LISTS:
+        bad = unknown_features(value)
+        if bad:
+            return f"unknown feature {', '.join(map(repr, bad))}"
+    return None
+
+
+def unknown_features(ids: list[str]) -> list[str]:
+    from .features import FEATURES
+
+    return [i for i in ids if i not in FEATURES]
+
+
+def _apply(obj, data: dict, source: str, prefix: str = "") -> None:
+    known = {f.name for f in fields(obj)} - {"source"}
     for key, value in data.items():
-        key = key.replace("-", "_")
-        if key == "hooks" and isinstance(value, dict) and hasattr(obj, "hooks"):
-            _apply(obj.hooks, value)
-        elif key in known:
-            setattr(obj, key, value)
+        name = key.replace("-", "_")
+        if name not in known:
+            print(f"readcost: warning: {source}: unknown key {prefix + key!r} ignored", file=sys.stderr)
+            continue
+        current = getattr(obj, name)
+        if isinstance(current, HookConfig):
+            if not isinstance(value, dict):
+                raise ValueError(f"{source}: {prefix + key} must be a table, not {value!r}")
+            _apply(current, value, source, f"{prefix}{key}.")
+            continue
+        error = _check(name, current, value)
+        if error:
+            raise ValueError(f"{source}: {prefix + key} {error}")
+        setattr(obj, name, float(value) if isinstance(current, float) else value)
 
 
 def find_config(start: Path) -> Path | None:
@@ -108,11 +171,22 @@ def load_config(path: str | None = None, start: str | None = None) -> Config:
         candidate = find_config(Path(start or os.getcwd()).resolve())
     if candidate is None:
         return cfg
-    data = tomllib.loads(candidate.read_text())
+    try:
+        data = tomllib.loads(candidate.read_text())
+    except tomllib.TOMLDecodeError as exc:
+        raise ValueError(f"{candidate}: invalid TOML: {exc}") from exc
     if candidate.name == "pyproject.toml":
         data = data.get("tool", {}).get("readcost", {})
-    else:
-        data = data.get("readcost", data)
-    _apply(cfg, data)
+    elif isinstance(data.get("readcost"), dict):
+        # readcost.toml may use a [readcost] table, top-level keys, or both.
+        table = data.pop("readcost")
+        both = sorted(set(data) & set(table))
+        if both:
+            raise ValueError(f"{candidate}: {', '.join(both)} set both at top level and in [readcost]")
+        data |= table
+    _apply(cfg, data, str(candidate))
     cfg.source = str(candidate)
+    # A relative profile path means relative to the config file, not the cwd.
+    if cfg.profile not in ("default", "") and not Path(cfg.profile).is_absolute():
+        cfg.profile = str(candidate.resolve().parent / cfg.profile)
     return cfg

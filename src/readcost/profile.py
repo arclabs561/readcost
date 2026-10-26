@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 import math
 import statistics
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, fields
 from importlib import resources
 from pathlib import Path
 
@@ -31,17 +31,34 @@ class Profile:
         return json.dumps(d, indent=1)
 
     @classmethod
-    def from_dict(cls, d: dict) -> "Profile":
-        d = dict(d)
-        d["dep_fit"] = tuple(d["dep_fit"])
-        return cls(**d)
+    def from_dict(cls, d: dict, source: str = "profile") -> "Profile":
+        """Build from parsed JSON; unknown keys are ignored so newer files still load."""
+        if not isinstance(d, dict):
+            raise ValueError(f"{source}: a profile must be a JSON object")
+        missing = [k for k in ("name", "words", "sentences", "dep_fit") if k not in d]
+        if missing:
+            raise ValueError(f"{source}: profile is missing {', '.join(missing)}")
+        fit = d["dep_fit"]
+        ok = (isinstance(fit, list) and len(fit) == 3
+              and all(isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v) for v in fit))
+        if not ok or fit[2] <= 0:
+            raise ValueError(f"{source}: dep_fit must be three finite numbers [a, b, sd] with sd > 0, "
+                             f"not {fit!r}")
+        known = {f.name for f in fields(cls)}
+        kept = {k: v for k, v in d.items() if k in known}
+        kept["dep_fit"] = tuple(float(v) for v in fit)
+        return cls(**kept)
 
 
 def load_profile(spec: str = "default") -> Profile:
     if spec in ("default", ""):
         data = resources.files("readcost").joinpath("data/default_profile.json").read_text()
-        return Profile.from_dict(json.loads(data))
-    return Profile.from_dict(json.loads(Path(spec).read_text()))
+        return Profile.from_dict(json.loads(data), "default profile")
+    try:
+        data = json.loads(Path(spec).read_text())
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"{spec}: invalid profile JSON: {exc}") from exc
+    return Profile.from_dict(data, spec)
 
 
 def fit_dependency(points: list[tuple[int, float]]) -> tuple[float, float, float]:
@@ -69,7 +86,7 @@ def build_profile(paths: list[str], name: str, analyzer_factory, fmt: str | None
     words = sentences = 0
     for p in paths:
         text = Path(p).read_text(encoding="utf-8", errors="ignore")
-        for seg in extract(text, p, fmt):
+        for seg in extract(text, p, fmt, comments=analyzer.cfg.comments):
             for sent in analyzer.sentences(seg):
                 content = [t for t in sent if not t.is_punct and not t.is_space]
                 arcs = [abs(t.i - t.head.i) for t in content if t.head is not t and not t.head.is_punct]
