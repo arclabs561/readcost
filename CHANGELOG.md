@@ -7,6 +7,11 @@ configuration.
 
 ## [Unreleased]
 
+### Added
+
+- `readcost: ignore`, `off` and `on` comments in Markdown can name rules, turning
+  off only those; an unknown rule name is reported in the notes.
+
 ## [0.2.0] - 2026-10-26
 
 First release on PyPI (`pip install readcost`, or `uvx readcost`).

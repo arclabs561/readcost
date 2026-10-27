@@ -156,10 +156,14 @@ class Analyzer:
                     framed.append((seg, sent))
                 text = show(ctx, sent.doc, sent.start, sent.end - 1)
                 for feature, sev, msg, toks in detect(sent, ctx):
+                    if feature in seg.skip:
+                        continue
                     result.findings.append(self._finding(ctx, seg, sent, text, path, line,
                                                          feature, sev, msg, toks))
         if "repeated-frame" in self.enabled:
             for seg, sent, msg, toks in repeated_frames(framed):
+                if "repeated-frame" in seg.skip:
+                    continue
                 ctx.codes = seg.codes
                 text = show(ctx, sent.doc, sent.start, sent.end - 1)
                 result.findings.append(self._finding(ctx, seg, sent, text, path, seg.line_at(sent.start_char),
@@ -175,6 +179,10 @@ class Analyzer:
         # The verdict uses every finding; min_severity only trims what is shown.
         self._verdict(result, context)
         result.findings = [f for f in result.findings if severity_rank(f.severity) >= floor]
+        unknown = sorted(set().union(*(seg.skip for seg in segments)) - set(FEATURES))
+        if unknown:
+            result.notes.append(f"unknown rule in a readcost directive: {', '.join(unknown)}; "
+                                "`readcost explain` lists the rules")
         if not lexicon.has_wordnet():
             result.notes.append("lexicon data missing: denominal-verb disabled, inanimate-subject reduced")
         if lines is None and readtime.available():

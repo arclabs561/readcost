@@ -39,6 +39,7 @@ class Segment:
     label: str = ""  # e.g. "assistant[3]" for a message inside a transcript
     codes: dict[int, str] = field(default_factory=dict)  # CODE offset -> original text
     in_list: bool = False  # a Markdown list item, not running prose
+    skip: frozenset[str] = frozenset()  # rules a readcost directive turned off here
 
     def line_at(self, offset: int) -> int:
         if not self.anchors:
@@ -70,6 +71,7 @@ EXTENSION = re.compile(r"\.[A-Za-z][A-Za-z0-9]{0,7}$")
 YAML_KEY = re.compile(r"^[^\s:#-][^:]*:(\s|$)")
 YAML_LINE = re.compile(r"^(\s.*|#.*|-(\s.*)?|\.\.\.|[^\s:#-][^:]*:(\s.*)?)$")
 IGNORE_NEXT = re.compile(r"readcost:\s*ignore", re.I)
+DIRECTIVE = re.compile(r"readcost:\s*(?:ignore|off|on)\b(.*?)(?:-->|$)", re.I | re.S)
 OFF = re.compile(r"readcost:\s*off", re.I)
 ON = re.compile(r"readcost:\s*on", re.I)
 
@@ -199,8 +201,16 @@ def _markdown(src: str, path: str, label: str, line_no) -> list[Segment]:
     disabled = False
     ignore_level: int | None = None  # a readcost: ignore waits at this nesting level
     skip_level: int | None = None  # inside the block that ignore applies to
+    # "readcost: ignore RULE ..." and "readcost: off RULE ...": only those rules.
+    ignore_rules: frozenset[str] = frozenset()
+    rule_skip: frozenset[str] = frozenset()  # for the block an ignore RULE applies to
+    rule_level: int | None = None
+    rule_token: int | None = None  # or, for a block that is one token, its index
+    off_rules: frozenset[str] = frozenset()
     items = 0  # open list items
     for i, tok in enumerate(tokens):
+        if rule_token is not None and i > rule_token:
+            rule_skip, rule_token = frozenset(), None
         if tok.type in ("list_item_open", "list_item_close"):
             items += tok.nesting
         if skip_level is not None:
@@ -209,21 +219,39 @@ def _markdown(src: str, path: str, label: str, line_no) -> list[Segment]:
             continue
         if tok.type == "html_block" and tok.content.lstrip().startswith("<!--"):
             # Comments, directives included, do not use up a pending ignore.
+            m = DIRECTIVE.search(tok.content)
+            rules = frozenset(re.findall(r"[a-z][a-z-]*[a-z]", m.group(1))) if m else frozenset()
             if OFF.search(tok.content):
-                disabled = True
+                if rules:
+                    off_rules |= rules
+                else:
+                    disabled = True
             elif ON.search(tok.content):
-                disabled = False
+                if rules:
+                    off_rules -= rules
+                else:
+                    disabled, off_rules = False, frozenset()
             elif IGNORE_NEXT.search(tok.content):
-                ignore_level = tok.level
+                ignore_level, ignore_rules = tok.level, rules
             continue
         if ignore_level is not None:
             if tok.level < ignore_level:
                 ignore_level = None  # the container ended; nothing followed
             elif tok.level == ignore_level:
                 ignore_level = None
-                if tok.nesting == 1:
-                    skip_level = tok.level
-                continue
+                if ignore_rules:
+                    # Read the block, but drop these rules' findings in it.
+                    rule_skip = ignore_rules
+                    if tok.nesting == 1:
+                        rule_level = tok.level
+                    else:
+                        rule_token = i
+                else:
+                    if tok.nesting == 1:
+                        skip_level = tok.level
+                    continue
+        if rule_level is not None and tok.level == rule_level and tok.nesting == -1:
+            rule_skip, rule_level = frozenset(), None
         if tok.type == "html_block" and not disabled:
             # Prose inside HTML in Markdown (<p>...</p>, <details>) is still prose.
             base = tok.map[0] if tok.map else 0
@@ -232,6 +260,7 @@ def _markdown(src: str, path: str, label: str, line_no) -> list[Segment]:
             parser._flush()
             for seg in markdown_lines([(t, line_no(base + n - 1)) for t, n in parser.lines], path, label):
                 seg.in_list = items > 0
+                seg.skip = seg.skip | rule_skip | off_rules
                 segments.append(seg)
             continue
         if disabled or tok.type != "inline" or i == 0 or tokens[i - 1].type != "paragraph_open":
@@ -239,6 +268,7 @@ def _markdown(src: str, path: str, label: str, line_no) -> list[Segment]:
         seg = _segment(_inline_pieces(tok, line_no), path, label)
         if seg:
             seg.in_list = items > 0
+            seg.skip = rule_skip | off_rules
             segments.append(seg)
     return segments
 
