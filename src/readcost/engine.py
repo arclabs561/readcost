@@ -228,7 +228,7 @@ class Analyzer:
         if not lexicon.has_wordnet():
             result.notes.append("lexicon data missing: denominal-verb disabled, inanimate-subject reduced")
         if lines is None and readtime.available():
-            times = [readtime.word_times(seg.text) for seg in segments]
+            times = readtime.word_times_many([seg.text for seg in segments])
             words = sum(len(t) for t in times)
             ms = sum(w[3] for t in times for w in t)
             if words:
