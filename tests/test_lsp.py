@@ -73,7 +73,7 @@ def test_no_message_suffix_and_no_link_for_undocumented_feature():
 def test_documented_features_match_readme_table():
     readme = (Path(__file__).parents[1] / "README.md").read_text()
     section = readme.split("## What it flags", 1)[1].split("\n## ", 1)[0]
-    rows = set(re.findall(r"^\| ([a-z][a-z-]+)(?: \(opt-in\))? \|", section, re.MULTILINE))
+    rows = set(re.findall(r"^\| ([a-z][a-z-]+)(?: \([^)]*\))? \|", section, re.MULTILINE))
     assert rows == DOCUMENTED
 
 
