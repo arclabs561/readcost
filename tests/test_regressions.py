@@ -265,6 +265,9 @@ def test_several_findings_in_a_short_text_still_advise():
     "The manifest records model family, training config, split sizes, SHA-256 digests, byte sizes, "
     "and evaluation metrics when `--eval` is used.",
     "reduced-object-relative skips pronoun subjects and light heads;",
+    # A verb above the misparse ("grows") did not stop it: two plurals in a row.
+    "Formulaic text such as merge-commit subjects scores high legitimately, and the share grows "
+    "with the amount of text.",
 ])
 def test_misparsed_verb_is_not_part_of_a_noun_stack(sentence):
     findings = Analyzer(Config()).check_text(sentence, "markdown").findings
@@ -274,6 +277,12 @@ def test_misparsed_verb_is_not_part_of_a_noun_stack(sentence):
 def test_noun_stack_before_a_verb_is_still_reported():
     findings = Analyzer(Config()).check_text("We tune the shard compaction retry budget by hand.", "markdown").findings
     assert [f.excerpt for f in findings if f.feature == "stacked-nouns"] == ["compaction retry budget"]
+
+
+def test_plural_head_followed_by_a_verb_is_still_a_noun_stack():
+    findings = Analyzer(Config()).check_text(
+        "The quarterly product sales figures rose sharply after the new store opened.", "markdown").findings
+    assert [f.excerpt for f in findings if f.feature == "stacked-nouns"] == ["product sales figures"]
 
 
 # From public READMEs (arclabs561/piku, precinct, netbraid): a noun at the
