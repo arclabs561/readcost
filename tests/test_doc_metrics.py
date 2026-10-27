@@ -3,7 +3,7 @@
 import pytest
 
 from readcost import Analyzer, Config, metrics
-from readcost.features import center_embeddings, new_referents
+from readcost.features import center_embeddings
 
 
 @pytest.fixture(scope="module")
@@ -87,21 +87,6 @@ def test_sentence_profile_bands_use_the_cut_points(plain):
     assert profile["low"] == pytest.approx(9 / 49, abs=0.001)
 
 
-# ---------------------------------------------------------------- DLT referents
-
-def test_new_referents_counts_gibson_examples(plain):
-    # Gibson 2000, section 5.3.2: between "reporter" and "disliked" lie two new
-    # referents in (1b) (senator, attacked) and four in (1c) (senator, John,
-    # met, attacked). A first-person pronoun is not new: (6) has three.
-    for text, want in [(SINGLE, 2), (DOUBLE, 4),
-                       ("The reporter who the senator who I met attacked disliked the editor.", 3)]:
-        doc = plain.nlp(text)
-        subj = next(t for t in doc if t.dep_ == "nsubj" and t.head.dep_ == "ROOT")
-        assert new_referents(doc, subj.i, subj.head.i) == want
-
-
-# ---------------------------------------------------------------- opt-in rules
-
 def test_new_rules_are_off_by_default(plain):
     assert rules(plain, DOUBLE, "center-embedding") == []
     assert rules(plain, "Every write goes to the WAL before the table changes.", "undefined-acronym") == []
@@ -183,12 +168,3 @@ def test_frequent_abbreviations_and_capitalised_words_are_known(opt):
 ])
 def test_spelled_out_next_to_the_acronym_counts_as_a_definition(opt, text):
     assert rules(opt, text, "undefined-acronym") == []
-
-
-def test_referent_measure_is_opt_in_and_changes_the_message():
-    text = ("The index, which is built once from every document in the corpus at startup and then "
-            "rebuilt only when the compactor runs, serves all queries.")
-    default = rules(Analyzer(Config()), text, "long-dependency")
-    assert default and "new nouns or verbs" not in default[0].message
-    dlt = rules(Analyzer(Config(long_dependency_referents=5)), text, "long-dependency")
-    assert [f.message.split(", with ")[1].split(" new")[0] for f in dlt] == ["6"]

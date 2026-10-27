@@ -38,11 +38,6 @@ configuration.
   continue after it) and undefined-acronym (an acronym used before it is
   spelled out), both at info severity.
 - `scripts/eval_corpus.py --info RULES` turns on opt-in rules for a corpus run.
-- Config key `long_dependency_referents` (default 0, off): measure a
-  long-dependency gap by the new nouns and tensed verbs inside it, after
-  Gibson's Dependency Locality Theory. In a blind comparison the six strict
-  raters accepted 10 of 30 findings only this measure reports, against 17 of
-  30 only word distance reports, so word distance stays the default.
 
 - JSON findings carry `column`, `end_line` and `end_column`, and `precision`
   (how many labelled findings of that rule raters accepted); `-o agent` shows
@@ -62,8 +57,14 @@ configuration.
 - long-dependency reports a subject, object or attribute far from its verb
   (9+ words in a sentence whose dependencies are long overall, or 15+ words
   anywhere), not the longest arc of any kind. In a blind comparison six model
-  raters accepted 14 of 30 new findings and 0 of 30 old ones. New config keys
-  `long_dependency_core_min` and `long_dependency_core_always`.
+  raters accepted 14 of 30 new findings and 0 of 30 old ones.
+- Rule and verdict thresholds are no longer config keys: `stacked_nouns_min`,
+  `long_dependency_z`, `long_dependency_min_tokens`, `inline_list_min_items`,
+  `long_sentence_words`, `block_min_points`, `short_text_words`,
+  `short_advise_points`, `commit_advise_cost_index` and
+  `commit_block_cost_index` now warn and are ignored. They were set from the
+  evaluation corpus; change a rule's level instead. `advise_cost_index`,
+  `block_cost_index` and `advise_severity` stay.
 
 ### Fixed
 

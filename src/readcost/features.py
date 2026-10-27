@@ -22,6 +22,17 @@ if TYPE_CHECKING:
     from .config import Config
     from .profile import Profile
 
+# Rule thresholds. They were config keys until 0.3; set from the evaluation
+# corpus and labelled findings (docs/evaluation.md), not meant to be tuned
+# per repository: turn a rule off or change its level instead.
+STACKED_NOUNS_MIN = 3             # nouns in a row
+INLINE_LIST_MIN_ITEMS = 4         # coordinated items in one sentence
+LONG_DEPENDENCY_MIN_TOKENS = 10   # skip shorter sentences
+LONG_DEPENDENCY_CORE_MIN = 9      # words between a subject or object and its verb, when z is high
+LONG_DEPENDENCY_CORE_ALWAYS = 15  # that many words is reported at any z
+LONG_DEPENDENCY_Z = 2.5           # sentence's dependency length against the profile
+LONG_SENTENCE_WORDS = 32          # long-sentence (opt-in)
+
 
 @dataclass(frozen=True)
 class Feature:
@@ -333,7 +344,7 @@ def stacked_nouns(sent, ctx: Context, taken: set[int],
     # of a noun is hyphen-compound's to report.
     spans = _merge((spans or []) + _hyphen_spans(sent))
     out = []
-    minimum = ctx.cfg.stacked_nouns_min
+    minimum = STACKED_NOUNS_MIN
     caps = _mostly_upper(sent)
     for t in sent:
         if t.pos_ not in ("NOUN", "PROPN") or t.dep_ == "compound" or t.text == CODE:
@@ -497,7 +508,7 @@ def _code_chunks(chunks) -> bool:
 
 def inline_lists(sent, ctx: Context) -> list[tuple[str, str, list]]:
     out = []
-    minimum = ctx.cfg.inline_list_min_items
+    minimum = INLINE_LIST_MIN_ITEMS
     seen = set()
     best: list = []
     for t in sent:
@@ -568,28 +579,6 @@ def _finite(t) -> bool:
         return True
     return any(c.dep_ in ("aux", "auxpass") and ("Fin" in c.morph.get("VerbForm") or c.tag_ in ("VBD", "VBP", "VBZ", "MD"))
                for c in t.children)
-
-
-def new_referents(doc, lo: int, hi: int) -> int:
-    """New discourse referents strictly between token indices lo and hi.
-
-    The Dependency Locality Theory (Gibson 2000, section 5.3.1) measures the
-    cost of linking a word to its head by the new discourse referents in
-    between: the head noun of each noun phrase and each tensed verb (an
-    event). Pronouns refer to entities already in the discourse and do not
-    count, nor do nouns that only modify another noun ("source" in "source
-    segment"). Gibson distinguishes new from given referents and treats
-    first- and second-person pronouns as free; this count simply takes every
-    noun phrase head as new and leaves all pronouns out.
-    """
-    a, b = sorted((lo, hi))
-    n = 0
-    for t in doc[a + 1:b]:
-        noun = t.pos_ in ("NOUN", "PROPN") and t.dep_ != "compound"
-        # A tensed verb, or a copula heading its clause ("which is fast").
-        event = (t.pos_ == "VERB" or (t.pos_ == "AUX" and t.dep_ not in ("aux", "auxpass"))) and _finite(t)
-        n += noun or event
-    return n
 
 
 # Clause relations that can nest one finite clause inside another.
@@ -672,25 +661,16 @@ def center_embedding(sent, ctx: Context) -> list[tuple[str, str, list]]:
 def long_dependency(sent, ctx: Context, has_list: bool) -> list[tuple[str, str, list]]:
     z, n, longest = dependency_z(sent, ctx.profile)
     ctx.stats.setdefault("dep_z", []).append(z)
-    if has_list or n < ctx.cfg.long_dependency_min_tokens or not longest:
+    if has_list or n < LONG_DEPENDENCY_MIN_TOKENS or not longest:
         return []
     core = [arc for arc in dependency_arcs(sent) if arc[1].dep_ in CORE_DEPS]
     if not core:
         return []
     dist, dep, head = max(core, key=lambda arc: arc[0])
-    referents = ctx.cfg.long_dependency_referents
-    if referents > 0:
-        # Opt-in: measure the gap by new discourse referents (Gibson 2000).
-        # It did no better than words on labelled findings (docs/evaluation.md).
-        refs = new_referents(sent.doc, dep.i, head.i)
-        if not (refs >= referents or (refs >= 2 and z >= ctx.cfg.long_dependency_z)):
-            return []
-        return [("warn", f"'{_w(ctx, dep)}' and '{_w(ctx, head)}' are {dist} words apart, "
-                         f"with {refs} new nouns or verbs between (z = {z:.1f})", [dep, head])]
     # A long gap in a sentence whose dependencies are long overall, or a very
     # long gap anywhere ("The index, which ... runs, serves all queries").
-    if not (dist >= ctx.cfg.long_dependency_core_always
-            or (dist >= ctx.cfg.long_dependency_core_min and z >= ctx.cfg.long_dependency_z)):
+    if not (dist >= LONG_DEPENDENCY_CORE_ALWAYS
+            or (dist >= LONG_DEPENDENCY_CORE_MIN and z >= LONG_DEPENDENCY_Z)):
         return []
     return [("warn", f"'{_w(ctx, dep)}' and '{_w(ctx, head)}' are {dist} words apart (z = {z:.1f})", [dep, head])]
 
@@ -787,7 +767,7 @@ def reduced_object_relatives(sent, ctx: Context) -> list[tuple[str, str, list]]:
 
 def long_sentence(sent, ctx: Context) -> list[tuple[str, str, list]]:
     words = sum(1 for t in sent if t.is_alpha)
-    if words > ctx.cfg.long_sentence_words:
+    if words > LONG_SENTENCE_WORDS:
         return [("info", f"{words} words in one sentence", [])]
     return []
 
