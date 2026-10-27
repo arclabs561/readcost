@@ -62,3 +62,13 @@ def test_lsp_without_pygls_says_how_to_install():
     proc = subprocess.run([sys.executable, "-c", code], check=False, capture_output=True, text=True, stdin=subprocess.DEVNULL)
     assert proc.returncode == 2
     assert proc.stderr.count("\n") == 1 and "pip install 'readcost[lsp]'" in proc.stderr
+
+
+def test_readme_links_work_on_pypi():
+    # PyPI renders README.md without the repository, so relative links break there.
+    import re
+    from pathlib import Path
+
+    readme = (Path(__file__).resolve().parent.parent / "README.md").read_text()
+    relative = re.findall(r"\]\((?!https?:|#)([^)]+)\)", readme)
+    assert relative == []
