@@ -747,9 +747,16 @@ grade.
 ## Speed
 
 `scripts/bench_speed.py` on an Apple M3 Max: a new `readcost check` process
-on a short file takes 0.74 s (median of 5; most of it loading spaCy), which
-is what a hook pays per edit; a loaded Analyzer checks about 5,100 words per
-second.
+on a short file takes about 1.1 to 1.4 s (most of it loading spaCy and the
+word-frequency table), which is what a hook pays per edit. A loaded Analyzer
+checks 8,100 words per second (median of 5), against 3,400 for the code
+before the reading-time model walked all its trees at once, measured at the
+same time; an earlier, quieter run of the old code gave 5,100.
+
+On many files, `readcost check` runs a process per core. The combined
+evaluation corpus (10,953 texts, 5.66 million words) takes 157 s with 8
+processes, about 36,000 words per second, and 231 s with every opt-in rule
+on as well.
 
 ## Reference profile
 
