@@ -31,6 +31,19 @@ configuration.
   most reading time beyond their length (experimental); the JSON output has
   `hotspots` for every file.
 
+- JSON output has a `metrics` object per file: lexical diversity (MTLD),
+  idea density (DEPID), mean and maximum center-embedding depth, and the share
+  of words in four sentence-length bands. It never changes the verdict.
+- Opt-in rules center-embedding (a clause nested two deep inside clauses that
+  continue after it) and undefined-acronym (an acronym used before it is
+  spelled out), both at info severity.
+- `scripts/eval_corpus.py --info RULES` turns on opt-in rules for a corpus run.
+- Config key `long_dependency_referents` (default 0, off): measure a
+  long-dependency gap by the new nouns and tensed verbs inside it, after
+  Gibson's Dependency Locality Theory. In a blind comparison the six strict
+  raters accepted 10 of 30 findings only this measure reports, against 17 of
+  30 only word distance reports, so word distance stays the default.
+
 ### Deprecated
 
 - `enable`, `disable`, `hooks.paths` and `hooks.exclude` still work, with a
