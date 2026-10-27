@@ -2,30 +2,34 @@
 
 readcost locates sentences whose construction tends to cost readers time. It
 does not grade documents, and it cannot see content problems: missing,
-wrong or stale information. Developers rate those as the worst documentation
-failures (Uddin and Robillard 2015), and comment staleness is the most studied
-comment-quality problem (Rani et al. 2022). Tools that compare comments with
-code changes cover that (Wen et al. 2019; Panthaplackel et al. 2021).
+ambiguous or wrong information. Developers rate ambiguity, incompleteness and
+incorrectness as the worst documentation failures (Uddin and Robillard 2015),
+and consistency between comments and code, which includes staleness, is the
+most studied comment-quality attribute (Rani et al. 2022). Studies and tools
+that compare comments with code changes cover that (Wen et al. 2019;
+Panthaplackel et al. 2021).
 
 ## What the evidence supports
 
 - The detectors come from Clark, Martin and Mahowald (arXiv 2610.29162). They
   show language models overuse these constructions relative to paraphrases of
-  the same content and to human corpora. That is a claim about rates, not
+  the same content; against human corpora the excess is consistent only for
+  inanimate subjects and rare word pairs. That is a claim about rates, not
   about single sentences, and the paper ran no reading study on model text.
-- Technical prose is noun-heavy by register. Compressed noun phrases are
-  efficient for expert readers and costly for newcomers (Biber and Gray
-  2010). A stacked noun that names a defined term is not the same as one
+- Technical prose is noun-heavy by register. Biber and Gray (2010) argue,
+  without measuring it, that compressed noun phrases are efficient for
+  expert readers and costly for newcomers. A stacked noun that names a defined term is not the same as one
   coined for a single sentence.
 - No single static metric predicts how well people understand code
-  (Scalabrino et al. 2017; Peitek et al. 2021), and reader experience matters
-  more than any metric (Trockman et al. 2018). The same caution applies to a
+  (Scalabrino et al. 2017; Peitek et al. 2021); reader experience matters
+  most, and combined metrics add a small real signal (Trockman et al. 2018). The same caution applies to a
   prose index. Per-sentence findings are the primary output; the file index is
   for trends and gates.
 - Shorter is not the goal. Compressed rewrites can raise reading cost per word
   (Cekini et al., arXiv 2610.23715). Rewrites restore optional words such as
-  "that" and keep rationale clauses, which are rare and valuable in comments
-  (Chen et al., TOSEM). Done: when a long-dependency or inline-list sentence
+  "that" and keep rationale clauses: rationale is the part of a comment that
+  cannot be recovered from the code, and summarization models fail on it
+  most (Chen et al. 2021). Done: when a long-dependency or inline-list sentence
   gives a reason, the suggestion says to keep it.
 - Three opt-in detectors count constructions that language models overuse:
   nominalizations and present participial clauses (1.5 to 2 and 2 to 5 times
@@ -34,11 +38,15 @@ code changes cover that (Wen et al. 2019; Panthaplackel et al. 2021).
   across many outputs of one model, not within one document, and they make
   no claim about reading time; repeated-frame is a style signal only.
 - Two opt-in rules with weaker evidence. center-embedding flags a clause
-  nested two deep inside clauses that continue after it; Gibson (2000) shows
-  that readers lose track at that depth in constructed sentences, and Wu et
-  al. (2010) find that embedding depth adds to reading time beyond surprisal.
-  undefined-acronym flags an acronym used before it is spelled out; the only
-  evidence is self-reported difficulty (Hales, Williams and Rector 2017). No
+  nested two deep inside clauses that continue after it. Gibson (1998, 2000)
+  argues from acceptability judgements of constructed sentences that such
+  nesting is hard, except when the innermost subject is a pronoun; Wu et al.
+  (2010) find that a parser's change in embedding depth adds to reading time
+  beyond surprisal over all words, though not for open-class words, in one
+  constructed corpus. undefined-acronym flags an acronym used before it is
+  spelled out; the only evidence is a magazine report of self-rated
+  difficulty, whose authors recommend spelling a term out at every use
+  (Hales, Williams and Rector 2017). No
   study was found on terminology consistency, and none supports a check for
   ambiguous pronouns: Gordon, Grosz and Gilliom (1993) find that repeating a
   name where a pronoun would do slows reading.
@@ -58,10 +66,10 @@ each context gets its own defaults and its own reference profile.
 | Context | Detected from | Differences from the README defaults |
 | --- | --- | --- |
 | readme | Markdown, RST, HTML files | Baseline. Introduction and purpose sections stay strict. |
-| doc-comment | Rust `///`, Python docstrings, `/** */` | Tag and parameter lines (`@param`, `Args:`, `# Arguments`) skipped; they are mostly predictable from the code (Louis et al. 2018). |
-| inline-comment | `//`, `#` comments with `comments = "all"` | Syntax findings at info level; comment value depends on context (Abdelsalam et al. 2026; Nielebock et al. 2019). |
+| doc-comment | Rust `///`, Python docstrings, `/** */` | Tag and parameter lines (`@param`, `Args:`, `# Arguments`) skipped; in Java, `@param` and `@throws` lines are mostly predictable from the code, `@return` lines less so (Louis et al. 2018). |
+| inline-comment | `//`, `#` comments with `comments = "all"` | Syntax findings at info level. A comment's effect on comprehension ranges from harmful to helpful by snippet (Abdelsalam et al. 2026), and on small tasks comments made little measurable difference (Nielebock et al. 2019). |
 | commit-subject | First line of a commit message | Stacked-noun and hyphen-compound off: subjects are headlines. |
-| commit-body | Rest of a commit message | On; a missing "why" is the main quality signal (Tian et al. 2022; Li and Ahmed 2023). |
+| commit-body | Rest of a commit message | On. Commit-message studies judge whether a message says what changed and why (Tian et al. 2022; Li and Ahmed 2023); readcost checks only how it is written. |
 | llm-output | stdin, chat JSON, transcripts | Baseline plus the full detector set. |
 
 A profile records the reference distribution that a context is judged
@@ -74,7 +82,7 @@ READMEs by one author.
 
 Short units need absolute counts. One finding in a twelve-word comment gives
 a cost index above 80, so below about 40 words the verdict uses the number of
-findings, not the density (Chin and Holmes 2026).
+findings, not the density. The 40-word cut is readcost's own choice.
 
 ## Terminology
 
@@ -95,8 +103,9 @@ KenLM is LGPL and builds from source.
 
 Complexity tools such as lizard measure a different thing and predict
 understanding only weakly. readcost may use them for triage: ordering
-findings in doc comments so that comments on complex functions come first, since
-comments cluster on longer and more complex code (Chin and Holmes 2026). It
+findings in inline comments so that comments on complex functions come
+first, since inline and block comments cluster on longer and more complex code
+(Chin and Holmes 2026; the finding excludes docstrings). It
 will not fold complexity into the score. Any new index is checked against a
 plain baseline, the number of sentences times their mean length, before it
 is trusted (Shepperd 1988).
@@ -126,11 +135,14 @@ index while adding words is reported, not rewarded.
    corpora; a regression set of labeled findings with a second rater.
 5. Attested word-pair sets; optional KenLM extra.
 6. A baseline file for CI gating, and a check that rewrites do not add words.
-7. Optional obvious-comment check (comment words repeating the next line's
-   identifiers; Steidl, Hummel and Juergens 2013) and complexity-ordered
-   triage.
+7. Optional obvious-comment check (a doc comment that only restates its
+   function's name, or an inline comment of two words or fewer; Steidl,
+   Hummel and Juergens 2013) and complexity-ordered triage.
 
 ## References
+
+Reading notes on each paper, with how much of it was read, are in
+[docs/papers](papers/).
 
 - Abdelsalam, Peitek, Bergum and Apel 2026. The effect of comments on program
   comprehension: an eye-tracking study. Empirical Software Engineering 31.
@@ -142,18 +154,22 @@ index while adding words is reported, not rewarded.
 - Biber and Gray 2010. Challenging stereotypes about academic writing.
   Journal of English for Academic Purposes 9(1).
 - Cekini et al. 2026. The cognitive cost of LLM writing. arXiv 2610.23715.
-- Chen, Xia, Hu, Lo and Li. Why my code summarization model does not work.
-  TOSEM, doi 10.1145/3434280.
+- Chen, Xia, Hu, Lo and Li 2021. Why my code summarization model does not
+  work. TOSEM 30(2), doi 10.1145/3434280.
 - Chin and Holmes 2026. Put the "code" back in "code comprehension study".
   ICPC.
 - Clark, Martin and Mahowald 2026. Why is AI-generated language so hard to
   understand? arXiv 2610.29162.
+- Gibson 1998. Linguistic complexity: locality of syntactic dependencies.
+  Cognition 68(1).
 - Gibson 2000. The dependency locality theory: a distance-based theory of
   linguistic complexity. In Image, Language, Brain, MIT Press.
 - Gordon, Grosz and Gilliom 1993. Pronouns, names, and the centering of
   attention in discourse. Cognitive Science 17.
 - Hales, Williams and Rector 2017. Alienating the audience: how abbreviations
   hamper scientific communication. APS Observer 30(2).
+- Karlsson 2007. Constraints on multiple center-embedding of clauses.
+  Journal of Linguistics 43(2), doi 10.1017/S0022226707004616.
 - Li and Ahmed 2023. Commit message matters. ICSE.
 - McCarthy and Jarvis 2010. MTLD, vocd-D, and HD-D: a validation study of
   sophisticated approaches to lexical diversity assessment. Behavior Research

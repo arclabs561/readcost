@@ -504,7 +504,10 @@ accepts:
 | short-items rule reverted | 75 | 15 (20.0%) |
 
 The fixes judged by one rater gained 3 points by the majority; reverting the
-one rule the majority disagreed with gains 6 more. The scripts are
+one rule the majority disagreed with gains 6 more. Both gains are small
+against the sampling error (Wilson 95% intervals 7.4 to 17.5%, 7.7 to 25.0%
+and 12.5 to 30.4%), and the two lenient raters were set aside after their
+labels were seen. The scripts are
 `scripts/second_rater.py` and `scripts/rater_ensemble.py`.
 
 ## Paired rewrites
@@ -540,7 +543,9 @@ Wilcoxon tests, rewrite minus original (`scripts/paired_score.py`):
   not significant (p = 0.08 and 0.31).
 - H3 was half confirmed. Rewrites use longer words, as Cekini et al. found,
   and in every pair for Codex. Surprisal went up, the opposite of their
-  result with OPT-125M. The rise holds in all 13 sources, docs included, so
+  result with OPT-125M; both were scored with one small model, and such
+  comparisons can reverse with the scorer's size (Liu et al. 2025). The rise
+  holds in all 13 sources, docs included, so
   memorization of famous essays by the scoring model does not explain it,
   though the largest rise is for Paul Graham's essays (+0.86 bits).
 - H4 was not detected: coined hyphen pairs are rare on both sides.
@@ -636,8 +641,9 @@ Provo's error rises to 10.4 ms, so short paragraphs keep their positions.
 ## Contexts
 
 The verdict thresholds (advise at 15, block at 30) were set on ten READMEs.
-Following Alves et al. 2010, a threshold should sit at a high percentile of
-good writing of the same kind. Cost index per text on the corpus (texts of
+Adapting Alves et al. 2010, who set code-metric thresholds at the 70th, 80th
+and 90th percentiles of a benchmark weighted by code volume, a threshold
+should sit at a high percentile of good writing of the same kind. Cost index per text on the corpus (texts of
 40+ words, after the fixes above):
 
 | Context | Texts | p90 | p95 | p99 |
@@ -919,8 +925,9 @@ it was not used.
 `scripts/eval_sentence_ratings.py` checks each sentence alone and correlates
 each measure with the mean rating (Spearman's rho). "Partial" holds sentence
 length constant; "within bins" is the mean rho inside six length bins
-(readcost `f3871bb`). Wikipedia sentences, median 14 words; the two raters
-agree at rho 0.72:
+(readcost `f3871bb`). Wikipedia sentences, median 14 words; on the released
+ratings the two raters agree at rho 0.72 by our computation (the paper
+reports 37.6% exact agreement and 88.4% within one level):
 
 | Measure | Sentences with it | rho | Partial, length held | Within length bins |
 | --- | --- | --- | --- | --- |
@@ -1111,8 +1118,9 @@ keeps the 7,406 with three or more words, and uses readcost's word count as
 the length; it gives +0.39 for ms per word and +0.04 for readcost's findings.
 This script keeps all 7,453 sentences and counts whitespace words, which is why
 the two figures for ms per word differ. Among the language-model signals, how uneven the
-surprisal is (its standard deviation, the uniform information density idea)
-and the most surprising token track difficulty a little; mean surprisal and
+surprisal is (its standard deviation, one way to measure uniform information
+density, and a weak one by Meister et al. 2021's comparison) and the most
+surprising token track difficulty a little; mean surprisal and
 entropy do not.
 
 On 600 ASSET pairs, each original against its first human simplification:
@@ -1307,3 +1315,10 @@ simplifications and PEPs. Not covered:
 - Gordon, Hendrick and Johnson 2001. Memory interference during language
   processing. Journal of Experimental Psychology: Learning, Memory, and
   Cognition 27(6), doi 10.1037/0278-7393.27.6.1411.
+- Liu, Li, Xu, Wang, Yuan and Yang 2025. Evaluating text generation quality
+  using spectral distances of surprisal. Findings of EMNLP 2025.
+- Meister, Pimentel, Haller, Jäger, Cotterell and Levy 2021. Revisiting the
+  uniform information density hypothesis. EMNLP; arXiv 2109.11635.
+
+Notes on these and the other papers cited here are in
+[docs/papers](papers/).
