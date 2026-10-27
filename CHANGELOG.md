@@ -7,21 +7,22 @@ configuration.
 
 ## [Unreleased]
 
-### Added
-
-- `readcost: ignore`, `off` and `on` comments in Markdown can name rules, turning
-  off only those; an unknown rule name is reported in the notes.
-
 ## [0.2.0] - 2026-10-26
 
 First release on PyPI (`pip install readcost`, or `uvx readcost`).
 
 ### Added
 
-- Default output quotes each flagged line with a caret under the words, the
-  rule name and the fix, in the style of the Rust compiler, with colour on a
-  terminal (`--color`, `NO_COLOR`). `-o concise` prints one `path:line:col` line
-  per finding ([#24](https://github.com/arclabs561/readcost/pull/24)).
+- Default output quotes each flagged line with carets under the words, in the
+  style of the Rust compiler: the rule as a headline, the specific finding as a
+  label at the carets, the fix, and once per rule why it costs the reader and
+  an example rewrite, all within 80 columns. Colour on a terminal (`--color`,
+  `NO_COLOR`). `-o concise` prints one `path:line:col` line per finding
+  ([#24](https://github.com/arclabs561/readcost/pull/24),
+  [#29](https://github.com/arclabs561/readcost/pull/29)).
+- `readcost: ignore`, `off` and `on` comments in Markdown can name rules,
+  turning off only those; an unknown rule name is reported in the notes
+  ([#27](https://github.com/arclabs561/readcost/pull/27)).
 - `readcost lsp`, a language server for editors, as the optional extra
   `readcost[lsp]` ([#23](https://github.com/arclabs561/readcost/pull/23)).
 - `readcost baseline` and `check --baseline` record today's findings so that
@@ -52,6 +53,10 @@ First release on PyPI (`pip install readcost`, or `uvx readcost`).
 
 ### Fixed
 
+- Fewer false positives: a misparsed verb inside a noun stack ("specification
+  defines slices"), a main clause read as an object relative ("The help output
+  begins with:"), and a row of links read as prose
+  ([#28](https://github.com/arclabs561/readcost/pull/28)).
 - Precision fixes for pronoun subjects, light relative heads, names before
   noun stacks and package paths in slash lists
   ([#9](https://github.com/arclabs561/readcost/pull/9)).
