@@ -9,6 +9,8 @@ configuration.
 
 ### Added
 
+- Text that is clearly not English gets a note instead of findings and a
+  reading time, which would be meaningless (`language_check`).
 - Rule levels as in ty: `[readcost.rules]` sets each rule to `error`, `warn`,
   `info` or `ignore` (`all` for every rule), `[[readcost.overrides]]` sets them
   per path, and `--error`, `--warn`, `--info` and `--ignore` set them from the
