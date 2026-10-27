@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="742" height="674" viewBox="0 0 742 674" role="img" aria-label="readcost check output">
+<rect width="100%" height="100%" rx="6" fill="#0d1117"/>
+<g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#e6edf3">
+<text x="14" y="28" xml:space="preserve"><tspan>$ readcost check notes.md</tspan></text>
+<text x="14" y="47" xml:space="preserve"><tspan fill="#e3b341" font-weight="bold">warn[stacked-nouns]</tspan><tspan font-weight="bold">: three or more nouns in a row</tspan></text>
+<text x="14" y="66" xml:space="preserve"><tspan> </tspan><tspan fill="#79c0ff" font-weight="bold">--&gt;</tspan><tspan> notes.md:1:11</tspan></text>
+<text x="14" y="85" xml:space="preserve"><tspan fill="#79c0ff" font-weight="bold">  |</tspan></text>
+<text x="14" y="104" xml:space="preserve"><tspan fill="#79c0ff" font-weight="bold">1 |</tspan><tspan> The shard compaction retry budget is the setting the operator changes most.</tspan></text>
+<text x="14" y="123" xml:space="preserve"><tspan fill="#79c0ff" font-weight="bold">  |</tspan><tspan>           </tspan><tspan fill="#e3b341" font-weight="bold">^^^^^^^^^^^^^^^^^^^^^^^</tspan><tspan> </tspan><tspan fill="#e3b341" font-weight="bold">3 nouns stacked</tspan></text>
+<text x="14" y="142" xml:space="preserve"><tspan>  </tspan><tspan fill="#79c0ff" font-weight="bold">|</tspan></text>
+<text x="14" y="161" xml:space="preserve"><tspan>  </tspan><tspan fill="#79c0ff" font-weight="bold">=</tspan><tspan> </tspan><tspan font-weight="bold">why:</tspan><tspan> Readers must work out how the nouns group before they can read on, and</tspan></text>
+<text x="14" y="180" xml:space="preserve"><tspan>         the grouping is often ambiguous (Squad Helps Dog Bite Victim).</tspan></text>
+<text x="14" y="199" xml:space="preserve"><tspan>  </tspan><tspan fill="#79c0ff" font-weight="bold">=</tspan><tspan> </tspan><tspan font-weight="bold">help:</tspan><tspan> Keep at most two nouns together. Unpack the rest with a preposition or</tspan></text>
+<text x="14" y="218" xml:space="preserve"><tspan>          a relative clause.</tspan></text>
+<text x="14" y="237" xml:space="preserve"><tspan>  </tspan><tspan fill="#79c0ff" font-weight="bold">=</tspan><tspan> </tspan><tspan font-weight="bold">example:</tspan><tspan> &#x27;forcing source segment rebuilds&#x27; -&gt; &#x27;forcing each segment to be</tspan></text>
+<text x="14" y="256" xml:space="preserve"><tspan>             rebuilt from its source&#x27;</tspan></text>
+<text x="14" y="275" xml:space="preserve"></text>
+<text x="14" y="294" xml:space="preserve"><tspan fill="#56d4dd" font-weight="bold">info[reduced-object-relative]</tspan><tspan font-weight="bold">: object relative clause without &#x27;that&#x27;</tspan></text>
+<text x="14" y="313" xml:space="preserve"><tspan> </tspan><tspan fill="#79c0ff" font-weight="bold">--&gt;</tspan><tspan> notes.md:2:13</tspan></text>
+<text x="14" y="332" xml:space="preserve"><tspan fill="#79c0ff" font-weight="bold">  |</tspan></text>
+<text x="14" y="351" xml:space="preserve"><tspan fill="#79c0ff" font-weight="bold">2 |</tspan><tspan> It sets the limit the scheduler uses for every retry.</tspan></text>
+<text x="14" y="370" xml:space="preserve"><tspan fill="#79c0ff" font-weight="bold">  |</tspan><tspan>             </tspan><tspan fill="#56d4dd" font-weight="bold">^^^^^^^^^^^^^^^^^^^^^^^^</tspan><tspan> </tspan><tspan fill="#56d4dd" font-weight="bold">object relative without &#x27;that&#x27;</tspan></text>
+<text x="14" y="389" xml:space="preserve"><tspan>  </tspan><tspan fill="#79c0ff" font-weight="bold">|</tspan></text>
+<text x="14" y="408" xml:space="preserve"><tspan>  </tspan><tspan fill="#79c0ff" font-weight="bold">=</tspan><tspan> </tspan><tspan font-weight="bold">why:</tspan><tspan> Object relatives (the house the contractors built) cost more to read</tspan></text>
+<text x="14" y="427" xml:space="preserve"><tspan>         than subject relatives; dropping the optional &#x27;that&#x27; removes the cue</tspan></text>
+<text x="14" y="446" xml:space="preserve"><tspan>         that one has started.</tspan></text>
+<text x="14" y="465" xml:space="preserve"><tspan>  </tspan><tspan fill="#79c0ff" font-weight="bold">=</tspan><tspan> </tspan><tspan font-weight="bold">help:</tspan><tspan> Keep the &#x27;that&#x27;, or turn it into a subject relative or a separate</tspan></text>
+<text x="14" y="484" xml:space="preserve"><tspan>          sentence.</tspan></text>
+<text x="14" y="503" xml:space="preserve"><tspan>  </tspan><tspan fill="#79c0ff" font-weight="bold">=</tspan><tspan> </tspan><tspan font-weight="bold">example:</tspan><tspan> &#x27;the format the reader expects&#x27; -&gt; &#x27;the format that the reader</tspan></text>
+<text x="14" y="522" xml:space="preserve"><tspan>             expects&#x27;</tspan></text>
+<text x="14" y="541" xml:space="preserve"></text>
+<text x="14" y="560" xml:space="preserve"><tspan>notes.md: </tspan><tspan fill="#7ee787" font-weight="bold">pass</tspan></text>
+<text x="14" y="579" xml:space="preserve"><tspan>  2 findings in 2 sentences (22 words), cost index 68.2 per 1,000 words</tspan></text>
+<text x="14" y="598" xml:space="preserve"><tspan>  predicted reading time 5 s, 230 ms per word</tspan></text>
+<text x="14" y="617" xml:space="preserve"></text>
+<text x="14" y="636" xml:space="preserve"><tspan>More on a rule: readcost explain stacked-nouns</tspan></text>
+<text x="14" y="655" xml:space="preserve"><tspan>Wrong finding? https://github.com/arclabs561/readcost/issues/new/choose</tspan></text>
+</g>
+</svg>
