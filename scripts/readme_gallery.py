@@ -19,7 +19,6 @@ from readcost.engine import Analyzer, Result
 ENTRIES = [
     ("cnk", "e62ce5f08c3fd6f9999b49fdf929ee236aef5454", 61,
      ("stacked-nouns", "hyphen-compound", "reduced-object-relative")),
-    ("cnk", "e62ce5f08c3fd6f9999b49fdf929ee236aef5454", 48, ("long-dependency",)),
     ("lexir", "fe578e4061f95447f8dc125a3133ed920de72eb7", 7, ("inanimate-subject",)),
     ("durability", "f213db600007709928db3d9aafba8e6c19a7fdfe", 8, ("inline-list",)),
 ]

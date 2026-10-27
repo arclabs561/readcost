@@ -820,6 +820,31 @@ the human answers' or not different. The Wikipedia passages are dense; one in
 five does not pass. The 2022 ChatGPT answers read faster per word than the
 human ones, so the per-word cost is a property of current models, not of model
 text as such.
+## Long dependency: subject and object gaps
+
+On the labelled sample the eight-rater majority accepted none of 13
+long-dependency findings. Most reported a fronted connective ("Of course",
+"Therefore", "Likewise") or an arc between two clauses as the long dependency,
+and the raters said so ("adverb and verb, not dependency"). The rule now keeps
+its trigger, the sentence's mean dependency length against the profile, but
+reports only a subject, object or attribute arc: 9 or more words when the
+trigger fires, or 15 or more at any z, which catches "The index, which ...
+runs, serves all queries" (21 words) whose overall z is 2.48.
+
+`scripts/blind_rule_compare.py` drew 30 findings of each version from the
+essays and docs, shuffled them together, and the six strict OpenRouter raters
+labelled them without knowing which version produced which:
+
+| Version | Majority of six accepts | Single raters |
+| --- | --- | --- |
+| Longest arc of any kind (before) | 0 of 30 | 0 to 3 |
+| Subject, object or attribute gap (after) | 14 of 30 | 15 to 17 |
+
+Volume falls only from 365 to 320 findings in the essays and docs, so the gain
+is in which words are reported. On the original labelled sample, 64 findings
+are still reported instead of 74, and the eight-rater majority's share goes
+from 20.3% to 23.4%. Misparses remain: a misattached appositive or a long
+coordinated object can still be reported as a long gap.
 
 ## Not yet evaluated
 
