@@ -30,7 +30,7 @@ tracking comes through word skipping.
 - Adding Shannon entropy improves fit in three of four datasets (not
   Provo); replacing surprisal by entropy is as good except in Provo.
   Rényi alpha = 1/2 replacing surprisal improves fit in Natural Stories
-  (+1.30 x10^-2 nats) and Dundee (+0.32), and is worse in Provo (-3.25).
+  (+1.30, in units of 0.01 nats) and Dundee (+0.32), and is worse in Provo (-3.25).
 - Spillover is carried by previous words' surprisal, not their entropy.
 - Skipping: in Dundee, entropy predicts whether a word is skipped better
   than surprisal, and surprisal adds nothing once entropy is in. With

@@ -29,15 +29,15 @@ modestly over treating the whole corpus as difficult.
 
 ## Results (numbers that matter)
 
-- Sentences: 65.6% accuracy with sentence and word length alone (gold
-  training data), 79.9% with 30 features, 83.7% with all 66 selected.
+- Sentences: 65.6% accuracy with sentence and word length alone (trained on
+  the gold labels), 79.9% with 30 features, 83.7% with all 66 selected.
   Documents: 80% with the two length features, 96.6% with 30.
 - Local syntactic features (verb arity, pre-verbal subject, post-verbal
   object, embedded complement chains) matter for sentences; average
   dependency length is a middle-ranked feature for both; maximum
   dependency length ranks higher for documents (rank 6) than sentences
   (rank 18).
-- Mean max dependency length: 10.98 words in difficult sentences vs 7.67
+- The mean of each sentence's longest dependency: 10.98 words in difficult sentences vs 7.67
   in easy ones; parse depth 6.83 vs 5.2.
 
 ## What the full text qualifies
@@ -50,8 +50,8 @@ chosen by computational linguists, not measured on readers.
 Not cited. Consistent with readcost's evaluation that single rules fire
 too rarely to rank sentences (docs/evaluation.md "Sentence difficulty
 rated by people"): sentence difficulty here needed some 30 mostly
-syntactic features, and length alone left accuracy at 65%. Maximum
-dependency length is more useful aggregated over a document than per
+syntactic features, and length alone left accuracy at 65%. The
+longest dependency is more useful aggregated over a document than per
 sentence, which fits readcost reporting long-dependency as a per-sentence
 flag but treating the file index as a trend measure.
 
