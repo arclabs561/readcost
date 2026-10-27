@@ -62,8 +62,10 @@ uvx readcost check README.md
 
 The constructions come from "Why is AI-generated language so hard to
 understand?" ([arXiv 2610.29162](https://arxiv.org/abs/2610.29162)), which finds
-that recent language models use them more than people do; earlier reading
-studies tie each of them to slower reading.
+that recent language models use them more than paraphrases of the same content
+do (against human corpora, consistently only for inanimate subjects); earlier
+studies tie each of them to harder reading, some with reading times and some
+with brain responses.
 
 ## Scope
 
@@ -77,8 +79,9 @@ it. It reports:
 - a predicted reading time per file, from a model fitted to eye-tracking data.
 
 It does not check grammar, spelling or terminology, enforce a style guide,
-judge whether text is correct, complete or up to date (which developers rate as
-the worst documentation failures), or tell who wrote a text.
+judge whether text is correct, complete or clear in meaning (ambiguity,
+incompleteness and incorrectness are what developers rate as the worst
+documentation failures), or tell who wrote a text.
 
 ## How it differs
 
@@ -181,10 +184,11 @@ hyphenated word counts as one noun, so "storage-shrink job" is a hyphen
 compound, not three stacked nouns. Participial-clause, nominalization and
 repeated-frame are constructions that language models use more often than
 people (Reinhart et al. 2025; Shaib et al. 2024). Center-embedding flags a
-clause nested two deep inside clauses that continue after it, which readers
-fail to follow (Gibson 2000); undefined-acronym flags an acronym used before
-it is spelled out, which readers report as harder to read (Hales, Williams and
-Rector 2017), skipping common ones such as API and JSON. Turn any opt-in rule on
+clause nested two deep inside clauses that continue after it, which people
+judge hard in constructed sentences unless the innermost subject is a pronoun
+(Gibson 1998, 2000); undefined-acronym flags an acronym used before it is
+spelled out, which readers rated as harder to read in one small report (Hales,
+Williams and Rector 2017), skipping common ones such as API and JSON. Turn any opt-in rule on
 with a level, such as `--info nominalization` or `nominalization = "info"`
 under `[readcost.rules]`. `long-sentence` is also
 available but off by default. `readcost explain` prints why each one costs the
@@ -336,9 +340,8 @@ stacked-nouns per 1k words                0.43          1.53  0.3x
 ```
 
 A rate far above the reference is a prompt to look at those sentences, not a
-verdict. These rates differ by genre (Reinhart et al. 2025 compare model and
-human text within each genre for that reason), so compare with a reference of
-the same kind of text.
+verdict. These rates differ by kind of text, as the built-in profiles show,
+so compare with a reference of the same kind of text.
 
 ### Repetition across texts
 
@@ -374,9 +377,10 @@ affect the verdict. Code spans are left out. See
 for how it was built and tested.
 
 To judge a rewrite, compare it with the original. `readcost compare` reports
-both the time per word and the total, because a clearer rewrite can still take
-longer to read if it is much longer (Cekini et al. 2026 found exactly that for
-model rewrites). For the README sentence above and the rewrite it adopted:
+both the time per word and the total: a rewrite can read slower per word yet
+faster in total, or the reverse when it is much longer. Cekini et al. 2026
+found model rewrites took 1.6% longer per word but 1.2% less in total, being
+shorter. For the README sentence above and the rewrite it adopted:
 
 ```text
 $ readcost compare cmp-old.md cmp-new.md

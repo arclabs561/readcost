@@ -144,8 +144,10 @@ FEATURES: dict[str, Feature] = {f.id: f for f in [
         "center-embedding", "Clause nested inside a nested clause", "info", False, "opt-in",
         "A clause inside a clause that is itself inside the middle of another "
         "clause makes the reader hold several unfinished subjects at once. One "
-        "nested clause is ordinary; two is where readers lose track (Gibson 2000; "
-        "such sentences are rare even in edited writing, Karlsson 2007).",
+        "nested clause is ordinary; people judge two hard in constructed "
+        "sentences, unless the innermost subject is a pronoun (Gibson 1998, "
+        "2000; acceptability judgements, not reading times). Such sentences are "
+        "rare even in edited writing (Karlsson 2007).",
         "Finish the outer clause first, or move the inner clause into its own sentence.",
         "The reporter who the senator who John met attacked disliked the editor.",
         "John met the senator who attacked the reporter. The reporter disliked the editor.",
@@ -154,8 +156,9 @@ FEATURES: dict[str, Feature] = {f.id: f for f in [
         "undefined-acronym", "Acronym used before it is spelled out", "info", False, "opt-in",
         "An acronym the reader has not seen spelled out has to be guessed or "
         "looked up. Readers rated passages harder to read when abbreviations "
-        "were never expanded than when each was expanded once (Hales, Williams "
-        "and Rector 2017); there is no reading-time evidence. Common ones (API, "
+        "were never expanded than when each was expanded once, in one small "
+        "report whose authors advise spelling a term out at every use (Hales, "
+        "Williams and Rector 2017); there is no reading-time evidence. Common ones (API, "
         "URL, JSON, HTTP and similar) are skipped; add others to `allow`.",
         "Spell it out at its first use: 'write-ahead log (WAL)'.",
         "Every write goes to the WAL before the table changes.",
@@ -562,8 +565,9 @@ def new_referents(doc, lo: int, hi: int) -> int:
     between: the head noun of each noun phrase and each tensed verb (an
     event). Pronouns refer to entities already in the discourse and do not
     count, nor do nouns that only modify another noun ("source" in "source
-    segment"). Gibson's simplification treats every noun phrase as new; so
-    does this count.
+    segment"). Gibson distinguishes new from given referents and treats
+    first- and second-person pronouns as free; this count simply takes every
+    noun phrase head as new and leaves all pronouns out.
     """
     a, b = sorted((lo, hi))
     n = 0
@@ -632,7 +636,7 @@ def center_embeddings(sent) -> list[tuple[object, int]]:
     return out
 
 
-CENTER_EMBEDDING_DEPTH = 2   # Gibson 2000: one nested clause is ordinary, two is where readers fail
+CENTER_EMBEDDING_DEPTH = 2   # Gibson 1998, 2000: two nested clauses judged hard in constructed sentences
 
 
 def center_embedding(sent, ctx: Context) -> list[tuple[str, str, list]]:
@@ -751,9 +755,11 @@ def reduced_object_relatives(sent, ctx: Context) -> list[tuple[str, str, list]]:
             # "relative clause" is the main clause the parser missed.
             continue
         if subj[0].pos_ == "PRON" or t.head.lemma_.lower() in LIGHT_RELATIVE_HEADS:
-            # "someone I trust", "all you need", "the first time we met": a
-            # pronoun subject makes an object relative easy to read (Gordon,
-            # Hendrick and Johnson 2001), and these heads are fixed phrases.
+            # "someone I trust", "all you need", "the first time we met": an
+            # object relative is easier when its subject is a different kind of
+            # noun phrase from the head, such as a pronoun, since similar noun
+            # phrases interfere (Gordon, Hendrick and Johnson 2001); these heads
+            # are also fixed phrases.
             continue
         out.append(("info", f"'{_w(ctx, t.head)} {_w(ctx, subj[0])} {t.text}': object relative without 'that'",
                     [t.head, subj[0], t]))
