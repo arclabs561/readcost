@@ -450,3 +450,132 @@ def test_opinion_paragraphs_drop_star_page_markers():
     text = "The court affirms the ruling below.\n*2Plaintiffs sued the widget company for damages.\n"
     assert domains.opinion_paragraphs(text) == ["The court affirms the ruling below.",
                                                  "Plaintiffs sued the widget company for damages."]
+
+people = load("fetch_people_text")
+ai = load("fetch_ai_text")
+
+
+def test_community_prose_drops_code_quotes_templates_and_tables():
+    lines = (
+        "<!-- Describe your change. Delete this template text. -->",
+        "This change makes the parser accept trailing commas.",
+        "> Someone else's words, quoted in a reply.",
+        "```rust", "let x = 1;", "```",
+        "    indented_code_line();",
+        "- [x] I ran the tests", "- [ ] I updated the changelog",
+        "| col | col |", "|---|---|",
+        "https://example.invalid/some/link",
+        "", "", "", "It also adds a test.",
+    )
+    md = "\r\n".join(lines)
+    assert people.community_prose(md) == ("This change makes the parser accept trailing commas.\n\n"
+                                          "It also adds a test.\n")
+
+
+def test_community_prose_drops_an_unclosed_fence_to_the_end():
+    assert people.community_prose("Before the log.\n```\npanic at line 3\nmore log") == "Before the log.\n"
+
+
+def test_community_prose_of_nothing_but_template_is_empty():
+    assert people.community_prose("<!-- template -->\n- [ ] checked\n") == ""
+
+
+@pytest.mark.parametrize("user, expected", [
+    ({"login": "dependabot[bot]", "type": "Bot"}, True), ({"login": "renovate", "type": "User"}, True),
+    ({"login": "Copilot", "type": "User"}, True), ({"login": "some-person", "type": "User"}, False),
+    (None, True),
+])
+def test_bot_accounts_are_recognized(user, expected):
+    assert people.is_bot(user) is expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ("https://github.com/owner/repo/issues/12", "owner/repo"),
+    ("https://github.com/owner/repo/pull/7#discussion_r1", "owner/repo"),
+    ("https://api.github.com/repos/owner/repo/pulls/7", "owner/repo"),
+    ("https://example.invalid/x", ""),
+])
+def test_repository_from_issue_url(url, expected):
+    assert people.repo_of(url) == expected
+
+
+def test_discourse_html_keeps_paragraphs_without_code_quotes_or_previews():
+    cooked = ('<p>First paragraph with <a href="x">a link</a> &amp; an entity.</p>'
+              '<aside class="quote"><blockquote><p>Quoted reply.</p></blockquote></aside>'
+              '<pre><code>fn main() {}</code></pre>'
+              '<aside class="onebox">Preview of a linked page.</aside>'
+              '<ul><li>One item</li></ul><p>Last<br>line.</p>')
+    assert people.html_to_text(cooked) == "First paragraph with a link & an entity.\n\nOne item\n\nLast\nline.\n"
+
+
+def test_discourse_posts_skip_system_users_and_moderator_actions():
+    topic = {"post_stream": {"posts": [
+        {"id": 1, "user_id": 5, "username": "alice", "post_number": 1, "cooked": "<p>Question text.</p>"},
+        {"id": 2, "user_id": -1, "username": "system", "post_number": 2, "cooked": "<p>Closed.</p>"},
+        {"id": 3, "user_id": 6, "username": "mod", "post_number": 3, "action_code": "closed.enabled", "cooked": ""},
+        {"id": 4, "user_id": 7, "username": "bob", "post_number": 4, "cooked": "<p>An answer.</p>"},
+    ]}}
+    posts = people.forum_posts(topic)
+    assert [(p["id"], p["number"], p["text"]) for p in posts] == [(1, 1, "Question text.\n"), (4, 4, "An answer.\n")]
+
+
+@pytest.mark.parametrize("src, expected", [
+    ("cmv_human", ("cmv", "human")),
+    ("sci_gen_human", ("sci_gen", "human")),
+    ("xsum_machine_continuation_opt_125m", ("xsum", "opt_125m")),
+    ("sci_gen_machine_continuation_30B", ("sci_gen", "30B")),
+    ("wp_machine_topical_text-davinci-002", ("wp", "text-davinci-002")),
+    ("roct_machine_specified_gpt-3.5-trubo", ("roct", "gpt-3.5-trubo")),
+])
+def test_mage_source_splits_into_domain_and_generator(src, expected):
+    assert ai.mage_src(src) == expected
+
+
+def test_m4_record_texts_take_the_first_of_a_list():
+    assert ai.m4_texts({"human_text": "  Human words. ", "machine_text": "Machine words."}) == (
+        "Human words.", "Machine words.")
+    assert ai.m4_texts({"human_text": ["First review.", "Second."], "machine_text": ["Generated."]}) == (
+        "First review.", "Generated.")
+    assert ai.m4_texts({"human_text": "", "machine_text": "Only one side."}) is None
+
+
+def test_m4_bloomz_records_take_the_generation_not_the_prompt():
+    rec = {"abstract": "Human abstract.", "machine_abstract": "Generated abstract.",
+           "machine_text": "Write a long abstract of a scientific paper", "model": "bigscience/bloomz"}
+    assert ai.m4_texts(rec) == ("Human abstract.", "Generated abstract.")
+    rec = {"human_reviews": ["A review."], "bloom_reviews": ["A generated review."], "model": "bigscience/bloomz"}
+    assert ai.m4_texts(rec) == ("A review.", "A generated review.")
+
+
+def test_byte_prefix_keeps_only_whole_lines():
+    assert ai.complete_lines(b'{"a": 1}\n\n{"b": 2}\n{"c": 3') == ['{"a": 1}', '{"b": 2}']
+
+
+def test_pull_request_text_puts_the_title_over_the_cleaned_body():
+    assert ai.pr_text(" Fix the widget ", "Fixes the widget.\n> quoted\n") == "# Fix the widget\n\nFixes the widget.\n"
+    assert ai.pr_text("Title only", None) == ""
+
+
+@pytest.mark.parametrize("body, expected", [
+    ("Summary\n\n🤖 Generated with [Claude Code](https://claude.ai/code)", True),
+    ("Task: https://chatgpt.com/codex/tasks/task_e_123", True),
+    ("Co-authored-by: Copilot <x@example.invalid>", True),
+    ("I fixed the off-by-one error in the loop.", False),
+])
+def test_agent_markers_in_pull_request_bodies(body, expected):
+    assert bool(ai.AGENT_MARKERS.search(body)) is expected
+
+
+def test_paired_comparison_is_machine_minus_human_per_pair():
+    pytest.importorskip("scipy")
+    ev = load("eval_people_ai")
+    rows = []
+    for i, (h, m) in enumerate([(10.0, 8.0), (12.0, 9.0), (9.0, 9.5), (11.0, 7.0)]):
+        rows += [{"pair_id": str(i), "role": "human", "cost_index": h},
+                 {"pair_id": str(i), "role": "machine", "cost_index": m}]
+    rows.append({"pair_id": "lonely", "role": "human", "cost_index": 1.0})
+    (r,) = ev.paired(rows, "human", "machine", ["cost_index"])
+    assert r["pairs"] == 4
+    assert r["median_diff"] == -2.5
+    assert r["machine_lower"] == 0.75
+    assert r["human_median"] == 10.5 and r["machine_median"] == 8.5
