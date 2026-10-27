@@ -323,9 +323,10 @@ def test_quantity_without_a_counted_noun_keeps_its_own_animacy():
 
 
 @pytest.mark.parametrize("sentence", [
-    # From rust-lang/rust pull request descriptions (rollup lists and fix notes).
-    "rust-lang/rust#164857 (Do not checkout Cargo for bootstrap tests)",
-    "Adds two ui tests in `tests/ui/reborrow` for the two snippets in rust-lang/rust#156380.",
+    # Shaped like rollup lines in large projects' pull request descriptions,
+    # where owner/repo#N was read as the coined compound "data-store" or "rust-lang".
+    "example-org/data-store#4821 (Skip the network step in offline builds)",
+    "Adds two tests in `tests/parse` for the two cases reported in example-org/data-store#5123.",
     "This fixes gh-12345 and #678 in the parser module today.",
 ])
 def test_issue_references_are_single_words(sentence):
