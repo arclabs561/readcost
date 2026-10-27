@@ -47,11 +47,11 @@ def _feature_ids(value: str, flag: str) -> list[str]:
     return ids
 
 
-def _walk(root: Path) -> list[Path]:
+def _walk(root: Path, respect_ignore_files: bool = True) -> list[Path]:
     """Files under ``root``: what git tracks or would track, else non-hidden files."""
     proc = subprocess.run(["git", "-C", str(root), "ls-files", "-z", "--cached", "--others",
-                           "--exclude-standard"], capture_output=True)
-    if proc.returncode == 0:
+                           "--exclude-standard"], capture_output=True) if respect_ignore_files else None
+    if proc is not None and proc.returncode == 0:
         names = [n for n in proc.stdout.decode("utf-8", "replace").split("\0") if n]
         return sorted(p for p in (root / n for n in names) if p.is_file())
     return sorted(p for p in root.rglob("*")
@@ -68,6 +68,15 @@ def _load_config(args):
         cfg.disable += _feature_ids(args.disable, "--disable")
     if args.profile:
         cfg.profile = args.profile
+    for level in ("error", "warn", "info", "ignore"):
+        for value in getattr(args, level):
+            for rule in (r.strip() for r in value.split(",") if r.strip()):
+                if rule != "all":
+                    _feature_ids(rule, f"--{level}")
+                cfg.cli_rules[rule] = level
+    cfg.src.extend_exclude += args.exclude
+    if args.respect_ignore_files is not None:
+        cfg.src.respect_ignore_files = args.respect_ignore_files
     return cfg
 
 
@@ -89,7 +98,7 @@ def _cmd_check(args) -> int:
     if failed:
         return EXIT_USAGE
     worst = max((VERDICT_RANK[r.verdict] for r in results), default=0)
-    threshold = {"never": 99, "advise": 1, "block": 2}[args.fail_on]
+    threshold = {"never": 99, "advise": 1, "block": 2}["never" if args.exit_zero else args.fail_on]
     return EXIT_FINDINGS if worst >= threshold else EXIT_OK
 
 
@@ -139,12 +148,14 @@ def _collect(args, cfg, analyzer) -> tuple[list, bool]:
             results.extend(check(sys.stdin.read(), "-", args.stdin_name))
             continue
         if Path(path).is_dir():
-            # --per-record also takes JSONL, which hooks.paths leaves out.
-            files = [p for p in _walk(Path(path))
+            # --per-record also takes JSONL, which [readcost.src] include leaves out.
+            files = [p for p in _walk(Path(path), cfg.src.respect_ignore_files)
                      if cfg.wants(str(p)) or (args.per_record and p.suffix == ".jsonl"
                                               and not cfg.excluded(str(p)))]
             if not files:
-                print(f"readcost: {path}: no files matched hooks.paths", file=sys.stderr)
+                print(f"readcost: {path}: no files matched [readcost.src] include", file=sys.stderr)
+        elif args.force_exclude and cfg.excluded(path):
+            files = []
         else:
             files = [Path(path)]
         for p in files:
@@ -259,8 +270,18 @@ def build_parser() -> argparse.ArgumentParser:
         c.add_argument("paths", nargs="*", help="files or directories; '-' or nothing reads stdin")
         c.add_argument("-f", "--format", choices=FORMATS,
                        help="input format (default: from the file name; stdin: markdown)")
-        c.add_argument("--enable", help="comma-separated features to turn on")
-        c.add_argument("--disable", help="comma-separated features to turn off")
+        for level in ("error", "warn", "info", "ignore"):
+            what = "turn off" if level == "ignore" else f"turn on at severity {level}"
+            c.add_argument(f"--{level}", action="append", default=[], metavar="RULE",
+                           help=f"{what} (repeatable or comma-separated; 'all' for every rule)")
+        c.add_argument("--enable", help="comma-separated rules to turn on (older spelling of --warn etc.)")
+        c.add_argument("--disable", help="comma-separated rules to turn off (older spelling of --ignore)")
+        c.add_argument("--exclude", action="append", default=[], metavar="GLOB",
+                       help="also skip files matching this glob, after [readcost.src] exclude (repeatable)")
+        c.add_argument("--force-exclude", action="store_true",
+                       help="apply the excludes to files named on the command line too")
+        c.add_argument("--respect-ignore-files", action=argparse.BooleanOptionalAction, default=None,
+                       help="skip files that .gitignore excludes when walking a directory (default: on)")
         c.add_argument("--profile", help="reference profile JSON (default: built-in)")
         c.add_argument("--field", help="for JSON/JSONL: dotted path of the text field, e.g. response or output.text")
         c.add_argument("--per-record", action="store_true",
@@ -276,6 +297,7 @@ def build_parser() -> argparse.ArgumentParser:
                    help="colour the full output (auto: on a terminal, unless NO_COLOR is set)")
     c.add_argument("--fail-on", choices=("never", "advise", "block"), default="block",
                    help="exit 1 when any file reaches this verdict (default: block)")
+    c.add_argument("--exit-zero", action="store_true", help="always exit 0 on findings (same as --fail-on never)")
     c.add_argument("--min-severity", choices=("info", "warn", "error"))
     c.add_argument("--lines", help="only report sentences touching these lines, e.g. 10-24,40")
     c.add_argument("--last", action="store_true", help="for transcripts: only the last assistant message")

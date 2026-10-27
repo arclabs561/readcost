@@ -1,4 +1,4 @@
 # readcost's own settings: check every kind of prose in this repo, including
 # docstrings and comments in Python, YAML and TOML files.
-[readcost.hooks]
-paths = ["*.md", "*.rst", "*.txt", "*.py", "*.yml", "*.yaml", "*.toml"]
+[readcost.src]
+include = ["*.md", "*.rst", "*.txt", "*.py", "*.yml", "*.yaml", "*.toml"]

@@ -35,6 +35,11 @@ CHOICES = {
     "comments": ("doc", "all"),
 }
 FEATURE_LISTS = ("enable", "disable")
+# Rule levels, as in ty: a level turns a rule on at that severity; "ignore" turns it off.
+LEVELS = (*SEVERITIES, "ignore")
+# Keys that still load but have a newer spelling; removed at 1.0.
+DEPRECATED = {"enable": "[readcost.rules] RULE = \"info\", \"warn\" or \"error\"", "disable": "[readcost.rules] RULE = \"ignore\"",
+              "hooks.paths": "[readcost.src] include", "hooks.exclude": "[readcost.src] exclude"}
 
 
 @dataclass
@@ -42,15 +47,22 @@ class HookConfig:
     mode: str = "advise"            # off | advise | block
     stop: str = "off"               # off | report | revise
     display: str = "off"            # off | note  (Claude Code MessageDisplay)
-    paths: list[str] = field(default_factory=lambda: [
-        "*.md", "*.markdown", "*.mdx", "*.rst", "*.txt", "COMMIT_EDITMSG"])
-    exclude: list[str] = field(default_factory=lambda: [
-        "CHANGELOG*", "*/node_modules/*", "*/target/*", "*/.git/*", "*/vendor/*",
-        "*/.venv/*", "*/venv/*", "*/.tox/*"])
     max_items: int = 8
     max_chars: int = 2500
     edited_lines_only: bool = True
     timeout_seconds: float = 8.0
+
+
+@dataclass
+class SrcConfig:
+    """Which files `readcost check DIR`, the hooks and the language server read."""
+    include: list[str] = field(default_factory=lambda: [
+        "*.md", "*.markdown", "*.mdx", "*.rst", "*.txt", "COMMIT_EDITMSG"])
+    exclude: list[str] = field(default_factory=lambda: [
+        "CHANGELOG*", "*/node_modules/*", "*/target/*", "*/.git/*", "*/vendor/*",
+        "*/.venv/*", "*/venv/*", "*/.tox/*"])
+    extend_exclude: list[str] = field(default_factory=list)  # added to exclude, keeping its defaults
+    respect_ignore_files: bool = True  # skip what .gitignore and other git ignore files exclude
 
 
 @dataclass
@@ -86,16 +98,52 @@ class Config:
     commit_block_cost_index: float = 100.0
     # Text and agent output end with a link for reporting a wrong finding.
     feedback_link: bool = True
+    # Per-rule level: "error", "warn", "info" or "ignore"; "all" sets every rule.
+    rules: dict[str, str] = field(default_factory=dict)
+    # [[readcost.overrides]]: {"include": [globs], "exclude": [globs], "rules": {...}}, in order.
+    overrides: list[dict] = field(default_factory=list)
+    src: SrcConfig = field(default_factory=SrcConfig)
     hooks: HookConfig = field(default_factory=HookConfig)
     source: str = ""                # where the config came from
+    cli_rules: dict[str, str] = field(default_factory=dict, repr=False)  # --error/--warn/--info/--ignore
 
     def wants(self, path: str) -> bool:
         if self.excluded(path):
             return False
-        return any(fnmatch.fnmatch(c, g) for c in _candidates(path) for g in self.hooks.paths)
+        return any(fnmatch.fnmatch(c, g) for c in _candidates(path) for g in self.src.include)
 
     def excluded(self, path: str) -> bool:
-        return any(fnmatch.fnmatch(c, g) for c in _candidates(path) for g in self.hooks.exclude)
+        globs = [*self.src.exclude, *self.src.extend_exclude]
+        return any(fnmatch.fnmatch(c, g) for c in _candidates(path) for g in globs)
+
+    def rule_levels(self, path: str | None = None) -> dict[str, str]:
+        """The level each rule has for ``path``: a severity, "ignore", or "default".
+
+        "default" means on, at the detector's own severity. Later sources win:
+        each rule's default, enable/disable, [readcost.rules], every override
+        whose globs match ``path``, then the command line.
+        """
+        from .features import FEATURES
+
+        levels = {k: "default" if f.default else "ignore" for k, f in FEATURES.items()}
+        levels.update({k: "default" for k in self.enable if k in levels})
+        levels.update({k: "ignore" for k in self.disable if k in levels})
+
+        def apply(rules: dict[str, str]) -> None:
+            if "all" in rules:
+                levels.update(dict.fromkeys(levels, rules["all"]))
+            levels.update({k: v for k, v in rules.items() if k in levels})
+
+        apply(self.rules)
+        for o in self.overrides:
+            if path is None:
+                continue
+            hit = any(fnmatch.fnmatch(c, g) for c in _candidates(path) for g in o.get("include", ["*"]))
+            miss = any(fnmatch.fnmatch(c, g) for c in _candidates(path) for g in o.get("exclude", []))
+            if hit and not miss:
+                apply(o.get("rules", {}))
+        apply(self.cli_rules)
+        return levels
 
 
 def _candidates(path: str) -> tuple[str, str, str]:
@@ -135,19 +183,73 @@ def unknown_features(ids: list[str]) -> list[str]:
     return [i for i in ids if i not in FEATURES]
 
 
+def _check_rules(rules, where: str) -> dict[str, str]:
+    """Validate a rules table: rule names (or "all") to a level."""
+    from .features import FEATURES
+
+    if not isinstance(rules, dict):
+        raise ValueError(f"{where} must be a table of rule = level, not {rules!r}")
+    for k, v in rules.items():
+        if k != "all" and k not in FEATURES:
+            raise ValueError(f"{where}: unknown rule {k!r}; `readcost explain` lists the rules")
+        if v not in LEVELS:
+            raise ValueError(f"{where}.{k} must be one of {', '.join(LEVELS)}, not {v!r}")
+    return dict(rules)
+
+
+def _check_overrides(value, source: str) -> list[dict]:
+    if not isinstance(value, list) or not all(isinstance(o, dict) for o in value):
+        raise ValueError(f"{source}: overrides must be [[readcost.overrides]] tables")
+    out = []
+    for n, o in enumerate(value, 1):
+        where = f"{source}: overrides #{n}"
+        unknown = set(o) - {"include", "exclude", "rules"}
+        if unknown:
+            raise ValueError(f"{where}: unknown key {', '.join(map(repr, sorted(unknown)))}")
+        for g in ("include", "exclude"):
+            if g in o and not (isinstance(o[g], list) and all(isinstance(x, str) for x in o[g])):
+                raise ValueError(f"{where}: {g} must be a list of globs")
+        out.append({"include": o.get("include", ["*"]), "exclude": o.get("exclude", []),
+                    "rules": _check_rules(o.get("rules", {}), f"{where} rules")})
+    return out
+
+
+def _deprecated(source: str, key: str) -> None:
+    print(f"readcost: warning: {source}: {key} is deprecated; use {DEPRECATED[key]}", file=sys.stderr)
+
+
 def _apply(obj, data: dict, source: str, prefix: str = "") -> None:
-    known = {f.name for f in fields(obj)} - {"source"}
+    known = {f.name for f in fields(obj)} - {"source", "cli_rules"}
     for key, value in data.items():
         name = key.replace("-", "_")
         if name not in known:
             print(f"readcost: warning: {source}: unknown key {prefix + key!r} ignored", file=sys.stderr)
             continue
         current = getattr(obj, name)
-        if isinstance(current, HookConfig):
+        if isinstance(current, (HookConfig, SrcConfig)):
             if not isinstance(value, dict):
                 raise ValueError(f"{source}: {prefix + key} must be a table, not {value!r}")
+            if isinstance(current, HookConfig):
+                # hooks.paths and hooks.exclude moved to [readcost.src].
+                value = dict(value)
+                for old, new in (("paths", "include"), ("exclude", "exclude")):
+                    if old in value:
+                        _deprecated(source, f"hooks.{old}")
+                        moved = value.pop(old)
+                        error = _check(new, getattr(obj.src, new), moved)
+                        if error:  # name the key the user wrote
+                            raise ValueError(f"{source}: {prefix}{key}.{old} {error}")
+                        setattr(obj.src, new, moved)
             _apply(current, value, source, f"{prefix}{key}.")
             continue
+        if name == "rules":
+            obj.rules = _check_rules(value, f"{source}: {prefix}rules")
+            continue
+        if name == "overrides":
+            obj.overrides = _check_overrides(value, source)
+            continue
+        if name in FEATURE_LISTS and not prefix:
+            _deprecated(source, name)
         error = _check(name, current, value)
         if error:
             raise ValueError(f"{source}: {prefix + key} {error}")
