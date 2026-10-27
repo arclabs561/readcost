@@ -88,6 +88,8 @@ First release on PyPI (`pip install readcost`, or `uvx readcost`).
 
 ### Fixed
 
+- A number joined to its unit ("17-month", "one-hop", "64-bit") is a modifier,
+  not a noun in a stack.
 - inanimate-subject no longer flags groups of people ("a majority of eight
   raters judged"): a quantity noun takes the animacy of what it counts.
 - Issue and pull request references (`owner/repo#123`, `#123`, `gh-123`) count
