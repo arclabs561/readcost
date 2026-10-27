@@ -108,6 +108,11 @@ class Config:
     hooks: HookConfig = field(default_factory=HookConfig)
     source: str = ""                # where the config came from
     cli_rules: dict[str, str] = field(default_factory=dict, repr=False)  # --error/--warn/--info/--ignore
+    # When above 0, long-dependency measures a gap by the new nouns and tensed
+    # verbs inside it (Gibson's Dependency Locality Theory): it reports this
+    # many at any z, or 2 when the z threshold is met. 5 matches the default
+    # rule's volume on the evaluation corpus. Off: word distance did better.
+    long_dependency_referents: int = 0
 
     def wants(self, path: str) -> bool:
         if self.excluded(path):
