@@ -12,7 +12,8 @@ ROOT/provo/Provo_Corpus-Eyetracking_Data.csv  (Provo, CC BY 4.0;
 
 Writes ROOT/texts.jsonl: one line per text with corpus, text id, words and
 the mean total reading time (dwell time, ms) of each word across readers,
-counting a skipped word as 0 ms, as Cekini et al. 2026 do.
+counting a skipped word as 0 ms, which Cekini et al. 2026's averaging
+implies (the paper does not say so outright).
 """
 import json
 import sys
