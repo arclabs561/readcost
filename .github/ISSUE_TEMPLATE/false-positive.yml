@@ -1,0 +1,52 @@
+name: False positive
+description: readcost flagged a sentence that is fine as written.
+title: "False positive: "
+labels: ["false positive"]
+body:
+  - type: input
+    id: rule
+    attributes:
+      label: Rule
+      description: The rule in brackets in the output, for example stacked-nouns.
+    validations:
+      required: true
+  - type: input
+    id: message
+    attributes:
+      label: readcost message
+      description: The message readcost printed for this sentence.
+    validations:
+      required: true
+  - type: textarea
+    id: sentence
+    attributes:
+      label: Sentence
+      description: The whole sentence, copied as written.
+      render: text
+    validations:
+      required: true
+  - type: dropdown
+    id: context
+    attributes:
+      label: Where the sentence was
+      options:
+        - README
+        - Other documentation
+        - Commit message
+        - Code comment or docstring
+        - Model output
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why the finding is wrong
+      description: For example, the phrase is a term of art in this field, or the parse is wrong.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: readcost version
+      description: The output of readcost --version.

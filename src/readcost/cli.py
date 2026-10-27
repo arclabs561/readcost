@@ -113,7 +113,8 @@ def _cmd_check(args) -> int:
                 failed = True
                 detail = exc.strerror if isinstance(exc, OSError) and exc.strerror else exc
                 print(f"readcost: {p}: {detail}", file=sys.stderr)
-    out = render(results, args.output, max_items=cfg.hooks.max_items, max_chars=cfg.hooks.max_chars)
+    out = render(results, args.output, max_items=cfg.hooks.max_items, max_chars=cfg.hooks.max_chars,
+                 feedback_link=cfg.feedback_link)
     if out:
         print(out)
     if failed:

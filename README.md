@@ -49,7 +49,8 @@ readcost explain stacked-nouns
 ```
 
 Output is plain text by default. `-o json`, `-o sarif` and `-o github` are for
-tools, and `-o agent` is short feedback written for a model. The exit status is
+tools, `-o agent` is short feedback written for a model, and `-o pr-comment` is
+the Markdown summary that the GitHub Action posts on a pull request. The exit status is
 1 when a file reaches the `--fail-on` verdict (default `block`), 2 on an error,
 and 0 otherwise.
 
@@ -175,6 +176,8 @@ useful ones:
   this severity; `off` turns that rule off.
 - `profile`: a relative path is read from the config file's directory.
 - `hooks.mode`: `off`, `advise` or `block`.
+- `feedback_link`: `false` drops the line that text and agent output end
+  with, which points to the false-positive form.
 
 readcost warns about unknown keys and stops with exit code 2 on a value of the
 wrong type or outside its choices, naming the file and the key.
@@ -192,8 +195,63 @@ per turn. In short:
   `integrations/claude-code/`.
 - piku: `integrations/piku/hooks.json`.
 - git: `.pre-commit-hooks.yaml`, or the scripts in `integrations/git/`.
-- GitHub Actions: `action.yml`.
+- GitHub Actions: `action.yml`; see the next section.
 - Anything else: `readcost hook generic` reads JSON on stdin and writes JSON.
+
+## GitHub Action
+
+The action annotates the lines it flags. On a pull request it checks only the
+Markdown, reStructuredText and text files that the pull request adds or
+changes; set `changed-only: "false"` to check every file under `paths`. With
+`comment: "true"` it also posts one summary comment on the pull request and
+edits that comment on later runs, so the thread gets one comment, not one
+per push. The comment counts the verdicts, lists the worst findings in a
+table, and gives the predicted reading time.
+
+```yaml
+name: readcost
+on: pull_request
+
+permissions:
+  contents: read
+  pull-requests: write   # only needed for comment: "true"
+
+jobs:
+  prose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0   # lets the action diff against the merge base
+      - uses: arclabs561/readcost@main   # pin a commit SHA in real use
+        with:
+          paths: README.md docs
+          fail-on: block
+          comment: "true"
+```
+
+Inputs:
+
+- `paths`: files or directories, separated by spaces or newlines (default `.`).
+- `fail-on`: `never`, `advise` or `block` (default `block`).
+- `comment`: `"true"` to post the summary comment (default `"false"`).
+- `changed-only`: on a pull request, check only changed files (default `"true"`).
+
+Without `fetch-depth: 0` the action fetches the base commit itself and
+compares it with the checked-out commit; that list can include files that
+changed on the base branch after the pull request was opened. A pull request
+from a fork gets a read-only token, so the comment fails with a warning and the
+annotations still appear.
+
+## Reporting a false positive
+
+readcost is advisory, and many findings are wrong (see Limits). When one is,
+open an issue with the
+[false positive form](https://github.com/arclabs561/readcost/issues/new?template=false-positive.yml):
+it asks for the rule, the message, the sentence, where the sentence was, and
+why the finding is wrong. Text and agent output end with a line that links to
+the form when there are findings; `feedback_link = false` in `readcost.toml`
+turns that line off. The hooks never add it, since a model cannot act on it.
 
 ## Limits
 

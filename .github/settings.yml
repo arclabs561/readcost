@@ -18,3 +18,9 @@ repository:
     - linter
     - writing
     - python
+
+# The false-positive issue form applies this label.
+labels:
+  - name: false positive
+    color: "d4c5f9"
+    description: readcost flagged a sentence that is fine as written

@@ -81,6 +81,8 @@ class Config:
     # essays, docs, READMEs and discussion (docs/evaluation.md, "Contexts").
     commit_advise_cost_index: float = 50.0
     commit_block_cost_index: float = 100.0
+    # Text and agent output end with a link for reporting a wrong finding.
+    feedback_link: bool = True
     hooks: HookConfig = field(default_factory=HookConfig)
     source: str = ""                # where the config came from
 

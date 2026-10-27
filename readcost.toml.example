@@ -21,6 +21,7 @@ long_dependency_z = 2.5         # long-dependency: z-score against the profile's
 long_dependency_min_tokens = 10 # long-dependency: skip sentences with fewer tokens
 inline_list_min_items = 4       # inline-list: this many conjoined items
 long_sentence_words = 32        # long-sentence (opt-in): more than this many words
+feedback_link = true            # text and agent output end with a link to report a wrong finding
 
 [readcost.hooks]
 mode = "advise"                 # off | advise | block
