@@ -47,6 +47,15 @@ class Feature:
     good: str
 
 
+# Rules removed in 0.3 after blind labelling on the 5.7-million-word corpus
+# (docs/evaluation.md, "Opt-in rules on every corpus"). A config or flag that
+# names one warns and is ignored.
+RETIRED_RULES = {
+    "denominal-verb": "8% of its findings accepted",
+    "repeated-frame": "2% of its findings accepted; `readcost corpus` measures repetition",
+    "center-embedding": "20% accepted and almost never fires",
+}
+
 FEATURES: dict[str, Feature] = {f.id: f for f in [
     Feature(
         "stacked-nouns", "Three or more nouns in a row", "warn", True, "paper",
@@ -76,16 +85,6 @@ FEATURES: dict[str, Feature] = {f.id: f for f in [
         "of scope, what is returned, what is not guaranteed.",
         "It does not own indexing or compaction.",
         "Indexing and compaction are left to the caller.",
-    ),
-    Feature(
-        "denominal-verb", "Noun used as a verb", "info", False, "paper",
-        "A noun pressed into service as a verb (calendar it, footnote it) "
-        "makes the reader re-parse the word. Off by default: on well-edited "
-        "prose almost every hit was a settled verb (scale, host, fork), because "
-        "the lexicon cannot tell a new coinage from an old one (docs/evaluation.md).",
-        "Use an ordinary verb phrase.",
-        "The script will bucket the requests by hour.",
-        "The script will group the requests by hour.",
     ),
     Feature(
         "reduced-object-relative", "Object relative clause without 'that'", "info", True, "paper",
@@ -139,29 +138,6 @@ FEATURES: dict[str, Feature] = {f.id: f for f in [
         "Say the relation: 'so', 'because', 'which', or a second sentence.",
         "The parser caches every token, making lookups faster.",
         "The parser caches every token, so lookups are faster.",
-    ),
-    Feature(
-        "repeated-frame", "Same sentence frame repeated", "info", False, "opt-in",
-        "Three or more sentences in one document share a run of six or more "
-        "part-of-speech tags. Repeated syntactic templates mark model output "
-        "(Shaib et al. 2024 measure them across many texts, not within one, and "
-        "make no claim about reading cost). Formulaic text such as changelogs "
-        "repeats on purpose; list items, headings and tables are skipped.",
-        "Vary the sentences, or turn the parallel statements into a list.",
-        "This change reduces latency. This change improves speed. This change lowers cost.",
-        "This change reduces latency, improves speed and lowers cost.",
-    ),
-    Feature(
-        "center-embedding", "Clause nested inside a nested clause", "info", False, "opt-in",
-        "A clause inside a clause that is itself inside the middle of another "
-        "clause makes the reader hold several unfinished subjects at once. One "
-        "nested clause is ordinary; people judge two hard in constructed "
-        "sentences, unless the innermost subject is I, you or we (Gibson 1998, "
-        "2000; acceptability judgements, not reading times). Such sentences are "
-        "rare even in edited writing (Karlsson 2007).",
-        "Finish the outer clause first, or move the inner clause into its own sentence.",
-        "The reporter who the senator who John met attacked disliked the editor.",
-        "John met the senator who attacked the reporter. The reporter disliked the editor.",
     ),
     Feature(
         "undefined-acronym", "Acronym used before it is spelled out", "info", False, "opt-in",
@@ -655,26 +631,6 @@ def center_embeddings(sent) -> list[tuple[object, int]]:
     return out
 
 
-INDEXICAL_PRONOUNS = frozenset({"i", "you", "we"})
-CENTER_EMBEDDING_DEPTH = 2   # Gibson 1998, 2000: two nested clauses judged hard in constructed sentences
-
-
-def center_embedding(sent, ctx: Context) -> list[tuple[str, str, list]]:
-    deep = [(t, d) for t, d in center_embeddings(sent) if d >= CENTER_EMBEDDING_DEPTH]
-    if not deep:
-        return []
-    inner, d = max(deep, key=lambda x: x[1])
-    if any(c.dep_ in ("nsubj", "nsubjpass") and c.lower_ in INDEXICAL_PRONOUNS for c in inner.children):
-        # "The reporter who the senator who I met attacked ...": an innermost
-        # subject already in the discourse adds no new referent, and such
-        # sentences are processable (Gibson 1998, after Bever 1974).
-        return []
-    outer = [t for t, k in center_embeddings(sent) if k == 1 and t.left_edge.i <= inner.i <= t.right_edge.i]
-    span = outer[0] if outer else inner
-    toks = [span.left_edge, inner, span.right_edge]
-    return [("info", f"clause '{_w(ctx, inner)}' is nested {d} deep inside clauses that continue after it", toks)]
-
-
 def long_dependency(sent, ctx: Context, has_list: bool) -> list[tuple[str, str, list]]:
     z, n, longest = dependency_z(sent, ctx.profile)
     ctx.stats.setdefault("dep_z", []).append(z)
@@ -724,25 +680,6 @@ def inanimate_subjects(sent, ctx: Context) -> list[tuple[str, str, list]]:
             out.append(("info", f"'{_w(ctx, s)} ... {t.text}': a person's verb with a non-person subject", [s, t]))
     return out
 
-
-def denominal_verbs(sent, ctx: Context) -> list[tuple[str, str, list]]:
-    if not lexicon.has_wordnet():
-        return []
-    out = []
-    for t in sent:
-        if t.pos_ != "VERB" or not t.tag_.startswith("VB") or t.dep_ in ("amod", "compound"):
-            continue
-        if t.text[:1].isupper() or not any(c.dep_ in ("dobj", "obj", "nsubj", "prt") for c in t.children):
-            continue
-        inflected = t.tag_ in ("VBD", "VBG", "VBN") or (t.tag_ == "VBZ" and t.text.lower().endswith("es"))
-        if not inflected and not any(c.dep_ in ("aux", "auxpass") for c in t.children) and t.i != sent.start:
-            continue  # bare base-form "verbs" here are usually mis-tagged nouns
-        nxt = sent.doc[t.i + 1] if t.i + 1 < len(sent.doc) else None
-        if any(c.dep_ == "prt" for c in t.children) or (nxt is not None and nxt.dep_ == "prt"):
-            continue  # phrasal verbs: "figure out", "wind up", "light up"
-        if lexicon.is_denominal_candidate(t.lemma_.lower()):
-            out.append(("info", f"'{t.text}' is mainly a noun used here as a verb", [t]))
-    return out
 
 
 LIGHT_RELATIVE_HEADS = {"time", "way", "all", "reason", "day", "moment", "place"}
@@ -839,46 +776,6 @@ def participial_clauses(sent, ctx: Context) -> list[tuple[str, str, list]]:
         elif t.i == sent.start and t.head.i > t.i and \
                 any(x.text == "," for x in sent.doc[t.right_edge.i + 1:t.head.i + 1]):
             out.append(("info", f"'{t.text} ...,' leaves its link to '{t.head.text}' unstated", [t]))
-    return out
-
-
-# Calibrated on 12 BurntSushi READMEs and this repo's docs (10k words): with
-# 7 tags and sentences ending in ":" left out, no frame repeats three times.
-FRAME_N = 7      # fine-grained tags in a frame; shorter runs are common in all prose
-FRAME_MIN = 3    # sentences that must share it
-
-
-def repeated_frames(sents) -> list[tuple[object, object, str, list]]:
-    """Sentences sharing a run of FRAME_N fine-grained POS tags, FRAME_MIN or more times.
-
-    A within-document check, not Shaib et al.'s corpus-level template rate.
-
-    ``sents`` is a list of (segment, sentence). Returns one finding per group
-    of sentences, at the group's first sentence: (segment, sentence, message, tokens).
-    """
-    where: dict[tuple, dict[int, int]] = {}  # frame -> sentence number -> first token index
-    for k, (_, sent) in enumerate(sents):
-        if sent.text.rstrip().endswith(":"):
-            continue  # lead-ins to code or lists are formulaic on purpose
-        toks = [t for t in sent if not t.is_punct and not t.is_space]
-        for j in range(len(toks) - FRAME_N + 1):
-            where.setdefault(tuple(t.tag_ for t in toks[j:j + FRAME_N]), {}).setdefault(k, j)
-    groups: dict[frozenset, tuple] = {}
-    for frame, hits in where.items():
-        if len(hits) >= FRAME_MIN:
-            groups.setdefault(frozenset(hits), frame)
-    out = []
-    reported: set[int] = set()
-    for members, frame in sorted(groups.items(), key=lambda g: (-len(g[0]), min(g[0]))):
-        if members <= reported:
-            continue  # a sub-run of a frame already reported for these sentences
-        reported |= members
-        k = min(members)
-        seg, sent = sents[k]
-        toks = [t for t in sent if not t.is_punct and not t.is_space]
-        j = where[frame][k]
-        out.append((seg, sent, f"{len(members)} sentences share the frame '{' '.join(frame)}'",
-                    toks[j:j + FRAME_N]))
     return out
 
 
@@ -1009,8 +906,6 @@ def detect(sent, ctx: Context) -> list[tuple[str, str, str, list]]:
         add("long-dependency", long_dependency(sent, ctx, has_list=bool(lists) or coordinated or ":" in sent.text))
     if "inanimate-subject" in on:
         add("inanimate-subject", inanimate_subjects(sent, ctx))
-    if "denominal-verb" in on:
-        add("denominal-verb", denominal_verbs(sent, ctx))
     if "reduced-object-relative" in on:
         add("reduced-object-relative", reduced_object_relatives(sent, ctx))
     if "long-sentence" in on:
@@ -1019,6 +914,4 @@ def detect(sent, ctx: Context) -> list[tuple[str, str, str, list]]:
         add("nominalization", nominalizations(sent, ctx))
     if "participial-clause" in on:
         add("participial-clause", participial_clauses(sent, ctx))
-    if "center-embedding" in on:
-        add("center-embedding", center_embedding(sent, ctx))
     return results

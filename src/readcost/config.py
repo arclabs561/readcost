@@ -169,9 +169,20 @@ def _check(name: str, default, value):
 
 
 def unknown_features(ids: list[str]) -> list[str]:
-    from .features import FEATURES
+    from .features import FEATURES, RETIRED_RULES
 
-    return [i for i in ids if i not in FEATURES]
+    return [i for i in ids if i not in FEATURES and i not in RETIRED_RULES]
+
+
+def drop_retired(ids, where: str) -> list[str]:
+    """``ids`` without rules removed in 0.3, with a warning for each one named."""
+    from .features import RETIRED_RULES
+
+    for i in ids:
+        if i in RETIRED_RULES:
+            print(f"readcost: warning: {where}: rule {i!r} was removed in 0.3 ({RETIRED_RULES[i]}) "
+                  "and is ignored", file=sys.stderr)
+    return [i for i in ids if i not in RETIRED_RULES]
 
 
 def _check_rules(rules, where: str) -> dict[str, str]:
@@ -180,6 +191,7 @@ def _check_rules(rules, where: str) -> dict[str, str]:
 
     if not isinstance(rules, dict):
         raise ValueError(f"{where} must be a table of rule = level, not {rules!r}")
+    rules = {k: rules[k] for k in drop_retired(list(rules), where)}
     for k, v in rules.items():
         if k != "all" and k not in FEATURES:
             raise ValueError(f"{where}: unknown rule {k!r}; `readcost explain` lists the rules")
@@ -245,6 +257,8 @@ def _apply(obj, data: dict, source: str, prefix: str = "") -> None:
             continue
         if name in FEATURE_LISTS and not prefix:
             _deprecated(source, name)
+            if isinstance(value, list):
+                value = drop_retired(value, f"{source}: {name}")
         error = _check(name, current, value)
         if error:
             raise ValueError(f"{source}: {prefix + key} {error}")

@@ -31,25 +31,18 @@ Panthaplackel et al. 2021).
   cannot be recovered from the code, and summarization models fail on it
   most (Chen et al. 2021). Done: when a long-dependency or inline-list sentence
   gives a reason, the suggestion says to keep it.
-- Three opt-in detectors count constructions that language models overuse:
+- Two opt-in detectors count constructions that language models overuse:
   nominalizations and present participial clauses (1.5 to 2 and 2 to 5 times
-  the human rate in Reinhart et al. 2025, over general genres), and sentence
-  frames repeated within one document. Shaib et al. 2024 count templates
-  across many outputs of one model, not within one document, and they make
-  no claim about reading time; repeated-frame is a style signal only.
-- Two opt-in rules with weaker evidence. center-embedding flags a clause
-  nested two deep inside clauses that continue after it. Gibson (1998, 2000)
-  argues from acceptability judgements of constructed sentences that such
-  nesting is hard, except when the innermost subject is I or you (readcost
-  skips those). Wu et al. (2010) find that a parser's change in embedding
-  depth adds to reading time beyond surprisal over all words, though not
-  for open-class words, in one constructed corpus. undefined-acronym flags an acronym used before it is
-  spelled out; the only evidence is a magazine report of self-rated
-  difficulty, whose authors recommend spelling a term out at every use
-  (Hales, Williams and Rector 2017). No
-  study was found on terminology consistency, and none supports a check for
-  ambiguous pronouns: Gordon, Grosz and Gilliom (1993) find that repeating a
-  name where a pronoun would do slows reading.
+  the human rate in Reinhart et al. 2025, over general genres). Repetition
+  of sentence frames is measured across many texts by `readcost corpus`
+  (Shaib et al. 2024), not per document.
+- One opt-in rule with weaker evidence: undefined-acronym flags an acronym
+  used before it is spelled out; the only evidence is a magazine report of
+  self-rated difficulty, whose authors recommend spelling a term out at
+  every use (Hales, Williams and Rector 2017). No study was found on
+  terminology consistency, and none supports a check for ambiguous pronouns:
+  Gordon, Grosz and Gilliom (1993) find that repeating a name where a
+  pronoun would do slows reading.
 - Document measures (JSON `metrics`) describe rather than judge: MTLD, idea
   density by DEPID (Sirts et al. 2017), center-embedding depth, and a
   sentence-length profile in the manner of Alves et al. (2010).
