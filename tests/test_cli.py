@@ -1,6 +1,7 @@
 import json
 import subprocess
 import sys
+from pathlib import Path
 
 DENSE = ("It does not own indexing, segment selection, compaction, or reader visibility. "
          "The example prints the first snapshot-search cost with persisted region-index sidecars "
@@ -72,3 +73,14 @@ def test_readme_links_work_on_pypi():
     readme = (Path(__file__).resolve().parent.parent / "README.md").read_text()
     relative = re.findall(r"\]\((?!https?:|#)([^)]+)\)", readme)
     assert relative == []
+
+
+def test_readcost_comes_from_this_checkout(tmp_path):
+    from conftest import SRC
+
+    import readcost
+
+    here = subprocess.run([sys.executable, "-c", "import readcost; print(readcost.__file__)"],
+                          cwd=tmp_path, capture_output=True, text=True, check=True).stdout.strip()
+    assert Path(readcost.__file__).is_relative_to(SRC)
+    assert Path(here).is_relative_to(SRC)
