@@ -32,9 +32,9 @@ uncorrelated with integration cost, so both mechanisms are needed.
 
 ## Results (numbers that matter)
 
-- All words: integration cost coefficient negative (first pass -2.28 ms
+- All words: the coefficient of integration cost is negative (first pass -2.28 ms
   main effects; -5.37 log cost in the full model).
-- Nouns with non-zero cost: log integration cost +5.86 ms (p < .05); the
+- Nouns with non-zero cost: +5.86 ms per unit of log integration cost (p < .05); the
   effect disappears when compound-initial nouns (cost 0 by DLT) are
   included, so the authors conclude the first noun of a compound should
   carry cost.

@@ -12,7 +12,7 @@ Table II.
 
 ## Claim
 
-Code complexity metrics explain program comprehension only partly. In an
+Metrics of code complexity explain program comprehension only partly. In an
 fMRI study, lines of code and Halstead's vocabulary track cognitive load
 and attention, Beyer's data-flow metric DepDegree tracks activation most
 consistently, and McCabe's cyclomatic complexity tracks nothing measured.
@@ -52,15 +52,15 @@ No single metric predicts overall cognitive effort.
 
 ## What the full text qualifies
 
-- 16 snippets and 18 usable participants; metric ranges were small (only
-  six distinct McCabe values, maximum 8), so null results for McCabe may
-  reflect range restriction, as the authors say.
+- 16 snippets and 18 usable participants. The metrics varied little (only
+  six distinct McCabe values, maximum 8), so the null results for McCabe
+  may come from that narrow range, as the authors say.
 - The four metrics are correlated with each other by construction.
 - Task is output prediction for intermediate programmers; other tasks and
   experts may differ.
 - The authors note DepDegree ignores the distance of a data dependency and
-  suggest adding locality, an idea close to dependency-length measures in
-  linguistics.
+  suggest adding locality, an idea close to how linguistics measures the
+  length of dependencies.
 
 ## For readcost (used, accurately, plus candidates)
 
@@ -71,13 +71,13 @@ No single metric predicts overall cognitive effort.
 - The reference entry (research.md lines 167 to 168) is accurate; the
   co-authors (Apel, Parnin, Brechmann, Siegmund) could be listed.
 - Candidate: the study's own rationale borrows from sentence-processing
-  research (filler-gap dependencies, Broca's area), the same literature
+  research (the dependency between a moved phrase and its gap, Broca's area), the same literature
   behind readcost's long-dependency and center-embedding rules. Its
-  suggestion that dependency distance matters, not just count, matches
-  readcost's word-distance choice in research.md lines 48 to 51; it is a
+  suggestion that the distance of a dependency matters, not just the count,
+  matches readcost's choice to count words in research.md lines 48 to 51; it is a
   suggestion, not a tested result.
 - Candidate: the strong showing of subjective difficulty ratings supports
-  collecting reader ratings in any human evaluation readcost runs.
+  collecting reader ratings in any human evaluation of readcost.
 
 ## Open questions
 
