@@ -94,6 +94,7 @@ def text_mae(texts, preds) -> float:
 def tree_predict(spec: dict, X: np.ndarray) -> np.ndarray:
     """The same evaluation as readcost.readtime.predict, for the export check."""
     out = np.full(len(X), spec["init"])
+    X = np.asarray(X, dtype=np.float32).astype(np.float64)  # as sklearn compares
     for t in spec["trees"]:
         for k, row in enumerate(X):
             node = 0
@@ -107,7 +108,7 @@ def export(gb: GradientBoostingRegressor, names: list[str]) -> dict:
     trees = []
     for est in gb.estimators_[:, 0]:
         t = est.tree_
-        trees.append({"feature": t.feature.tolist(), "threshold": [round(x, 6) for x in t.threshold.tolist()],
+        trees.append({"feature": t.feature.tolist(), "threshold": t.threshold.tolist(),
                       "left": t.children_left.tolist(), "right": t.children_right.tolist(),
                       "value": [round(float(v), 6) for v in t.value[:, 0, 0]]})
     return {"features": names, "init": float(gb.init_.constant_[0][0]),

@@ -16,7 +16,8 @@ def ms(words):
 
 
 def test_longer_words_take_longer_to_read():
-    # Word length is the strongest single predictor of reading time (Rayner 1998).
+    # Longer words take longer to read; length carries the most importance in
+    # the model fitted to OneStop (docs/evaluation.md, "Reading-time model").
     a = ms("We saw the cat on the mat today .".split())
     b = ms("We saw the photosynthesis on the mat today .".split())
     assert b[3] > a[3] + 50
@@ -63,3 +64,24 @@ def test_json_and_text_output_carry_reading_time(tmp_path):
     text = subprocess.run([sys.executable, "-m", "readcost", "check", str(tmp_path / "doc.md")],
                           capture_output=True, text=True, check=False).stdout
     assert "predicted reading time" in text
+
+
+def test_features_are_compared_in_float32_like_scikit_learn():
+    # scikit-learn's trees compare float32 features with float64 thresholds.
+    # Take the first tree's root split (every row passes it) and a value just
+    # above the threshold in float64 that is not above it in float32: both
+    # must take the same branch, as they do in the training library.
+    import numpy as np
+
+    spec = readtime._model()
+    root = spec["trees"][0]
+    f, t = int(root["feature"][0]), float(root["threshold"][0])
+    x = float(np.nextafter(np.float32(t), np.float32(np.inf)))  # first float32 above t
+    below = float(np.float32(t)) if float(np.float32(t)) <= t else float(np.nextafter(np.float32(t), np.float32(-np.inf)))
+    above64 = (below + x) / 2 if (below + x) / 2 > t else t + (x - t) / 4
+    assert np.float32(above64) <= np.float32(x) and above64 > t
+    rows = np.zeros((2, 14))
+    rows[0, f] = above64
+    rows[1, f] = float(np.float32(above64))
+    a, b = readtime.predict(rows)
+    assert a == b

@@ -572,16 +572,25 @@ as in the paper (`scripts/reading_time_train.py`):
 | Model | OneStop validation | OneStop test | Provo |
 | --- | --- | --- | --- |
 | always the training mean | 27.1 | 22.3 | 16.9 |
-| word length only (ridge) | 23.7 | 20.7 | 12.3 |
-| all features (ridge) | 23.4 | 19.6 | 10.6 |
-| gradient-boosted trees (shipped) | 22.8 | 19.1 | 9.6 |
-| trees plus SmolLM2-135M surprisal | 22.8 | 19.1 | 10.7 |
+| word length only (ridge) | 23.7 | 20.8 | 12.2 |
+| all features (ridge) | 23.4 | 19.7 | 11.5 |
+| gradient-boosted trees (shipped) | 22.7 | 19.2 | 10.3 |
+| trees plus SmolLM2-135M surprisal | 22.7 | 19.2 | 15.8 |
 
 Observed means are 198 to 205 ms/word. Cekini et al. report 15.0 on OneStop
 test and 16.1 on Provo for their RoBERTa model and about 19 for feature
 models on OneStop test. Word length (0.59) and frequency (0.22) carry most of
-the trees' importance. Surprisal adds nothing here, so readcost ships the
-lexical model, which needs neither torch nor a language model.
+the trees' importance. Surprisal adds nothing on OneStop and makes Provo
+worse, so readcost ships the lexical model, which needs neither torch nor a
+language model.
+
+Correction: an earlier version of this table reported 9.6 ms/word on Provo.
+Provo rows were keyed by `Word_Number`, which is missing for each passage's
+first word and runs one ahead of the interest area in places, so some words
+were paired with a neighbour's reading time. Keyed by interest area, Provo
+has 2,743 words with a mean of 200.2 ms (Cekini et al. report 2,743 and
+200.16), and the shipped model's error is 10.3. The model itself and the
+paired results below are unchanged; Provo is used only for testing.
 
 Applied to the paired rewrites (the `reading_ms_per_word`, `reading_seconds`
 and `cost_index` rows of `scripts/paired_score.py`), with eight more

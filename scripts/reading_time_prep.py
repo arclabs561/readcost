@@ -30,7 +30,10 @@ def onestop(path: Path) -> list[dict]:
           .with_columns(pl.col("IA_ID").cast(pl.Int64),
                         pl.col("IA_DWELL_TIME").cast(pl.Float64, strict=False).fill_null(0.0))
           .group_by(["article_batch", "article_id", "difficulty_level", "paragraph_id", "IA_ID"])
-          .agg(pl.col("IA_LABEL").first(), pl.col("IA_DWELL_TIME").mean().alias("rt"),
+          # 2.65% of slots carry different labels across readers (hyphen
+          # splits and a screen bug the OneStop paper describes); take the
+          # label most readers saw.
+          .agg(pl.col("IA_LABEL").mode().first(), pl.col("IA_DWELL_TIME").mean().alias("rt"),
                pl.col("participant_id").n_unique().alias("readers"))
           .sort(["article_batch", "article_id", "difficulty_level", "paragraph_id", "IA_ID"])
           .collect())
@@ -42,15 +45,18 @@ def onestop(path: Path) -> list[dict]:
 
 
 def provo(path: Path) -> list[dict]:
+    # Key by the interest area, which the dwell time belongs to. Word_Number is
+    # NA for each passage's first word and runs one ahead of IA_ID in places
+    # (the Provo paper warns they need not match); IA_LABEL is the word shown.
     df = (pl.read_csv(path, infer_schema_length=0)
-          .select(["Participant_ID", "Text_ID", "Word_Number", "Word", "IA_DWELL_TIME"])
-          .with_columns(pl.col("Word_Number").cast(pl.Int64, strict=False),
+          .select(["Participant_ID", "Text_ID", "IA_ID", "IA_LABEL", "IA_DWELL_TIME"])
+          .with_columns(pl.col("IA_ID").cast(pl.Int64),
                         pl.col("IA_DWELL_TIME").cast(pl.Float64, strict=False).fill_null(0.0))
-          .drop_nulls("Word_Number")
-          .group_by(["Text_ID", "Word_Number"])
-          .agg(pl.col("Word").first(), pl.col("IA_DWELL_TIME").mean().alias("rt"),
+          .group_by(["Text_ID", "IA_ID"])
+          .agg(pl.col("IA_LABEL").first().alias("Word"), pl.col("IA_DWELL_TIME").mean().alias("rt"),
                pl.col("Participant_ID").n_unique().alias("readers"))
-          .sort(["Text_ID", "Word_Number"]))
+          .with_columns(pl.col("Text_ID").cast(pl.Int64))
+          .sort(["Text_ID", "IA_ID"]))
     out = []
     for key, g in df.group_by("Text_ID", maintain_order=True):
         tid = key[0] if isinstance(key, tuple) else key

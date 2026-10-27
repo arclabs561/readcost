@@ -93,6 +93,9 @@ def predict(X: np.ndarray) -> np.ndarray:
     if not len(X):
         return out
     rows = np.arange(len(X))
+    # scikit-learn compares float32 features with float64 thresholds; do the
+    # same, or a value on a split goes down the other branch.
+    X = np.asarray(X, dtype=np.float32).astype(np.float64)
     for t in spec["trees"]:
         node = np.zeros(len(X), dtype=np.int64)
         while True:
