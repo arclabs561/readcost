@@ -812,9 +812,17 @@ source's answer is above the human answer and a Wilcoxon signed-rank p-value.
 | mistralai/mistral-large-4-0 | 54 | 316 (91%, p 2.2e-09) | 4.42 (40%, p 0.016) | 7.37 (40%, p 0.045) | 256 (94%, p 3.8e-10) | 92 (96%, p 3.2e-10) | 4% |
 
 The finding from the paired rewrites holds for answers written from scratch.
-All five current models write answers that take longer per word to read than
-the human answer to the same question (83 to 98% of questions), and longer in
-total, because they are 1.5 to 4 times as long. readcost's construction counts
+Four of the five current models write answers that take longer per word to
+read than the human answer to the same question, and all five take longer in
+total, because they are 1.5 to 4 times as long. The per-word figure depends on
+how the estimate treats paragraphs (see "Model signals" below): read paragraph
+by paragraph, as `readcost check` does, all five are slower in 83 to 98% of
+questions; read sentence by sentence (each answer's prose without Markdown,
+split at sentence ends, as `scripts/eval_model_signals.py` does), which does
+not depend on how a text is split into paragraphs, DeepSeek, Kimi, Grok and
+Mistral are slower in 74 to 94% and Gemini in 51%, about even with the human
+answers (no significance test was run). Gemini's answers
+have the most short paragraphs (median 21). readcost's construction counts
 do not separate them: cost index and findings per 1,000 words are lower than
 the human answers' or not different. The Wikipedia passages are dense; one in
 five does not pass. The 2022 ChatGPT answers read faster per word than the
@@ -885,25 +893,275 @@ check in the same script gives:
 | 20 | 4,398 | 4.41 | 0.045 |
 | 40 | 8,850 | 4.56 | 0.030 |
 
+## Sentence difficulty rated by people
+
+The first human ratings tested are CEFR-SP (Arase, Uchida and Kajiwara
+2022): English sentences that two English-education professionals each placed at a CEFR
+level from A1 to C2 (scored 1 to 6). Its public part has 7,406 Wikipedia
+sentences (Wiki-Auto, CC BY-SA 3.0) and 2,540 sentences written for learners
+(SCoRE, CC BY-NC-SA 4.0); the Newsela part needs a separate licence. The data
+planned first, Brunato et al. 2018, is behind a request form, and its English
+sentences come from the Wall Street Journal treebank under an LDC licence, so
+it was not used.
+
+`scripts/eval_sentence_ratings.py` checks each sentence alone and correlates
+each measure with the mean rating (Spearman's rho). "Partial" holds sentence
+length constant; "within bins" is the mean rho inside six length bins
+(readcost `f3871bb`). Wikipedia sentences, median 14 words; the two raters
+agree at rho 0.72:
+
+| Measure | Sentences with it | rho | Partial, length held | Within length bins |
+| --- | --- | --- | --- | --- |
+| words | all | +0.40 | - | +0.12 |
+| mean word length | all | +0.39 | +0.45 | +0.43 |
+| predicted ms per word | all | +0.09 | +0.39 | +0.38 |
+| any readcost finding | 5% | +0.08 | +0.04 | +0.02 |
+| stacked-nouns | 3% | +0.05 | +0.03 | +0.03 |
+| inline-list | 1% | +0.05 | +0.03 | +0.01 |
+| inanimate-subject | 1% | +0.03 | +0.01 | -0.00 |
+
+The other three rules fire on under 1% of these sentences. A flagged
+sentence is rated 0.13 points harder than unflagged sentences of the same
+length (387 matched, Wilcoxon p = 0.01, on a scale of 1 to 6). On the
+learners' sentences (median 8 words) only 1% are flagged and the
+same-length difference, +0.08, is not significant (29 matched, p = 0.47).
+
+The rules add a small, real signal beyond length on Wikipedia text, but they
+fire too rarely in single sentences to rank sentences by difficulty. The
+reading-time estimate adds far more beyond length (partial rho 0.39); most
+of that comes from word length, which it uses as a feature. This is the same
+picture as the CLEAR result above: readcost's rules are a list of
+constructions to reread, not a difficulty score.
+
+## Non-native writers
+
+Does readcost flag learners of English more than native writers? W&I+LOCNESS
+(BEA-2019 shared task) has 3,215 essays of 40 or more words submitted to
+Cambridge Write & Improve, each given a CEFR level, and 50 essays by native
+English students from LOCNESS. Both licences allow non-commercial research
+only, so the text stays local and only counts are reported.
+`scripts/eval_learner_essays.py` checks every essay, then again after
+applying the annotators' corrections. Findings per 1,000 words, readcost
+`f3871bb`:
+
+| Group | Essays | Words | Not passing | All rules | stack | dep | inan | rel | hyph | list |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| A (beginner) | 1,347 | 173,231 | 1% | 3.12 | 0.61 | 0.30 | 0.53 | 0.29 | 0.02 | 1.39 |
+| B (intermediate) | 1,099 | 228,759 | 1% | 2.92 | 0.61 | 0.35 | 0.45 | 0.20 | 0.01 | 1.29 |
+| C (advanced) | 769 | 198,856 | 1% | 3.05 | 0.74 | 0.38 | 0.57 | 0.25 | 0.02 | 1.10 |
+| native (LOCNESS) | 50 | 20,461 | 0% | 4.74 | 0.83 | 0.93 | 0.73 | 0.44 | 0.10 | 1.71 |
+| A, corrected | 1,348 | 172,941 | 1% | 2.31 | 0.39 | 0.19 | 0.36 | 0.14 | 0.02 | 1.21 |
+| C, corrected | 769 | 199,080 | 1% | 2.90 | 0.62 | 0.38 | 0.56 | 0.21 | 0.02 | 1.11 |
+
+Learners are flagged less than native students, at each of the levels A, B
+and C and for every rule; native essays have two to three times the
+long-dependency rate. readcost's
+rules count constructions that fluent writers build, so they are not biased
+against non-native writing on this data. Errors do add findings: corrections
+cut beginners' rate by a quarter (A, 3.12 to 2.31; A1, 3.75 to 2.20), mostly stacked nouns,
+inanimate subjects and object relatives, where a misspelling or missing word
+misleads the parser. Advanced learners' rates barely move (C, 3.05 to 2.90).
+Limits: 50 native essays, all by students, and essays are short (130 words on
+average at level A, 260 at C, 410 for native), so the cost index is 0 for
+most learner essays.
+
+## Human simplifications
+
+ASSET (Alva-Manchego et al. 2020, CC BY-NC 4.0) has 2,359 Wikipedia
+sentences, each simplified by ten crowd workers, who could paraphrase,
+delete and split. This is the human counterpart to the model rewrites above.
+`scripts/eval_simplifications.py` compares 23,280 pairs (original minus
+simplification, two-sided Wilcoxon):
+
+| Measure | Original median | Simplification median | Lower | Same | Higher | p |
+| --- | --- | --- | --- | --- | --- | --- |
+| words | 17 | 15 | 64% | 16% | 19% | <0.001 |
+| findings | 0 | 0 | 5% | 93% | 2% | <0.001 |
+| cost index | 0 | 0 | 6% | 89% | 5% | <0.001 |
+| predicted ms per word | 241 | 239 | 56% | 1% | 43% | <0.001 |
+
+| Rule | Per 1k words, original | Per 1k words, simplified | Present in original: removed | Absent in original: added |
+| --- | --- | --- | --- | --- |
+| long-dependency | 0.55 | 0.23 | 84% of 239 | 0.2% |
+| reduced-object-relative | 0.12 | 0.10 | 86% of 50 | 0.1% |
+| inanimate-subject | 0.29 | 0.36 | 65% of 127 | 0.4% |
+| stacked-nouns | 2.00 | 1.79 | 44% of 830 | 0.8% |
+| inline-list | 2.84 | 2.39 | 37% of 1,234 | 0.6% |
+| hyphen-compound | 0.07 | 0.08 | 20% of 30 | 0.0% |
+| all | 5.87 | 4.95 | 43% of 2,420 | 2.0% |
+
+People asked to simplify remove long dependencies and object relatives
+almost every time they occur, and the rate of findings per word falls by 16%.
+They keep most noun stacks and lists, many of which are names and
+established terms in Wikipedia text, and they add inanimate subjects slightly
+more than they remove them. Predicted reading time per word barely moves,
+because simplifications keep the rare content words. Unlike the model
+rewrites, human simplifications do lower the cost index, but the effect is
+in the 10% of pairs whose original had a finding.
+
+## Python Enhancement Proposals
+
+Specifications and design documents: `scripts/fetch_peps.py` takes the 401
+PEPs whose status is Final, Active or Accepted and whose text is in the
+public domain or under CC0 (22 more were skipped for licence), from
+python/peps at `362ca9d`. Both runs below are readcost `f3871bb`:
+
+| Category | Texts | Words | Pass | CI p50 / p90 | stack | dep | inan | rel | hyph | list |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| essays | 118 | 391,429 | 98% | 2.5 / 6.4 | 1.44 | 0.59 | 0.71 | 0.40 | 0.08 | 1.11 |
+| docs | 83 | 179,649 | 96% | 2.8 / 6.6 | 2.06 | 0.51 | 0.50 | 0.37 | 0.09 | 0.77 |
+| PEPs, standards track | 301 | 677,538 | 98% | 3.8 / 7.5 | 2.69 | 0.63 | 0.56 | 0.27 | 0.14 | 1.00 |
+| PEPs, informational | 65 | 90,441 | 89% | 4.5 / 13.0 | 2.68 | 0.46 | 0.64 | 0.23 | 0.11 | 1.18 |
+| PEPs, process | 35 | 62,239 | 100% | 4.1 / 7.1 | 2.22 | 0.82 | 0.42 | 0.19 | 0.22 | 1.35 |
+
+PEPs pass at the rate of essays and docs; stacked nouns and hyphen compounds
+run higher.
+The informational PEPs that do not pass are short release schedules and
+election notices (100 to 300 words), where two stacks are enough to reach
+"advise". Several of those stacks are false positives of one kind: a number
+joined to a unit by a hyphen ("17-month development period", "two-week
+nomination period") is split, and the unit is counted as a noun.
+
+## Per-rule benchmark
+
+`eval/rulebench/rulebench.jsonl` lists 116 real sentences, 18 to 21 per
+default rule, each labelled with whether the rule should fire. Expected-fire
+items are constructions an editor would change; expected-no-fire items are
+traps, most of them sentences some version of readcost has reported. The
+repository keeps references only: the source URL (PEPs at a pinned commit,
+SQLite docs, the Go blog and Effective Go, the Rust book, Django docs, GOV.UK
+guidance, two essays), its licence, the label and the SHA-256 of the sentence;
+the only text kept is readcost's own rule examples. `scripts/fetch_rulebench.py`
+downloads the sources and rebuilds the sentences by hash (all 116 rebuild);
+three items from an earlier draft could not be rebuilt and were dropped.
+
+Labels: 48 come from the majority of the strict model raters in the sections
+above, judging readcost's findings. The other 68 were first labelled by one
+maintainer, then all 116 were labelled blind by the six strict OpenRouter
+raters (`scripts/label_rulebench.py`), who saw only the rule's definition and
+the sentence. Counting a 3 to 3 split as a tie: of the 48 rater labels the
+blind majority agreed with 43, tied on 3 and disagreed with 2 (kept, with
+the votes recorded); of the 68 maintainer labels it agreed with 58, tied on 3,
+overturned 6 (which now carry the blind majority's label) and missed one rater
+on 1. Each item records its blind votes.
+
+`scripts/rulebench.py --bench` scores the current rules:
+
+| Rule | Items | Fire / no-fire | TP | FN | TN | FP | Precision | Recall | Silent on traps |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| hyphen-compound | 18 | 5 / 13 | 4 | 1 | 3 | 10 | 29% | 80% | 23% |
+| inanimate-subject | 20 | 6 / 14 | 6 | 0 | 5 | 9 | 40% | 100% | 36% |
+| inline-list | 18 | 10 / 8 | 10 | 0 | 2 | 6 | 62% | 100% | 25% |
+| long-dependency | 20 | 10 / 10 | 9 | 1 | 4 | 6 | 60% | 90% | 40% |
+| reduced-object-relative | 21 | 10 / 11 | 9 | 1 | 6 | 5 | 64% | 90% | 55% |
+| stacked-nouns | 19 | 8 / 11 | 8 | 0 | 2 | 9 | 47% | 100% | 18% |
+
+These numbers describe the bench, not the rules' precision on real text: the
+traps were picked from reported findings, so the bench is built to be hard on
+precision. Use it to compare two versions of a rule.
+
+## Model signals
+
+`scripts/eval_model_signals.py` computes signals from models that readcost
+does not use: surprisal (mean, maximum and standard deviation, in bits per
+token) and predictive entropy from two small language models of different
+families (SmolLM2-135M and GPT-2), a readability regressor
+(agentlans/deberta-v3-xsmall-readability, trained on FineWeb-Edu, TinyStories,
+Wikipedia and arXiv paragraphs), and a sentence CEFR classifier
+(AbdullahBarayan/ModernBERT-base-doc_sent_en-Cefr). The classifier's training
+data is not documented and may include CEFR-SP, so it is left out of that test.
+readcost's predicted ms per word is computed sentence by sentence.
+
+On the 7,453 Wiki-Auto sentences rated by teachers (CEFR-SP; length alone has
+rho +0.36):
+
+| Signal | rho | partial rho (length held) | mean rho within length bins |
+| --- | --- | --- | --- |
+| length in words | +0.36 | | |
+| SmolLM2-135M surprisal | +0.00 | +0.09 | +0.07 (5 bins) |
+| SmolLM2-135M max_surprisal | +0.15 | +0.10 | +0.08 (5 bins) |
+| SmolLM2-135M surprisal_sd | +0.13 | +0.17 | +0.15 (5 bins) |
+| SmolLM2-135M entropy | -0.12 | -0.00 | -0.05 (5 bins) |
+| gpt2 surprisal | -0.02 | +0.07 | +0.08 (5 bins) |
+| gpt2 max_surprisal | +0.25 | +0.20 | +0.19 (5 bins) |
+| gpt2 surprisal_sd | +0.24 | +0.25 | +0.24 (5 bins) |
+| gpt2 entropy | -0.21 | -0.11 | -0.09 (5 bins) |
+| readability grade | +0.58 | +0.48 | +0.47 (5 bins) |
+| readcost ms per word | +0.08 | +0.33 | +0.32 (5 bins) |
+
+The readability regressor tracks the teachers far better than anything readcost
+computes: partial rho +0.48, against +0.33 for readcost's predicted ms per word
+in this run. The sentence-ratings section above is a separate run
+(`scripts/eval_sentence_ratings.py`): it checks each sentence with readcost,
+keeps the 7,406 with three or more words, and uses readcost's word count as
+the length; it gives +0.39 for ms per word and +0.04 for readcost's findings.
+This script keeps all 7,453 sentences and counts whitespace words, which is why
+the two figures for ms per word differ. Among the language-model signals, how uneven the
+surprisal is (its standard deviation, the uniform information density idea)
+and the most surprising token track difficulty a little; mean surprisal and
+entropy do not.
+
+On 600 ASSET pairs, each original against its first human simplification:
+
+| Signal | Original median | Simplification median | Lower in the simplification | p |
+| --- | --- | --- | --- | --- |
+| SmolLM2-135M surprisal | 5.07 | 5.38 | 34% | 6.8e-24 |
+| SmolLM2-135M max_surprisal | 15.9 | 15.5 | 42% | 0.36 |
+| SmolLM2-135M surprisal_sd | 4.39 | 4.4 | 48% | 0.49 |
+| SmolLM2-135M entropy | 5.2 | 5.52 | 26% | 1.7e-38 |
+| gpt2 surprisal | 5.8 | 6.17 | 33% | 1.2e-26 |
+| gpt2 max_surprisal | 15.9 | 15.9 | 42% | 0.57 |
+| gpt2 surprisal_sd | 4.46 | 4.48 | 48% | 0.18 |
+| gpt2 entropy | 6.05 | 6.26 | 28% | 2.7e-32 |
+| readability grade | 11.7 | 8.51 | 91% | 3.2e-88 |
+| cefr_expected | 3.86 | 3 | 79% | 1.5e-48 |
+| cefr_entropy | 0.0171 | 0.0267 | 48% | 0.31 |
+| readcost ms per word | 243 | 239 | 56% | 0.015 |
+
+People's simplifications lower the readability grade in 91% of pairs and the
+CEFR level in 79%, but raise mean surprisal and entropy: plainer wording is not
+more predictable per token to these models.
+
+On the model and human answers to the same HC3 questions (each answer's prose,
+without Markdown), for selected signals:
+
+| Source | SmolLM2-135M surprisal | SmolLM2-135M max_surprisal | SmolLM2-135M surprisal_sd | SmolLM2-135M entropy | gpt2 surprisal | gpt2 max_surprisal | gpt2 surprisal_sd | gpt2 entropy | readability grade | cefr_expected | cefr_entropy | readcost ms per word |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| human | 3.82 | 18.5 | 3.7 | 3.85 | 4.57 | 18.2 | 4.08 | 4.74 | 16.3 | 5 | 0.00735 | 226 |
+| chatgpt-2022 | 2.19 (0%) | 14 (16%) | 2.52 (0%) | 2.94 (5%) | 3.07 (0%) | 18.1 (44%) | 3.18 (0%) | 4.25 (9%) | 13.8 (25%) | 4.01 (7%) | 0.0271 (65%) | 214 (31%) |
+| google/gemini-4-argon | 3.31 (17%) | 18.6 (47%) | 3.54 (30%) | 3.44 (13%) | 4.2 (17%) | 22.3 (85%) | 3.92 (34%) | 4.59 (26%) | 10.7 (4%) | 4.9 (9%) | 0.0102 (62%) | 228 (51%) |
+| deepseek/deepseek-v4.1-flash | 3.66 (44%) | 18 (46%) | 3.74 (46%) | 3.76 (44%) | 4.68 (56%) | 22.3 (85%) | 4.24 (69%) | 4.86 (56%) | 12.5 (10%) | 5 (17%) | 0.054 (60%) | 259 (94%) |
+| x-ai/grok-4.7 | 4.15 (75%) | 17.8 (45%) | 3.87 (61%) | 4 (69%) | 5.08 (90%) | 23.1 (90%) | 4.39 (80%) | 5.03 (65%) | 13.9 (24%) | 5 (24%) | 0.02 (49%) | 240 (75%) |
+| moonshotai/kimi-k3.1-pro | 3.74 (51%) | 17.6 (41%) | 3.69 (35%) | 3.76 (43%) | 4.7 (65%) | 23.3 (92%) | 4.25 (65%) | 4.86 (55%) | 13.6 (20%) | 4.99 (14%) | 0.0111 (59%) | 246 (84%) |
+| mistralai/mistral-large-4-0 | 3.76 (50%) | 18.6 (52%) | 3.76 (54%) | 3.8 (50%) | 4.59 (63%) | 21.4 (85%) | 4.1 (59%) | 4.87 (63%) | 15.8 (56%) | 5 (31%) | 0.0198 (59%) | 243 (74%) |
+
+The signals disagree. The readability regressor and the CEFR classifier rate
+most model answers easier than the human answers (dense Wikipedia passages),
+while readcost's predicted time per word is higher for four of the five
+models. A text can look easier to a classifier and still take longer to read;
+which one matches readers needs a study with people.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News
 and Stack Overflow discussion, code comments from two standard libraries, Go
-commit messages, model rewrites of human paragraphs, and two reading-time and
-two difficulty datasets. Not covered:
+commit messages, model rewrites of human paragraphs, two reading-time and
+two difficulty datasets, sentence ratings by teachers, learner essays, human
+simplifications and PEPs. Not covered:
 
 - Agent replies and Claude Code transcripts (chat answers to questions are
   above).
-- Human judgment: every label here comes from model raters, which agree only
-  modestly (Fleiss' kappa 0.23 over ten, 0.40 over eight). No study has
-  checked that readers understand a rewrite faster or better.
+- Human labels of findings: every finding label here comes from model raters,
+  which agree only modestly (Fleiss' kappa 0.23 over ten, 0.40 over eight).
+  The human data above rates sentences or rewrites them, not readcost's
+  findings. No study has checked that readers understand a rewrite faster or
+  better.
 - Issue threads (pull request descriptions and review comments are above).
 - API references, docstrings at scale, man pages, CLI help and error messages.
-- Changelogs, release notes, design documents, ADRs and specifications.
+- Changelogs, release notes, ADRs, and design documents other than PEPs.
 - Commit messages outside the Go project's conventions.
-- Writing by non-native English writers. Limits warns against treating
-  findings as markers of authorship, but the rates in such writing are not
-  measured.
+- Professional writing by non-native writers: the learner essays above are
+  short student essays.
 - Reading time on technical prose: the model was fitted and tested on
   newspaper, popular-science and fiction passages.
 
