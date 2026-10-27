@@ -214,3 +214,239 @@ def test_readme_format_from_file_name():
     assert readmes.readme_format("README.md") == "markdown"
     assert readmes.readme_format("README.rst") == "rst"
     assert readmes.readme_format("README") == "text"
+
+
+se = load("fetch_stackexchange")
+design = load("fetch_design_docs")
+mdn = load("fetch_mdn")
+man = load("fetch_man_pages")
+releases = load("fetch_release_notes")
+
+
+def test_se_html_drops_code_blocks_and_quotes_and_keeps_inline_code():
+    body = ("<p>Use <code>ls -l</code> to list\nfiles.</p>\n<pre><code>ls -l /tmp\n</code></pre>\n"
+            "<blockquote><p>Quoted text.</p></blockquote>\n<ul>\n<li>First item.</li>\n<li>Second &amp; last.</li>\n</ul>")
+    assert se.html_to_text(body) == "Use `ls -l` to list files.\n\nFirst item.\n\nSecond & last.\n"
+
+
+def test_se_tex_becomes_math_token_only_on_math_sites():
+    body = "<p>Let $x_n$ tend to $$0$$ fast.</p>"
+    assert se.html_to_text(body, math=True) == "Let [MATH] tend to [MATH] fast.\n"
+    assert "$x_n$" in se.html_to_text(body)
+
+
+def test_se_prose_words_skip_inline_code():
+    assert se.prose_words("Run `make all now` and wait.") == 3
+
+
+def test_se_revisions_pair_first_with_last_and_skip_vote_events():
+    revs = [{"post_id": 1, "revision_number": 2, "body": "b"}, {"post_id": 1, "revision_number": 3, "body": "c"},
+            {"post_id": 1, "revision_number": 1, "body": "a"}, {"post_id": 1, "revision_type": "vote_based"},
+            {"post_id": 2, "revision_number": 1, "body": "only"},
+            {"post_id": 3, "revision_number": 4, "body": "x"}, {"post_id": 3, "revision_number": 5, "body": "y"}]
+    pairs = se.pair_revisions(revs)
+    assert list(pairs) == [1]
+    assert (pairs[1][0]["body"], pairs[1][1]["body"]) == ("a", "c")
+
+
+def test_design_doc_cleaning_drops_comments_toc_checklists_and_header_metadata():
+    md = ("# Proposal: widgets\n\nAuthor(s): Someone\n\nLast updated: 2020-01-01\n\n<!-- toc -->\n- [Summary](#summary)\n"
+          "<!-- /toc -->\n\n## Summary\n\n<!--\nTemplate advice.\n-->\nWidgets help.\n\n- [ ] Approved\n- [x] Tested\n\n"
+          "```\nauthor: kept in code\n```\n")
+    assert design.clean_design_doc(md) == ("# Proposal: widgets\n\n## Summary\n\nWidgets help.\n\n"
+                                           "```\nauthor: kept in code\n```\n")
+
+
+def test_design_doc_start_date_and_even_spacing():
+    assert design.start_date("- Start Date: 2015-03-04\n- RFC PR: x") == "2015-03-04"
+    assert design.start_date("no header") is None
+    assert design.evenly(list(range(10)), 4) == [0, 3, 6, 9]
+    assert design.evenly([1, 2], 5) == [1, 2]
+
+
+def test_mdn_front_matter_is_split_from_the_body():
+    meta, body = mdn.split_front_matter('---\ntitle: "Widget"\nslug: Web/API/Widget\npage-type: web-api-interface\n'
+                                        "browser-compat: api.Widget\n---\n\nBody.\n")
+    assert meta["page-type"] == "web-api-interface" and meta["slug"] == "Web/API/Widget"
+    assert body == "\nBody.\n"
+
+
+def test_mdn_macros_resolve_to_display_text_and_reference_sections_drop():
+    body = ('{{APIRef("Widgets")}}\n\nThe {{domxref("Widget.spin", "spin()")}} method of {{domxref("Widget")}} '
+            'turns a {{Glossary("widget")}}.{{experimental_inline}}\n\n> [!NOTE]\n> Spin gently.\n\n'
+            "## Specifications\n\n{{Specifications}}\n\n## Browser compatibility\n\n{{Compat}}\n\n## See also\n\n- A link\n")
+    assert mdn.clean_mdn(body) == "The spin() method of Widget turns a widget.\n\n> Spin gently.\n"
+
+
+@pytest.mark.parametrize("page_type, group", [
+    ("guide", "guide"), ("learn-module-chapter", "guide"), ("learn-module-assessment", "guide"), ("tutorial-chapter", "guide"),
+    ("web-api-interface", "reference"), ("css-property", "reference"), ("landing-page", None), ("", None),
+])
+def test_mdn_page_type_groups(page_type, group):
+    assert mdn.group_of(page_type) == group
+
+
+def test_mdn_guide_paths():
+    assert mdn.is_guide_path("web/css/guides/flexbox/index.md")
+    assert mdn.is_guide_path("learn_web_development/core/styling/index.md")
+    assert not mdn.is_guide_path("web/api/widget/index.md")
+
+
+@pytest.mark.parametrize("header, expected", [
+    ('.\\" SPDX-License-Identifier: Linux-man-pages-copyleft\n', "Linux-man-pages-copyleft"),
+    ('.\\" Permission to use, copy, modify, and distribute this software for any\n.\\" purpose\n', "ISC"),
+    (('.\\" Redistribution and use in source and binary forms, with or without\n.\\" 1. Kept.\n.\\" 2. Kept.\n'
+      '.\\" 3. Neither the name\n'), "BSD-3-Clause"),
+    ('.\\" Redistribution and use in source and binary forms\n.\\" 1. Kept.\n.\\" 2. Kept.\n', "BSD-2-Clause"),
+    ('.\\" Redistribution and use in source and binary forms\n.\\" 3. All advertising materials mentioning\n',
+     "BSD-4-Clause"),
+    ('.\\" This file is in the public domain.\n', "public domain"),
+    ('.\\" Copyright someone. All rights reserved.\n', None),
+])
+def test_man_page_licence_classification(header, expected):
+    assert man.page_licence(header + ".Dd today\n") == expected
+
+
+def test_man_description_section_is_unwrapped_into_paragraphs():
+    rendered = ("WIDGET(1)    General Commands Manual    WIDGET(1)\n\nNAME\n     widget - spin widgets\n\n"
+                "DESCRIPTION\n     The widget utility spins\n     widgets.\n\n     -f      Spin fast.\n\n"
+                "EXIT STATUS\n     0 on success.\n")
+    assert man.description(rendered) == "The widget utility spins widgets.\n\n-f      Spin fast.\n"
+    assert man.description("NAME\n     x\n") == ""
+
+
+@pytest.mark.skipif(__import__("shutil").which("mandoc") is None, reason="needs mandoc")
+def test_man_render_with_mandoc_keeps_description():
+    src = (b".Dd January 1, 2020\n.Dt WIDGET 1\n.Os\n.Sh NAME\n.Nm widget\n.Nd spin widgets\n"
+           b".Sh DESCRIPTION\nThe\n.Nm\nutility spins widgets\nquickly.\n.Sh EXIT STATUS\nZero.\n")
+    assert man.description(man.render(src)) == "The widget utility spins widgets quickly.\n"
+
+
+def test_release_generated_detection():
+    assert releases.is_generated("## What's Changed\n* Fix by @a in https://x/pull/1\n")
+    assert releases.is_generated("Notes.\n\n**Full Changelog**: https://x/compare/a...b\n")
+    assert not releases.is_generated("## Highlights\n\nWidgets now spin.\n")
+
+
+def test_release_cleaning_keeps_titles_and_drops_link_only_lines_and_contributors():
+    body = ("## What's Changed\r\n* Make widgets spin by @alice in https://github.com/o/r/pull/12\r\n"
+            "* https://github.com/o/r/pull/13\r\n* #14\r\n- abc1234 (@bob)\r\nThanks @carol for the review.\r\n\r\n"
+            "## New Contributors\r\n* @dave made their first contribution in https://github.com/o/r/pull/9\r\n\r\n"
+            "**Full Changelog**: https://github.com/o/r/compare/v1...v2\r\n")
+    assert releases.clean_release(body) == "## What's Changed\n* Make widgets spin\nThanks  for the review.\n"
+
+
+domains = load("fetch_domains")
+
+
+def test_gutenberg_body_keeps_only_the_text_between_start_and_end():
+    book = ("Header about the project and its licence.\n"
+            "*** START OF THE PROJECT GUTENBERG EBOOK A MADE-UP BOOK ***\n\nThe story.\n\n"
+            "*** END OF THE PROJECT GUTENBERG EBOOK A MADE-UP BOOK ***\nLicence text.\n")
+    assert domains.gutenberg_body(book).strip() == "The story."
+    assert domains.gutenberg_body("No markers here.") is None
+
+
+def test_gutenberg_paragraphs_are_unwrapped_and_headings_dropped():
+    body = ("CHAPTER ONE\n\nThe widget maker walked down\nthe long road to the market _every_ day\n"
+            "and sold what he made there.\n\n* * *\n\nShort line.\n")
+    assert domains.unwrap_paragraphs(body) == [
+        "The widget maker walked down the long road to the market every day and sold what he made there."]
+
+
+def test_passages_are_whole_paragraph_runs_within_the_word_range():
+    import random
+
+    paras = [" ".join(["word"] * 100) for _ in range(60)]
+    got = domains.passages(paras, random.Random(1), 3)
+    assert len(got) == 3
+    assert all(400 <= len(p.split()) <= 800 for p in got)
+    assert all(p.count("\n\n") == 3 for p in got)          # four paragraphs of 100 words
+
+
+@pytest.mark.parametrize("row, expected", [
+    ({"Language": "en", "Type": "Text", "LoCC": "PR", "Authors": "Doe, Jane, 1800-1870",
+      "Subjects": "England -- Fiction"}, "novel"),
+    ({"Language": "en", "Type": "Text", "LoCC": "PS", "Authors": "Roe, Al, 1850-1920",
+      "Subjects": "American essays"}, "essay"),
+    ({"Language": "en", "Type": "Text", "LoCC": "PS", "Authors": "Roe, Al, 1850-1920",
+      "Subjects": "Essays; Nature"}, "essay"),
+    ({"Language": "en", "Type": "Text", "LoCC": "PR", "Authors": "Doe, Jane, 1900-1980",
+      "Subjects": "Fiction"}, None),                                     # died too late
+    ({"Language": "fr", "Type": "Text", "LoCC": "PQ", "Authors": "Doe, Jean, 1800-1870",
+      "Subjects": "Fiction"}, None),
+    ({"Language": "en", "Type": "Text", "LoCC": "PR", "Authors": "Doe, Jane, 1800-1870",
+      "Subjects": "Juvenile fiction"}, None),
+])
+def test_literature_eligibility(row, expected):
+    assert domains.literature_kind(row) == expected
+
+
+def test_wikinews_extract_drops_dateline_headings_and_sources():
+    raw = "Monday, March 1, 2010\n\nLead paragraph.\n\n== Details ==\nMore.\n\n== Sources ==\nA source\n"
+    assert domains.clean_wiki(raw, dateline=True) == "Lead paragraph.\n\nMore.\n"
+
+
+@pytest.mark.parametrize("section, topic", [
+    ("History", "history"), ("Warfare", "history"), ("Paintings", "arts"), ("Music", "arts"),
+    ("Music biographies", "biography"), ("Biographies (art, architecture, and archaeology)", "biography"),
+    ("Biology", None), ("Video gaming", None),
+])
+def test_featured_article_sections_map_to_topics(section, topic):
+    assert domains.featured_topic(section) == topic
+
+
+def test_federal_register_text_starts_at_supplementary_information():
+    raw = ("<html><pre>[Federal Register Volume 1]\nSUMMARY: Not wanted.\n\n"
+           "SUPPLEMENTARY INFORMATION: The agency made\na rule about widgets.\n"
+           "    A second paragraph\n[[Page 12]]\ncontinues here.\n\n"
+           "-----\n\nBILLING CODE 1234-56-P\nTrailing.</pre></html>")
+    assert domains.federal_register_text(raw) == (
+        "The agency made a rule about widgets.\n\nA second paragraph continues here.")
+
+
+def test_uk_notes_text_elements_in_order():
+    xml = (b'<EN xmlns="http://www.legislation.gov.uk/namespaces/legislation" '
+           b'xmlns:dc="http://purl.org/dc/elements/1.1/"><Metadata><dc:title>Notes to a Made-up Act</dc:title>'
+           b'</Metadata><P><Text>These notes relate to\n the Act.</Text></P><P><Text>Second <Emphasis>one</Emphasis>.'
+           b'</Text></P></EN>')
+    assert domains.uk_notes_paragraphs(xml) == ("Notes to a Made-up Act", ["These notes relate to the Act.", "Second one."])
+
+
+def test_only_a_single_lead_opinion_is_taken():
+    lead = {"type": "020lead", "opinion_text": "The court holds."}
+    assert domains.lead_opinion({"opinions": [lead, {"type": "040dissent", "opinion_text": "No."}]}) == lead
+    assert domains.lead_opinion({"opinions": [{"type": "010combined", "opinion_text": "All."}]}) is None
+    assert domains.lead_opinion({"opinions": [lead, lead]}) is None
+
+
+def test_cap_paragraphs_stops_at_the_first_paragraph_end_past_the_cap():
+    paras = ["one two three", "four five", "six seven eight", "nine"]
+    assert domains.cap_paragraphs(paras, 4) == ["one two three", "four five"]
+
+
+def test_medline_topics_keep_english_summaries():
+    xml = (b'<health-topics><health-topic id="1" title="Widgets" url="https://example.invalid/w" language="English">'
+           b'<full-summary>&lt;p&gt;About widgets.&lt;/p&gt;</full-summary></health-topic>'
+           b'<health-topic id="2" title="Widgets" language="Spanish"><full-summary>x</full-summary></health-topic>'
+           b'</health-topics>')
+    assert domains.medline_topics(xml) == [
+        {"id": "1", "title": "Widgets", "url": "https://example.invalid/w", "summary": "<p>About widgets.</p>"}]
+
+
+def test_openalex_abstract_is_rebuilt_in_word_order():
+    index = {"Abstract": [0], "Widgets": [1], "are": [2, 5], "small.": [3], "They": [4], "useful.": [6]}
+    assert domains.rebuild_abstract(index) == "Widgets are small. They are useful."
+    assert domains.rebuild_abstract(None) == ""
+
+
+def test_federal_register_text_without_supplementary_information_starts_after_the_header_rule():
+    raw = ("<html><head><title>Federal Register, Volume 1</title></head><pre>[Federal Register Volume 1]\n"
+           "[Notices]\n\n" + "-" * 40 + "\n\nDEPARTMENT OF WIDGETS\n\nThe department asks for comments.\n</pre></html>")
+    assert domains.federal_register_text(raw) == "DEPARTMENT OF WIDGETS\n\nThe department asks for comments."
+
+
+def test_opinion_paragraphs_drop_star_page_markers():
+    text = "The court affirms the ruling below.\n*2Plaintiffs sued the widget company for damages.\n"
+    assert domains.opinion_paragraphs(text) == ["The court affirms the ruling below.",
+                                                 "Plaintiffs sued the widget company for damages."]
