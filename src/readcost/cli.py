@@ -359,10 +359,12 @@ def _collect(args, cfg, analyzer) -> tuple[list, bool]:
         raise ValueError("--per-record cannot be combined with --last or --lines")
     opts = (args.format, args.per_record, args.field, args.last, parse_line_ranges(_line_spec(args.lines)))
 
-    results, failed = [], False
+    # Every input in order: stdin text, or a file. Files from all paths are
+    # checked together, so many file arguments use the pool as a directory does.
+    inputs: list = []
     for path in args.paths or ["-"]:
         if path == "-":
-            results.extend(_check_one(analyzer, opts, sys.stdin.read(), "-", args.stdin_name))
+            inputs.append(("-", sys.stdin.read()))
             continue
         if Path(path).is_dir():
             # --per-record also takes JSONL, which [readcost.src] include leaves out.
@@ -371,24 +373,29 @@ def _collect(args, cfg, analyzer) -> tuple[list, bool]:
                                               and not cfg.excluded(str(p)))]
             if not files:
                 print(f"readcost: {path}: no files matched [readcost.src] include", file=sys.stderr)
-        elif args.force_exclude and cfg.excluded(path):
-            files = []
-        else:
-            files = [Path(path)]
-        jobs = _jobs(getattr(args, "jobs", 1), len(files))
-        if jobs > 1:
-            from concurrent.futures import ProcessPoolExecutor
+            inputs.extend(files)
+        elif not (args.force_exclude and cfg.excluded(path)):
+            inputs.append(Path(path))
+    files = [x for x in inputs if isinstance(x, Path)]
+    jobs = _jobs(getattr(args, "jobs", 1), len(files))
+    if jobs > 1:
+        from concurrent.futures import ProcessPoolExecutor
 
-            with ProcessPoolExecutor(jobs, initializer=_init_worker,
-                                     initargs=(analyzer.cfg, analyzer.profile, opts)) as pool:
-                done = list(pool.map(_work, files, chunksize=4))
-        else:
-            done = (_read_and_check(analyzer, opts, p) for p in files)
-        for p, (out, error) in zip(files, done):
-            if error is not None:
-                failed = True
-                print(f"readcost: {p}: {error}", file=sys.stderr)
-            results.extend(out)
+        with ProcessPoolExecutor(jobs, initializer=_init_worker,
+                                 initargs=(analyzer.cfg, analyzer.profile, opts)) as pool:
+            checked = iter(pool.map(_work, files, chunksize=4))
+    else:
+        checked = (_read_and_check(analyzer, opts, p) for p in files)
+    results, failed = [], False
+    for x in inputs:
+        if not isinstance(x, Path):
+            results.extend(_check_one(analyzer, opts, x[1], "-", args.stdin_name))
+            continue
+        out, error = next(checked)
+        if error is not None:
+            failed = True
+            print(f"readcost: {x}: {error}", file=sys.stderr)
+        results.extend(out)
     return results, failed
 
 

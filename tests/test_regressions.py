@@ -415,3 +415,16 @@ def test_parallel_check_matches_the_sequential_check(tmp_path):
     assert one.returncode == two.returncode == 0
     assert json.loads(one.stdout) == json.loads(two.stdout)
     assert len(json.loads(two.stdout)) == PARALLEL_MIN_FILES
+
+
+def test_many_file_arguments_are_checked_in_parallel_in_order(tmp_path):
+    from readcost.cli import PARALLEL_MIN_FILES
+
+    names = [f"doc{i:02}.md" for i in range(PARALLEL_MIN_FILES)]
+    for i, n in enumerate(names):
+        (tmp_path / n).write_text(DENSE if i % 2 else PLAIN)
+    args = ["check", "-o", "json", "--fail-on", "never"]
+    one = run_cli([*args, "-j", "1", *reversed(names)], cwd=tmp_path)
+    two = run_cli([*args, "-j", "2", *reversed(names)], cwd=tmp_path)
+    assert json.loads(one.stdout) == json.loads(two.stdout)
+    assert [r["path"] for r in json.loads(two.stdout)] == list(reversed(names))
