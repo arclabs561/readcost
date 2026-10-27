@@ -14,8 +14,8 @@ readcost setup
 - It checks a document when you open it, when you save it, and half a second
   after you stop typing.
 - It reads the same `readcost.toml` that `readcost check` reads, found by
-  walking up from the document's directory. `hooks.paths` and `hooks.exclude`
-  choose the files it checks, so a file outside `hooks.paths` gets no
+  walking up from the document's directory. `[readcost.src]` `include` and
+  `exclude` choose the files it checks, so a file outside `include` gets no
   diagnostics. The globs are matched against the path relative to the config
   file's directory.
 - It picks the format from the file name, as `readcost check` does: Markdown

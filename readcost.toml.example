@@ -6,8 +6,6 @@ profile = "default"             # or a JSON file from `readcost profile build`, 
 baseline = ""                   # a file from `readcost baseline`, relative to this file; findings in it do not count
 min_severity = "info"           # info | warn | error: drop findings below this
 advise_severity = "error"       # info | warn | error | off: any finding this severe makes the verdict "advise"
-enable = []                     # e.g. ["long-sentence"]
-disable = []                    # e.g. ["reduced-object-relative"]
 allow = []                      # phrases never flagged, e.g. ["write-ahead log", "Block-Max WAND"]
 comments = "doc"                # source files: "doc" comments only, or "all"
 advise_cost_index = 15.0        # verdict "advise" at this many weighted findings per 1k words
@@ -26,14 +24,33 @@ long_dependency_core_always = 15 # long-dependency: that many words is reported 
 inline_list_min_items = 4       # inline-list: this many conjoined items
 long_sentence_words = 32        # long-sentence (opt-in): more than this many words
 feedback_link = true            # text and agent output end with a link to report a wrong finding
+overrides = []                  # [[readcost.overrides]] tables: per-path rule levels (see below)
+
+# Rule levels: "error", "warn" or "info" turns a rule on at that severity
+# (opt-in rules too); "ignore" turns it off. "all" sets every rule. Unlisted
+# rules keep their default: on or off, at the detector's own severity.
+[readcost.rules]
+# stacked-nouns = "error"
+# long-sentence = "info"
+# hyphen-compound = "ignore"
+
+# Per-path levels, applied in order after [readcost.rules]:
+# [[readcost.overrides]]
+# include = ["CHANGELOG.md", "docs/adr/*"]
+# exclude = []
+# rules = { inline-list = "ignore" }
+
+[readcost.src]
+include = ["*.md", "*.markdown", "*.mdx", "*.rst", "*.txt", "COMMIT_EDITMSG"]
+exclude = ["CHANGELOG*", "*/node_modules/*", "*/target/*", "*/.git/*", "*/vendor/*",
+           "*/.venv/*", "*/venv/*", "*/.tox/*"]
+extend_exclude = []             # added to exclude, keeping the defaults above
+respect_ignore_files = true     # skip what .gitignore and other git ignore files exclude
 
 [readcost.hooks]
 mode = "advise"                 # off | advise | block
 stop = "off"                    # off | report | revise   (Claude Code Stop hook)
 display = "off"                 # off | note             (Claude Code MessageDisplay)
-paths = ["*.md", "*.markdown", "*.mdx", "*.rst", "*.txt", "COMMIT_EDITMSG"]
-exclude = ["CHANGELOG*", "*/node_modules/*", "*/target/*", "*/.git/*", "*/vendor/*",
-           "*/.venv/*", "*/venv/*", "*/.tox/*"]
 edited_lines_only = true        # judge only the lines an edit touched
 max_items = 8                   # findings sent back to a model
 max_chars = 2500

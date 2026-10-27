@@ -177,7 +177,8 @@ rules derived from where those constructions show up in technical writing. A
 hyphenated word counts as one noun, so "storage-shrink job" is a hyphen
 compound, not three stacked nouns. The other opt-in three are constructions
 that language models use more often than people (Reinhart et al. 2025; Shaib
-et al. 2024). Turn any opt-in rule on with `--enable`. `long-sentence` is also
+et al. 2024). Turn any opt-in rule on with a level, such as `--info
+nominalization` or `nominalization = "info"` under `[readcost.rules]`. `long-sentence` is also
 available but off by default. `readcost explain` prints why each one costs the
 reader and how to fix it. When a long-dependency or inline-list
 sentence gives a reason (because, since, so that, otherwise), the suggestion
@@ -327,13 +328,43 @@ Put a `readcost.toml` at the repository root, or a `[tool.readcost]` table in
 useful ones:
 
 - `allow`: phrases never flagged, such as product names or terms of art.
-- `disable` and `enable`: turn features off or on.
+- `[readcost.rules]`: a level per rule, as in ty. `"error"`, `"warn"` or
+  `"info"` turns a rule on at that severity (opt-in rules too); `"ignore"`
+  turns it off; `all` sets every rule. An unlisted rule keeps its default.
+- `[[readcost.overrides]]`: rule levels for files matching `include` globs
+  and not `exclude` globs, applied in order after `[readcost.rules]`.
+- `[readcost.src]`: `include` and `exclude` globs choose the files that
+  `readcost check DIR`, the hooks and the language server read;
+  `extend_exclude` adds to the default excludes; `respect_ignore_files`
+  (default on) skips what `.gitignore` excludes.
 - `advise_severity`: the verdict is at least `advise` when any finding reaches
   this severity; `off` turns that rule off.
 - `profile`: a relative path is read from the config file's directory.
 - `hooks.mode`: `off`, `advise` or `block`.
 - `feedback_link`: `false` drops the line that text and agent output end
   with, which points to the false-positive form.
+
+```toml
+[readcost.rules]
+stacked-nouns = "error"
+hyphen-compound = "ignore"
+nominalization = "info"
+
+[[readcost.overrides]]
+include = ["CHANGELOG.md", "docs/adr/*"]
+rules = { inline-list = "ignore" }
+
+[readcost.src]
+extend_exclude = ["docs/generated/*"]
+```
+
+The same choices are flags: `--error`, `--warn`, `--info` and `--ignore` take
+a rule name (repeat them, or `all`), `--exclude GLOB` adds an exclude,
+`--force-exclude` applies the excludes to files named on the command line,
+`--no-respect-ignore-files` reads ignored files too, and `--exit-zero` never
+fails on findings. Flags win over the config file. The older `enable`,
+`disable`, `hooks.paths` and `hooks.exclude` keys still work and print a
+warning naming the newer key; they will be removed at version 1.0.
 
 readcost warns about unknown keys and stops with exit code 2 on a value of the
 wrong type or outside its choices, naming the file and the key.

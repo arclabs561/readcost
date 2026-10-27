@@ -7,6 +7,21 @@ configuration.
 
 ## [Unreleased]
 
+### Added
+
+- Rule levels as in ty: `[readcost.rules]` sets each rule to `error`, `warn`,
+  `info` or `ignore` (`all` for every rule), `[[readcost.overrides]]` sets them
+  per path, and `--error`, `--warn`, `--info` and `--ignore` set them from the
+  command line.
+- `[readcost.src]` with `include`, `exclude`, `extend_exclude` and
+  `respect_ignore_files`, and the flags `--exclude`, `--force-exclude`,
+  `--no-respect-ignore-files` and `--exit-zero`.
+
+### Deprecated
+
+- `enable`, `disable`, `hooks.paths` and `hooks.exclude` still work, with a
+  warning naming the newer key; they will be removed at 1.0.
+
 ### Changed
 
 - long-dependency reports a subject, object or attribute far from its verb

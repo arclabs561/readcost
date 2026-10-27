@@ -123,7 +123,7 @@ to your settings:
 
 Either way `readcost` must be on the PATH that Claude Code runs hooks with.
 Matchers filter by tool name only; readcost filters paths itself using
-`hooks.paths` and `hooks.exclude`.
+`[readcost.src]` `include` and `exclude`.
 
 ### piku
 
