@@ -9,6 +9,10 @@ configuration.
 
 ### Added
 
+- `readcost style FILES --against NAME` compares rule rates, sentence length and
+  predicted reading time with a reference; built-in references for the Rust
+  book, Go, Python, Django, SQLite and Stripe docs, GOV.UK guidance, READMEs and
+  essays. Profiles now record predicted ms per word and words per sentence.
 - Text that is clearly not English gets a note instead of findings and a
   reading time, which would be meaningless (`language_check`).
 - Rule levels as in ty: `[readcost.rules]` sets each rule to `error`, `warn`,

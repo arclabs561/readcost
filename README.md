@@ -301,6 +301,37 @@ readcost profile build path/to/good/*.md -o myprofile.json --name mine
 readcost check --profile myprofile.json README.md
 ```
 
+### Comparing with a style you know
+
+`readcost style` compares a document set with a reference: words per
+sentence, predicted reading time, and each rule's rate per 1,000 words, and
+marks a rule at least twice as frequent as in the reference (with three or
+more findings). Built-in references, measured on readcost's evaluation corpus
+(numbers only): `rust-book`, `go-docs`, `python-docs`, `django-docs`,
+`sqlite-docs`, `stripe-docs`, `govuk`, `readmes` and `essays`; `readcost
+style --list` describes them, and `--against` also takes a profile file from
+`readcost profile build`. For an earlier version of this README against the Go docs:
+
+```text
+$ readcost style README.md --against go-docs
+1 file(s), 2,301 words, against go-docs: 19 texts from Effective Go and the Go blog, fetched for readcost's evaluation corpus
+
+                                         yours       go-docs  ratio
+words per sentence                       17.70         17.50  1.0x
+predicted ms per word                   213.54        200.70  1.1x
+hyphen-compound per 1k words              0.87          0.05  17.7x
+inanimate-subject per 1k words            0.00          0.30  0.0x
+inline-list per 1k words                  2.17          0.82  2.7x  much higher
+long-dependency per 1k words              0.43          0.35  1.3x
+reduced-object-relative per 1k words      0.00          0.35  0.0x
+stacked-nouns per 1k words                0.43          1.53  0.3x
+```
+
+A rate far above the reference is a prompt to look at those sentences, not a
+verdict. These rates differ by genre (Reinhart et al. 2025 compare model and
+human text within each genre for that reason), so compare with a reference of
+the same kind of text.
+
 ## Predicted reading time
 
 Each whole-document check also reports a predicted reading time, for example

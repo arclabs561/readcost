@@ -24,6 +24,9 @@ class Profile:
     rates: dict[str, float] = field(default_factory=dict)
     sources: list[str] = field(default_factory=list)
     note: str = ""
+    # Measured over the same documents; None in profiles built before 0.3.
+    reading_ms_per_word: float | None = None
+    words_per_sentence: float | None = None
 
     def to_json(self) -> str:
         d = asdict(self)
@@ -50,10 +53,19 @@ class Profile:
         return cls(**kept)
 
 
+def builtin_profiles() -> list[str]:
+    """Names of the reference profiles shipped in readcost/data/profiles."""
+    return sorted(p.name.removesuffix(".json") for p in resources.files("readcost").joinpath("data/profiles").iterdir()
+                  if p.name.endswith(".json"))
+
+
 def load_profile(spec: str = "default") -> Profile:
     if spec in ("default", ""):
         data = resources.files("readcost").joinpath("data/default_profile.json").read_text()
         return Profile.from_dict(json.loads(data), "default profile")
+    if spec in builtin_profiles():
+        data = resources.files("readcost").joinpath(f"data/profiles/{spec}.json").read_text()
+        return Profile.from_dict(json.loads(data), f"built-in profile {spec}")
     try:
         data = json.loads(Path(spec).read_text())
     except json.JSONDecodeError as exc:
@@ -85,6 +97,7 @@ def build_profile(paths: list[str], name: str, analyzer_factory, fmt: str | None
     points: list[tuple[int, float]] = []
     counts: dict[str, int] = {}
     words = sentences = 0
+    timed_words, timed_ms = 0.0, 0.0
     for p in paths:
         text = Path(p).read_text(encoding="utf-8", errors="ignore")
         for seg in extract(text, p, fmt, comments=analyzer.cfg.comments):
@@ -102,8 +115,14 @@ def build_profile(paths: list[str], name: str, analyzer_factory, fmt: str | None
         result = analyzer.check_file(p, fmt)
         words += result.words
         sentences += result.sentences
+        if result.reading_seconds is not None and result.reading_ms_per_word:
+            # Reading time counts whitespace words, not the alphabetic words above.
+            timed_ms += 1000 * result.reading_seconds
+            timed_words += 1000 * result.reading_seconds / result.reading_ms_per_word
         for f in result.findings:
             counts[f.feature] = counts.get(f.feature, 0) + 1
     profile.words, profile.sentences = words, sentences
     profile.rates = {k: round(1000.0 * v / words, 3) for k, v in sorted(counts.items())} if words else {}
+    profile.reading_ms_per_word = round(timed_ms / timed_words, 1) if timed_words else None
+    profile.words_per_sentence = round(words / sentences, 1) if sentences else None
     return profile
