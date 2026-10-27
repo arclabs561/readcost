@@ -8,7 +8,7 @@ from pathlib import Path
 
 from . import lexicon, readtime
 from .baseline import load_baseline
-from .config import Config, load_config, severity_rank
+from .config import SEVERITIES, Config, load_config, severity_rank
 from .extract import Segment, detect_format, extract
 from .features import (
     FEATURES,
@@ -103,8 +103,8 @@ class Analyzer:
         self.cfg = config or load_config()
         self.profile = profile or load_profile(self.cfg.profile)
         self._nlp = None
-        enabled = {k for k, f in FEATURES.items() if f.default} | set(self.cfg.enable)
-        self.enabled = enabled - set(self.cfg.disable)
+        # Rules on for a file with no path-specific override; analyze() resolves per path.
+        self.enabled = {k for k, v in self.cfg.rule_levels().items() if v != "ignore"}
         self.allow = {a.lower() for a in lexicon.DEFAULT_ALLOW} | {a.lower() for a in self.cfg.allow}
         self.baseline = load_baseline(self.cfg.baseline) if self.cfg.baseline else None
 
@@ -134,7 +134,10 @@ class Analyzer:
                 budget=None) -> Result:
         """``budget``: baselined keys left for this file, shared when one file yields several results."""
         result = Result(path=path)
-        ctx = Context(self.cfg, self.profile, self.allow, self.enabled)
+        levels = self.cfg.rule_levels(path)
+        enabled = {k for k, v in levels.items() if v != "ignore"}
+        forced = {k: v for k, v in levels.items() if v in SEVERITIES}  # a level set in config or flags
+        ctx = Context(self.cfg, self.profile, self.allow, enabled)
         floor = severity_rank(self.cfg.min_severity)
         docs = self.nlp.pipe([s.text for s in segments])
         framed: list[tuple[Segment, object]] = []  # prose sentences for repeated-frame
@@ -160,7 +163,7 @@ class Analyzer:
                         continue
                     result.findings.append(self._finding(ctx, seg, sent, text, path, line,
                                                          feature, sev, msg, toks))
-        if "repeated-frame" in self.enabled:
+        if "repeated-frame" in enabled:
             for seg, sent, msg, toks in repeated_frames(framed):
                 if "repeated-frame" in seg.skip:
                     continue
@@ -169,6 +172,10 @@ class Analyzer:
                 result.findings.append(self._finding(ctx, seg, sent, text, path, seg.line_at(sent.start_char),
                                                      "repeated-frame", "info", msg, toks))
         result.findings = _first_use_only(result.findings)
+        for f in result.findings:
+            # A level set in [readcost.rules], an override or a flag replaces the detector's own.
+            if f.feature in forced:
+                f.severity = forced[f.feature]
         if self.baseline is not None:
             # Before the verdict, so that only new findings decide it.
             if budget is None:
