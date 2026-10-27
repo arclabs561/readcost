@@ -1439,12 +1439,11 @@ abstracts.
 ## More corpora: technical and non-technical
 
 Thirteen new categories, 2,322 texts and 2.4 million readcost words, test
-readcost on Stack Exchange answers and their edits, design documents, MDN,
-man pages, release notes, and (added mid-task) fiction and essays, news, law
-and regulation, health pages for lay readers, social-science abstracts and
-Wikipedia Featured Articles. All runs are readcost `6be1918` with `Config()` defaults, fetched on
-2026-10-27. The text stays under
-`REF/broad`; only these aggregates leave it.
+readcost on Stack Exchange answers and their edits, design documents, MDN, man
+pages, release notes, and fiction and essays, news, law and regulation, health
+pages for lay readers, social-science abstracts and Wikipedia Featured
+Articles. All runs are readcost `6be1918` with `Config()` defaults, fetched on
+2026-10-27. The text stays under `REF/broad`; only these aggregates leave it.
 
 ```sh
 REF=/Volumes/Rebuildable/readcost-ref
