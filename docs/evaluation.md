@@ -1269,6 +1269,156 @@ rules or the verdict. Within-sentence surprisal spread from a language model
 (partial rho +0.25, "Model signals") remains the strongest model-based
 signal of this kind.
 
+## Broader corpora
+
+Three new samples test readcost outside the essays, docs and PEPs above:
+arXiv abstracts and introductions, GitHub READMEs stratified by language and
+stars, and texts written for experts alongside texts on the same subject
+written for lay readers. All runs are readcost `9655bea` with `Config()`
+defaults, fetched on 2026-10-27. The text stays under `REF/broad`; only these
+aggregates leave it.
+
+```sh
+REF=/Volumes/Rebuildable/readcost-ref
+uv run scripts/fetch_arxiv.py $REF/broad/arxiv               # --date 2026-10-20 --per-set 50 --intros 150
+uv run scripts/fetch_github_readmes.py $REF/broad/readmes     # --per-cell 12 --windows 2 --seed 1
+uv run scripts/fetch_expert_lay.py $REF/broad/expert-lay      # --summaries 150 --wiki 150 --govuk 100 --seed 1
+uv run --group eval scripts/eval_broad.py $REF/broad
+```
+
+### Items and licences
+
+| Corpus | Items | Licence | Skipped |
+| --- | --- | --- | --- |
+| arXiv abstracts, 8 sets | 385 (50 per set; q-fin 35 after 10 days) | CC BY 362, CC0 12, CC BY-SA 11 | every paper under arXiv's non-exclusive licence or a CC NC/ND licence |
+| arXiv introductions (section S1) | 152 (19 per set) | CC BY 143, CC0 6, CC BY-SA 3 | 40 papers: no HTML version, or S1 not titled Introduction |
+| GitHub READMEs, 8 languages x 4 star tiers | 361 (12 per cell; Haskell 500..5000 has 3, Haskell >5000 has 4, JavaScript 5..50 has 8, Go 5..50 has 10) | MIT 168, Apache-2.0 97, GPL-3.0 34, BSD-3-Clause 23, GPL-2.0 13, MPL-2.0 8, AGPL-3.0 8, other 10 | 263 repositories with no licence GitHub recognizes, 155 READMEs under 100 words of prose, 4 not English, 2 without a README |
+| PLOS (Comp Biol, Genetics, Pathogens, NTD) and eLife: abstract vs author summary or digest | 150 pairs (30 per journal) | CC BY 141, CC0 9 (pairs) | 167 articles without a lay summary, 12 without either, 2 with a side under 80 words; none failed the licence check |
+| English vs Simple English Wikipedia | 150 pairs (CS 48, maths 47, physics 41, biology 14) | CC BY-SA 4.0 | 149 Simple articles under 150 words, 8 with no English link, 4 English articles short |
+| GOV.UK `guide` and `detailed_guide` | 100 + 100 (unpaired) | OGL v3.0 | 7 pages under 150 words, 2 not English |
+
+All items used have reuse rights; nothing was kept on the strength of a local
+analysis exception. Group comparisons leave out texts under 150 words, which
+drops most arXiv abstracts from the pooled percentiles (280 of 385 remain);
+the per-field abstract tables use a 50-word floor, and the pair tests use
+every pair.
+
+### Pooled distributions
+
+| Category | Texts | Words | CI p50 / p90 | Pass | ms/word p50 | Words/sentence p50 | stack | dep | inan | rel | hyph | list |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| arXiv abstracts | 385 | 70,227 | 10.0 / 22.3 | 68% | 242 | 24.5 | 5.95 | 0.93 | 0.83 | 0.10 | 2.72 | 2.01 |
+| arXiv introductions | 152 | 144,183 | 8.1 / 15.4 | 88% | 237 | 22.3 | 4.24 | 0.94 | 1.03 | 0.30 | 1.60 | 2.20 |
+| PLOS/eLife abstracts and summaries | 300 | 61,648 | 6.1 / 19.9 | 78% | 229 | 23.1 | 5.79 | 1.56 | 0.57 | 0.08 | 0.39 | 1.44 |
+| English and Simple Wikipedia | 300 | 493,404 | 4.4 / 9.5 | 95% | 212 | 19.3 | 2.82 | 0.93 | 0.48 | 0.20 | 0.12 | 2.29 |
+| READMEs | 361 | 233,113 | 5.0 / 11.8 | 94% | 240 | 13.5 | 3.41 | 0.31 | 0.32 | 0.24 | 0.39 | 2.66 |
+| GOV.UK guides | 200 | 240,093 | 3.1 / 7.9 | 97% | 222 | 14.4 | 2.15 | 0.43 | 0.22 | 0.29 | 0.02 | 1.32 |
+
+arXiv abstracts are the densest text readcost has been run on: a third get
+"advise" or "block", against 2 to 4% of the essays and docs. Stacked nouns
+(5.95 per 1,000 words) and hyphen compounds (2.72) drive it.
+
+### Expert and lay texts
+
+Each pair is one unit; the Wilcoxon signed-rank test is two-sided on the
+paired differences. "Lay lower" is the share of pairs where the lay text has
+the lower value.
+
+| Pairs | Measure | Expert median | Lay median | Median diff | Lay lower | p |
+| --- | --- | --- | --- | --- | --- | --- |
+| PLOS/eLife, 150 | findings per 1k words | 10.1 | 6.0 | -1.9 | 54% | 0.0004 |
+| | cost index | 9.4 | 5.5 | -1.7 | 55% | 0.0002 |
+| | ms per word | 241 | 223 | -14.5 | 81% | <0.001 |
+| | words per sentence | 23.0 | 23.0 | +0.2 | 48% | 0.76 |
+| | mean word length | 5.68 | 5.52 | -0.12 | 69% | <0.001 |
+| | words | 216 | 181 | -46 | 73% | 0.005 |
+| Wikipedia, 150 | findings per 1k words | 6.7 | 4.1 | -2.6 | 72% | <0.001 |
+| | cost index | 5.1 | 2.5 | -2.5 | 71% | <0.001 |
+| | ms per word | 218 | 201 | -13.8 | 75% | <0.001 |
+| | words per sentence | 21.5 | 16.2 | -4.9 | 85% | <0.001 |
+| | mean word length | 4.97 | 4.82 | -0.23 | 74% | <0.001 |
+| | words | 2,390 | 288 | -1,950 | 98% | <0.001 |
+| Wikipedia, English cut to Simple length | findings per 1k words | 6.8 | 4.1 | -2.4 | 65% | <0.001 |
+| | cost index | 4.9 | 2.5 | -1.9 | 65% | <0.001 |
+| | ms per word | 212 | 201 | -9.4 | 69% | <0.001 |
+
+| GOV.UK (Mann-Whitney U) | guide, 100 | detailed_guide, 100 | p |
+| --- | --- | --- | --- |
+| findings per 1k words | 3.0 | 5.3 | <0.001 |
+| cost index | 2.6 | 4.1 | <0.001 |
+| ms per word | 219 | 224 | 0.005 |
+| words per sentence | 13.8 | 15.5 | <0.001 |
+| mean word length | 4.47 | 4.93 | <0.001 |
+
+In all three sources the text written for lay readers scores lower on
+findings, cost index and predicted reading time. The PLOS and eLife pairs are
+the cleanest test of the confound: summaries and abstracts have the same
+median sentence length (23 words, p = 0.76), yet the summaries have fewer
+findings, almost all from stacked nouns (5.2 to 2.9 per 1,000 words, p <
+0.001). Mean word length does fall with them (5.68 to 5.52), so part of the
+drop may track vocabulary rather than structure. In Wikipedia, sentence length
+falls with everything else, and the per-rule drops (long dependency in 77% of
+pairs, stacked nouns in 69%) cannot be separated from it here. Cutting each
+English article to its Simple counterpart's length shrinks the effect but
+keeps it (cost index 4.9 against 2.5).
+
+By source the effect is uneven. eLife digests (written by eLife's editorial staff) and PLOS
+Computational Biology summaries are clearly lower (cost index -8.2 and -4.3
+per pair, p < 0.005); PLOS Genetics marginally (-1.4, p = 0.02); PLOS
+Pathogens (-0.1, p = 0.70) and PLOS NTD (+0.4, p = 0.49) show no difference
+in findings, although predicted reading time still falls (p < 0.03). PLOS
+author summaries are written by the paper's authors, which may explain why
+some stay close to the abstract; this was not checked.
+
+### READMEs
+
+306 READMEs of 150 or more prose words. Spearman correlation with stars:
+findings per 1k words rho = 0.08 (p = 0.15), cost index 0.05 (p = 0.34),
+predicted ms per word 0.22 (p < 0.001), mean word length 0.18 (p = 0.002),
+inline lists 0.17 (p = 0.003). Popular projects' READMEs are no less
+readable by readcost's rules; they are longer, use longer words and more
+inline lists. By language (Kruskal-Wallis p < 0.001), median cost index runs
+from 2.9 (Python) and 4.1 (Haskell) to 6.4 (C++) and 7.9 (Java), mostly from
+stacked nouns and inline lists; sentence length does not differ (p = 0.10).
+
+### arXiv
+
+Fields differ (Kruskal-Wallis p < 0.01 for findings and cost index, in both
+abstracts and introductions). Median cost index in abstracts runs from 6.8
+(math) and 7.5 (econ) to 14.9 (eess); introductions keep the same order (5.6
+math, 11.4 eess). Within a paper, the introduction is not lighter than the
+abstract: cost index differs by +0.1 per paper (p = 0.20), findings per 1k
+words by +1.1 (p = 0.63), on 152 papers. The introduction has shorter words
+(-0.14 letters) and sentences (-1.9 words) and 5 ms per word less predicted
+reading time, and it trades stacked nouns and hyphen compounds for long
+dependencies, inanimate subjects and object relatives, which barely occur in
+abstracts.
+
+### Surprises and limits
+
+- Introductions are not lighter than abstracts by findings, though they are
+  four to five times longer and less compressed by every other measure. The
+  pooled rates (5.95 against 4.24 stacked nouns per 1,000 words) suggest a
+  difference that the per-paper test does not find; abstracts of 150 to 250
+  words make per-text rates noisy.
+- Stars do not predict findings. Whatever makes a README popular, readcost's
+  rules do not see it, and higher-star READMEs score slightly worse on
+  predicted reading time.
+- Two of four PLOS journals show no expert-lay difference in findings.
+- arXiv math introductions have 16.4 words per sentence against 21 to 25
+  elsewhere: display equations and `[MATH]` tokens likely split sentences.
+  `[MATH]` also counts as a four-letter word in mean word length.
+- Simple Wikipedia articles of 150+ words are a selected subset (149 of 311
+  tried were shorter); English articles were cut by paragraph, so the
+  length-matched English side still runs longer (386 against 288 words).
+- The arXiv harvest is by OAI datestamp (2026-10-11 to 2026-10-20), which
+  includes revised older papers; introductions come only from papers first
+  submitted in 2024 or later with an HTML version. READMEs come from random
+  creation-date windows and random result pages, two windows per cell, so
+  Haskell's higher tiers are thin (3 and 4 READMEs).
+- GOV.UK guides are not paired by topic: the comparison is between two
+  publishing formats, not two treatments of one subject.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News
