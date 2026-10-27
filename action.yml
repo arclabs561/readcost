@@ -7,6 +7,17 @@ inputs:
   fail-on:
     description: never, advise, or block.
     default: block
+  comment:
+    description: >-
+      "true" to post one summary comment on the pull request and edit it on
+      later runs. The job needs `pull-requests: write`.
+    default: "false"
+  changed-only:
+    description: >-
+      On a pull request, check only the Markdown, reStructuredText and text
+      files under `paths` that the pull request adds or changes. Ignored on
+      other events.
+    default: "true"
 runs:
   using: composite
   steps:
@@ -26,13 +37,64 @@ runs:
         "$READCOST_PYTHON" -m venv "$READCOST_VENV"
         "$READCOST_VENV/bin/python" -m pip install --quiet "$READCOST_SRC"
         "$READCOST_VENV/bin/readcost" setup
-    # Inputs go through env, never into the script text, so a path cannot
-    # inject shell code. Paths are separated by whitespace or newlines.
+    # Inputs and event fields go through env, never into the script text, so
+    # a path or branch name cannot inject shell code. Paths are separated by
+    # whitespace or newlines.
     - shell: bash
       env:
         READCOST_PATHS: ${{ inputs.paths }}
         READCOST_FAIL_ON: ${{ inputs.fail-on }}
+        READCOST_COMMENT: ${{ inputs.comment }}
+        READCOST_CHANGED_ONLY: ${{ inputs.changed-only }}
+        READCOST_PR: ${{ github.event.pull_request.number }}
+        READCOST_BASE: ${{ github.event.pull_request.base.sha }}
         READCOST_VENV: ${{ runner.temp }}/readcost-venv
+        READCOST_TMP: ${{ runner.temp }}
+        GH_TOKEN: ${{ github.token }}
       run: |
         read -r -d '' -a paths <<< "$READCOST_PATHS" || true
-        "$READCOST_VENV/bin/readcost" check "${paths[@]}" --output github --fail-on "$READCOST_FAIL_ON"
+        files=("${paths[@]}")
+        if [[ -n "$READCOST_PR" && "$READCOST_CHANGED_ONLY" == "true" ]]; then
+          # A shallow checkout lacks the base commit; fetch just that commit.
+          if ! git cat-file -e "$READCOST_BASE^{commit}" 2>/dev/null; then
+            git fetch --quiet --no-tags --depth=1 origin "$READCOST_BASE"
+          fi
+          # Three dots diff against the merge base; with too little history
+          # for one, compare the base commit with HEAD directly.
+          range=("$READCOST_BASE...HEAD")
+          git merge-base "$READCOST_BASE" HEAD >/dev/null 2>&1 || range=("$READCOST_BASE" HEAD)
+          # Through a file, not a pipe, so a failed diff fails the step.
+          git diff -z --name-only --diff-filter=ACMR "${range[@]}" -- "${paths[@]}" > "$READCOST_TMP/readcost-changed"
+          files=()
+          while IFS= read -r -d '' f; do
+            case "$f" in
+              *.md|*.markdown|*.mdx|*.rst|*.txt) files+=("$f") ;;
+            esac
+          done < "$READCOST_TMP/readcost-changed"
+          echo "readcost: ${#files[@]} changed prose file(s)"
+        fi
+
+        if [[ -n "$READCOST_PR" && "$READCOST_COMMENT" == "true" ]]; then
+          body="$READCOST_TMP/readcost-comment.md"
+          if (( ${#files[@]} )); then
+            "$READCOST_VENV/bin/readcost" check "${files[@]}" --output pr-comment --fail-on never > "$body" || true
+          else
+            "$READCOST_VENV/bin/python" -c 'from readcost.report import pr_comment; print(pr_comment([]), end="")' > "$body"
+          fi
+          jq -Rs '{body: .}' < "$body" > "$body.json"
+          # The comment is a convenience: a token without write access (a
+          # pull request from a fork) gets a warning, not a failed job.
+          id=$(gh api --paginate "repos/$GITHUB_REPOSITORY/issues/$READCOST_PR/comments" \
+                 --jq '.[] | select(.body | startswith("<!-- readcost -->")) | .id' | head -n 1) || id=""
+          if [[ -n "$id" ]]; then
+            gh api --method PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$id" --input "$body.json" > /dev/null \
+              || echo "::warning title=readcost::could not update the pull request comment"
+          else
+            gh api --method POST "repos/$GITHUB_REPOSITORY/issues/$READCOST_PR/comments" --input "$body.json" > /dev/null \
+              || echo "::warning title=readcost::could not post the pull request comment; does the job have pull-requests: write?"
+          fi
+        fi
+
+        if (( ${#files[@]} )); then
+          "$READCOST_VENV/bin/readcost" check "${files[@]}" --output github --fail-on "$READCOST_FAIL_ON"
+        fi
