@@ -13,7 +13,7 @@
   "inline-list": 0.817,
   "long-dependency": 0.346,
   "reduced-object-relative": 0.346,
-  "stacked-nouns": 1.534
+  "stacked-nouns": 1.485
  },
  "sources": [
   "https://github.com/golang/website/blob/52d470bcf26e41fd5a38199c5463268fb61b67ae/_content/blog/context.md",

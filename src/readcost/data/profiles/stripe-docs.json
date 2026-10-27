@@ -13,7 +13,7 @@
   "inline-list": 0.716,
   "long-dependency": 0.391,
   "reduced-object-relative": 0.325,
-  "stacked-nouns": 3.841
+  "stacked-nouns": 3.711
  },
  "sources": [
   "https://docs.stripe.com/api/errors.md",
