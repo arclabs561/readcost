@@ -66,6 +66,10 @@ configuration.
   longest training paragraph (165 words): one long paragraph read 17% faster
   than the same text split into paragraphs, now 4%. Reference profiles are
   rebuilt.
+- numpy is a declared dependency (readtime imports it). `uv sync` sets up
+  development with a lock file, and `uv run --group eval` runs the evaluation
+  scripts; scripts whose inline metadata names readcost now use the checkout
+  instead of the PyPI release.
 
 ## [0.2.0] - 2026-10-26
 

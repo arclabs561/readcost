@@ -607,11 +607,16 @@ setup for each editor.
 ## Development
 
 ```sh
-pip install -e '.[test]' && python3 -m pytest
-readcost check . --fail-on block               # CI runs readcost on its own repo
-python3 scripts/build_lexicon.py               # needs nltk and its WordNet data
-python3 scripts/build_default_profile.py ref/eval  # needs scripts/fetch_eval_corpus.py first
+uv sync && uv run pytest                       # or: pip install -e '.[test]' && python3 -m pytest
+uv run readcost check . --fail-on block        # CI runs readcost on its own repo
+uv run --group eval scripts/eval_simplifications.py REF   # scripts without inline metadata
+uv run scripts/fetch_eval_corpus.py ref/eval   # scripts with inline metadata bring their own
+uv run --group eval scripts/build_lexicon.py   # also needs nltk's WordNet data
+uv run scripts/build_default_profile.py ref/eval   # after fetch_eval_corpus.py
 ```
+
+Scripts with inline metadata that import readcost install this checkout, not
+the release on PyPI.
 
 ## License
 
