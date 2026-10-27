@@ -337,3 +337,15 @@ def test_issue_references_are_single_words(sentence):
 def test_a_coined_compound_next_to_an_issue_reference_is_still_reported():
     findings = Analyzer(Config()).check_text("This fixes gh-12345, which the storage-shrink job broke.", "markdown").findings
     assert [f.excerpt for f in findings if f.feature == "hyphen-compound"] == ["storage-shrink job"]
+
+
+@pytest.mark.parametrize("sentence,excerpts", [
+    # A number joined to its unit is a modifier, not a noun in a stack (shapes from PEPs).
+    ("Each release has a 17-month development period followed by a beta phase.", []),
+    ("The council holds a two-week nomination period before each election.", []),
+    # The rest of a real stack is still reported.
+    ("We tune the two-week compaction retry budget by hand.", ["compaction retry budget"]),
+])
+def test_number_unit_modifiers_are_not_stacked_nouns(sentence, excerpts):
+    findings = Analyzer(Config()).check_text(sentence, "markdown").findings
+    assert [f.excerpt for f in findings if f.feature == "stacked-nouns"] == excerpts
