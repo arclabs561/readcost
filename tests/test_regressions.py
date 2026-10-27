@@ -300,3 +300,23 @@ def test_a_row_of_links_is_navigation_not_prose():
     assert extract_markdown(nav, "a.md") == []
     prose = "See the [quickstart guide](docs/QUICKSTART.md) and the [API docs](https://docs.rs/muxer) first.\n"
     assert len(extract_markdown(prose, "a.md")) == 1
+
+
+@pytest.mark.parametrize("sentence,flagged", [
+    # From this repo's README: a majority of people is people.
+    ("Of the 75 that are still reported, a majority of eight raters judged 20% correct.", False),
+    ("Half of the users decided to keep the old layout.", False),
+    # What is counted decides, so a quantity of things still counts as a thing.
+    ("A majority of the files decide their own encoding.", True),
+    ("The output of the engineers decides the schedule.", True),
+])
+def test_quantity_subject_takes_the_animacy_of_what_it_counts(sentence, flagged):
+    findings = Analyzer(Config()).check_text(sentence, "markdown").findings
+    assert any(f.feature == "inanimate-subject" for f in findings) is flagged
+
+
+def test_quantity_without_a_counted_noun_keeps_its_own_animacy():
+    # From arclabs561/deformat's README: nothing is counted, so "number" is a thing.
+    text = "Reporting per page type is the point: a single ALL number hides that one category carries the result."
+    findings = Analyzer(Config()).check_text(text, "markdown").findings
+    assert [f.feature for f in findings if f.feature == "inanimate-subject"] == ["inanimate-subject"]
