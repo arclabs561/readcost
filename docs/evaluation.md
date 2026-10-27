@@ -733,6 +733,61 @@ on a short file takes 0.74 s (median of 5; most of it loading spaCy), which
 is what a hook pays per edit; a loaded Analyzer checks about 5,100 words per
 second.
 
+## Reference profile
+
+long-dependency scores a sentence against a reference profile: the usual
+distance between related words at each sentence length. The first default
+profile came from twelve READMEs by one writer. It is now built by
+`scripts/build_default_profile.py` from every other text of each essay, docs
+and README source in this corpus (126 texts, 22 sources, 341k words); the other
+half is held out. The two fits are close ((0.429, 0.629, 0.405) before,
+(0.446, 0.633, 0.409) after), so the change is mostly in how much evidence
+stands behind the profile. `scripts/compare_profile.py` compares the runs
+before and after:
+
+| Texts | Run | Texts (40+ words) | Pass | Cost index p50 / p95 | long-dependency per 1k words |
+| --- | --- | --- | --- | --- | --- |
+| code | before | 30 | 97% | 4.1 / 9.7 | 1.80 |
+| code | after | 30 | 97% | 4.0 / 9.7 | 1.64 |
+| commit | before | 549 | 98% | 5.0 / 32.4 | 1.69 |
+| commit | after | 549 | 98% | 4.3 / 32.4 | 1.55 |
+| discussion | before | 174 | 98% | 0.0 / 12.8 | 0.64 |
+| discussion | after | 174 | 98% | 0.0 / 12.8 | 0.51 |
+| held-out docs | before | 38 | 97% | 2.7 / 6.2 | 0.54 |
+| held-out docs | after | 38 | 97% | 2.7 / 6.2 | 0.51 |
+| held-out essay | before | 56 | 98% | 3.3 / 7.2 | 0.69 |
+| held-out essay | after | 56 | 98% | 3.3 / 7.2 | 0.65 |
+| held-out readme | before | 20 | 90% | 5.7 / 19.2 | 0.68 |
+| held-out readme | after | 20 | 90% | 5.7 / 19.2 | 0.62 |
+
+Verdicts do not move; long-dependency findings drop by 5 to 20% per category.
+Of the 210 labelled findings, 74 are still reported instead of 75; the one
+dropped was judged wrong by the majority, so the eight-rater majority's share
+correct or defensible goes from 20.0% to 20.3%.
+
+## Not yet evaluated
+
+The corpus above covers edited essays and documentation, READMEs, Hacker News
+and Stack Overflow discussion, code comments from two standard libraries, Go
+commit messages, model rewrites of human paragraphs, and two reading-time and
+two difficulty datasets. Not covered:
+
+- Model output as written: chat answers and agent replies, including Claude
+  Code transcripts, which readcost reads. The paired test used rewrites of
+  human paragraphs, not answers a model wrote from scratch.
+- Human judgment: every label here comes from model raters, which agree only
+  modestly (Fleiss' kappa 0.23 over ten, 0.40 over eight). No study has
+  checked that readers understand a rewrite faster or better.
+- Pull request descriptions, issue threads and code review comments.
+- API references, docstrings at scale, man pages, CLI help and error messages.
+- Changelogs, release notes, design documents, ADRs and specifications.
+- Commit messages outside the Go project's conventions.
+- Writing by non-native English writers. Limits warns against treating
+  findings as markers of authorship, but the rates in such writing are not
+  measured.
+- Reading time on technical prose: the model was fitted and tested on
+  newspaper, popular-science and fiction passages.
+
 ## Limits
 
 - One automated rater, no second rater, and no agreement statistic. The
