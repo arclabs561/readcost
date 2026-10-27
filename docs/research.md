@@ -40,10 +40,10 @@ Panthaplackel et al. 2021).
 - Two opt-in rules with weaker evidence. center-embedding flags a clause
   nested two deep inside clauses that continue after it. Gibson (1998, 2000)
   argues from acceptability judgements of constructed sentences that such
-  nesting is hard, except when the innermost subject is a pronoun; Wu et al.
-  (2010) find that a parser's change in embedding depth adds to reading time
-  beyond surprisal over all words, though not for open-class words, in one
-  constructed corpus. undefined-acronym flags an acronym used before it is
+  nesting is hard, except when the innermost subject is I or you (readcost
+  skips those). Wu et al. (2010) find that a parser's change in embedding
+  depth adds to reading time beyond surprisal over all words, though not
+  for open-class words, in one constructed corpus. undefined-acronym flags an acronym used before it is
   spelled out; the only evidence is a magazine report of self-rated
   difficulty, whose authors recommend spelling a term out at every use
   (Hales, Williams and Rector 2017). No
