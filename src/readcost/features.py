@@ -145,7 +145,7 @@ FEATURES: dict[str, Feature] = {f.id: f for f in [
         "A clause inside a clause that is itself inside the middle of another "
         "clause makes the reader hold several unfinished subjects at once. One "
         "nested clause is ordinary; people judge two hard in constructed "
-        "sentences, unless the innermost subject is a pronoun (Gibson 1998, "
+        "sentences, unless the innermost subject is I, you or we (Gibson 1998, "
         "2000; acceptability judgements, not reading times). Such sentences are "
         "rare even in edited writing (Karlsson 2007).",
         "Finish the outer clause first, or move the inner clause into its own sentence.",
@@ -636,6 +636,7 @@ def center_embeddings(sent) -> list[tuple[object, int]]:
     return out
 
 
+INDEXICAL_PRONOUNS = frozenset({"i", "you", "we"})
 CENTER_EMBEDDING_DEPTH = 2   # Gibson 1998, 2000: two nested clauses judged hard in constructed sentences
 
 
@@ -644,6 +645,11 @@ def center_embedding(sent, ctx: Context) -> list[tuple[str, str, list]]:
     if not deep:
         return []
     inner, d = max(deep, key=lambda x: x[1])
+    if any(c.dep_ in ("nsubj", "nsubjpass") and c.lower_ in INDEXICAL_PRONOUNS for c in inner.children):
+        # "The reporter who the senator who I met attacked ...": an innermost
+        # subject already in the discourse adds no new referent, and such
+        # sentences are processable (Gibson 1998, after Bever 1974).
+        return []
     outer = [t for t, k in center_embeddings(sent) if k == 1 and t.left_edge.i <= inner.i <= t.right_edge.i]
     span = outer[0] if outer else inner
     toks = [span.left_edge, inner, span.right_edge]

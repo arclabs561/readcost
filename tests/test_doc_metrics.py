@@ -114,6 +114,16 @@ def test_double_center_embedding_is_flagged(opt):
     assert fs[0].excerpt == "who the senator who John met attacked"
 
 
+def test_double_embedding_with_an_indexical_innermost_subject_is_not_flagged(opt):
+    # Gibson 1998, after Bever 1974: "I" or "you" adds no new referent, and
+    # such sentences are processable. The parse still nests "met" two deep.
+    from readcost.features import center_embeddings
+
+    text = DOUBLE.replace("who John met", "who I met")
+    assert max(d for _, d in center_embeddings(next(opt.nlp(text).sents))) == 2
+    assert rules(opt, text, "center-embedding") == []
+
+
 @pytest.mark.parametrize("text", [SINGLE, RIGHT])
 def test_single_or_right_branching_clauses_are_not_flagged(opt, text):
     assert rules(opt, text, "center-embedding") == []
