@@ -337,11 +337,13 @@ the same kind of text.
 `readcost corpus` looks across many texts at once (commit messages, PR
 descriptions, a model's answers) for syntactic templates and repeated
 sentence openers, with Shaib et al.'s (2024) measures: CR-POS, the share of
-texts with one of the 100 most frequent part-of-speech 6-grams, and the share
-of tokens in them. Point it at files or directories (one text each), or at
+texts with one of the 100 most frequent part-of-speech 6-grams, and those
+6-grams per token. Point it at files or directories (one text each), or at
 one file of many texts separated by `---` lines with `--split`. Formulaic
-text such as merge-commit subjects scores high legitimately, and CR-POS grows
-with the amount of text, so compare corpora of similar size and kind.
+text such as merge-commit subjects scores high legitimately, and the
+measures depend on how much text there is (on essays, CR-POS rises from 4.0
+to 4.6 between 5 and 40 texts while templates per token falls), so compare
+corpora of similar size and kind.
 
 ## Predicted reading time
 
