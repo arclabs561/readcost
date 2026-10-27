@@ -790,8 +790,9 @@ two difficulty datasets. Not covered:
 
 ## Limits
 
-- One automated rater, no second rater, and no agreement statistic. The
-  research roadmap's "labeled findings with a second rater" is still open.
+- Every rater is a model. Ten raters from different labs agree only modestly
+  (Fleiss' kappa 0.23 over ten, 0.40 over the eight that are not lenient; see
+  Ten raters); no person has labelled the sample.
 - The sample is 210 findings from the essay and docs categories; commit,
   README, code and discussion findings were not labeled.
 - The corpus is curated for quality. It cannot show how well the rules
