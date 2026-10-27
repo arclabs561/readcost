@@ -150,6 +150,8 @@ def main(root: Path, words_tsv: Path, out: Path, use_surprisal: bool) -> None:
             p, y = np.concatenate(preds), np.concatenate([t["rt"] for t in sets[s]])
             out[f"{s}_word_r"] = round(float(np.corrcoef(p, y)[0, 1]), 3)
             out[f"{s}_word_rmse"] = round(float(np.sqrt(np.mean((p - y) ** 2))), 1)
+            # Mean signed error per text: a level shift between corpora shows here.
+            out[f"{s}_bias"] = round(float(np.mean([np.mean(q) - np.mean(t["rt"]) for q, t in zip(preds, sets[s])])), 1)
         return out
 
     mean_rt = float(ytr.mean())
