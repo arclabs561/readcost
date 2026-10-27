@@ -44,6 +44,8 @@ First release on PyPI (`pip install readcost`, or `uvx readcost`).
 
 ### Changed
 
+- The default reference profile is built from 126 essays, documentation pages
+  and READMEs from 22 sources instead of one writer's twelve READMEs.
 - `-o text` is now `-o concise`, and the default output is the new quoted
   form ([#24](https://github.com/arclabs561/readcost/pull/24)).
 - denominal-verb is off by default: on edited prose almost every hit was a

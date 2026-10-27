@@ -25,16 +25,15 @@ the piku log.
 **Verdicts.** Each finding has a weight: info 0.5, warn 1, error 2. The cost
 index is the weighted count per 1,000 words.
 
-| Verdict | Rule (defaults) | BurntSushi READMEs (10 with 150+ words) | arclabs561 READMEs (58 with 150+ words; measured with 0.1.0) |
+| Verdict | Rule (defaults) | Well-regarded essays, docs and READMEs (110 with 150+ words, held out from the profile) | arclabs561 READMEs (58 with 150+ words; measured with 0.1.0) |
 | --- | --- | --- | --- |
-| pass | cost index below 15 | 10 | 18 |
-| advise | cost index 15 or more, or any error | 0 | 37 |
+| pass | cost index below 15 | 107 | 18 |
+| advise | cost index 15 or more, or any error | 3 | 37 |
 | block | cost index 30 or more, and at least 3 weighted findings | 0 | 3 |
 
-Those BurntSushi READMEs have a median cost index of 7.3 and a maximum of 12.5,
-so the advise line sits just above the most demanding prose in the reference
-set. Change the lines with `advise_cost_index`, `block_cost_index` and
-`block_min_points`.
+That held-out writing has a median cost index of 3.2; only one text scores
+above 15, so the advise line sits above nearly all well-edited prose. Change the
+lines with `advise_cost_index`, `block_cost_index` and `block_min_points`.
 
 **Only the lines that changed.** On an edit, readcost judges sentences that
 overlap the edited lines, so a hook does not repeat complaints about text

@@ -290,9 +290,10 @@ Not every finding is right: see [Limits](#limits) and
 
 Each finding counts 0.5 (info), 1 (warn) or 2 (error). The cost index is that
 count per 1,000 words. A file passes below 15, gets "advise" at 15 or more, and
-gets "block" at 30 or more with at least 3 weighted findings. The ten BurntSushi
-READMEs of 150 words or more score at most 12.5 (median 7.3, measured
-2026-10-26), so the defaults treat that level of writing as the bar.
+gets "block" at 30 or more with at least 3 weighted findings. Of 110 essays,
+documentation pages and READMEs by well-regarded writers (150 words or more,
+held out from the reference profile), 107 pass and 3 get "advise"; the median
+cost index is 3.2 (measured 2026-10-26).
 
 Commit messages (`--format commit`, the commit-msg hook) are judged against
 their own thresholds, 50 and 100, because they are terser than prose: in 1,000
@@ -304,8 +305,11 @@ A rate is noisy for a short text: one finding in a 20-word comment is 50 per
 1,000 words. Below 40 words, readcost counts weighted findings instead: 2 or
 more gets "advise" and 3 or more gets "block".
 
-Dependency length is judged against a reference profile built from those
-READMEs. To compare against writing that you prefer, build your own:
+Dependency length is judged against a reference profile: how far apart
+related words usually are, by sentence length, in a swatch of essays,
+documentation and READMEs by well-regarded writers (126 texts from 22 sources,
+listed in `src/readcost/data/default_profile.json`). To compare against
+writing that you prefer, build your own:
 
 ```sh
 readcost profile build path/to/good/*.md -o myprofile.json --name mine
@@ -481,8 +485,8 @@ setup for each editor.
 - The paper also measures rare word pairs. readcost uses word-pair counts only
   to skip hyphenated pairs in common use; it does not flag rare pairs in
   general yet.
-- The default profile is one writer's READMEs. A cost index for chat answers
-  is not comparable to one for READMEs.
+- The default profile is edited English technical and essay prose. A cost
+  index for chat answers is not comparable to one for READMEs.
 
 ## Development
 
@@ -490,7 +494,7 @@ setup for each editor.
 pip install -e '.[test]' && python3 -m pytest
 readcost check . --fail-on block               # CI runs readcost on its own repo
 python3 scripts/build_lexicon.py               # needs nltk and its WordNet data
-python3 scripts/build_default_profile.py ref/  # needs the BurntSushi clones
+python3 scripts/build_default_profile.py ref/eval  # needs scripts/fetch_eval_corpus.py first
 ```
 
 ## License
