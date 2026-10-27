@@ -121,3 +121,33 @@ def test_sarif_rules_link_to_readme_and_results_stay_plain():
     assert rules and all(rule["helpUri"] == report.RULES_URL for rule in rules)
     assert report.RULES_URL.startswith("https://github.com/arclabs561/readcost")
     assert all("properties" not in res for res in doc["runs"][0]["results"])
+
+
+def test_json_columns_slice_the_excerpt_out_of_the_source():
+    from readcost import Analyzer
+
+    text = "# Title\n\nWe tune the shard compaction retry budget\nby hand every week.\n"
+    r = Analyzer(Config()).check_text(text, "markdown", "doc.md")
+    rows = json.loads(report.as_json([r]))[0]["findings"]
+    stack = next(f for f in rows if f["feature"] == "stacked-nouns")
+    line = text.splitlines()[stack["line"] - 1]
+    assert stack["end_line"] == stack["line"]
+    assert line[stack["column"] - 1:stack["end_column"] - 1] == stack["excerpt"]
+
+
+def test_json_and_agent_output_carry_measured_precision():
+    from readcost import Analyzer
+
+    r = Analyzer(Config()).check_text(DENSE, "markdown", "doc.md")
+    rows = json.loads(report.as_json([r]))[0]["findings"]
+    data = report.rule_precision()["rules"]
+    for f in rows:
+        row = data.get(f["feature"])
+        if row and row["labelled"] >= 5:
+            assert f["precision"] == {"accepted": row["accepted"], "labelled": row["labelled"]}
+        else:
+            assert f["precision"] is None
+    assert any(f["precision"] for f in rows)
+    first = next(f for f in rows if f["precision"])
+    p = first["precision"]
+    assert f"(raters accepted {p['accepted']} of {p['labelled']} such findings)" in report.agent([r])

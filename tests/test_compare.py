@@ -81,3 +81,21 @@ def test_readme_compare_example_is_current(tmp_path):
     (tmp_path / "cmp-old.md").write_text(OLD)
     (tmp_path / "cmp-new.md").write_text(NEW)
     assert run(["compare", "cmp-old.md", "cmp-new.md"], tmp_path).stdout == shown
+
+
+def test_compare_reads_the_old_text_from_a_git_revision(tmp_path):
+    def git(*a):
+        subprocess.run(["git", *a], cwd=tmp_path, check=True, capture_output=True)
+
+    git("init", "-q")
+    (tmp_path / "doc.md").write_text(OLD)
+    git("add", "doc.md")
+    git("-c", "user.name=t", "-c", "user.email=t@example.invalid", "commit", "-qm", "old")
+    (tmp_path / "doc.md").write_text(NEW)
+    by_rev = run(["compare", "HEAD:doc.md", "doc.md", "-o", "json"], tmp_path)
+    (tmp_path / "old.md").write_text(OLD)
+    by_file = run(["compare", "old.md", "doc.md", "-o", "json"], tmp_path)
+    assert by_rev.returncode == by_file.returncode == 0
+    assert json.loads(by_rev.stdout)["old"]["points"] == json.loads(by_file.stdout)["old"]["points"] > 0
+    missing = run(["compare", "HEAD:nope.md", "doc.md"], tmp_path)
+    assert missing.returncode == 2 and "cannot read HEAD:nope.md" in missing.stderr
