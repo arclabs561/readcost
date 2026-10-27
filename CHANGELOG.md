@@ -13,6 +13,8 @@ configuration.
   predicted reading time with a reference; built-in references for the Rust
   book, Go, Python, Django, SQLite and Stripe docs, GOV.UK guidance, READMEs and
   essays. Profiles now record predicted ms per word and words per sentence.
+- `readcost corpus` measures repetition across many texts: syntactic templates,
+  CR-POS and repeated sentence openers (Shaib et al. 2024).
 - Text that is clearly not English gets a note instead of findings and a
   reading time, which would be meaningless (`language_check`).
 - Rule levels as in ty: `[readcost.rules]` sets each rule to `error`, `warn`,
