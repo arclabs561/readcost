@@ -354,6 +354,9 @@ def test_a_coined_compound_next_to_an_issue_reference_is_still_reported():
     ("The council holds a two-week nomination period before each election.", []),
     # The rest of a real stack is still reported.
     ("We tune the two-week compaction retry budget by hand.", ["compaction retry budget"]),
+    # A number or symbol splits the run: the quantity is not part of the compound.
+    ("The effect is larger in Brown (+1.30 x10^-2 nats) and smaller in Dundee.", []),
+    ("For nouns, log integration cost +5.86 ms is significant in the model.", ["log integration cost"]),
 ])
 def test_number_unit_modifiers_are_not_stacked_nouns(sentence, excerpts):
     findings = Analyzer(Config()).check_text(sentence, "markdown").findings

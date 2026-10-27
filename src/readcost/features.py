@@ -336,6 +336,19 @@ def stacked_nouns(sent, ctx: Context, taken: set[int],
         if t.pos_ not in ("NOUN", "PROPN") or t.dep_ == "compound" or t.text == CODE:
             continue
         stack = [x for x in _noun_stack(t) if not _measure_unit(x)]
+        if any(not any(c.isalpha() for c in x.text) for x in stack):
+            # "cost +5.86 ms", "+1.30 x10^-2 nats": a number or symbol splits the
+            # run; the words on either side are a compound and a quantity, not one
+            # stack. Keep the longest run of words between them. A name with a
+            # digit ("HTTP/2", "S3") is still a word.
+            runs, run = [], []
+            for x in sorted(stack, key=lambda x: x.i):
+                if any(c.isalpha() for c in x.text):
+                    run.append(x)
+                else:
+                    runs.append(run)
+                    run = []
+            stack = max([*runs, run], key=len)
         if t.tag_ == "NNS" and any(_embedded_question(c, t) for c in t.children
                                    if c.dep_ in ("relcl", "ccomp", "acl")):
             # "prints how long the search takes": the head is the verb.
