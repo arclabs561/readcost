@@ -320,3 +320,19 @@ def test_quantity_without_a_counted_noun_keeps_its_own_animacy():
     text = "Reporting per page type is the point: a single ALL number hides that one category carries the result."
     findings = Analyzer(Config()).check_text(text, "markdown").findings
     assert [f.feature for f in findings if f.feature == "inanimate-subject"] == ["inanimate-subject"]
+
+
+@pytest.mark.parametrize("sentence", [
+    # From rust-lang/rust pull request descriptions (rollup lists and fix notes).
+    "rust-lang/rust#164857 (Do not checkout Cargo for bootstrap tests)",
+    "Adds two ui tests in `tests/ui/reborrow` for the two snippets in rust-lang/rust#156380.",
+    "This fixes gh-12345 and #678 in the parser module today.",
+])
+def test_issue_references_are_single_words(sentence):
+    findings = Analyzer(Config()).check_text(sentence, "markdown").findings
+    assert [f.excerpt for f in findings if f.feature == "hyphen-compound"] == []
+
+
+def test_a_coined_compound_next_to_an_issue_reference_is_still_reported():
+    findings = Analyzer(Config()).check_text("This fixes gh-12345, which the storage-shrink job broke.", "markdown").findings
+    assert [f.excerpt for f in findings if f.feature == "hyphen-compound"] == ["storage-shrink job"]
