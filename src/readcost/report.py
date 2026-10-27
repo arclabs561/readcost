@@ -35,6 +35,7 @@ def text(results: list[Result], feedback_link: bool = False, **_) -> str:
             f"({r.words} words); cost index {r.cost_index:.1f} per 1k words"
             + (f"; predicted reading time {r.reading_seconds:.0f} s ({r.reading_ms_per_word:.0f} ms per word)"
                if r.reading_seconds is not None else "")
+            + (f"; {r.baselined} more in baseline" if r.baselined else "")
         )
         out.extend(f"{r.path}: note: {n}" for n in r.notes)
     if feedback_link and any(r.findings for r in results):

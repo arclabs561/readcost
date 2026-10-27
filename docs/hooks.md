@@ -41,6 +41,11 @@ overlap the edited lines, so a hook does not repeat complaints about text
 nobody touched. A Write over an existing file counts as an edit of the lines
 it changes. Set `hooks.edited_lines_only = false` to judge the whole file.
 
+**Baseline.** When the config sets `baseline` (a file from `readcost
+baseline`), every hook drops the findings that file records before it
+computes a verdict, so old prose neither blocks nor adds feedback. See
+"Adopting readcost in an existing repo" in the README.
+
 **Fail open.** Bad input, a missing spaCy model, or any exception ends the
 hook with exit 0 and no output. The error goes to stderr and, if
 `READCOST_HOOK_LOG` names a file, to that file. A broken checker should never

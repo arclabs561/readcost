@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from . import lexicon, readtime
+from .baseline import load_baseline
 from .config import Config, load_config, severity_rank
 from .extract import Segment, detect_format, extract
 from .features import (
@@ -33,6 +34,7 @@ class Result:
     cost_index: float = 0.0       # weighted findings per 1,000 words
     points: float = 0.0           # weighted findings
     verdict: str = "pass"         # pass | advise | block
+    baselined: int = 0            # findings dropped because the baseline already had them
     notes: list[str] = field(default_factory=list)
     # Predicted reading time from eye-tracking data (readtime.py); None when
     # only some lines were checked or the model data is missing.
@@ -48,7 +50,7 @@ class Result:
     def to_dict(self) -> dict:
         return {
             "path": self.path, "words": self.words, "sentences": self.sentences,
-            "verdict": self.verdict, "cost_index": round(self.cost_index, 2),
+            "verdict": self.verdict, "baselined": self.baselined, "cost_index": round(self.cost_index, 2),
             "points": self.points, "mean_dep_z": None if self.mean_dep_z is None else round(self.mean_dep_z, 3),
             "counts": self.counts(), "notes": self.notes,
             "reading_ms_per_word": None if self.reading_ms_per_word is None else round(self.reading_ms_per_word, 1),
@@ -102,6 +104,7 @@ class Analyzer:
         enabled = {k for k, f in FEATURES.items() if f.default} | set(self.cfg.enable)
         self.enabled = enabled - set(self.cfg.disable)
         self.allow = {a.lower() for a in lexicon.DEFAULT_ALLOW} | {a.lower() for a in self.cfg.allow}
+        self.baseline = load_baseline(self.cfg.baseline) if self.cfg.baseline else None
 
     @property
     def nlp(self):
@@ -125,7 +128,9 @@ class Analyzer:
             yield sent
 
     def analyze(self, segments: list[Segment], path: str,
-                lines: list[tuple[int, int]] | None = None, *, context: str = "prose") -> Result:
+                lines: list[tuple[int, int]] | None = None, *, context: str = "prose",
+                budget=None) -> Result:
+        """``budget``: baselined keys left for this file, shared when one file yields several results."""
         result = Result(path=path)
         ctx = Context(self.cfg, self.profile, self.allow, self.enabled)
         floor = severity_rank(self.cfg.min_severity)
@@ -158,6 +163,11 @@ class Analyzer:
                 result.findings.append(self._finding(ctx, seg, sent, text, path, seg.line_at(sent.start_char),
                                                      "repeated-frame", "info", msg, toks))
         result.findings = _first_use_only(result.findings)
+        if self.baseline is not None:
+            # Before the verdict, so that only new findings decide it.
+            if budget is None:
+                budget = self.baseline.budget(path)
+            result.findings, result.baselined = self.baseline.suppress(result.findings, budget)
         zs = ctx.stats.get("dep_z", [])
         result.mean_dep_z = statistics.mean(zs) if zs else None
         # The verdict uses every finding; min_severity only trims what is shown.
@@ -219,8 +229,9 @@ class Analyzer:
         for seg in segments:
             groups.setdefault(seg.label, []).append(seg)
         results = []
+        budget = self.baseline.budget(path) if self.baseline else None
         for label, segs in groups.items():
-            result = self.analyze(segs, path)
+            result = self.analyze(segs, path, budget=budget)
             result.path = f"{path}#{label}" if label else path
             results.append(result)
         return results

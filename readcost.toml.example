@@ -3,6 +3,7 @@
 [readcost]
 model = "en_core_web_sm"        # "en_core_web_trf" parses better and is slower
 profile = "default"             # or a JSON file from `readcost profile build`, relative to this file
+baseline = ""                   # a file from `readcost baseline`, relative to this file; findings in it do not count
 min_severity = "info"           # info | warn | error: drop findings below this
 advise_severity = "error"       # info | warn | error | off: any finding this severe makes the verdict "advise"
 enable = []                     # e.g. ["long-sentence"]

@@ -185,6 +185,29 @@ wrong type or outside its choices, naming the file and the key.
 To skip text, put `<!-- readcost: ignore -->` before a paragraph, or wrap a
 section in `<!-- readcost: off -->` and `<!-- readcost: on -->`.
 
+## Adopting readcost in an existing repo
+
+Old docs can fail the check before anyone edits them. Record their findings
+once, commit the file, and point the config at it:
+
+```sh
+readcost baseline README.md docs      # writes .readcost-baseline.json
+echo 'baseline = ".readcost-baseline.json"' >> readcost.toml
+```
+
+From then on `readcost check` and the hooks report only findings that are not
+in the baseline, and the verdict and exit status count only those. The text
+summary says how many findings the baseline hid, and the JSON output has a
+`baselined` count per file. `readcost check --baseline FILE` does the same
+without the config key.
+
+A finding is matched by its file, its feature and a hash of its sentence, not
+by line number, so edits elsewhere in a file do not make old findings new.
+A sentence that is reworded but still flagged counts as new, and so does a
+second copy of a baselined sentence. The file holds hashes only, sorted one entry per
+line, and paths relative to its own directory, so keep it at the repository
+root. Run `readcost baseline` again after a cleanup to shrink it.
+
 ## Hooks
 
 `docs/hooks.md` describes each adapter, what it sends back, and the rules that

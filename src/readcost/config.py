@@ -57,6 +57,7 @@ class HookConfig:
 class Config:
     model: str = "en_core_web_sm"
     profile: str = "default"        # "default" or a path to a profile JSON
+    baseline: str = ""              # a file from `readcost baseline`; findings in it do not count
     enable: list[str] = field(default_factory=list)   # adds opt-in features
     disable: list[str] = field(default_factory=list)
     min_severity: str = "info"      # findings below this are dropped
@@ -193,7 +194,9 @@ def load_config(path: str | None = None, start: str | None = None) -> Config:
         data |= table
     _apply(cfg, data, str(candidate))
     cfg.source = str(candidate)
-    # A relative profile path means relative to the config file, not the cwd.
+    # A relative profile or baseline path means relative to the config file, not the cwd.
     if cfg.profile not in ("default", "") and not Path(cfg.profile).is_absolute():
         cfg.profile = str(candidate.resolve().parent / cfg.profile)
+    if cfg.baseline and not Path(cfg.baseline).is_absolute():
+        cfg.baseline = str(candidate.resolve().parent / cfg.baseline)
     return cfg
