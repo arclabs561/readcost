@@ -970,14 +970,16 @@ most learner essays.
 ASSET (Alva-Manchego et al. 2020, CC BY-NC 4.0) has 2,359 Wikipedia
 sentences, each simplified by ten crowd workers, who could paraphrase,
 delete and split. This is the human counterpart to the model rewrites above.
-`scripts/eval_simplifications.py` compares 23,280 pairs (original minus
-simplification, two-sided Wilcoxon):
+`scripts/eval_simplifications.py` compares 23,280 pairs. The shares count
+pairs; the two-sided Wilcoxon test runs on each of the 2,336 original
+sentences' mean difference, since its ten simplifications are not independent
+(an earlier version tested all pairs and overstated the significance):
 
 | Measure | Original median | Simplification median | Lower | Same | Higher | p |
 | --- | --- | --- | --- | --- | --- | --- |
 | words | 17 | 15 | 64% | 16% | 19% | <0.001 |
 | findings | 0 | 0 | 5% | 93% | 2% | <0.001 |
-| cost index | 0 | 0 | 6% | 89% | 5% | <0.001 |
+| cost index | 0 | 0 | 6% | 89% | 5% | 0.87 |
 | predicted ms per word | 241 | 239 | 56% | 1% | 43% | <0.001 |
 
 | Rule | Per 1k words, original | Per 1k words, simplified | Present in original: removed | Absent in original: added |
@@ -995,9 +997,9 @@ almost every time they occur, and the rate of findings per word falls by 16%.
 They keep most noun stacks and lists, many of which are names and
 established terms in Wikipedia text, and they add inanimate subjects slightly
 more than they remove them. Predicted reading time per word barely moves,
-because simplifications keep the rare content words. Unlike the model
-rewrites, human simplifications do lower the cost index, but the effect is
-in the 10% of pairs whose original had a finding.
+because simplifications keep the rare content words. Findings fall, but so
+does length, and the cost index (points per 1,000 words) shows no reliable
+change per original sentence (p = 0.87), as with the model rewrites.
 
 ## Python Enhancement Proposals
 
