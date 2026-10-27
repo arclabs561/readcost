@@ -477,7 +477,7 @@ setup for each editor.
   writers. Of the 75 that the current rules still report, a majority of eight
   raters judged 20% correct or defensible (single raters: 13 to 41%; two
   lenient raters: 71%). Agreement between raters is modest (Fleiss' kappa 0.40
-  over the eight). See [docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md).
+  over the eight). `readcost explain RULE` shows the count for each rule. See [docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md).
 - hyphen-compound skips pairs found in 5+ documents of a 2019 FineWeb-Edu
   crawl (ODC-By; see `src/readcost/data/FINEWEB_NOTICE`).
 - The paper's findings are about how often text uses these constructions,

@@ -1,0 +1,31 @@
+{
+ "run": "results-7906d0a",
+ "raters": 8,
+ "method": "findings sampled from essays and documentation by well-regarded writers; accepted means a majority of the raters labelled it correct or defensible",
+ "rules": {
+  "stacked-nouns": {
+   "labelled": 19,
+   "accepted": 3
+  },
+  "inanimate-subject": {
+   "labelled": 12,
+   "accepted": 2
+  },
+  "hyphen-compound": {
+   "labelled": 13,
+   "accepted": 2
+  },
+  "long-dependency": {
+   "labelled": 13,
+   "accepted": 0
+  },
+  "inline-list": {
+   "labelled": 15,
+   "accepted": 7
+  },
+  "reduced-object-relative": {
+   "labelled": 2,
+   "accepted": 1
+  }
+ }
+}

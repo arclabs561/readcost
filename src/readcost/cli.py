@@ -171,6 +171,22 @@ def _cmd_profile(args) -> int:
     return EXIT_OK
 
 
+def _measured(rule: str) -> str:
+    """How often model raters accepted this rule's findings in the evaluation (docs/evaluation.md)."""
+    import json
+    from importlib import resources
+
+    try:
+        data = json.loads(resources.files("readcost").joinpath("data/rule_precision.json").read_text())
+    except (OSError, ValueError):
+        return "no evaluation data in this install"
+    row = data["rules"].get(rule)
+    if not row or row["labelled"] < 5:
+        return "too few labelled findings to measure (see docs/evaluation.md)"
+    return (f"{row['accepted']} of {row['labelled']} labelled findings judged correct or defensible "
+            f"by a majority of {data['raters']} model raters, on essays and docs by well-regarded writers")
+
+
 def _cmd_explain(args) -> int:
     from .features import FEATURES
 
@@ -187,6 +203,7 @@ def _cmd_explain(args) -> int:
         if f.bad:
             print(f"  Before: {f.bad}")
             print(f"  After:  {f.good}")
+        print(f"  Measured: {_measured(f.id)}")
         print()
     return EXIT_OK
 
