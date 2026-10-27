@@ -24,6 +24,17 @@ from .lang import other_language
 from .profile import Profile, load_profile
 
 WEIGHTS = {"info": 0.5, "warn": 1.0, "error": 2.0}
+# Verdict thresholds that were config keys until 0.3. Below SHORT_TEXT_WORDS
+# a per-1,000 density is too noisy (one finding in a 20-word comment scores
+# 50), so short texts are judged by weighted points. Commit messages are
+# terser than prose: in 1,000 Go commit messages of 40+ words the 99th
+# percentile cost index is 49, against 8 to 16 for essays, docs, READMEs and
+# discussion (docs/evaluation.md, "Contexts").
+SHORT_TEXT_WORDS = 40
+SHORT_ADVISE_POINTS = 2.0
+BLOCK_MIN_POINTS = 3.0            # a block needs at least this many weighted findings
+COMMIT_ADVISE_COST_INDEX = 50.0
+COMMIT_BLOCK_COST_INDEX = 100.0
 
 
 @dataclass
@@ -270,18 +281,18 @@ class Analyzer:
         result.cost_index = 1000.0 * result.points / result.words if result.words else 0.0
         advise_at = severity_rank(self.cfg.advise_severity)
         severe = any(severity_rank(f.severity) >= advise_at for f in result.findings)
-        if result.words < self.cfg.short_text_words:
-            if result.points >= self.cfg.block_min_points:
+        if result.words < SHORT_TEXT_WORDS:
+            if result.points >= BLOCK_MIN_POINTS:
                 result.verdict = "block"
-            elif result.points >= self.cfg.short_advise_points or severe:
+            elif result.points >= SHORT_ADVISE_POINTS or severe:
                 result.verdict = "advise"
             else:
                 result.verdict = "pass"
             return
         advise_ci, block_ci = self.cfg.advise_cost_index, self.cfg.block_cost_index
         if context == "commit":
-            advise_ci, block_ci = self.cfg.commit_advise_cost_index, self.cfg.commit_block_cost_index
-        if result.points >= self.cfg.block_min_points and result.cost_index >= block_ci:
+            advise_ci, block_ci = COMMIT_ADVISE_COST_INDEX, COMMIT_BLOCK_COST_INDEX
+        if result.points >= BLOCK_MIN_POINTS and result.cost_index >= block_ci:
             result.verdict = "block"
         elif (result.cost_index >= advise_ci and result.points >= 1) \
                 or any(severity_rank(f.severity) >= advise_at for f in result.findings):

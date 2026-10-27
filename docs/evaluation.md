@@ -1188,8 +1188,8 @@ referent rule reports, shuffled; the six strict raters labelled them blind:
 | Words (current rule) | 17 of 30 | 14 to 19 |
 | New referents | 10 of 30 | 7 to 15 |
 
-Word distance stays the default. `long_dependency_referents = 5` turns the
-referent measure on for anyone who wants to compare.
+Word distance stays the default, and the referent measure was removed in
+0.3 rather than kept as an option.
 
 ## Center embedding and undefined acronyms (opt-in)
 

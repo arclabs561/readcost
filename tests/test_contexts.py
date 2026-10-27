@@ -1,6 +1,7 @@
 """Commit messages: extraction of prose lines and their own verdict thresholds."""
 
 from readcost import Analyzer, Config
+from readcost.engine import COMMIT_ADVISE_COST_INDEX
 from readcost.extract import extract_commit
 
 BENCH = """runtime: speed up memmove for unaligned sources
@@ -49,10 +50,6 @@ def test_commit_messages_use_their_own_thresholds():
     prose = a.check_text(DENSE, "markdown")
     commit = a.check_text("Fix the build\n\n" + DENSE, "commit")
     assert prose.cost_index >= Config().advise_cost_index and prose.verdict != "pass"
-    assert Config().advise_cost_index <= commit.cost_index < Config().commit_advise_cost_index
+    assert Config().advise_cost_index <= commit.cost_index < COMMIT_ADVISE_COST_INDEX
     assert commit.verdict == "pass"
 
-
-def test_commit_thresholds_are_configurable():
-    cfg = Config(commit_advise_cost_index=5.0, commit_block_cost_index=10.0)
-    assert Analyzer(cfg).check_text("Fix the build\n\n" + DENSE, "commit").verdict == "block"

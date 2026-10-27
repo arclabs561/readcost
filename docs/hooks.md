@@ -33,7 +33,7 @@ index is the weighted count per 1,000 words.
 
 That held-out writing has a median cost index of 3.2; only one text scores
 above 15, so the advise line sits above nearly all well-edited prose. Change the
-lines with `advise_cost_index`, `block_cost_index` and `block_min_points`.
+lines with `advise_cost_index` and `block_cost_index`.
 
 **Only the lines that changed.** On an edit, readcost judges sentences that
 overlap the edited lines, so a hook does not repeat complaints about text

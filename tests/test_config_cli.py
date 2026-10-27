@@ -107,6 +107,16 @@ def test_advise_severity_off_disables_the_rule(tmp_path):
     assert result.verdict == "advise"
 
 
+def test_retired_threshold_keys_warn_and_are_ignored(tmp_path, capsys):
+    cfg = load_config(str(write_cfg(tmp_path, '[readcost]\nstacked_nouns_min = 2\nadvise_cost_index = 12.0\n')))
+    err = capsys.readouterr().err
+    assert "stacked_nouns_min is no longer configurable and is ignored" in err
+    assert cfg.advise_cost_index == 12.0 and not hasattr(cfg, "stacked_nouns_min")
+    # The rule still uses its fixed threshold: two stacked nouns are not reported.
+    r = Analyzer(cfg).check_text("We tune the retry budget by hand every week.", "markdown")
+    assert [f for f in r.findings if f.feature == "stacked-nouns"] == []
+
+
 def test_example_lists_every_key_with_default_values():
     example = ROOT / "readcost.toml.example"
     table = tomllib.loads(example.read_text())["readcost"]
