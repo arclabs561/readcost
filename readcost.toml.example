@@ -20,6 +20,9 @@ commit_block_cost_index = 100.0 # commit messages: "block" at this rate
 stacked_nouns_min = 3           # stacked-nouns: this many nouns in a row
 long_dependency_z = 2.5         # long-dependency: z-score against the profile's fit
 long_dependency_min_tokens = 10 # long-dependency: skip sentences with fewer tokens
+long_dependency_core_min = 9   # long-dependency: words between a subject or object and its verb,
+                               # in a sentence whose dependencies are long overall (z above)
+long_dependency_core_always = 15 # long-dependency: that many words is reported at any z
 inline_list_min_items = 4       # inline-list: this many conjoined items
 long_sentence_words = 32        # long-sentence (opt-in): more than this many words
 feedback_link = true            # text and agent output end with a link to report a wrong finding

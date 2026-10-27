@@ -487,13 +487,27 @@ def dependency_z(sent, profile) -> tuple[float, int, tuple]:
     return z, n, max(arcs, key=lambda x: x[0])
 
 
+# Subject, object and attribute arcs: what the rule is about. Arcs from fronted
+# connectives ("Of course, ...", "Therefore, ...") or between whole clauses are
+# long in ordinary prose; raters rejected every such finding (docs/evaluation.md).
+CORE_DEPS = frozenset({"nsubj", "nsubjpass", "csubj", "csubjpass", "dobj", "dative", "attr", "oprd"})
+
+
 def long_dependency(sent, ctx: Context, has_list: bool) -> list[tuple[str, str, list]]:
     z, n, longest = dependency_z(sent, ctx.profile)
     ctx.stats.setdefault("dep_z", []).append(z)
-    if has_list or n < ctx.cfg.long_dependency_min_tokens or z < ctx.cfg.long_dependency_z or not longest:
+    if has_list or n < ctx.cfg.long_dependency_min_tokens or not longest:
         return []
-    dist, dep, head = longest
-    return [("warn", f"'{_w(ctx, head)}' and '{_w(ctx, dep)}' are {dist} words apart (z = {z:.1f})", [dep, head])]
+    core = [arc for arc in dependency_arcs(sent) if arc[1].dep_ in CORE_DEPS]
+    if not core:
+        return []
+    dist, dep, head = max(core, key=lambda arc: arc[0])
+    # A long gap in a sentence whose dependencies are long overall, or a very
+    # long gap anywhere ("The index, which ... runs, serves all queries").
+    if not (dist >= ctx.cfg.long_dependency_core_always
+            or (dist >= ctx.cfg.long_dependency_core_min and z >= ctx.cfg.long_dependency_z)):
+        return []
+    return [("warn", f"'{_w(ctx, dep)}' and '{_w(ctx, head)}' are {dist} words apart (z = {z:.1f})", [dep, head])]
 
 
 def inanimate_subjects(sent, ctx: Context) -> list[tuple[str, str, list]]:

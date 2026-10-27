@@ -68,6 +68,8 @@ class Config:
     stacked_nouns_min: int = 3
     long_dependency_z: float = 2.5
     long_dependency_min_tokens: int = 10
+    long_dependency_core_min: int = 9
+    long_dependency_core_always: int = 15
     inline_list_min_items: int = 4
     long_sentence_words: int = 32
     block_cost_index: float = 30.0  # weighted findings per 1,000 words

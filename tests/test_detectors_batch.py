@@ -64,8 +64,9 @@ def test_hyphenated_package_name_counts_as_one_unit(analyzer):
 
 
 def test_excerpt_and_sentence_show_the_original_code(analyzer):
-    fs = found(analyzer, "In non-Windows environments, if `NO_COLOR` is not set, then colors will be suppressed.",
-               "long-dependency")
+    # long-dependency reports subject and object gaps, so the code span is the subject here.
+    fs = found(analyzer, "`NO_COLOR`, which every terminal library on the system reads when it starts and again "
+                         "on each redraw, controls colors.", "long-dependency")
     assert fs
     assert "`NO_COLOR`" in fs[0].excerpt and "`NO_COLOR`" in fs[0].sentence
     assert "Xcode" not in fs[0].excerpt + fs[0].sentence
@@ -79,8 +80,8 @@ def test_message_names_the_code_span(analyzer):
 
 
 def test_literal_xcode_in_prose_is_left_alone(analyzer):
-    fs = found(analyzer, "In non-Windows environments, if Xcode is not installed, then colors will be suppressed.",
-               "long-dependency")
+    fs = found(analyzer, "Xcode, which every developer on the team installs once and updates whenever a release "
+                         "ships, sets the colors.", "long-dependency")
     assert fs and "Xcode" in fs[0].sentence
 
 
@@ -237,8 +238,8 @@ def test_inline_list_suggestion_keeps_the_reason(analyzer):
 
 
 def test_long_dependency_suggestion_keeps_the_reason(analyzer):
-    fs = found(analyzer, "Or, since you would like to iterate over all entries and ignore any errors that may "
-                         "arise, use `WalkDir::into_iter`.", "long-dependency")
+    fs = found(analyzer, "The index, which every query reads since it must see the latest writes and no reader "
+                         "may block a writer, serves all lookups.", "long-dependency")
     assert fs
     assert "since" in fs[0].suggestion and "keep" in fs[0].suggestion.lower()
 
@@ -385,3 +386,20 @@ def test_readme_examples_trigger_their_detector(feature, note, example):
     # Phrases in the table are not sentences; put them in one.
     text = example if example.endswith(".") else f"The fix keeps {example} in the module."
     assert feature in {f.feature for f in Analyzer(cfg).check_text(text, "markdown").findings}
+
+
+@pytest.mark.parametrize("sentence", [
+    # Shaped like labelled findings the eight-rater majority rejected
+    # (docs/evaluation.md): a fronted connective, or a
+    # clause-to-clause arc, rather than a subject or object far from its verb.
+    "Likewise, if some other process opens the log file and writes junk into the middle of it, "
+    "then the log might become unreadable.",
+])
+def test_long_dependency_ignores_connectives_and_clause_links(analyzer, sentence):
+    assert not found(analyzer, sentence, "long-dependency")
+
+
+def test_long_dependency_reports_the_subject_and_its_verb(analyzer):
+    fs = found(analyzer, "The index, which is built once from every document in the corpus at startup and then "
+                         "rebuilt only when the compactor runs, serves all queries.", "long-dependency")
+    assert [f.message.split(" are ")[0] for f in fs] == ["'index' and 'serves'"]
