@@ -191,6 +191,21 @@ def _segment(pieces: list[tuple[str, int, str | None]], path: str, label: str) -
     return Segment(text, path, anchors, label, codes)
 
 
+def _link_row(tok) -> bool:
+    """True when an inline token is only links joined by separators such as | or ·."""
+    depth, links = 0, 0
+    for c in tok.children or []:
+        if c.type == "link_open":
+            depth, links = depth + 1, links + 1
+        elif c.type == "link_close":
+            depth -= 1
+        elif depth == 0 and c.type in ("text", "softbreak") and c.content.strip(" |·•/-–\n"):
+            return False
+        elif depth == 0 and c.type not in ("text", "softbreak"):
+            return False
+    return links >= 2
+
+
 def _markdown(src: str, path: str, label: str, line_no) -> list[Segment]:
     tokens = _MD.parse(src)
     if tokens and tokens[0].type == "front_matter" and not _is_yaml(tokens[0].content):
@@ -236,6 +251,8 @@ def _markdown(src: str, path: str, label: str, line_no) -> list[Segment]:
             continue
         if disabled or tok.type != "inline" or i == 0 or tokens[i - 1].type != "paragraph_open":
             continue  # headings, table cells and definition terms are not prose
+        if _link_row(tok):
+            continue  # "[Guide](a) | [API docs](b) | [Changelog](c)": navigation, not prose
         seg = _segment(_inline_pieces(tok, line_no), path, label)
         if seg:
             seg.in_list = items > 0
