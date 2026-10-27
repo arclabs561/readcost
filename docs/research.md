@@ -33,6 +33,22 @@ code changes cover that (Wen et al. 2019; Panthaplackel et al. 2021).
   frames repeated within one document. Shaib et al. 2024 count templates
   across many outputs of one model, not within one document, and they make
   no claim about reading time; repeated-frame is a style signal only.
+- Two opt-in rules with weaker evidence. center-embedding flags a clause
+  nested two deep inside clauses that continue after it; Gibson (2000) shows
+  that readers lose track at that depth in constructed sentences, and Wu et
+  al. (2010) find that embedding depth adds to reading time beyond surprisal.
+  undefined-acronym flags an acronym used before it is spelled out; the only
+  evidence is self-reported difficulty (Hales, Williams and Rector 2017). No
+  study was found on terminology consistency, and none supports a check for
+  ambiguous pronouns: Gordon, Grosz and Gilliom (1993) find that repeating a
+  name where a pronoun would do slows reading.
+- Document measures (JSON `metrics`) describe rather than judge: MTLD, idea
+  density by DEPID (Sirts et al. 2017), center-embedding depth, and a
+  sentence-length profile in the manner of Alves et al. (2010).
+- Gibson's Dependency Locality Theory measures a gap by the new nouns and
+  verbs in it rather than by words. On labelled long-dependency findings it
+  separated accepted from rejected findings no better than word distance
+  (docs/evaluation.md), so long-dependency still counts words.
 
 ## Contexts and reference profiles
 
@@ -120,6 +136,9 @@ index while adding words is reported, not rewarded.
   comprehension: an eye-tracking study. Empirical Software Engineering 31.
 - Alves, Ypma and Visser 2010. Deriving metric thresholds from benchmark data.
   ICSM.
+- Brown, Snodgrass, Kemper, Herman and Covington 2008. Automatic measurement
+  of propositional idea density from part-of-speech tagging. Behavior
+  Research Methods 40(2).
 - Biber and Gray 2010. Challenging stereotypes about academic writing.
   Journal of English for Academic Purposes 9(1).
 - Cekini et al. 2026. The cognitive cost of LLM writing. arXiv 2610.23715.
@@ -129,7 +148,16 @@ index while adding words is reported, not rewarded.
   ICPC.
 - Clark, Martin and Mahowald 2026. Why is AI-generated language so hard to
   understand? arXiv 2610.29162.
+- Gibson 2000. The dependency locality theory: a distance-based theory of
+  linguistic complexity. In Image, Language, Brain, MIT Press.
+- Gordon, Grosz and Gilliom 1993. Pronouns, names, and the centering of
+  attention in discourse. Cognitive Science 17.
+- Hales, Williams and Rector 2017. Alienating the audience: how abbreviations
+  hamper scientific communication. APS Observer 30(2).
 - Li and Ahmed 2023. Commit message matters. ICSE.
+- McCarthy and Jarvis 2010. MTLD, vocd-D, and HD-D: a validation study of
+  sophisticated approaches to lexical diversity assessment. Behavior Research
+  Methods 42(2).
 - Louis, Dash, Barr and Sutton 2018. Deep learning to detect redundant method
   comments. arXiv 1806.04616.
 - Nielebock et al. 2019. Commenting source code: is it worth it for small
@@ -147,6 +175,8 @@ index while adding words is reported, not rewarded.
   generated text. EMNLP; arXiv 2407.00211.
 - Shepperd 1988. A critique of cyclomatic complexity as a software metric.
   Software Engineering Journal.
+- Sirts, Piguet and Johnson 2017. Idea density for predicting Alzheimer's
+  disease from transcribed speech. CoNLL; arXiv 1706.04473.
 - Steidl, Hummel and Juergens 2013. Quality analysis of source code comments.
   ICPC.
 - Tian et al. 2022. What makes a good commit message? ICSE.
@@ -155,3 +185,5 @@ index while adding words is reported, not rewarded.
 - Uddin and Robillard 2015. How API documentation fails. IEEE Software 32(4).
 - Wen, Nagy, Bavota and Lanza 2019. A large-scale empirical study on
   code-comment inconsistencies. ICPC.
+- Wu, Bachrach, Cardenas and Schuler 2010. Complexity metrics in an
+  incremental right-corner parser. ACL.

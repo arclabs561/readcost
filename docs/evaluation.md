@@ -1141,6 +1141,75 @@ while readcost's predicted time per word is higher for four of the five
 models. A text can look easier to a classifier and still take longer to read;
 which one matches readers needs a study with people.
 
+## Long dependency: words or new referents
+
+Gibson's Dependency Locality Theory (2000) measures the cost of a gap by the
+new discourse referents inside it (head nouns and tensed verbs), not by
+words. `features.new_referents` counts them for the reported arc. Over the
+20,789 sentences long-dependency examines in the essays and docs, the two
+measures correlate at r = 0.87.
+
+On findings the raters had already labelled (both earlier samples, reparsed;
+80 of 92 matched), 31 were subject or object arcs and the strict majority
+accepted 14. As a score for telling accepted from rejected findings, the
+number of words between the two words reaches an AUC of 0.68 and the referent
+count 0.61. Every accepted finding had 15 or more words in its gap. All 49 other arcs were rejected.
+
+A referent rule tuned to fire about as often (5 or more referents at any z,
+or 2 or more when the sentence's z is 2.5 or more: 308 findings against 320)
+shares 231 findings with the current rule. `scripts/blind_rule_compare.py`'s
+format took 30 findings only the current rule reports and 30 only the
+referent rule reports, shuffled; the six strict raters labelled them blind:
+
+| Findings only one rule reports | Majority of six accepts | Single raters |
+| --- | --- | --- |
+| Words (current rule) | 17 of 30 | 14 to 19 |
+| New referents | 10 of 30 | 7 to 15 |
+
+Word distance stays the default. `long_dependency_referents = 5` turns the
+referent measure on for anyone who wants to compare.
+
+## Center embedding and undefined acronyms (opt-in)
+
+With both rules enabled, the essays and docs give:
+
+| Rule | Findings | Per 1,000 words | Essays | Docs |
+| --- | --- | --- | --- | --- |
+| center-embedding | 14 | 0.02 | 0.04 | 0.00 |
+| undefined-acronym | 476 | 0.83 | 0.93 | 0.63 |
+
+center-embedding counts a finite clause as nested when it interrupts a
+subject and its verb, or a verb and its object, of the clause around it;
+counting any clause with words of its parent on both sides flagged fronted
+"when" and "if" clauses after a connective, and gave 106 findings. Six of
+118 essays and none of the 83 docs reach depth two. undefined-acronym skips
+a fixed list of common abbreviations and any whose lowercase form has a Zipf
+frequency of 3.8 or more (CEO, TV, and capitalised words such as UPDATE),
+and treats words just before an acronym that start with its letters as its
+expansion ("write-ahead log or WAL mode"). Without these it gave 776
+findings; the frequency cut removed 288 and the expansion check 12. Most
+remaining hits are names that a specialist reader knows (AWS, POSIX, GNU) or
+SQL keywords below the cut (PRAGMA, ROLLBACK).
+
+The six strict raters labelled all 14 center-embedding findings and 30 random
+undefined-acronym findings, shuffled together, with the rule definitions
+added to the rater prompt:
+
+| Rule | Majority of six accepts | Single raters |
+| --- | --- | --- |
+| center-embedding | 5 of 14 | 1 to 11 |
+| undefined-acronym | 7 of 30 | 5 to 9 |
+
+For center-embedding the raters' commonest objection was that the clause is
+not center-embedded (a single relative clause, or right-branching); the
+majority judged the construction present in 8 of 14. For undefined-acronym
+they called most hits common acronyms, terms of art or SQL keywords; the
+raters see one sentence, not the document, so they cannot check whether the
+acronym was spelled out elsewhere. Both rules stay off by default.
+
+center-embedding also misses doubly embedded clauses that the small parser
+attaches elsewhere: of four constructed double embeddings, it reported one.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News
