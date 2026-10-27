@@ -271,6 +271,13 @@ def _allowed_spans(sent, allow: set[str]) -> list[set[int]]:
     return spans
 
 
+def _measure_unit(token) -> bool:
+    """The unit of a number-unit modifier ("17-month", "two-week", "64-bit"): it works as an adjective."""
+    doc = token.doc
+    return (token.i >= 2 and doc[token.i - 1].text == "-" and not doc[token.i - 2].whitespace_
+            and not doc[token.i - 1].whitespace_ and doc[token.i - 2].like_num)
+
+
 def _noun_stack(token) -> list:
     # Iterative: a very long run of nouns would overflow Python's recursion limit.
     out, todo = [], [token]
@@ -294,7 +301,7 @@ def stacked_nouns(sent, ctx: Context, taken: set[int],
     for t in sent:
         if t.pos_ not in ("NOUN", "PROPN") or t.dep_ == "compound" or t.text == CODE:
             continue
-        stack = _noun_stack(t)
+        stack = [x for x in _noun_stack(t) if not _measure_unit(x)]
         if t.tag_ == "NNS" and any(_embedded_question(c, t) for c in t.children
                                    if c.dep_ in ("relcl", "ccomp", "acl")):
             # "prints how long the search takes": the head is the verb.
