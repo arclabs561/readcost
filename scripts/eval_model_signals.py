@@ -1,6 +1,8 @@
 # /// script
 # requires-python = ">=3.11"
 # dependencies = ["readcost", "torch", "transformers", "scipy", "numpy"]
+# [tool.uv.sources]
+# readcost = { path = "..", editable = true }  # this checkout, not the PyPI release
 # ///
 """Model-based uncertainty and difficulty signals, tested against human judgments.
 
