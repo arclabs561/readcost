@@ -40,6 +40,8 @@ class Result:
     # only some lines were checked or the model data is missing.
     reading_ms_per_word: float | None = None
     reading_seconds: float | None = None
+    # The checked text, so reports can quote the source line; not in to_dict.
+    source: str = field(default="", repr=False)
 
     def counts(self) -> dict[str, int]:
         out: dict[str, int] = {}
@@ -220,7 +222,9 @@ class Analyzer:
         segments = extract(text, path, fmt, field_path=field_path, last_only=last_only,
                            comments=self.cfg.comments)
         context = "commit" if (fmt or detect_format(path, text)) == "commit" else "prose"
-        return self.analyze(segments, path, lines, context=context)
+        result = self.analyze(segments, path, lines, context=context)
+        result.source = text
+        return result
 
     def check_records(self, text: str, fmt: str, path: str, *, field_path=None) -> list[Result]:
         """One result per message or JSONL record, labeled ``path#label``."""
@@ -233,6 +237,7 @@ class Analyzer:
         for label, segs in groups.items():
             result = self.analyze(segs, path, budget=budget)
             result.path = f"{path}#{label}" if label else path
+            result.source = text
             results.append(result)
         return results
 

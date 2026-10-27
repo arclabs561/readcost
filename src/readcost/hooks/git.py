@@ -15,7 +15,7 @@ import sys
 
 from .common import analyze, config_for
 
-HUNK = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@", re.M)
+HUNK = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@", re.MULTILINE)
 
 
 def _git(*args: str) -> str:
@@ -36,11 +36,11 @@ def handle(event: str, rest: list[str]) -> int:
 
 
 def _report(results, cfg) -> int:
-    from ..report import text
+    from ..report import full, use_color
 
     shown = [r for r in results if r.verdict != "pass"]
     if shown:
-        print(text(shown), file=sys.stderr)
+        print(full(shown, color=use_color(sys.stderr)), file=sys.stderr)
     blocked = any(r.verdict == "block" for r in results)
     if blocked and cfg.hooks.mode == "block":
         print("readcost: commit blocked; rewrite the flagged sentences or commit with --no-verify",

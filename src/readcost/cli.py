@@ -73,7 +73,7 @@ def _load_config(args):
 
 def _cmd_check(args) -> int:
     from .engine import Analyzer
-    from .report import render
+    from .report import render, use_color
 
     cfg = _load_config(args)
     if args.min_severity:
@@ -82,7 +82,8 @@ def _cmd_check(args) -> int:
         cfg.baseline = args.baseline
     results, failed = _collect(args, cfg, Analyzer(cfg))
     out = render(results, args.output, max_items=cfg.hooks.max_items, max_chars=cfg.hooks.max_chars,
-                 feedback_link=cfg.feedback_link)
+                 feedback_link=cfg.feedback_link,
+                 color=use_color(sys.stdout, args.color))
     if out:
         print(out)
     if failed:
@@ -241,7 +242,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     c = sub.add_parser("check", help="analyze files, directories, or stdin")
     inputs(c)
-    c.add_argument("-o", "--output", choices=OUTPUTS, default="text")
+    c.add_argument("-o", "--output", choices=OUTPUTS, default="full",
+                   help="full: quoted line and fix per finding; concise: one line per finding")
+    c.add_argument("--color", choices=("auto", "always", "never"), default="auto",
+                   help="colour the full output (auto: on a terminal, unless NO_COLOR is set)")
     c.add_argument("--fail-on", choices=("never", "advise", "block"), default="block",
                    help="exit 1 when any file reaches this verdict (default: block)")
     c.add_argument("--min-severity", choices=("info", "warn", "error"))

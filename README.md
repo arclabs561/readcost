@@ -48,9 +48,13 @@ readcost check src/lib.rs                     # doc comments; --format source
 readcost explain stacked-nouns
 ```
 
-Output is plain text by default. `-o json`, `-o sarif` and `-o github` are for
-tools, `-o agent` is short feedback written for a model, and `-o pr-comment` is
-the Markdown summary that the GitHub Action posts on a pull request. The exit status is
+The default output quotes each flagged line with a caret under the words,
+names the rule, and says how to fix it, in the style of the Rust compiler.
+Colour is on in a terminal unless `NO_COLOR` is set (`--color` overrides).
+`-o concise` prints one `path:line:col` line per finding, for editors and grep.
+`-o json`, `-o sarif` and `-o github` are for tools, `-o agent` is short
+feedback written for a model, and `-o pr-comment` is the Markdown summary that
+the GitHub Action posts on a pull request. The exit status is
 1 when a file reaches the `--fail-on` verdict (default `block`), 2 on an error,
 and 0 otherwise.
 
@@ -63,9 +67,23 @@ forcing source-segment rebuilds.
 ```
 
 ```text
-notes.md:1: warn: [stacked-nouns] 3 nouns stacked: 'store restart measurement'
-notes.md:1: warn: [stacked-nouns] 3 nouns stacked: 'source-segment rebuilds'
-notes.md: advise; 2 findings in 1 sentences (26 words); cost index 76.9 per 1k words
+warn[stacked-nouns]: 3 nouns stacked: 'store restart measurement'
+ --> notes.md:1:5
+  |
+1 | For store restart measurement, the example prints first snapshot-query cost
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  = help: Keep at most two nouns together. Unpack the rest with a preposition or a relative clause.
+
+warn[hyphen-compound]: coined compound modifier: 'source-segment rebuilds'
+ --> notes.md:3:9
+  |
+3 | forcing source-segment rebuilds.
+  |         ^^^^^^^^^^^^^^^^^^^^^^^
+  = help: Write the relationship out.
+
+notes.md: advise; 2 findings in 1 sentence (26 words); cost index 76.9 per 1k words; predicted reading time 7 s (301 ms per word)
+For why a rule matters, with an example rewrite, run `readcost explain stacked-nouns` (rules here: stacked-nouns, hyphen-compound).
+readcost: a finding is wrong? Report it at https://github.com/arclabs561/readcost/issues/new?template=false-positive.yml
 ```
 
 The rewrite that README adopted keeps every fact and passes:
@@ -119,6 +137,65 @@ Technical writing repeats compressed terms on purpose, so a stacked or
 hyphenated compound is reported once per document, at its first use. An
 identifier as a subject (`` `parse()` returns ``) is not reported as an
 inanimate subject. Code spans, URLs and file paths count as single words.
+
+### Real findings
+
+These come from READMEs in the author's public repositories, checked with the
+default settings. `scripts/readme_gallery.py` regenerates them from pinned
+commits.
+
+```text
+warn[stacked-nouns]: 3 nouns stacked: 'index posting list'
+  --> cnk/README.md:61:48
+   |
+61 | ...presses an inverted-index posting list with cnk, the storage-shrink use case these ID-set codecs exi...
+   |                        ^^^^^^^^^^^^^^^^^^
+   = help: Keep at most two nouns together. Unpack the rest with a preposition or a relative clause.
+
+warn[hyphen-compound]: coined compound modifier: 'storage-shrink use case'
+  --> cnk/README.md:61:81
+   |
+61 | ... an inverted-index posting list with cnk, the storage-shrink use case these ID-set codecs exist for.
+   |                                                  ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: Write the relationship out.
+
+info[reduced-object-relative]: 'case codecs exist': object relative without 'that'
+  --> cnk/README.md:61:100
+   |
+61 | ... an inverted-index posting list with cnk, the storage-shrink use case these ID-set codecs exist for.
+   |                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: Keep the 'that', or turn it into a subject relative or a separate sentence.
+
+warn[long-dependency]: 'is' and 'selected' are 15 words apart (z = 2.7)
+  --> cnk/README.md:48:1
+   |
+48 | is an experimental rANS-backed sorted-set codec behind the `ans` feature, but
+   | ^^---------------------------------------------------------------------------
+49 | is not selected by the default chooser.
+   | -------^^^^^^^^
+   = help: Put the subject next to its verb. Move long modifiers after the verb or into a second sentence.
+
+info[inanimate-subject]: 'index ... owns': a person's verb with a non-person subject
+ --> lexir/README.md:7:60
+  |
+7 | `lexir` ranks caller-provided token streams. Its in-memory index owns postings
+  |                                                            ^^^^^-^^^^
+  = help: Make the person the subject, or state the fact directly: what is out of scope, what is returned, what is not guaranteed.
+
+info[inline-list]: 6 items listed in one sentence
+ --> durability/README.md:8:68
+  |
+8 | `durability` provides filesystem and in-memory directories, atomic writes, WALs,
+  |                                                                    ^^^^^^^^^^^^^
+9 | record logs, checkpoint files, CRC validation, and sync helpers.
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  = help: Use a bulleted list.
+```
+
+Not every finding is right. On those same READMEs, 4 of the 5
+reduced-object-relative hits were false positives ("The help output begins
+with:"); see
+[Limits](#limits) and [Reporting a false positive](#reporting-a-false-positive).
 
 ## Verdicts
 
