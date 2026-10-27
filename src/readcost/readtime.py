@@ -53,6 +53,18 @@ def _model() -> dict:
     raw = resources.files("readcost").joinpath("data/reading_time_model.json.gz").read_bytes()
     spec = json.loads(gzip.decompress(raw))
     spec["trees"] = [{k: np.asarray(v) for k, v in t.items()} for t in spec["trees"]]
+    # All trees padded into (trees, nodes) arrays, so predict walks every tree
+    # at once, one level per step, instead of looping over 300 trees.
+    width = max(len(t["left"]) for t in spec["trees"])
+
+    def pad(key, fill, dtype):
+        out = np.full((len(spec["trees"]), width), fill, dtype=dtype)
+        for i, t in enumerate(spec["trees"]):
+            out[i, :len(t[key])] = t[key]
+        return out
+    spec["stacked"] = {"left": pad("left", -1, np.int64), "right": pad("right", -1, np.int64),
+                       "feature": pad("feature", 0, np.int64), "threshold": pad("threshold", 0.0, np.float64),
+                       "value": pad("value", 0.0, np.float64)}
     return spec
 
 
@@ -103,15 +115,20 @@ def predict(X: np.ndarray) -> np.ndarray:
     # scikit-learn compares float32 features with float64 thresholds; do the
     # same, or a value on a split goes down the other branch.
     X = np.asarray(X, dtype=np.float32).astype(np.float64)
-    for t in spec["trees"]:
-        node = np.zeros(len(X), dtype=np.int64)
-        while True:
-            leaf = t["left"][node] == -1
-            if leaf.all():
-                break
-            go_left = X[rows, np.where(leaf, 0, t["feature"][node])] <= t["threshold"][node]
-            node = np.where(leaf, node, np.where(go_left, t["left"][node], t["right"][node]))
-        out += spec["learning_rate"] * t["value"][node]
+    st = spec["stacked"]
+    trees = np.arange(st["left"].shape[0])[None, :]
+    node = np.zeros((len(X), st["left"].shape[0]), dtype=np.int64)  # (rows, trees)
+    while True:
+        left = st["left"][trees, node]
+        leaf = left == -1
+        if leaf.all():
+            break
+        x = X[rows[:, None], st["feature"][trees, node]]
+        go_left = x <= st["threshold"][trees, node]
+        node = np.where(leaf, node, np.where(go_left, left, st["right"][trees, node]))
+    # Summed tree by tree, in the order scikit-learn adds them.
+    for value in (spec["learning_rate"] * st["value"][trees, node]).T:
+        out += value
     return out
 
 
@@ -131,6 +148,17 @@ def word_times(text: str) -> list[tuple[int, int, str, float]]:
         return []
     ms = predict(features([w for _, _, w in spans]))
     return [(a, b, w, float(t)) for (a, b, w), t in zip(spans, ms)]
+
+
+def word_times_many(texts: list[str]) -> list[list[tuple[int, int, str, float]]]:
+    """``word_times`` for each paragraph, with one model call for all of them."""
+    spans = [[(m.start(), m.end(), m.group()) for m in re.finditer(r"\S+", t) if CODE not in m.group()]
+             for t in texts]
+    blocks = [features([w for _, _, w in sp]) for sp in spans if sp]
+    if not blocks:
+        return [[] for _ in texts]
+    ms = iter(predict(np.vstack(blocks)))
+    return [[(a, b, w, float(next(ms))) for a, b, w in sp] for sp in spans]
 
 
 def estimate(paragraphs: list[str]) -> tuple[int, float]:

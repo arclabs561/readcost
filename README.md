@@ -126,6 +126,7 @@ package.
 
 ```sh
 readcost check README.md docs/
+readcost check ~/src                          # a whole tree: git-aware, skips node_modules and the like, parallel
 readcost check --lines 40-80 README.md      # only sentences touching these lines; 40- runs to the end
 some-model-cli "explain X" | readcost check -        # model output on stdin
 readcost check --format transcript --last session.jsonl

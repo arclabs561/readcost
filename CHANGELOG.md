@@ -47,6 +47,13 @@ configuration.
 - docs/agents.md: using readcost from a coding agent, with an AGENTS.md
   snippet.
 
+- `readcost check DIR` crawls large trees: inside a repository it lists what
+  git tracks or would track (nested repositories by their own ignore files);
+  elsewhere it never descends into hidden directories or ones `[readcost.src]
+  exclude` matches. From 16 files it checks in parallel processes (`-j N`).
+  With the reading-time and allowed-term speedups, the 235-file evaluation
+  corpus takes 14 s instead of 112 s, with identical output.
+
 ### Deprecated
 
 - `enable`, `disable`, `hooks.paths` and `hooks.exclude` still work, with a
