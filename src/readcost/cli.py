@@ -38,7 +38,9 @@ def _line_spec(spec: str | None) -> str | None:
 def _feature_ids(value: str, flag: str) -> list[str]:
     from .config import unknown_features
 
-    ids = [i.strip() for i in value.split(",") if i.strip()]
+    from .config import drop_retired
+
+    ids = drop_retired([i.strip() for i in value.split(",") if i.strip()], flag)
     bad = unknown_features(ids)
     if bad:
         from .features import FEATURES

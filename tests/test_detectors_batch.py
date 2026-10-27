@@ -13,7 +13,7 @@ def analyzer():
 
 @pytest.fixture(scope="module")
 def full():
-    return Analyzer(Config(enable=["nominalization", "participial-clause", "repeated-frame"]))
+    return Analyzer(Config(rules={"nominalization": "info", "participial-clause": "info"}))
 
 
 def found(a, text, feature=None):
@@ -203,30 +203,6 @@ def test_participial_clause_negatives(full, text):
     assert found(full, text, "participial-clause") == []
 
 
-def test_repeated_frame_in_one_document(full):
-    text = ("This approach reduces the latency of every request. "
-            "This change improves the speed of every query. "
-            "This design lowers the cost of every lookup.")
-    fs = found(full, text, "repeated-frame")
-    assert len(fs) == 1
-    assert "3 sentences" in fs[0].message
-
-
-def test_varied_sentences_have_no_frame(full):
-    text = ("The index stores one list of documents for each term. "
-            "You can search it from several threads at once. "
-            "When a segment fills up, the writer starts a new one and merges old ones in the background. "
-            "Queries never wait for a merge.")
-    assert found(full, text, "repeated-frame") == []
-
-
-def test_two_repeats_are_not_a_frame(full):
-    text = ("This approach reduces the latency of every request. "
-            "This change improves the speed of every query. "
-            "Nothing else changed in the release.")
-    assert found(full, text, "repeated-frame") == []
-
-
 # ---------------------------------------------------------------- rationale-keeping suggestions
 
 def test_inline_list_suggestion_keeps_the_reason(analyzer):
@@ -247,13 +223,6 @@ def test_long_dependency_suggestion_keeps_the_reason(analyzer):
 def test_suggestion_without_a_reason_is_the_plain_fix(analyzer):
     fs = found(analyzer, "It supports negations from three families, implications defined by residuation, ordered weighted averages, and uninorms with any neutral element.", "inline-list")
     assert fs and fs[0].suggestion == "Use a bulleted list."
-
-
-def test_list_items_do_not_form_a_frame(full):
-    text = ("- This approach reduces the latency of every request.\n"
-            "- This change improves the speed of every query.\n"
-            "- This design lowers the cost of every lookup.\n")
-    assert found(full, text, "repeated-frame") == []
 
 
 # ---------------------------------------------------------------- lexicon data
@@ -321,13 +290,6 @@ def test_participle_inside_a_list_is_not_flagged(full):
 def test_nominalization_naming_a_thing_is_not_flagged(full):
     assert found(full, "This crate provides a fast implementation of ordered sets and maps.", "nominalization") == []
     assert found(full, "The crate provides implementations of the trait for every map.", "nominalization") == []
-
-
-def test_colon_lead_ins_do_not_form_a_frame(full):
-    text = ("If you are a Homebrew user, then you can install the tool from the main tap:\n\n    brew install x\n\n"
-            "If you are a MacPorts user, then you can install the tool from the main ports:\n\n    port install x\n\n"
-            "If you are a Windows user, then you can install the tool from the main bucket:\n\n    scoop install x\n")
-    assert found(full, text, "repeated-frame") == []
 
 
 # ---------------------------------------------------------------- profile fit

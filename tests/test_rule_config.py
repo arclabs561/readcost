@@ -110,3 +110,13 @@ def test_exit_zero(tmp_path):
     (tmp_path / "readcost.toml").write_text('[readcost.rules]\nall = "error"\n')
     assert run(["check", "--fail-on", "advise", "-"], tmp_path, DENSE).returncode == 1
     assert run(["check", "--fail-on", "advise", "--exit-zero", "-"], tmp_path, DENSE).returncode == 0
+
+
+def test_retired_rules_warn_and_are_ignored(tmp_path):
+    (tmp_path / "readcost.toml").write_text('[readcost.rules]\ndenominal-verb = "warn"\nstacked-nouns = "error"\n')
+    out = run(["check", "-o", "concise", "--fail-on", "never", "--info", "repeated-frame,center-embedding", "-"],
+              tmp_path, "We tune the shard compaction retry budget by hand.\n")
+    assert out.returncode == 0
+    for rule in ("denominal-verb", "repeated-frame", "center-embedding"):
+        assert f"rule '{rule}' was removed in 0.3" in out.stderr
+    assert "error: [stacked-nouns]" in out.stdout  # the rest of the table still applies

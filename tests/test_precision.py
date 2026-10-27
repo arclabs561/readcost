@@ -56,16 +56,6 @@ def test_long_stack_after_a_name_is_still_reported(analyzer):
     assert "stacked-nouns" in feats(analyzer, text)
 
 
-def test_phrasal_verb_is_not_a_denominal_verb():
-    a = Analyzer(Config(enable=["denominal-verb"]))
-    assert "denominal-verb" not in feats(a, "You can always figure out more from the screen than from the manual.")
-    assert "denominal-verb" in feats(a, "The script will bucket the requests by hour.")
-
-
-def test_denominal_verb_is_off_by_default(analyzer):
-    assert "denominal-verb" not in feats(analyzer, "The script will bucket the requests by hour.")
-
-
 def test_clauses_joined_by_commas_are_not_an_inline_list(analyzer):
     text = ("But it's still a challenge for models, because drawing pelicans is difficult, drawing "
             "bicycles is difficult, and pelicans can't ride bicycles in the first place.")
