@@ -134,3 +134,14 @@ def test_readme_example_output_is_what_readcost_prints():
     assert m, "README example blocks not found"
     out = run(["check", "--fail-on", "never", "--stdin-name", "notes.md", "-"], stdin=m.group(1)).stdout
     assert out == m.group(2)
+
+
+def test_colour_changes_no_column(tmp_path):
+    # Escape codes have no width; padding measured on coloured text misaligns the arrows.
+    import re
+
+    src = "x\nWe rebuild the cache invalidation strategy file nightly.\n"
+    f = finding("cache invalidation strategy file", src.splitlines()[1], 2)
+    r = Result(path="a.md", findings=[f], source=src)
+    coloured = re.sub(r"\x1b\[[0-9;]*m", "", report.full([r], color=True))
+    assert coloured == report.full([r])
