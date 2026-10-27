@@ -33,7 +33,7 @@ def test_commit_subject_scope_is_not_a_slash_list():
 
 def test_package_path_in_prose_is_not_a_slash_list():
     r = Analyzer(Config()).check_text(
-        "On my workstation this makes the build of the cmd/compile/internal/simdgen package faster.", "markdown")
+        "With this change the tests in the cmd/compile/internal/ssagen package run faster on my laptop.", "markdown")
     assert not [f for f in r.findings if f.feature == "inline-list"]
 
 
