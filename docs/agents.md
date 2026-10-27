@@ -39,6 +39,15 @@ status is 1 when the rewrite is predicted to take longer to read in total or
 has more weighted findings (`--fail-on slower` checks time only), 2 when an
 input cannot be read, and 0 otherwise.
 
+## Match a house style
+
+`readcost style docs/ --against go-docs -o json` compares a draft's rule
+rates, words per sentence and predicted ms per word with a reference
+profile (`readcost style --list`). Each row has `measure`, `rule` (null for
+the two rows that are not rules), `yours`, `reference`, `count` and
+`ratio`; a rule far above the reference (ratio 2 or more) is where a
+rewrite toward that style should start.
+
 ## AGENTS.md snippet
 
 Paste into a repository's AGENTS.md or CLAUDE.md:
