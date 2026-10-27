@@ -765,6 +765,62 @@ Of the 210 labelled findings, 74 are still reported instead of 75; the one
 dropped was judged wrong by the majority, so the eight-rater majority's share
 correct or defensible goes from 20.0% to 20.3%.
 
+## Pull requests and review comments
+
+`scripts/fetch_github_prose.py` takes 20 merged pull request descriptions (40 or
+more words) and 20 review comments by people (25 or more words) from each of
+python/cpython, rust-lang/rust, django/django, kubernetes/kubernetes,
+astral-sh/ruff and facebook/react: 240 texts, kept outside the repository.
+`scripts/eval_corpus.py` runs on them unchanged.
+
+| Category | Texts | Median words | Pass | Advise | Block | Cost index p50 / p90 |
+| --- | --- | --- | --- | --- | --- | --- |
+| PR descriptions | 120 | 108 | 104 | 16 | 0 | 3.1 / 12.2 |
+| Review comments | 120 | 39 | 114 | 5 | 1 | 7.1 / 10.6 |
+
+The first run found one false-positive source that the other categories never
+show: cross-repository references such as `rust-lang/rust#161362` were read as
+the coined compound "rust-lang", which put 3% of descriptions at "block". Issue
+references now count as single words, like URLs, and hyphen-compound findings
+in descriptions fell from 2.11 to 0.72 per 1,000 words. What remains is mostly
+stacked nouns in terse rollup titles ("overflow safety docs"). Most review
+comments are under 40 words, so they are judged by weighted counts, not the
+cost index.
+
+## Model answers written from scratch
+
+The paired rewrites above test a model restating a human paragraph. This tests
+what a user of a chat product reads: the model's own answer to a question.
+`scripts/native_answers.py` takes 55 questions from HC3 (Hello-SimpleAI/HC3,
+CC BY-SA 4.0; 30 from wiki_csai, whose human answers are Wikipedia passages on
+computer science and AI, and 25 from open_qa), each with a human answer and a
+ChatGPT answer from late 2022, and asks five current models each question
+unchanged, at default settings, through OpenRouter (275 calls, $1.70). Each
+cell gives the median, then in brackets the share of questions where that
+source's answer is above the human answer and a Wilcoxon signed-rank p-value.
+
+54 questions with a human answer of 40+ words
+
+| Source | Answers | words median (above human) | cost_index median (above human) | findings_per_1k median (above human) | ms_per_word median (above human) | seconds median (above human) | Not passing |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| human | 54 | 133 | 6.12 | 9.76 | 209 | 28 | 20% |
+| chatgpt-2022 | 55 | 168 (52%, p 0.42) | 4.07 (31%, p 0.0035) | 8 (33%, p 0.12) | 202 (33%, p 0.0025) | 34 (46%, p 0.96) | 2% |
+| google/gemini-4-argon | 53 | 506 (98%, p 2.7e-10) | 3.14 (34%, p 0.0003) | 5.41 (34%, p 0.00088) | 223 (83%, p 3.2e-05) | 120 (98%, p 2.5e-10) | 0% |
+| deepseek/deepseek-v4.1-flash | 51 | 246 (71%, p 1.4e-05) | 7.63 (45%, p 0.77) | 12.3 (55%, p 0.096) | 260 (98%, p 5.5e-10) | 69.3 (90%, p 6.2e-09) | 12% |
+| x-ai/grok-4.7 | 51 | 204 (63%, p 0.035) | 7.61 (51%, p 0.97) | 13.8 (55%, p 0.12) | 239 (92%, p 9.1e-09) | 53.9 (73%, p 0.0001) | 12% |
+| moonshotai/kimi-k3.1-pro | 50 | 210 (70%, p 0.0024) | 5.08 (30%, p 0.037) | 8.54 (38%, p 0.5) | 248 (92%, p 3e-13) | 50.9 (78%, p 6e-07) | 8% |
+| mistralai/mistral-large-4-0 | 54 | 316 (91%, p 2.2e-09) | 4.42 (40%, p 0.016) | 7.37 (40%, p 0.045) | 256 (94%, p 3.8e-10) | 92 (96%, p 3.2e-10) | 4% |
+
+The finding from the paired rewrites holds for answers written from scratch.
+All five current models write answers that take longer per word to read than
+the human answer to the same question (83 to 98% of questions), and longer in
+total, because they are 1.5 to 4 times as long. readcost's construction counts
+do not separate them: cost index and findings per 1,000 words are lower than
+the human answers' or not different. The Wikipedia passages are dense; one in
+five does not pass. The 2022 ChatGPT answers read faster per word than the
+human ones, so the per-word cost is a property of current models, not of model
+text as such.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News
@@ -772,13 +828,12 @@ and Stack Overflow discussion, code comments from two standard libraries, Go
 commit messages, model rewrites of human paragraphs, and two reading-time and
 two difficulty datasets. Not covered:
 
-- Model output as written: chat answers and agent replies, including Claude
-  Code transcripts, which readcost reads. The paired test used rewrites of
-  human paragraphs, not answers a model wrote from scratch.
+- Agent replies and Claude Code transcripts (chat answers to questions are
+  above).
 - Human judgment: every label here comes from model raters, which agree only
   modestly (Fleiss' kappa 0.23 over ten, 0.40 over eight). No study has
   checked that readers understand a rewrite faster or better.
-- Pull request descriptions, issue threads and code review comments.
+- Issue threads (pull request descriptions and review comments are above).
 - API references, docstrings at scale, man pages, CLI help and error messages.
 - Changelogs, release notes, design documents, ADRs and specifications.
 - Commit messages outside the Go project's conventions.
