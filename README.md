@@ -94,7 +94,8 @@ the worst documentation failures), or tell who wrote a text.
 Vale's part-of-speech rules can match a run of nouns, but Vale, proselint and
 write-good do not parse which word depends on which, so they cannot measure the
 distance from a subject to its verb or find an object relative without "that". readcost works next to
-Vale rather than instead of it. A readability formula tracks how hard a whole
+Vale rather than instead of it; [docs/vale.md](https://github.com/arclabs561/readcost/blob/main/docs/vale.md)
+has a CI recipe that runs both. A readability formula tracks how hard a whole
 text is better than readcost's cost index does (see
 [docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md));
 readcost's job is to say which sentence to change.
