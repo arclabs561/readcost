@@ -235,22 +235,6 @@ info[reduced-object-relative]: object relative clause without 'that'
    = example: 'the format the reader expects' -> 'the format that the reader
               expects'
 
-warn[long-dependency]: related words far apart
-  --> cnk/README.md:48:1
-   |
-48 | is an experimental rANS-backed sorted-set codec behind the `ans` feat...
-   | ^^-------------------------------------------------------------------
-49 | is not selected by the default chooser.
-   | -------^^^^^^^^ 'is' and 'selected' are 15 words apart
-   |
-   = why: A subject far from its verb, or a verb far from its object, has to be
-          held in working memory.
-   = help: Put the subject next to its verb. Move long modifiers after the verb
-           or into a second sentence.
-   = example: 'The index, built once from all documents and rebuilt only on
-              compaction, serves queries.' -> 'The index serves queries. It is
-              built once and rebuilt only on compaction.'
-
 info[inanimate-subject]: thing doing a person's action
  --> lexir/README.md:7:60
   |
@@ -474,9 +458,9 @@ setup for each editor.
   Treat their findings as prompts to reread, not verdicts.
 - Precision is low on well-edited prose. Ten model raters from different labs
   labelled 210 findings sampled from essays and documentation by well-regarded
-  writers. Of the 74 that the current rules still report, a majority of eight
-  raters judged 15 (20%) correct or defensible (single raters: 14 to 42%; two
-  lenient raters: 72%). Agreement between raters is modest (Fleiss' kappa 0.40
+  writers. Of the 64 that the current rules still report, a majority of eight
+  raters judged 15 (23%) correct or defensible (single raters: 16 to 48%; two
+  lenient raters: 75 to 77%). Agreement between raters is modest (Fleiss' kappa 0.40
   over the eight). `readcost explain RULE` shows the count for each rule. See
   [docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md).
 - hyphen-compound skips pairs found in 5+ documents of a 2019 FineWeb-Edu

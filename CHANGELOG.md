@@ -7,6 +7,14 @@ configuration.
 
 ## [Unreleased]
 
+### Changed
+
+- long-dependency reports a subject, object or attribute far from its verb
+  (9+ words in a sentence whose dependencies are long overall, or 15+ words
+  anywhere), not the longest arc of any kind. In a blind comparison six model
+  raters accepted 14 of 30 new findings and 0 of 30 old ones. New config keys
+  `long_dependency_core_min` and `long_dependency_core_always`.
+
 ## [0.2.0] - 2026-10-26
 
 First release on PyPI (`pip install readcost`, or `uvx readcost`).
