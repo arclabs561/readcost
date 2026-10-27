@@ -6,7 +6,7 @@ import statistics
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import lexicon, readtime
+from . import lexicon, metrics, readtime
 from .baseline import load_baseline
 from .config import SEVERITIES, Config, load_config, severity_rank
 from .extract import Segment, detect_format, extract
@@ -18,6 +18,7 @@ from .features import (
     repeated_frames,
     show,
     suggestion,
+    undefined_acronyms,
 )
 from .lang import other_language
 from .profile import Profile, load_profile
@@ -45,6 +46,8 @@ class Result:
     # worst first (see Analyzer._hotspots). Experimental: the model was
     # validated on whole texts, not single sentences.
     hotspots: list[dict] = field(default_factory=list)
+    # Document measures (metrics.py); JSON output only, never the verdict.
+    metrics: dict = field(default_factory=dict)
     # The checked text, so reports can quote the source line; not in to_dict.
     source: str = field(default="", repr=False)
 
@@ -63,6 +66,7 @@ class Result:
             "reading_ms_per_word": None if self.reading_ms_per_word is None else round(self.reading_ms_per_word, 1),
             "reading_seconds": None if self.reading_seconds is None else round(self.reading_seconds, 1),
             "hotspots": self.hotspots,
+            "metrics": self.metrics,
             "findings": [vars(f) for f in self.findings],
         }
 
@@ -156,8 +160,11 @@ class Analyzer:
         docs = self.nlp.pipe([s.text for s in segments])
         framed: list[tuple[Segment, object]] = []  # prose sentences for repeated-frame
         spans: list[tuple] = []  # (segment, start, end, line, text) of each checked sentence
+        parsed: list[tuple[Segment, object]] = []  # every parsed segment, for document-level rules
+        checked: list = []                          # every sentence checked, for metrics
         for seg_index, (seg, doc) in enumerate(zip(segments, docs)):
             ctx.codes = seg.codes
+            parsed.append((seg, doc))
             for sent in doc.sents:
                 words = [t for t in sent if t.is_alpha]
                 if len(words) < 4 or not any(t.pos_ in ("VERB", "AUX") for t in sent):
@@ -170,6 +177,7 @@ class Analyzer:
                     continue
                 result.sentences += 1
                 result.words += len(words)
+                checked.append(sent)
                 if not seg.in_list:
                     framed.append((seg, sent))
                 text = show(ctx, sent.doc, sent.start, sent.end - 1)
@@ -187,11 +195,21 @@ class Analyzer:
                 text = show(ctx, sent.doc, sent.start, sent.end - 1)
                 result.findings.append(self._finding(ctx, seg, sent, text, path, seg.line_at(sent.start_char),
                                                      "repeated-frame", "info", msg, toks))
+        if "undefined-acronym" in enabled:
+            keys = {(id(s.doc), s.start) for s in checked}
+            for seg, sent, msg, toks in undefined_acronyms(parsed, keys, self.allow):
+                if "undefined-acronym" in seg.skip:
+                    continue
+                ctx.codes = seg.codes
+                text = show(ctx, sent.doc, sent.start, sent.end - 1)
+                result.findings.append(self._finding(ctx, seg, sent, text, path, seg.line_at(sent.start_char),
+                                                     "undefined-acronym", "info", msg, toks))
         result.findings = _first_use_only(result.findings)
         for f in result.findings:
             # A level set in [readcost.rules], an override or a flag replaces the detector's own.
             if f.feature in forced:
                 f.severity = forced[f.feature]
+        result.metrics = metrics.compute(checked)
         if self.baseline is not None:
             # Before the verdict, so that only new findings decide it.
             if budget is None:

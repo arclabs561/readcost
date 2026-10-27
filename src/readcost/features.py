@@ -140,6 +140,27 @@ FEATURES: dict[str, Feature] = {f.id: f for f in [
         "This change reduces latency. This change improves speed. This change lowers cost.",
         "This change reduces latency, improves speed and lowers cost.",
     ),
+    Feature(
+        "center-embedding", "Clause nested inside a nested clause", "info", False, "opt-in",
+        "A clause inside a clause that is itself inside the middle of another "
+        "clause makes the reader hold several unfinished subjects at once. One "
+        "nested clause is ordinary; two is where readers lose track (Gibson 2000; "
+        "such sentences are rare even in edited writing, Karlsson 2007).",
+        "Finish the outer clause first, or move the inner clause into its own sentence.",
+        "The reporter who the senator who John met attacked disliked the editor.",
+        "John met the senator who attacked the reporter. The reporter disliked the editor.",
+    ),
+    Feature(
+        "undefined-acronym", "Acronym used before it is spelled out", "info", False, "opt-in",
+        "An acronym the reader has not seen spelled out has to be guessed or "
+        "looked up. Readers rated passages harder to read when abbreviations "
+        "were never expanded than when each was expanded once (Hales, Williams "
+        "and Rector 2017); there is no reading-time evidence. Common ones (API, "
+        "URL, JSON, HTTP and similar) are skipped; add others to `allow`.",
+        "Spell it out at its first use: 'write-ahead log (WAL)'.",
+        "Every write goes to the WAL before the table changes.",
+        "Every write goes to the write-ahead log (WAL) before the table changes.",
+    ),
 ]}
 
 
@@ -500,6 +521,112 @@ def dependency_z(sent, profile) -> tuple[float, int, tuple]:
 CORE_DEPS = frozenset({"nsubj", "nsubjpass", "csubj", "csubjpass", "dobj", "dative", "attr", "oprd"})
 
 
+def _finite(t) -> bool:
+    """A tensed verb, or a verb with a tensed auxiliary ("has been running").
+
+    A verb with its own subject counts too: the small model often tags the
+    verb of "who I met attacked" VBN.
+    """
+    if "Fin" in t.morph.get("VerbForm") or t.tag_ in ("VBD", "VBP", "VBZ", "MD"):
+        return True
+    if t.tag_ != "VBG" and any(c.dep_ in ("nsubj", "nsubjpass") for c in t.children):
+        return True
+    return any(c.dep_ in ("aux", "auxpass") and ("Fin" in c.morph.get("VerbForm") or c.tag_ in ("VBD", "VBP", "VBZ", "MD"))
+               for c in t.children)
+
+
+def new_referents(doc, lo: int, hi: int) -> int:
+    """New discourse referents strictly between token indices lo and hi.
+
+    The Dependency Locality Theory (Gibson 2000, section 5.3.1) measures the
+    cost of linking a word to its head by the new discourse referents in
+    between: the head noun of each noun phrase and each tensed verb (an
+    event). Pronouns refer to entities already in the discourse and do not
+    count, nor do nouns that only modify another noun ("source" in "source
+    segment"). Gibson's simplification treats every noun phrase as new; so
+    does this count.
+    """
+    a, b = sorted((lo, hi))
+    n = 0
+    for t in doc[a + 1:b]:
+        noun = t.pos_ in ("NOUN", "PROPN") and t.dep_ != "compound"
+        # A tensed verb, or a copula heading its clause ("which is fast").
+        event = (t.pos_ == "VERB" or (t.pos_ == "AUX" and t.dep_ not in ("aux", "auxpass"))) and _finite(t)
+        n += noun or event
+    return n
+
+
+# Clause relations that can nest one finite clause inside another.
+EMBED_DEPS = frozenset({"relcl", "ccomp", "csubj", "csubjpass", "advcl", "acl"})
+
+
+# Links that a nested clause does not hold open: connectives, adverbials and
+# punctuation attach to the clause as a whole, not to a word waiting for its head.
+OPEN_LINK_DEPS = frozenset({"mark", "cc", "advmod", "prep", "punct", "intj", "npadvmod", "advcl",
+                            "parataxis", "discourse", "meta", "preconj", "conj", "dep"})
+
+
+def _is_clause(t) -> bool:
+    return t.dep_ in EMBED_DEPS and t.pos_ in ("VERB", "AUX") and _finite(t)
+
+
+def center_embeddings(sent) -> list[tuple[object, int]]:
+    """(clause head, depth) for every finite clause nested between parts of its parent clause.
+
+    A clause is center-embedded when words of the clause that contains it
+    come both before and after it ("The index [that the job builds] serves
+    queries"). Its depth is the number of center-embedded clauses on the path
+    from the sentence root down to it, so "The reporter [who the senator [who
+    John met] attacked] disliked the editor" has a clause at depth 2.
+    """
+    root = sent.root
+
+    def owner(t):
+        """The clause a token belongs to: the nearest clause head above it, or the root."""
+        while t.i != root.i and not _is_clause(t) and t.head.i != t.i:
+            t = t.head
+        return t if (t.i == root.i or _is_clause(t)) else root
+
+    own: dict[int, list[int]] = {}
+    for t in sent:
+        if not t.is_punct and not t.is_space:
+            own.setdefault(owner(t).i, []).append(t.i)
+    depth = {root.i: 0}
+    out = []
+    # Parents before children: shallower clauses first.
+    heads = sorted((t for t in sent if _is_clause(t) and t.i != root.i),
+                   key=lambda t: sum(1 for _ in t.ancestors))
+    for t in heads:
+        parent = owner(t.head)
+        words = set(own.get(parent.i, []))
+        lo, hi = t.left_edge.i, t.right_edge.i
+        # The clause must interrupt a link inside its parent: a subject and
+        # its verb, a verb and its object. Words of the parent on both sides
+        # are not enough; "But if [what I care about] is X" only has a
+        # connective on the left.
+        centered = any(
+            x.i < lo and x.head.i > hi and x.head.i in words or x.i > hi and x.head.i < lo and x.head.i in words
+            for x in sent if x.dep_ not in OPEN_LINK_DEPS)
+        depth[t.i] = depth.get(parent.i, 0) + int(centered)
+        if centered:
+            out.append((t, depth[t.i]))
+    return out
+
+
+CENTER_EMBEDDING_DEPTH = 2   # Gibson 2000: one nested clause is ordinary, two is where readers fail
+
+
+def center_embedding(sent, ctx: Context) -> list[tuple[str, str, list]]:
+    deep = [(t, d) for t, d in center_embeddings(sent) if d >= CENTER_EMBEDDING_DEPTH]
+    if not deep:
+        return []
+    inner, d = max(deep, key=lambda x: x[1])
+    outer = [t for t, k in center_embeddings(sent) if k == 1 and t.left_edge.i <= inner.i <= t.right_edge.i]
+    span = outer[0] if outer else inner
+    toks = [span.left_edge, inner, span.right_edge]
+    return [("info", f"clause '{_w(ctx, inner)}' is nested {d} deep inside clauses that continue after it", toks)]
+
+
 def long_dependency(sent, ctx: Context, has_list: bool) -> list[tuple[str, str, list]]:
     z, n, longest = dependency_z(sent, ctx.profile)
     ctx.stats.setdefault("dep_z", []).append(z)
@@ -509,6 +636,15 @@ def long_dependency(sent, ctx: Context, has_list: bool) -> list[tuple[str, str, 
     if not core:
         return []
     dist, dep, head = max(core, key=lambda arc: arc[0])
+    referents = ctx.cfg.long_dependency_referents
+    if referents > 0:
+        # Opt-in: measure the gap by new discourse referents (Gibson 2000).
+        # It did no better than words on labelled findings (docs/evaluation.md).
+        refs = new_referents(sent.doc, dep.i, head.i)
+        if not (refs >= referents or (refs >= 2 and z >= ctx.cfg.long_dependency_z)):
+            return []
+        return [("warn", f"'{_w(ctx, dep)}' and '{_w(ctx, head)}' are {dist} words apart, "
+                         f"with {refs} new nouns or verbs between (z = {z:.1f})", [dep, head])]
     # A long gap in a sentence whose dependencies are long overall, or a very
     # long gap anywhere ("The index, which ... runs, serves all queries").
     if not (dist >= ctx.cfg.long_dependency_core_always
@@ -705,6 +841,92 @@ def repeated_frames(sents) -> list[tuple[object, object, str, list]]:
     return out
 
 
+ACRONYM = re.compile(r"[A-Z][A-Z0-9]*[A-Z][A-Z0-9]*s?")
+ROMAN = re.compile(r"[IVXLC]+")
+# Abbreviations most technical readers know without an expansion, words
+# written in capitals for emphasis or by convention (RFC 2119, file names),
+# and units.
+KNOWN_ACRONYMS = frozenset([
+    "API", "URL", "URI", "HTML", "JSON", "CPU", "GPU", "CLI", "HTTP", "HTTPS", "ID", "OS", "UI",
+    "PR", "CI", "CD", "IO", "SQL", "CSS", "XML", "YAML", "TOML", "CSV", "PDF", "TCP", "UDP", "IP",
+    "DNS", "SSH", "TLS", "SSL", "USB", "RAM", "SSD", "UTF", "ASCII", "UUID", "SDK", "IDE", "AI",
+    "ML", "LLM", "US", "UK", "EU", "AM", "PM", "OK", "FAQ", "README", "LICENSE", "CHANGELOG",
+    "TODO", "FIXME", "NOTE", "MUST", "SHOULD", "MAY", "NOT", "REQUIRED", "SHALL", "RECOMMENDED",
+    "OPTIONAL", "KB", "MB", "GB", "TB", "PB",
+])
+DEFINES = ("stands for", "is short for", "short for", "means")
+# Abbreviations at least this frequent in web text (Zipf scale, the word
+# frequency table the reading-time model uses) are treated as known: CEO, TV,
+# IBM and capitalised ordinary words such as UPDATE fall above it; WAL (3.3),
+# JIT (2.7) and RPC (2.7) fall below.
+KNOWN_ZIPF = 3.8
+
+
+def _acronym(t) -> str | None:
+    text = t.text
+    if not ACRONYM.fullmatch(text) or ROMAN.fullmatch(text) or len(text) > 8:
+        return None
+    base = text.removesuffix("s")
+    if base in KNOWN_ACRONYMS or text in KNOWN_ACRONYMS:
+        return None
+    from .readtime import _zipf
+
+    table, floor = _zipf()
+    if table.get(base.lower(), floor) >= KNOWN_ZIPF:
+        return None  # an ordinary word in capitals (UPDATE, AND) or a household name (CEO, TV)
+    return base
+
+
+def _defines(t) -> bool:
+    """True where the text spells the acronym out: "write-ahead log (WAL)", "WAL (write-ahead log)"."""
+    doc = t.doc
+    before = doc[t.i - 1].text if t.i > 0 else ""
+    after = doc[t.i + 1].text if t.i + 1 < len(doc) else ""
+    if (before == "(" and after == ")") or after == "(":
+        return True
+    rest = doc[t.i + 1:t.i + 4].text.lower()
+    if any(rest.startswith(d) for d in DEFINES):
+        return True
+    # "write-ahead log or WAL", 'Write-Ahead Log (hereafter "WAL")': the words
+    # just before it start with its letters.
+    letters = "".join(c for c in t.text.rstrip("s").lower() if c.isalpha())
+    words = [w.lower_ for w in doc[max(t.sent.start, t.i - 12):t.i] if w.is_alpha]
+    initials = "".join(w[0] for w in words)
+    if len(letters) == 2:
+        return letters in initials[-3:]  # two letters match by chance too easily further back
+    return len(letters) > 2 and letters in initials
+
+
+def undefined_acronyms(parsed, checked: set[tuple[int, int]], allow: set[str]):
+    """Acronyms whose first use in a checked sentence comes before any expansion.
+
+    ``parsed`` is every (segment, doc) of the file in order, headings and list
+    items included, so an expansion anywhere counts; ``checked`` holds
+    (id(doc), sentence start) for the sentences findings may be reported in.
+    Returns (segment, sentence, message, tokens), one per acronym.
+    """
+    defined: set[str] = set()
+    later: dict[str, list] = {}  # acronym -> its first checked use, waiting for an expansion
+    for seg, doc in parsed:
+        for sent in doc.sents:
+            upper = _mostly_upper(sent)
+            for t in sent:
+                name = _acronym(t)
+                if not name or name.lower() in allow or name in defined:
+                    continue
+                if _defines(t):
+                    defined.add(name)
+                    continue
+                if upper or (id(doc), sent.start) not in checked or name in later:
+                    continue
+                later[name] = [seg, sent, t]
+    out = []
+    for name, (seg, sent, t) in later.items():
+        when = "before it is spelled out" if name in defined else "without being spelled out"
+        out.append((seg, sent, f"'{t.text}' is used {when}", [t]))
+    return out
+
+
 RATIONALE = re.compile(r"\b(because|so that|otherwise|since)\b", re.IGNORECASE)
 
 
@@ -756,4 +978,6 @@ def detect(sent, ctx: Context) -> list[tuple[str, str, str, list]]:
         add("nominalization", nominalizations(sent, ctx))
     if "participial-clause" in on:
         add("participial-clause", participial_clauses(sent, ctx))
+    if "center-embedding" in on:
+        add("center-embedding", center_embedding(sent, ctx))
     return results
