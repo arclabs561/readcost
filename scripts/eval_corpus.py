@@ -155,6 +155,7 @@ def main() -> int:
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--category", default="", help="comma-separated categories to run (default all)")
     ap.add_argument("--code-label", help="readcost version to record when it is not a git checkout")
+    ap.add_argument("--enable", default="", help="comma-separated opt-in rules to turn on")
     args = ap.parse_args()
     corpus: Path = args.corpus
     out = args.out or corpus / "results"
@@ -163,8 +164,9 @@ def main() -> int:
     wanted = {c for c in args.category.split(",") if c}
     entries = [e for e in manifest["entries"] if not wanted or e["category"] in wanted]
 
-    prose = Analyzer(config=Config())
-    code = Analyzer(config=Config(comments="all"))
+    enable = [f for f in args.enable.split(",") if f]
+    prose = Analyzer(config=Config(enable=list(enable)))
+    code = Analyzer(config=Config(comments="all", enable=list(enable)))
     code._nlp = prose.nlp  # share the loaded model
     features = [f for f in FEATURES if f in prose.enabled]
 
@@ -178,7 +180,8 @@ def main() -> int:
         r = analyzer.check_text(text, e["format"], str(path))
         row = {"id": e["id"], "category": e["category"], "source": e["source"], "url": e["url"],
                "words": r.words, "sentences": r.sentences, "points": r.points,
-               "cost_index": round(r.cost_index, 2), "verdict": r.verdict, "counts": r.counts()}
+               "cost_index": round(r.cost_index, 2), "verdict": r.verdict, "counts": r.counts(),
+               "metrics": r.metrics}
         rows.append(row)
         for f in r.findings:
             findings.append({"id": e["id"], "category": e["category"], "source": e["source"], "url": e["url"],
@@ -194,7 +197,8 @@ def main() -> int:
         by_src[f"{r['category']}/{r['source']}"].append(r)
     summary = {
         "readcost": args.code_label or code_version(),
-        "settings": "Config() defaults; source files with comments='all'",
+        "settings": "Config() defaults" + (f" plus {', '.join(enable)}" if enable else "")
+                    + "; source files with comments='all'",
         "min_words_for_percentiles": MIN_WORDS,
         "features": features,
         "all": summarize(rows, features),
