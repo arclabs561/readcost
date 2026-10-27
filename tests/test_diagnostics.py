@@ -107,9 +107,10 @@ def test_colour_only_when_asked_and_no_color_wins(monkeypatch):
 def test_cli_default_is_full_and_points_at_explain():
     text = "We tune the shard compaction retry budget by hand.\n"
     out = run(["check", "--fail-on", "never", "-"], stdin=text).stdout
-    assert out.startswith("warn[stacked-nouns]: 3 nouns stacked: 'compaction retry budget'\n --> <stdin>:1:19\n")
+    assert out.startswith("warn[stacked-nouns]: three or more nouns in a row\n --> <stdin>:1:19\n")
+    assert "^^^^^^^^^^^^^^^^^^^^^^^ 3 nouns stacked\n" in out  # the specific finding sits at the carets
     assert "1 | We tune the shard compaction retry budget by hand." in out
-    assert "`readcost explain stacked-nouns`" in out
+    assert "\nMore on a rule: readcost explain stacked-nouns\n" in out
     assert "\x1b[" not in out  # a pipe is not a terminal
     concise = run(["check", "--fail-on", "never", "-o", "concise", "-"], stdin=text).stdout
     assert concise.startswith("<stdin>:1:")
@@ -145,3 +146,25 @@ def test_colour_changes_no_column(tmp_path):
     r = Result(path="a.md", findings=[f], source=src)
     coloured = re.sub(r"\x1b\[[0-9;]*m", "", report.full([r], color=True))
     assert coloured == report.full([r])
+
+
+def test_full_output_fits_80_columns():
+    # A README code block or a narrow terminal shows 80 columns without scrolling.
+    text = ("For store restart measurement, the example prints first snapshot-query cost\n"
+            "with persisted WAND sidecars present versus after deleting those sidecars and\n"
+            "forcing source-segment rebuilds. It does not own indexing, segment selection,\n"
+            "compaction, or reader visibility.\n")
+    out = run(["check", "--fail-on", "never", "--stdin-name", "notes.md", "-"], stdin=text).stdout
+    assert out.count("-->") >= 3
+    assert max(len(line) for line in out.splitlines()) <= 80
+
+
+def test_why_and_example_once_per_rule_help_every_time():
+    src = "We tune the shard compaction retry budget.\nWe skip the cache invalidation strategy file.\n"
+    fs = [finding("shard compaction retry budget", src.splitlines()[0], 1),
+          finding("cache invalidation strategy file", src.splitlines()[1], 2)]
+    out = report.full([Result(path="a.md", findings=fs, source=src)])
+    assert out.count("= why:") == 1 and out.count("= example:") == 1
+    assert out.count("= help: Unpack it") == 2
+    assert out.count("warn[stacked-nouns]: three or more nouns in a row\n") == 2
+    assert out.count("^ 3 nouns stacked") == 2  # the label, not the headline, carries the specifics

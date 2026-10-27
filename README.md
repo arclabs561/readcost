@@ -1,24 +1,103 @@
 # readcost
 
-readcost points at sentences that are likely to slow a reader down: three or
-more nouns in a row, related words far apart, things doing a person's action,
-and four other constructions. The list comes from "Why is AI-generated
-language so hard to understand?" ([arXiv 2610.29162](https://arxiv.org/abs/2610.29162)).
-The paper finds that recent language models use these constructions more than
-people do; earlier reading studies tie each of them to slower reading.
+readcost finds the sentences in your docs, or in a model's answer, whose
+construction slows readers down: three or more nouns in a row, a subject far
+from its verb, a thing doing a person's action, and a few more. For each one it
+quotes the line, marks the words, and says how to rewrite it.
 
-It is for two jobs: checking documentation that you write, and checking text a
-model writes before you or your users read it. It reads Markdown,
-reStructuredText, HTML, plain text, doc comments in source files, commit
-messages, and model output as raw text, chat JSON, or Claude Code transcripts.
-It runs as a command, a Python library, or a hook in Claude Code, piku, git and
-GitHub Actions.
+For example, this sentence from a README:
 
-It is not a grammar or style checker. Vale and proselint enforce style rules
-and word lists; readcost parses each sentence and looks at its structure. It is
-also not a readability formula: it says which sentence to change and how, not
-a grade level. It cannot tell whether text is complete, correct or up to date,
-which developers rate as the worst documentation failures.
+```text
+For store restart measurement, the example prints first snapshot-query cost
+with persisted WAND sidecars present versus after deleting those sidecars and
+forcing source-segment rebuilds.
+```
+
+```text
+warn[stacked-nouns]: three or more nouns in a row
+ --> notes.md:1:5
+  |
+1 | For store restart measurement, the example prints first snapshot-query cost
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^ 3 nouns stacked
+  |
+  = why: Readers must work out how the nouns group before they can read on, and
+         the grouping is often ambiguous (Squad Helps Dog Bite Victim).
+  = help: Keep at most two nouns together. Unpack the rest with a preposition or
+          a relative clause.
+  = example: 'forcing source segment rebuilds' -> 'forcing each segment to be
+             rebuilt from its source'
+
+warn[hyphen-compound]: ad hoc hyphenated noun compound
+ --> notes.md:3:9
+  |
+3 | forcing source-segment rebuilds.
+  |         ^^^^^^^^^^^^^^^^^^^^^^^ coined compound modifier
+  |
+  = why: Coined compounds such as storage-shrink or region-index are rare word
+         pairs, which the paper links to slower reading.
+  = help: Write the relationship out.
+  = example: 'the storage-shrink use case' -> 'the main use: storing ID sets in
+             less space'
+
+notes.md: advise
+  2 findings in 1 sentence (26 words), cost index 76.9 per 1,000 words
+  predicted reading time 7 s, 301 ms per word
+
+More on a rule: readcost explain stacked-nouns
+Wrong finding? https://github.com/arclabs561/readcost/issues/new/choose
+```
+
+The rewrite that README adopted keeps every fact and passes:
+
+```text
+To measure a store restart, the example reopens a checkpointed store and
+prints the duration of its first snapshot query. It does this twice: once
+with the persisted WAND sidecars present, and once after deleting those
+sidecars, which forces each segment to be rebuilt from its source vectors.
+```
+
+```sh
+uvx readcost check README.md
+```
+
+The constructions come from "Why is AI-generated language so hard to
+understand?" ([arXiv 2610.29162](https://arxiv.org/abs/2610.29162)), which finds
+that recent language models use them more than people do; earlier reading
+studies tie each of them to slower reading.
+
+## Scope
+
+readcost is for English technical prose: READMEs, documentation, commit
+messages, doc comments, and text a model writes before you or your users read
+it. It reports:
+
+- sentences built in a way that costs readers time, with the words marked and
+  a suggested rewrite;
+- a verdict per file (pass, advise, block) for CI and hooks;
+- a predicted reading time per file, from a model fitted to eye-tracking data.
+
+It does not check grammar, spelling or terminology, enforce a style guide,
+judge whether text is correct, complete or up to date (which developers rate as
+the worst documentation failures), or tell who wrote a text.
+
+## How it differs
+
+| Tool | Checks | How |
+| --- | --- | --- |
+| readcost | Sentence constructions tied to slower reading; reading time | A dependency parse of each sentence; a model fitted to eye-tracking data |
+| Vale | Your style guide: terms, phrases, capitalization | Rules you write: patterns, word lists, part-of-speech sequences |
+| proselint | Usage advice gathered from authors and editors | Built-in checks |
+| write-good | Passive voice, weasel words, wordy phrases | Word patterns |
+| LanguageTool | Grammar, spelling, punctuation | Grammar rules and models |
+| Readability formulas (Flesch-Kincaid) | A grade for a whole text | Word and sentence length |
+
+Vale's part-of-speech rules can match a run of nouns, but no rule above sees
+which word depends on which, so none can measure the distance from a subject
+to its verb or find an object relative without "that". readcost works next to
+Vale rather than instead of it. A readability formula tracks how hard a whole
+text is better than readcost's cost index does (see
+[docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md));
+readcost's job is to say which sentence to change.
 
 Status: experimental; before 1.0, output and configuration can change between
 minor versions.
@@ -51,8 +130,10 @@ readcost check src/lib.rs                     # doc comments; --format source
 readcost explain stacked-nouns
 ```
 
-The default output quotes each flagged line with a caret under the words,
-names the rule, and says how to fix it, in the style of the Rust compiler.
+The default output, in the style of the Rust compiler, names the rule, quotes
+the line with carets under the words and a label saying what is wrong, and
+gives the fix. The first finding of each rule also says why it costs the reader
+and shows an example rewrite. Lines stay within 80 columns.
 Colour is on in a terminal unless `NO_COLOR` is set (`--color` overrides).
 `-o concise` prints one `path:line:col` line per finding, for editors and grep.
 `-o json`, `-o sarif` and `-o github` are for tools, `-o agent` is short
@@ -60,43 +141,6 @@ feedback written for a model, and `-o pr-comment` is the Markdown summary that
 the GitHub Action posts on a pull request. The exit status is
 1 when a file reaches the `--fail-on` verdict (default `block`), 2 on an error,
 and 0 otherwise.
-
-For example, this sentence from a README:
-
-```text
-For store restart measurement, the example prints first snapshot-query cost
-with persisted WAND sidecars present versus after deleting those sidecars and
-forcing source-segment rebuilds.
-```
-
-```text
-warn[stacked-nouns]: 3 nouns stacked: 'store restart measurement'
- --> notes.md:1:5
-  |
-1 | For store restart measurement, the example prints first snapshot-query cost
-  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
-  = help: Keep at most two nouns together. Unpack the rest with a preposition or a relative clause.
-
-warn[hyphen-compound]: coined compound modifier: 'source-segment rebuilds'
- --> notes.md:3:9
-  |
-3 | forcing source-segment rebuilds.
-  |         ^^^^^^^^^^^^^^^^^^^^^^^
-  = help: Write the relationship out.
-
-notes.md: advise; 2 findings in 1 sentence (26 words); cost index 76.9 per 1k words; predicted reading time 7 s (301 ms per word)
-For why a rule matters, with an example rewrite, run `readcost explain stacked-nouns` (rules here: stacked-nouns, hyphen-compound).
-readcost: a finding is wrong? Report it at https://github.com/arclabs561/readcost/issues/new?template=false-positive.yml
-```
-
-The rewrite that README adopted keeps every fact and passes:
-
-```text
-To measure a store restart, the example reopens a checkpointed store and
-prints the duration of its first snapshot query. It does this twice: once
-with the persisted WAND sidecars present, and once after deleting those
-sidecars, which forces each segment to be rebuilt from its source vectors.
-```
 
 From Python:
 
@@ -111,18 +155,21 @@ if result.verdict != "pass":
 
 ## What it flags
 
-| Feature | Example | Rewrite |
-| --- | --- | --- |
-| stacked-nouns | forcing source segment rebuilds | forcing each segment to be rebuilt from its source |
-| long-dependency | The index, which is built once from every document in the corpus at startup and then rebuilt only when the compactor runs, serves all queries. | The index serves all queries. It is built once at startup and rebuilt only when the compactor runs. |
-| inanimate-subject | It does not own indexing or compaction. | Indexing and compaction are left to the caller. |
-| denominal-verb (opt-in) | The script will bucket the requests by hour. | The script will group the requests by hour. |
-| reduced-object-relative | the format the reader expects | the format that the reader expects |
-| hyphen-compound | the storage-shrink job | the job that shrinks storage |
-| inline-list | supports standard/Sugeno/Yager negations, OWA, power means, and uninorms | a bulleted list |
-| nominalization (opt-in) | The tool performs validation of the input. | The tool validates the input. |
-| participial-clause (opt-in) | The parser caches every token, making lookups faster. | The parser caches every token, so lookups are faster. |
-| repeated-frame (opt-in) | This change reduces the latency of the cache. This change improves the speed of the parser. This change lowers the cost of the build. | This change makes the cache faster, the parser quicker and the build cheaper. |
+Each example below is a real sentence from a public README, except where the
+last column says otherwise; each rewrite keeps every fact and passes.
+
+| Feature | Example | Rewrite | Source |
+| --- | --- | --- | --- |
+| stacked-nouns | For store restart measurement, the example prints first snapshot-query cost with persisted WAND sidecars present versus after deleting those sidecars and forcing source-segment rebuilds. | To measure a store restart, the example prints the cost of the first snapshot query twice: with the persisted WAND sidecars present, and after deleting them, which forces each segment to be rebuilt from its source. | a README this rewrite was adopted in |
+| long-dependency | Comparisons keep the declared artifact-digest relation and packet-shape evidence as separate claims. | Comparisons keep two claims separate: the relation that the artifact digests declare, and the evidence from packet shapes. | [linktop](https://github.com/arclabs561/linktop) |
+| inanimate-subject | It does not decide how text should be split; it records the chosen span. | The caller decides how to split the text; slabs records the span it chose. | [slabs](https://github.com/arclabs561/slabs) |
+| reduced-object-relative | `compressed_postings` compresses an inverted-index posting list with cnk, the storage-shrink use case these ID-set codecs exist for. | `compressed_postings` uses cnk to compress the posting list of an inverted index. Storing ID sets in less space is what these codecs are for. | [cnk](https://github.com/arclabs561/cnk) |
+| hyphen-compound | The missing-pattern check in `gitignore_audit` is a pattern-presence heuristic. | The missing-pattern check in `gitignore_audit` only looks for whether a pattern is present. | [devguard](https://github.com/arclabs561/devguard) |
+| inline-list | `durability` provides filesystem and in-memory directories, atomic writes, WALs, record logs, checkpoint files, CRC validation, and sync helpers. | a bulleted list | [durability](https://github.com/arclabs561/durability) |
+| participial-clause (opt-in) | The page updates automatically when the file changes on disk, highlighting what changed. | The page updates automatically when the file changes on disk and highlights what changed. | [mdpreview](https://github.com/arclabs561/mdpreview) |
+| denominal-verb (opt-in) | The script will bucket the requests by hour. | The script will group the requests by hour. | constructed: every hit in the sample was wrong |
+| nominalization (opt-in) | The tool performs validation of the input. | The tool validates the input. | constructed: no hit in the sample |
+| repeated-frame (opt-in) | This change reduces the latency of the cache. This change improves the speed of the parser. This change lowers the cost of the build. | This change makes the cache faster, the parser quicker and the build cheaper. | constructed: no hit in the sample |
 
 The first five come from the paper; denominal-verb is opt-in because on
 well-edited prose nearly all its hits were settled verbs. The next two are
@@ -141,64 +188,103 @@ hyphenated compound is reported once per document, at its first use. An
 identifier as a subject (`` `parse()` returns ``) is not reported as an
 inanimate subject. Code spans, URLs and file paths count as single words.
 
-### Real findings
+<details>
+<summary>More real output, from READMEs in the author's public repositories</summary>
 
-These come from READMEs in the author's public repositories, checked with the
-default settings. `scripts/readme_gallery.py` regenerates them from pinned
-commits.
+Checked with the default settings; `scripts/readme_gallery.py` regenerates
+this from pinned commits.
 
 ```text
-warn[stacked-nouns]: 3 nouns stacked: 'index posting list'
+warn[stacked-nouns]: three or more nouns in a row
   --> cnk/README.md:61:48
    |
-61 | ...presses an inverted-index posting list with cnk, the storage-shrink use case these ID-set codecs exi...
-   |                        ^^^^^^^^^^^^^^^^^^
-   = help: Keep at most two nouns together. Unpack the rest with a preposition or a relative clause.
+61 | ...presses an inverted-index posting list with cnk, the storage-shrink u...
+   |                        ^^^^^^^^^^^^^^^^^^ 3 nouns stacked
+   |
+   = why: Readers must work out how the nouns group before they can read on, and
+          the grouping is often ambiguous (Squad Helps Dog Bite Victim).
+   = help: Keep at most two nouns together. Unpack the rest with a preposition
+           or a relative clause.
+   = example: 'forcing source segment rebuilds' -> 'forcing each segment to be
+              rebuilt from its source'
 
-warn[hyphen-compound]: coined compound modifier: 'storage-shrink use case'
+warn[hyphen-compound]: ad hoc hyphenated noun compound
   --> cnk/README.md:61:81
    |
-61 | ... an inverted-index posting list with cnk, the storage-shrink use case these ID-set codecs exist for.
-   |                                                  ^^^^^^^^^^^^^^^^^^^^^^^
+61 | ... list with cnk, the storage-shrink use case these ID-set codecs exist...
+   |                        ^^^^^^^^^^^^^^^^^^^^^^^ coined compound modifier
+   |
+   = why: Coined compounds such as storage-shrink or region-index are rare word
+          pairs, which the paper links to slower reading.
    = help: Write the relationship out.
+   = example: 'the storage-shrink use case' -> 'the main use: storing ID sets in
+              less space'
 
-info[reduced-object-relative]: 'case codecs exist': object relative without 'that'
+info[reduced-object-relative]: object relative clause without 'that'
   --> cnk/README.md:61:100
    |
-61 | ... an inverted-index posting list with cnk, the storage-shrink use case these ID-set codecs exist for.
-   |                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = help: Keep the 'that', or turn it into a subject relative or a separate sentence.
+61 | ... with cnk, the storage-shrink use case these ID-set codecs exist for.
+   |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |                                      object relative without 'that'
+   |
+   = why: Object relatives (the house the contractors built) cost more to read
+          than subject relatives; dropping the optional 'that' removes the cue
+          that one has started.
+   = help: Keep the 'that', or turn it into a subject relative or a separate
+           sentence.
+   = example: 'the format the reader expects' -> 'the format that the reader
+              expects'
 
-warn[long-dependency]: 'is' and 'selected' are 15 words apart (z = 2.7)
+warn[long-dependency]: related words far apart
   --> cnk/README.md:48:1
    |
-48 | is an experimental rANS-backed sorted-set codec behind the `ans` feature, but
-   | ^^---------------------------------------------------------------------------
+48 | is an experimental rANS-backed sorted-set codec behind the `ans` feat...
+   | ^^-------------------------------------------------------------------
 49 | is not selected by the default chooser.
-   | -------^^^^^^^^
-   = help: Put the subject next to its verb. Move long modifiers after the verb or into a second sentence.
+   | -------^^^^^^^^ 'is' and 'selected' are 15 words apart
+   |
+   = why: A subject far from its verb, or a verb far from its object, has to be
+          held in working memory.
+   = help: Put the subject next to its verb. Move long modifiers after the verb
+           or into a second sentence.
+   = example: 'The index, built once from all documents and rebuilt only on
+              compaction, serves queries.' -> 'The index serves queries. It is
+              built once and rebuilt only on compaction.'
 
-info[inanimate-subject]: 'index ... owns': a person's verb with a non-person subject
+info[inanimate-subject]: thing doing a person's action
  --> lexir/README.md:7:60
   |
-7 | `lexir` ranks caller-provided token streams. Its in-memory index owns postings
-  |                                                            ^^^^^-^^^^
-  = help: Make the person the subject, or state the fact directly: what is out of scope, what is returned, what is not guaranteed.
+7 | ...ranks caller-provided token streams. Its in-memory index owns postings
+  |                                                       ^^^^^-^^^^
+  |                                    a person's verb with a non-person subject
+  |
+  = why: Verbs such as own, decide, promise, claim, hide or swallow normally
+         take a person as subject.
+  = help: Make the person the subject, or state the fact directly: what is out
+          of scope, what is returned, what is not guaranteed.
+  = example: 'It does not own indexing or compaction.' -> 'Indexing and
+             compaction are left to the caller.'
 
-info[inline-list]: 6 items listed in one sentence
+info[inline-list]: long list inside a sentence
  --> durability/README.md:8:68
   |
-8 | `durability` provides filesystem and in-memory directories, atomic writes, WALs,
-  |                                                                    ^^^^^^^^^^^^^
+8 | ...y` provides filesystem and in-memory directories, atomic writes, WALs,
+  |                                                             ^^^^^^^^^^^^^
 9 | record logs, checkpoint files, CRC validation, and sync helpers.
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  | 6 items listed in one sentence
+  |
+  = why: Four or more coordinated items, or items joined by slashes, stretch the
+         sentence's dependencies and are hard to scan.
   = help: Use a bulleted list.
+  = example: 'It supports standard/Sugeno/Yager negations, OWA, power means, and
+             uninorms.' -> a bulleted list
 ```
 
-Not every finding is right. On those same READMEs, 4 of the 5
-reduced-object-relative hits were false positives ("The help output begins
-with:"); see
-[Limits](#limits) and [Reporting a false positive](#reporting-a-false-positive).
+</details>
+
+Not every finding is right: see [Limits](#limits) and
+[Reporting a false positive](#reporting-a-false-positive).
 
 ## Verdicts
 
@@ -241,8 +327,10 @@ the average would score 22 and 17, so treat it as a document-level estimate,
 useful for comparing two versions of the same text, not as a judgement of one
 sentence. When ten models from different labs each rewrote the same 53
 paragraphs, every one raised the predicted time per word (by 2 to 19 ms);
-readcost's findings did not tell the rewrites apart. The number does not affect the verdict. Code spans are left out. See
-[docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md) for how it was built and tested.
+readcost's findings did not tell the rewrites apart. The number does not
+affect the verdict. Code spans are left out. See
+[docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md)
+for how it was built and tested.
 
 ## Configuration
 
@@ -364,7 +452,8 @@ turns that line off. The hooks never add it, since a model cannot act on it.
 
 `readcost lsp` is a language server, so findings show up as diagnostics in
 VS Code, Neovim, Helix and other editors with a generic LSP client. Install it
-with `pip install 'readcost[lsp]'`. [docs/editors.md](https://github.com/arclabs561/readcost/blob/main/docs/editors.md) has the
+with `pip install 'readcost[lsp]'`.
+[docs/editors.md](https://github.com/arclabs561/readcost/blob/main/docs/editors.md) has the
 setup for each editor.
 
 ## Limits
@@ -379,18 +468,19 @@ setup for each editor.
   `model = "en_core_web_trf"` for better parses at several times the cost.
 - inanimate-subject and denominal-verb use word lists derived from WordNet.
   Treat their findings as prompts to reread, not verdicts.
-- Precision is low on well-edited prose. On 210 findings sampled from essays
-  and documentation by well-regarded writers, two automated raters from
-  different model families (agreement kappa 0.41) found 1 to 3% correct and
-  16 to 22% correct or defensible. After the fixes that evaluation prompted,
-  25 to 33% of the findings still reported are correct or defensible, at
-  about 40% of the earlier volume. See [docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md).
+- Precision is low on well-edited prose. Ten model raters from different labs
+  labelled 210 findings sampled from essays and documentation by well-regarded
+  writers. Of the 75 that the current rules still report, a majority of eight
+  raters judged 20% correct or defensible (single raters: 13 to 41%; two
+  lenient raters: 71%). Agreement between raters is modest (Fleiss' kappa 0.40
+  over the eight). See [docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md).
 - hyphen-compound skips pairs found in 5+ documents of a 2019 FineWeb-Edu
   crawl (ODC-By; see `src/readcost/data/FINEWEB_NOTICE`).
 - The paper's findings are about how often text uses these constructions,
   not about any single sentence, and it ran no reading study on model text.
-- The paper also measures rare word pairs. readcost does not yet; the roadmap
-  in docs/research.md describes how it will.
+- The paper also measures rare word pairs. readcost uses word-pair counts only
+  to skip hyphenated pairs in common use; it does not flag rare pairs in
+  general yet.
 - The default profile is one writer's READMEs. A cost index for chat answers
   is not comparable to one for READMEs.
 

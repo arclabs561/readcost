@@ -3,6 +3,7 @@
 import pytest
 
 from readcost import Analyzer, Config
+from readcost.features import FEATURES
 
 
 @pytest.fixture(scope="module")
@@ -368,7 +369,7 @@ def _readme_rows():
     readme = Path(__file__).resolve().parent.parent / "README.md"
     for line in readme.read_text().splitlines():
         m = re.match(r"\| ([a-z-]+)((?: \([^)]*\))?) \| (.+?) \| .+ \|$", line)
-        if m and m.group(1) not in ("feature", "---"):
+        if m and m.group(1) in FEATURES:  # skips other tables, such as the tool comparison
             yield m.group(1), m.group(2), m.group(3)
 
 
