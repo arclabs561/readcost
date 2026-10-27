@@ -108,6 +108,17 @@ def _cmd_check(args) -> int:
     return EXIT_FINDINGS if worst >= threshold else EXIT_OK
 
 
+def _read_rev_or_file(path: str) -> str:
+    """A file's text, or for REV:PATH that isn't a file (HEAD:README.md), the file at a git revision."""
+    if Path(path).exists() or ":" not in path:
+        return Path(path).read_text(encoding="utf-8", errors="ignore")
+    proc = subprocess.run(["git", "show", path], capture_output=True, check=False)
+    if proc.returncode != 0:
+        print(f"readcost: cannot read {path}: {proc.stderr.decode(errors='ignore').strip()}", file=sys.stderr)
+        raise SystemExit(EXIT_USAGE)
+    return proc.stdout.decode("utf-8", errors="ignore")
+
+
 def _cmd_compare(args) -> int:
     from .config import load_config
     from .engine import Analyzer
@@ -118,8 +129,8 @@ def _cmd_compare(args) -> int:
     analyzer = Analyzer(cfg)
     results = []
     for path in (args.old, args.new):
-        text = sys.stdin.read() if path == "-" else Path(path).read_text(encoding="utf-8", errors="ignore")
-        fmt = args.format or ("markdown" if path == "-" else detect_format(path))
+        text = sys.stdin.read() if path == "-" else _read_rev_or_file(path)
+        fmt = args.format or ("markdown" if path == "-" else detect_format(path.split(":", 1)[-1]))
         results.append(analyzer.check_text(text, fmt, path))
     old, new = results
     if args.output == "json":
@@ -306,15 +317,13 @@ def _cmd_profile(args) -> int:
 
 def _measured(rule: str) -> str:
     """How often model raters accepted this rule's findings in the evaluation (docs/evaluation.md)."""
-    import json
-    from importlib import resources
+    from .report import _precision, rule_precision
 
-    try:
-        data = json.loads(resources.files("readcost").joinpath("data/rule_precision.json").read_text())
-    except (OSError, ValueError):
+    data = rule_precision()
+    if not data:
         return "no evaluation data in this install"
-    row = data["rules"].get(rule)
-    if not row or row["labelled"] < 5:
+    row = _precision(rule)
+    if row is None:
         return "too few labelled findings to measure (see docs/evaluation.md)"
     return (f"{row['accepted']} of {row['labelled']} labelled findings judged correct or defensible "
             f"by a majority of {data['raters']} model raters, on essays and docs by well-regarded writers")
@@ -445,7 +454,7 @@ def build_parser() -> argparse.ArgumentParser:
     co.set_defaults(func=_cmd_corpus)
 
     cm = sub.add_parser("compare", help="compare a rewrite with its original: reading time and findings")
-    cm.add_argument("old", help="the original ('-' for stdin)")
+    cm.add_argument("old", help="the original: a file, REV:PATH from git (HEAD:README.md), or '-' for stdin")
     cm.add_argument("new", help="the rewrite")
     cm.add_argument("-f", "--format", choices=FORMATS, help="input format (default: from the file name)")
     cm.add_argument("-o", "--output", choices=("full", "json"), default="full")

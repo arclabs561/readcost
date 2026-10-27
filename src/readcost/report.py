@@ -7,6 +7,8 @@ import json
 import os
 import re
 import textwrap
+from functools import lru_cache
+from importlib import resources
 from pathlib import Path
 from urllib.parse import quote
 
@@ -262,8 +264,36 @@ def concise(results: list[Result], feedback_link: bool = False, **_) -> str:
     return "\n".join(out)
 
 
+@lru_cache(maxsize=1)
+def rule_precision() -> dict:
+    """data/rule_precision.json: per rule, how many labelled findings model raters accepted."""
+    try:
+        return json.loads(resources.files("readcost").joinpath("data/rule_precision.json").read_text())
+    except (OSError, ValueError):
+        return {}
+
+
+def _precision(rule: str) -> dict | None:
+    """{accepted, labelled} for a rule with at least 5 labelled findings, else None."""
+    row = rule_precision().get("rules", {}).get(rule)
+    return {"accepted": row["accepted"], "labelled": row["labelled"]} if row and row["labelled"] >= 5 else None
+
+
 def as_json(results: list[Result], **_) -> str:
-    return json.dumps([r.to_dict() for r in results], indent=1)
+    out = []
+    for r in results:
+        d = r.to_dict()
+        lines = r.source.splitlines()
+        for fd, f in zip(d["findings"], r.findings):
+            # 1-based columns of the excerpt, so a tool can edit exactly those words;
+            # null when the excerpt cannot be found in the source.
+            span = _span(f, lines)
+            fd["column"] = span[0][1] + 1 if span else None
+            fd["end_line"] = span[-1][0] if span else None
+            fd["end_column"] = span[-1][2] + 1 if span else None
+            fd["precision"] = _precision(f.feature)
+        out.append(d)
+    return json.dumps(out, indent=1)
 
 
 def _gh_data(s: str) -> str:
@@ -355,14 +385,17 @@ def agent(results: list[Result], max_items: int = 8, max_chars: int = 2500, feed
     total = len(items)
     words = sum(r.words for r in results)
     head = (f"readcost: {total} hard-to-read construction{'s' if total != 1 else ''} "
-            f"in {words} words. Rewrite these sentences; keep the meaning and the facts.")
+            f"in {words} words. Rewrite these sentences where the finding holds; keep the meaning and the facts.")
     lines = [head]
     for f in items[:max_items]:
         if several:
             loc = f"{f.path}:{f.line}" if f.line else f.path + (f"#{f.label}" if f.label else "")
         else:
             loc = f"line {f.line}" if f.line else (f.label or f.path)
-        lines.append(f"- {loc} [{f.feature}] {f.message}. Fix: {f.suggestion}")
+        prec = _precision(f.feature)
+        # A low share tells the model the finding may be wrong and is worth judging, not obeying.
+        note = f" (raters accepted {prec['accepted']} of {prec['labelled']} such findings)" if prec else ""
+        lines.append(f"- {loc} [{f.feature}] {f.message}{note}. Fix: {f.suggestion}")
     if total > max_items:
         lines.append(f"- ...and {total - max_items} more (run `readcost check` for the full list)")
     body = "\n".join(lines)

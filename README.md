@@ -139,7 +139,9 @@ Colour is on in a terminal unless `NO_COLOR` is set (`--color` overrides).
 `-o concise` prints one `path:line:col` line per finding, for editors and grep.
 `-o json`, `-o sarif` and `-o github` are for tools, `-o agent` is short
 feedback written for a model, and `-o pr-comment` is the Markdown summary that
-the GitHub Action posts on a pull request. The exit status is
+the GitHub Action posts on a pull request. For agents that call readcost
+themselves (check, rewrite, `readcost compare HEAD:README.md README.md`), see
+[docs/agents.md](https://github.com/arclabs561/readcost/blob/main/docs/agents.md). The exit status is
 1 when a file reaches the `--fail-on` verdict (default `block`), 2 on an error,
 and 0 otherwise.
 
