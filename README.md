@@ -263,7 +263,11 @@ readcost warns about unknown keys and stops with exit code 2 on a value of the
 wrong type or outside its choices, naming the file and the key.
 
 To skip text, put `<!-- readcost: ignore -->` before a paragraph, or wrap a
-section in `<!-- readcost: off -->` and `<!-- readcost: on -->`.
+section in `<!-- readcost: off -->` and `<!-- readcost: on -->`. Name rules to
+turn off only those: `<!-- readcost: ignore stacked-nouns -->` keeps every
+other rule on for the next block, and `<!-- readcost: off inline-list -->`
+lasts until `<!-- readcost: on inline-list -->` or a bare `readcost: on`. A
+misspelled rule name is reported in the file's notes.
 
 ## Adopting readcost in an existing repo
 
