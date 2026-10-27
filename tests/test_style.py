@@ -45,3 +45,22 @@ def test_style_list_and_unknown_profile(tmp_path):
     assert out.count("words") >= len(builtin_profiles())
     (tmp_path / "doc.md").write_text(LISTS)
     assert run(["style", "doc.md", "--against", "no-such-profile"], tmp_path).returncode == 2
+
+
+def test_style_json_gives_the_same_rows_with_rule_ids(tmp_path):
+    import json
+
+    from readcost.profile import load_profile
+
+    (tmp_path / "doc.md").write_text(LISTS)
+    text = run(["style", "doc.md", "--against", "rust-book"], tmp_path).stdout
+    data = json.loads(run(["style", "doc.md", "--against", "rust-book", "-o", "json"], tmp_path).stdout)
+    rows = {r["measure"]: r for r in data["rows"]}
+    inline = rows["inline-list per 1k words"]
+    assert inline["rule"] == "inline-list" and inline["count"] > 0
+    assert inline["reference"] == round(load_profile("rust-book").rates["inline-list"], 3)
+    # The ratio is taken before rounding, so it matches the rounded values to 0.01.
+    assert abs(inline["ratio"] - inline["yours"] / inline["reference"]) < 0.01
+    assert rows["words per sentence"]["rule"] is None
+    assert {r["measure"] for r in data["rows"]} == {
+        x.split("  ")[0].strip() for x in text.splitlines()[3:] if x.strip()}

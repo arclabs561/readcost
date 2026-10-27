@@ -172,13 +172,25 @@ def _cmd_style(args) -> int:
     timed = [r for r in results if r.reading_seconds is not None and r.reading_ms_per_word]
     ms = sum(1000 * r.reading_seconds for r in timed)
     ws = sum(1000 * r.reading_seconds / r.reading_ms_per_word for r in timed)
-    print(f"{len(results)} file(s), {words:,} words, against {args.against}: {ref.note.split(';')[0]}")
-    print()
     rows = [("words per sentence", words / max(sentences, 1), ref.words_per_sentence, None),
             ("predicted ms per word", ms / ws if ws else None, ref.reading_ms_per_word, None)]
     rules = sorted(set(counts) | set(ref.rates))
     rows += [(f"{k} per 1k words", 1000 * counts.get(k, 0) / words, ref.rates.get(k, 0.0), counts.get(k, 0))
              for k in rules]
+    if args.output == "json":
+        import json
+
+        print(json.dumps({
+            "files": len(results), "words": words, "against": args.against, "reference": ref.note.split(";")[0],
+            "rows": [{"measure": label, "rule": label.removesuffix(" per 1k words") if n is not None else None,
+                      "yours": None if mine is None else round(mine, 3),
+                      "reference": None if theirs is None else round(theirs, 3), "count": n,
+                      "ratio": round(mine / theirs, 3) if mine is not None and theirs else None}
+                     for label, mine, theirs, n in rows],
+        }, indent=1))
+        return EXIT_OK
+    print(f"{len(results)} file(s), {words:,} words, against {args.against}: {ref.note.split(';')[0]}")
+    print()
     width = max(len(r[0]) for r in rows)
     print(f"{'':<{width}}  {'yours':>8}  {args.against[:12]:>12}  ratio")
     for label, mine, theirs, n in rows:
@@ -442,6 +454,8 @@ def build_parser() -> argparse.ArgumentParser:
     st.add_argument("--against", default="default",
                     help="a built-in profile (see --list), 'default', or a profile JSON file")
     st.add_argument("--list", action="store_true", help="list the built-in reference profiles")
+    st.add_argument("-o", "--output", choices=("text", "json"), default="text",
+                    help="json: the same rows for tools and agents")
     st.set_defaults(func=_cmd_style, lines=None, last=False)
 
     co = sub.add_parser("corpus", help="repetition across many texts: syntactic templates and openers")
