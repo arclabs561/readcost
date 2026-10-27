@@ -28,6 +28,6 @@
   "https://sqlite.org/whentouse.html"
  ],
  "note": "10 texts from the SQLite documentation, fetched for readcost's evaluation corpus; rates measured with readcost 0.2.0.",
- "reading_ms_per_word": 210.6,
+ "reading_ms_per_word": 210.9,
  "words_per_sentence": 20.0
 }

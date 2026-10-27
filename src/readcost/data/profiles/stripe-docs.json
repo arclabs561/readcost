@@ -28,6 +28,6 @@
   "https://docs.stripe.com/webhooks.md"
  ],
  "note": "10 texts from the Stripe documentation, fetched for readcost's evaluation corpus; rates measured with readcost 0.2.0.",
- "reading_ms_per_word": 222.8,
+ "reading_ms_per_word": 224.0,
  "words_per_sentence": 14.7
 }

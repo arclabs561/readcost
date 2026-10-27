@@ -5,7 +5,7 @@ time, ms) of each word from its length, its frequency, its position, and the
 same facts about its neighbours, following the feature model of Cekini et
 al. 2026. It was trained on OneStop Eye Movements (ordinary reading, 360
 native readers of English newspaper paragraphs) and tested on held-out
-OneStop articles and on the Provo Corpus; scripts/build_reading_time.py
+OneStop articles and on the Provo Corpus; scripts/reading_time_train.py
 builds it and docs/evaluation.md reports its error. Word frequencies come
 from FineWeb-Edu. Attribution for all three is in data/READING_TIME_NOTICE.
 
@@ -29,6 +29,11 @@ from .extract import CODE
 # Neighbour values at a paragraph edge: no word before, a sentence end after.
 _EDGE_PREV = [0, 0, 0, 0, 0, 0, 7.0, 1]
 _EDGE_NEXT = [0, 0, 0, 1, 0, 0, 7.0, 1]
+# The longest training paragraph. Past it the trees extrapolate a reading
+# time that keeps falling with position, so a text set as one long paragraph
+# read 17% faster than the same text in its paragraphs; a longer paragraph's
+# positions are scaled into this length instead (docs/evaluation.md).
+_MAX_PARAGRAPH = 165
 
 
 @lru_cache(maxsize=1)
@@ -75,8 +80,10 @@ def features(words: list[str]) -> np.ndarray:
     base = []
     for k, w in enumerate(words):
         c = re.sub(r"[^a-z']", "", w.lower())
+        rel = k / max(n - 1, 1)
+        index = round(rel * (_MAX_PARAGRAPH - 1)) if n > _MAX_PARAGRAPH else k
         base.append([len(re.sub(r"[^A-Za-z0-9]", "", w)), float(any(ch.isdigit() for ch in w)),
-                     float("-" in w), float(bool(re.search(r"[.,;:!?)\"']$", w))), k, k / max(n - 1, 1),
+                     float("-" in w), float(bool(re.search(r"[.,;:!?)\"']$", w))), index, rel,
                      zipf.get(c, floor) if c else floor, float(c in stop)])
     rows = []
     for k in range(n):
