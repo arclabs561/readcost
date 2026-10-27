@@ -1,0 +1,61 @@
+# Changelog
+
+All notable changes to readcost are recorded here. The format follows
+[Keep a Changelog](https://keepachangelog.com), and versions follow semantic
+versioning; before 1.0, a minor version can change output formats and
+configuration.
+
+## [Unreleased]
+
+## [0.2.0] - 2026-10-26
+
+First release on PyPI (`pip install readcost`, or `uvx readcost`).
+
+### Added
+
+- Default output quotes each flagged line with a caret under the words, the
+  rule name and the fix, in the style of the Rust compiler, with colour on a
+  terminal (`--color`, `NO_COLOR`). `-o concise` prints one `path:line:col` line
+  per finding ([#24](https://github.com/arclabs561/readcost/pull/24)).
+- `readcost lsp`, a language server for editors, as the optional extra
+  `readcost[lsp]` ([#23](https://github.com/arclabs561/readcost/pull/23)).
+- `readcost baseline` and `check --baseline` record today's findings so that
+  only new ones count when adopting readcost in an existing repository
+  ([#22](https://github.com/arclabs561/readcost/pull/22)).
+- The GitHub Action can post one pull request comment (`comment: true`) and
+  checks only changed files by default; `-o pr-comment` renders that comment.
+  A false-positive issue form and a link to it after findings
+  ([#21](https://github.com/arclabs561/readcost/pull/21)).
+- The spaCy model is downloaded on first use, checksum verified, into
+  `~/.cache/readcost`, so readcost runs under `uvx` with no setup step
+  ([#19](https://github.com/arclabs561/readcost/pull/19)).
+- Predicted reading time per file, from a model trained on eye-tracking data
+  ([#12](https://github.com/arclabs561/readcost/pull/12)).
+- Separate thresholds for commit messages
+  ([#13](https://github.com/arclabs561/readcost/pull/13)).
+- Opt-in rules: nominalization, participial-clause, repeated-frame
+  ([#7](https://github.com/arclabs561/readcost/pull/7)).
+
+### Changed
+
+- `-o text` is now `-o concise`, and the default output is the new quoted
+  form ([#24](https://github.com/arclabs561/readcost/pull/24)).
+- denominal-verb is off by default: on edited prose almost every hit was a
+  settled verb.
+- Hyphenated compounds that are common word pairs in a large web corpus are
+  no longer flagged ([#10](https://github.com/arclabs561/readcost/pull/10)).
+
+### Fixed
+
+- Precision fixes for pronoun subjects, light relative heads, names before
+  noun stacks and package paths in slash lists
+  ([#9](https://github.com/arclabs561/readcost/pull/9)).
+- HTML blocks inside Markdown are read as prose with correct line numbers
+  ([#14](https://github.com/arclabs561/readcost/pull/14)).
+
+## [0.1.0]
+
+Not published. The first tagged state of the repository.
+
+[Unreleased]: https://github.com/arclabs561/readcost/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/arclabs561/readcost/releases/tag/v0.2.0

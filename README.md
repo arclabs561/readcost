@@ -20,13 +20,16 @@ also not a readability formula: it says which sentence to change and how, not
 a grade level. It cannot tell whether text is complete, correct or up to date,
 which developers rate as the worst documentation failures.
 
-Status: experimental, version 0.1.0. [docs/research.md](docs/research.md) has
-the evidence behind each choice and the roadmap.
+Status: experimental; before 1.0, output and configuration can change between
+minor versions.
+[docs/research.md](https://github.com/arclabs561/readcost/blob/main/docs/research.md)
+has the evidence behind each choice and the roadmap.
 
 ## Install
 
 ```sh
-pip install git+https://github.com/arclabs561/readcost   # or: pip install -e . from a checkout
+uvx readcost check README.md    # run without installing
+pip install readcost            # or install it
 ```
 
 Python 3.11 or later. The dependencies are spaCy and markdown-it-py. On first
@@ -34,7 +37,7 @@ use readcost downloads spaCy's English model (about 13 MB, checksum verified)
 into `~/.cache/readcost`; no pip is needed, so it also works under `uvx`.
 `readcost setup` does the download ahead of time. Set `READCOST_NO_DOWNLOAD=1`
 to forbid it, for example on an offline machine with the model installed as a
-package. readcost is not on PyPI yet.
+package.
 
 ## Use
 
@@ -239,7 +242,7 @@ useful for comparing two versions of the same text, not as a judgement of one
 sentence. When ten models from different labs each rewrote the same 53
 paragraphs, every one raised the predicted time per word (by 2 to 19 ms);
 readcost's findings did not tell the rewrites apart. The number does not affect the verdict. Code spans are left out. See
-[docs/evaluation.md](docs/evaluation.md) for how it was built and tested.
+[docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md) for how it was built and tested.
 
 ## Configuration
 
@@ -357,7 +360,7 @@ turns that line off. The hooks never add it, since a model cannot act on it.
 
 `readcost lsp` is a language server, so findings show up as diagnostics in
 VS Code, Neovim, Helix and other editors with a generic LSP client. Install it
-with `pip install 'readcost[lsp]'`. [docs/editors.md](docs/editors.md) has the
+with `pip install 'readcost[lsp]'`. [docs/editors.md](https://github.com/arclabs561/readcost/blob/main/docs/editors.md) has the
 setup for each editor.
 
 ## Limits
@@ -377,7 +380,7 @@ setup for each editor.
   different model families (agreement kappa 0.41) found 1 to 3% correct and
   16 to 22% correct or defensible. After the fixes that evaluation prompted,
   25 to 33% of the findings still reported are correct or defensible, at
-  about 40% of the earlier volume. See [docs/evaluation.md](docs/evaluation.md).
+  about 40% of the earlier volume. See [docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md).
 - hyphen-compound skips pairs found in 5+ documents of a 2019 FineWeb-Edu
   crawl (ODC-By; see `src/readcost/data/FINEWEB_NOTICE`).
 - The paper's findings are about how often text uses these constructions,
