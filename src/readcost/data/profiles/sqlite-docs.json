@@ -1,0 +1,33 @@
+{
+ "name": "sqlite-docs",
+ "words": 35144,
+ "sentences": 1760,
+ "dep_fit": [
+  0.23504219552276595,
+  0.7123211935609438,
+  0.4242225368858397
+ ],
+ "rates": {
+  "hyphen-compound": 0.142,
+  "inanimate-subject": 0.882,
+  "inline-list": 0.967,
+  "long-dependency": 0.825,
+  "reduced-object-relative": 0.171,
+  "stacked-nouns": 3.614
+ },
+ "sources": [
+  "https://sqlite.org/about.html",
+  "https://sqlite.org/atomiccommit.html",
+  "https://sqlite.org/datatype3.html",
+  "https://sqlite.org/isolation.html",
+  "https://sqlite.org/lang_transaction.html",
+  "https://sqlite.org/lockingv3.html",
+  "https://sqlite.org/quirks.html",
+  "https://sqlite.org/testing.html",
+  "https://sqlite.org/wal.html",
+  "https://sqlite.org/whentouse.html"
+ ],
+ "note": "10 texts from the SQLite documentation, fetched for readcost's evaluation corpus; rates measured with readcost 0.2.0.",
+ "reading_ms_per_word": 210.6,
+ "words_per_sentence": 20.0
+}

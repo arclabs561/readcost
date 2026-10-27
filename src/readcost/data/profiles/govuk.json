@@ -1,0 +1,28 @@
+{
+ "name": "govuk",
+ "words": 11783,
+ "sentences": 983,
+ "dep_fit": [
+  0.6718142763512225,
+  0.5437745764533352,
+  0.3852089350782648
+ ],
+ "rates": {
+  "inanimate-subject": 0.255,
+  "inline-list": 1.358,
+  "long-dependency": 0.509,
+  "reduced-object-relative": 0.255,
+  "stacked-nouns": 1.188
+ },
+ "sources": [
+  "https://guidance.publishing.service.gov.uk/writing-to-gov-uk-standards/plan-manage-content/identify-user-needs/",
+  "https://guidance.publishing.service.gov.uk/writing-to-gov-uk-standards/plan-manage-content/plan-new-govuk-content/",
+  "https://guidance.publishing.service.gov.uk/writing-to-gov-uk-standards/plan-manage-content/understand-content-design/",
+  "https://guidance.publishing.service.gov.uk/writing-to-gov-uk-standards/style-guides/a-to-z-style-guide/",
+  "https://guidance.publishing.service.gov.uk/writing-to-gov-uk-standards/style-guides/technical-a-to-z/",
+  "https://www.gov.uk/service-manual/design/writing-for-user-interfaces"
+ ],
+ "note": "6 texts from GOV.UK guidance for writing to GOV.UK standards, fetched for readcost's evaluation corpus; rates measured with readcost 0.2.0.",
+ "reading_ms_per_word": 219.9,
+ "words_per_sentence": 12.0
+}

@@ -1,0 +1,33 @@
+{
+ "name": "stripe-docs",
+ "words": 15361,
+ "sentences": 1043,
+ "dep_fit": [
+  0.6161221895528732,
+  0.5677173237791601,
+  0.3755341156867178
+ ],
+ "rates": {
+  "hyphen-compound": 0.13,
+  "inanimate-subject": 0.065,
+  "inline-list": 0.716,
+  "long-dependency": 0.391,
+  "reduced-object-relative": 0.325,
+  "stacked-nouns": 3.841
+ },
+ "sources": [
+  "https://docs.stripe.com/api/errors.md",
+  "https://docs.stripe.com/api/idempotent_requests.md",
+  "https://docs.stripe.com/api/pagination.md",
+  "https://docs.stripe.com/error-handling.md",
+  "https://docs.stripe.com/keys.md",
+  "https://docs.stripe.com/payments/accept-a-payment.md",
+  "https://docs.stripe.com/payments/payment-intents.md",
+  "https://docs.stripe.com/rate-limits.md",
+  "https://docs.stripe.com/testing.md",
+  "https://docs.stripe.com/webhooks.md"
+ ],
+ "note": "10 texts from the Stripe documentation, fetched for readcost's evaluation corpus; rates measured with readcost 0.2.0.",
+ "reading_ms_per_word": 222.8,
+ "words_per_sentence": 14.7
+}
