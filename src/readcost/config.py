@@ -98,6 +98,8 @@ class Config:
     commit_block_cost_index: float = 100.0
     # Text and agent output end with a link for reporting a wrong finding.
     feedback_link: bool = True
+    # Skip text that is clearly not English (readcost/lang.py) with a note.
+    language_check: bool = True
     # Per-rule level: "error", "warn", "info" or "ignore"; "all" sets every rule.
     rules: dict[str, str] = field(default_factory=dict)
     # [[readcost.overrides]]: {"include": [globs], "exclude": [globs], "rules": {...}}, in order.
