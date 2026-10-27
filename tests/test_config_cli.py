@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from readcost.config import Config, HookConfig, load_config
+from readcost.config import SrcConfig, Config, HookConfig, load_config
 from readcost.engine import Analyzer, Result
 from readcost.features import Finding
 from readcost.profile import Profile, build_profile, load_profile
@@ -110,8 +110,10 @@ def test_advise_severity_off_disables_the_rule(tmp_path):
 def test_example_lists_every_key_with_default_values():
     example = ROOT / "readcost.toml.example"
     table = tomllib.loads(example.read_text())["readcost"]
-    top = {f.name for f in dataclasses.fields(Config)} - {"source"}
+    # enable and disable still load but are deprecated (DEPRECATED), so the example omits them.
+    top = {f.name for f in dataclasses.fields(Config)} - {"source", "cli_rules", "enable", "disable"}
     assert set(table) == top
+    assert set(table["src"]) == {f.name for f in dataclasses.fields(SrcConfig)}
     assert set(table["hooks"]) == {f.name for f in dataclasses.fields(HookConfig)}
     loaded = load_config(str(example))
     assert dataclasses.replace(loaded, source="") == Config()
