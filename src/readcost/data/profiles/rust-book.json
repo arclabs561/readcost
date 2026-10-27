@@ -1,0 +1,39 @@
+{
+ "name": "rust-book",
+ "words": 34886,
+ "sentences": 1742,
+ "dep_fit": [
+  0.44460493897560527,
+  0.6090637148061199,
+  0.3812697280575416
+ ],
+ "rates": {
+  "hyphen-compound": 0.029,
+  "inanimate-subject": 0.516,
+  "inline-list": 0.401,
+  "long-dependency": 0.602,
+  "reduced-object-relative": 0.631,
+  "stacked-nouns": 1.003
+ },
+ "sources": [
+  "https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch01-02-hello-world.md",
+  "https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch03-01-variables-and-mutability.md",
+  "https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch03-02-data-types.md",
+  "https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch04-01-what-is-ownership.md",
+  "https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch04-02-references-and-borrowing.md",
+  "https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch06-01-defining-an-enum.md",
+  "https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch08-01-vectors.md",
+  "https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch08-02-strings.md",
+  "https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch09-02-recoverable-errors-with-result.md",
+  "https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch09-03-to-panic-or-not-to-panic.md",
+  "https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch10-02-traits.md",
+  "https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch10-03-lifetime-syntax.md",
+  "https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch13-01-closures.md",
+  "https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch15-01-box.md",
+  "https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch16-01-threads.md",
+  "https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch16-03-shared-state.md"
+ ],
+ "note": "16 texts from The Rust Programming Language (the Rust book), fetched for readcost's evaluation corpus; rates measured with readcost 0.2.0.",
+ "reading_ms_per_word": 193.7,
+ "words_per_sentence": 20.0
+}

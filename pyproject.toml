@@ -41,7 +41,7 @@ version = {attr = "readcost.__version__"}
 where = ["src"]
 
 [tool.setuptools.package-data]
-readcost = ["data/*.json", "data/*.json.gz", "data/*.txt.gz", "data/WORDNET_LICENSE", "data/FINEWEB_NOTICE", "data/READING_TIME_NOTICE"]
+readcost = ["data/*.json", "data/profiles/*.json", "data/*.json.gz", "data/*.txt.gz", "data/WORDNET_LICENSE", "data/FINEWEB_NOTICE", "data/READING_TIME_NOTICE"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -134,6 +134,53 @@ def _cmd_compare(args) -> int:
     return EXIT_FINDINGS if {"never": False, "slower": slower, "worse": worse}[args.fail_on] else EXIT_OK
 
 
+def _cmd_style(args) -> int:
+    from .engine import Analyzer
+    from .profile import builtin_profiles, load_profile
+
+    if args.list:
+        for name in builtin_profiles():
+            prof = load_profile(name)
+            print(f"{name:12} {prof.words:>7,} words  {prof.note.split(';')[0]}")
+        return EXIT_OK
+    ref = load_profile(args.against)
+    cfg = _load_config(args)
+    # Measure against the reference's own dependency fit, as its rates were.
+    results, failed = _collect(args, cfg, Analyzer(cfg, profile=ref))
+    if failed or not results:
+        return EXIT_USAGE
+    words = sum(r.words for r in results)
+    sentences = sum(r.sentences for r in results)
+    if not words:
+        print("readcost: no prose found", file=sys.stderr)
+        return EXIT_USAGE
+    counts: dict[str, int] = {}
+    for r in results:
+        for k, n in r.counts().items():
+            counts[k] = counts.get(k, 0) + n
+    timed = [r for r in results if r.reading_seconds is not None and r.reading_ms_per_word]
+    ms = sum(1000 * r.reading_seconds for r in timed)
+    ws = sum(1000 * r.reading_seconds / r.reading_ms_per_word for r in timed)
+    print(f"{len(results)} file(s), {words:,} words, against {args.against}: {ref.note.split(';')[0]}")
+    print()
+    rows = [("words per sentence", words / max(sentences, 1), ref.words_per_sentence, None),
+            ("predicted ms per word", ms / ws if ws else None, ref.reading_ms_per_word, None)]
+    rules = sorted(set(counts) | set(ref.rates))
+    rows += [(f"{k} per 1k words", 1000 * counts.get(k, 0) / words, ref.rates.get(k, 0.0), counts.get(k, 0))
+             for k in rules]
+    width = max(len(r[0]) for r in rows)
+    print(f"{'':<{width}}  {'yours':>8}  {args.against[:12]:>12}  ratio")
+    for label, mine, theirs, n in rows:
+        if mine is None or theirs is None:
+            print(f"{label:<{width}}  {'-' if mine is None else f'{mine:.1f}':>8}  "
+                  f"{'-' if theirs is None else f'{theirs:.1f}':>12}")
+            continue
+        ratio = mine / theirs if theirs else None
+        note = "  much higher" if n is not None and n >= 3 and (ratio is None or ratio >= 2) else ""
+        print(f"{label:<{width}}  {mine:>8.2f}  {theirs:>12.2f}  {'-' if ratio is None else f'{ratio:.1f}x'}{note}")
+    return EXIT_OK
+
+
 def _cmd_baseline(args) -> int:
     from .baseline import dump_baseline
     from .engine import Analyzer
@@ -337,6 +384,13 @@ def build_parser() -> argparse.ArgumentParser:
     c.add_argument("--last", action="store_true", help="for transcripts: only the last assistant message")
     c.add_argument("--baseline", help="baseline JSON from `readcost baseline`; only findings not in it count")
     c.set_defaults(func=_cmd_check)
+
+    st = sub.add_parser("style", help="compare rule rates, sentence length and reading time with a reference style")
+    inputs(st)
+    st.add_argument("--against", default="default",
+                    help="a built-in profile (see --list), 'default', or a profile JSON file")
+    st.add_argument("--list", action="store_true", help="list the built-in reference profiles")
+    st.set_defaults(func=_cmd_style, lines=None, last=False)
 
     cm = sub.add_parser("compare", help="compare a rewrite with its original: reading time and findings")
     cm.add_argument("old", help="the original ('-' for stdin)")
