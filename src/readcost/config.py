@@ -40,6 +40,13 @@ LEVELS = (*SEVERITIES, "ignore")
 # Keys that still load but have a newer spelling; removed at 1.0.
 DEPRECATED = {"enable": "[readcost.rules] RULE = \"info\", \"warn\" or \"error\"", "disable": "[readcost.rules] RULE = \"ignore\"",
               "hooks.paths": "[readcost.src] include", "hooks.exclude": "[readcost.src] exclude"}
+# Tuning thresholds that were config keys until 0.3 and are now fixed in
+# features.py and engine.py. Setting one warns and is ignored.
+RETIRED_KEYS = frozenset({
+    "stacked_nouns_min", "long_dependency_z", "long_dependency_min_tokens", "long_dependency_core_min",
+    "long_dependency_core_always", "inline_list_min_items", "long_sentence_words", "block_min_points",
+    "short_text_words", "short_advise_points", "commit_advise_cost_index", "commit_block_cost_index",
+    "long_dependency_referents"})
 
 
 @dataclass
@@ -77,25 +84,7 @@ class Config:
     advise_cost_index: float = 15.0 # weighted findings per 1,000 words
     allow: list[str] = field(default_factory=list)
     comments: str = "doc"           # source files: "doc" or "all"
-    stacked_nouns_min: int = 3
-    long_dependency_z: float = 2.5
-    long_dependency_min_tokens: int = 10
-    long_dependency_core_min: int = 9
-    long_dependency_core_always: int = 15
-    inline_list_min_items: int = 4
-    long_sentence_words: int = 32
     block_cost_index: float = 30.0  # weighted findings per 1,000 words
-    block_min_points: float = 3.0   # and at least this many weighted findings
-    # Below this many words a per-1,000 density is too noisy (one finding in a
-    # 20-word comment scores 50), so short texts are judged by weighted points:
-    # advise at short_advise_points, block at block_min_points.
-    short_text_words: int = 40
-    short_advise_points: float = 2.0
-    # Commit messages are terser than prose: in 1,000 Go commit messages of
-    # 40+ words the 99th percentile cost index is 49, against 8 to 16 for
-    # essays, docs, READMEs and discussion (docs/evaluation.md, "Contexts").
-    commit_advise_cost_index: float = 50.0
-    commit_block_cost_index: float = 100.0
     # Text and agent output end with a link for reporting a wrong finding.
     feedback_link: bool = True
     # Skip text that is clearly not English (readcost/lang.py) with a note.
@@ -108,11 +97,6 @@ class Config:
     hooks: HookConfig = field(default_factory=HookConfig)
     source: str = ""                # where the config came from
     cli_rules: dict[str, str] = field(default_factory=dict, repr=False)  # --error/--warn/--info/--ignore
-    # When above 0, long-dependency measures a gap by the new nouns and tensed
-    # verbs inside it (Gibson's Dependency Locality Theory): it reports this
-    # many at any z, or 2 when the z threshold is met. 5 matches the default
-    # rule's volume on the evaluation corpus. Off: word distance did better.
-    long_dependency_referents: int = 0
 
     def wants(self, path: str) -> bool:
         if self.excluded(path):
@@ -229,6 +213,10 @@ def _apply(obj, data: dict, source: str, prefix: str = "") -> None:
     known = {f.name for f in fields(obj)} - {"source", "cli_rules"}
     for key, value in data.items():
         name = key.replace("-", "_")
+        if not prefix and name in RETIRED_KEYS:
+            print(f"readcost: warning: {source}: {key} is no longer configurable and is ignored; "
+                  "change a rule's level under [readcost.rules] instead", file=sys.stderr)
+            continue
         if name not in known:
             print(f"readcost: warning: {source}: unknown key {prefix + key!r} ignored", file=sys.stderr)
             continue
