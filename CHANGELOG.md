@@ -20,6 +20,8 @@ First release on PyPI (`pip install readcost`, or `uvx readcost`).
   `NO_COLOR`). `-o concise` prints one `path:line:col` line per finding
   ([#24](https://github.com/arclabs561/readcost/pull/24),
   [#29](https://github.com/arclabs561/readcost/pull/29)).
+- `readcost explain` shows how often model raters accepted each rule's findings
+  on well-regarded writing ([#34](https://github.com/arclabs561/readcost/pull/34)).
 - `readcost: ignore`, `off` and `on` comments in Markdown can name rules,
   turning off only those; an unknown rule name is reported in the notes
   ([#27](https://github.com/arclabs561/readcost/pull/27)).

@@ -91,9 +91,9 @@ the worst documentation failures), or tell who wrote a text.
 | LanguageTool | Grammar, spelling, punctuation | Grammar rules and models |
 | Readability formulas (Flesch-Kincaid) | A grade for a whole text | Word and sentence length |
 
-Vale's part-of-speech rules can match a run of nouns, but no rule above sees
-which word depends on which, so none can measure the distance from a subject
-to its verb or find an object relative without "that". readcost works next to
+Vale's part-of-speech rules can match a run of nouns, but Vale, proselint and
+write-good do not parse which word depends on which, so they cannot measure the
+distance from a subject to its verb or find an object relative without "that". readcost works next to
 Vale rather than instead of it. A readability formula tracks how hard a whole
 text is better than readcost's cost index does (see
 [docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md));
@@ -474,10 +474,11 @@ setup for each editor.
   Treat their findings as prompts to reread, not verdicts.
 - Precision is low on well-edited prose. Ten model raters from different labs
   labelled 210 findings sampled from essays and documentation by well-regarded
-  writers. Of the 75 that the current rules still report, a majority of eight
-  raters judged 20% correct or defensible (single raters: 13 to 41%; two
-  lenient raters: 71%). Agreement between raters is modest (Fleiss' kappa 0.40
-  over the eight). `readcost explain RULE` shows the count for each rule. See [docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md).
+  writers. Of the 74 that the current rules still report, a majority of eight
+  raters judged 15 (20%) correct or defensible (single raters: 14 to 42%; two
+  lenient raters: 72%). Agreement between raters is modest (Fleiss' kappa 0.40
+  over the eight). `readcost explain RULE` shows the count for each rule. See
+  [docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md).
 - hyphen-compound skips pairs found in 5+ documents of a 2019 FineWeb-Edu
   crawl (ODC-By; see `src/readcost/data/FINEWEB_NOTICE`).
 - The paper's findings are about how often text uses these constructions,
