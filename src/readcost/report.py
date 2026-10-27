@@ -1,17 +1,18 @@
-"""Output formats: text, json, sarif, github, agent, pr-comment."""
+"""Output formats: full, concise, json, sarif, github, agent, pr-comment."""
 
 from __future__ import annotations
 
 import html
 import json
 import os
+import re
 from pathlib import Path
 from urllib.parse import quote
 
 from .engine import Result
 from .features import FEATURES
 
-OUTPUTS = ("text", "json", "sarif", "github", "agent", "pr-comment")
+OUTPUTS = ("full", "concise", "json", "sarif", "github", "agent", "pr-comment")
 REPO_URL = "https://github.com/arclabs561/readcost"
 RULES_URL = REPO_URL + "#what-it-flags"
 FEEDBACK_URL = REPO_URL + "/issues/new?template=false-positive.yml"
@@ -21,22 +22,167 @@ COMMENT_MARKER = "<!-- readcost -->"
 
 
 def render(results: list[Result], fmt: str, **kw) -> str:
-    return {"text": text, "json": as_json, "sarif": sarif, "github": github, "agent": agent,
+    return {"full": full, "concise": concise, "json": as_json, "sarif": sarif, "github": github, "agent": agent,
             "pr-comment": pr_comment}[fmt](results, **kw)
 
 
-def text(results: list[Result], feedback_link: bool = False, **_) -> str:
-    out = []
-    for r in results:
-        for f in r.findings:
-            out.append(f"{f.where()}: {f.severity}: [{f.feature}] {f.message}")
-        out.append(
-            f"{r.path}: {r.verdict}; {len(r.findings)} findings in {r.sentences} sentences "
-            f"({r.words} words); cost index {r.cost_index:.1f} per 1k words"
+# Markdown that can sit between two words of an excerpt in the source.
+_SEP = r"(?:\s|[*_~`\[\]]|\]\([^)\s]*\))+"
+_WIDTH = 100
+# Rules whose excerpt runs from one related word to the other.
+_ENDPOINTS = {"long-dependency", "inanimate-subject"}
+_CODES = {"error": "1;31", "warn": "1;33", "info": "1;36", "gutter": "1;34", "bold": "1",
+          "block": "1;31", "advise": "1;33", "pass": "1;32"}
+
+
+def use_color(stream, mode: str = "auto") -> bool:
+    """Colour for ``stream``: NO_COLOR and FORCE_COLOR win, then whether it is a terminal."""
+    if mode != "auto":
+        return mode == "always"
+    if os.environ.get("NO_COLOR"):
+        return False
+    if os.environ.get("FORCE_COLOR") or os.environ.get("CLICOLOR_FORCE"):
+        return True
+    return bool(getattr(stream, "isatty", lambda: False)()) and os.environ.get("TERM") != "dumb"
+
+
+def _paint(on: bool):
+    if not on:
+        return lambda s, _k: s
+    return lambda s, k: f"\x1b[{_CODES[k]}m{s}\x1b[0m"
+
+
+def _span(f, source_lines: list[str]) -> list[tuple[int, int, int]]:
+    """Where ``f.excerpt`` sits in the source: (line, start, end) per line, columns from 0.
+
+    Empty when the excerpt is not found near ``f.line``, e.g. for text taken
+    from JSON, where the source line holds escaped text.
+    """
+    words = f.excerpt.split()
+    if not words or not 0 < f.line <= len(source_lines):
+        return []
+    pat = re.compile(_SEP.join(re.escape(w) for w in words))
+    for first in (f.line, max(f.line - 2, 1)):
+        window = "\n".join(source_lines[first - 1:first + 5])
+        m = pat.search(window)
+        if m:
+            break
+    else:
+        return []
+    out, pos = [], m.start()
+    line_no = first + window.count("\n", 0, pos)
+    line_start = window.rfind("\n", 0, pos) + 1
+    while True:
+        line_end = window.find("\n", line_start)
+        line_end = len(window) if line_end == -1 else line_end
+        out.append((line_no, pos - line_start, min(m.end(), line_end) - line_start))
+        if m.end() <= line_end:
+            return out
+        line_start, line_no = line_end + 1, line_no + 1
+        nxt = window.find("\n", line_start)
+        line = window[line_start:] if nxt == -1 else window[line_start:nxt]
+        pos = line_start + len(line) - len(line.lstrip())
+
+
+def _crop(text: str, start: int, end: int) -> tuple[str, int, int]:
+    """At most _WIDTH characters of ``text`` around [start, end), with the span shifted to match."""
+    text = text.replace("\t", " ").rstrip()
+    if len(text) <= _WIDTH:
+        return text, start, end
+    lo = max(0, min(start - 20, len(text) - _WIDTH))
+    hi = min(len(text), max(lo + _WIDTH, end))
+    head, tail = ("..." if lo else ""), ("..." if hi < len(text) else "")
+    shift = len(head) - lo
+    return head + text[lo:hi] + tail, start + shift, end + shift
+
+
+def _snippet(f, source_lines: list[str], paint) -> tuple[list[str], int | None, int]:
+    """Gutter lines quoting the source (or the sentence) with a caret under the excerpt, the column, the gutter width."""
+    sev = f.severity if f.severity in _CODES else "info"
+    span = _span(f, source_lines)
+    if span:
+        width = len(str(span[-1][0]))
+        bar = paint(" " * width + " |", "gutter")
+        out = [bar]
+        for i, (line_no, a, b) in enumerate(span):
+            text, a, b = _crop(source_lines[line_no - 1], a, b)
+            out.append(paint(f"{line_no:>{width}} |", "gutter") + f" {text}")
+            marks = "^" * max(b - a, 1)
+            if f.feature in _ENDPOINTS:
+                # The two related words get carets; the words between them a dashed line.
+                piece = text[a:b]
+                head, tail = re.match(r"[\w'`]*", piece), re.search(r"[\w'`]*$", piece)
+                first = len(head.group()) if i == 0 else 0
+                last = len(tail.group()) if i == len(span) - 1 else 0
+                marks = "^" * first + "-" * max(len(piece) - first - last, 0) + "^" * last
+                marks = marks[:len(piece)] or "^"
+            out.append(bar + " " + " " * a + paint(marks, sev))
+        return out, span[0][1] + 1, width
+    width = len(str(f.line or 0))
+    bar = paint(" " * width + " |", "gutter")
+    a = f.sentence.find(f.excerpt) if f.excerpt else -1
+    text, a, b = _crop(" ".join(f.sentence.split()), max(a, 0), max(a, 0) + len(f.excerpt))
+    out = [bar, bar + f" {text}"]
+    if f.excerpt and a >= 0:
+        out.append(bar + " " + " " * a + paint("^" * max(b - a, 1), sev))
+    return out, None, width
+
+
+def _summary(r: Result) -> str:
+    def n(k: int, word: str) -> str:
+        return f"{k} {word}" + ("" if k == 1 else "s")
+    return (f"{n(len(r.findings), 'finding')} in {n(r.sentences, 'sentence')} ({n(r.words, 'word')}); "
+            f"cost index {r.cost_index:.1f} per 1k words"
             + (f"; predicted reading time {r.reading_seconds:.0f} s ({r.reading_ms_per_word:.0f} ms per word)"
                if r.reading_seconds is not None else "")
-            + (f"; {r.baselined} more in baseline" if r.baselined else "")
-        )
+            + (f"; {r.baselined} more in baseline" if r.baselined else ""))
+
+
+def full(results: list[Result], feedback_link: bool = False, color: bool = False, **_) -> str:
+    """One block per finding in the style of rustc: header, location, quoted line, caret, help."""
+    paint = _paint(color)
+    out: list[str] = []
+    rules: list[str] = []
+    for r in results:
+        source_lines = r.source.splitlines()
+        for f in r.findings:
+            sev = f.severity if f.severity in _CODES else "info"
+            snippet, col, pad = _snippet(f, source_lines, paint)
+            help_text = f.suggestion or (FEATURES[f.feature].fix if f.feature in FEATURES else "")
+            out.append(paint(f"{f.severity}[{f.feature}]", sev) + paint(f": {f.message}", "bold"))
+            out.append(" " * pad + paint("-->", "gutter") + f" {f.where()}" + (f":{col}" if col else ""))
+            out.extend(snippet)
+            if help_text:
+                out.append(" " * (pad + 1) + paint("=", "gutter") + paint(" help:", "bold") + f" {help_text}")
+            out.append("")
+            if f.feature not in rules:
+                rules.append(f.feature)
+        if r.findings or r.baselined or r.verdict != "pass" or len(results) == 1:
+            out.append(f"{r.path}: " + paint(r.verdict, r.verdict) + f"; {_summary(r)}")
+        out.extend(f"{r.path}: note: {n}" for n in r.notes)
+    if len(results) > 1:
+        verdicts = {v: sum(r.verdict == v for r in results) for v in ("block", "advise", "pass")}
+        counts = ", ".join(paint(f"{n} {v}", v) for v, n in verdicts.items() if n)
+        found = sum(len(r.findings) for r in results)
+        out.append(paint("readcost", "bold") + f": {len(results)} files checked: {counts}; {found} findings")
+    if rules:
+        out.append(f"For why a rule matters, with an example rewrite, run `readcost explain {rules[0]}`"
+                   + (f" (rules here: {', '.join(rules)})." if len(rules) > 1 else "."))
+        if feedback_link:
+            out.append(FEEDBACK_LINE)
+    return "\n".join(out)
+
+
+def concise(results: list[Result], feedback_link: bool = False, **_) -> str:
+    """One line per finding, ``path:line:col: severity: [rule] message``, for editors and grep."""
+    out = []
+    for r in results:
+        source_lines = r.source.splitlines()
+        for f in r.findings:
+            span = _span(f, source_lines)
+            where = f.where() + (f":{span[0][1] + 1}" if span else "")
+            out.append(f"{where}: {f.severity}: [{f.feature}] {f.message}")
+        out.append(f"{r.path}: {r.verdict}; {_summary(r)}")
         out.extend(f"{r.path}: note: {n}" for n in r.notes)
     if feedback_link and any(r.findings for r in results):
         out.append(FEEDBACK_LINE)

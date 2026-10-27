@@ -77,8 +77,8 @@ def test_pr_comment_from_cli(tmp_path):
 
 # --- false-positive link ---------------------------------------------------------
 
-def test_text_and_agent_end_with_one_feedback_line(tmp_path):
-    for fmt in ("text", "agent"):
+def test_text_outputs_and_agent_end_with_one_feedback_line(tmp_path):
+    for fmt in ("full", "concise", "agent"):
         out = run(["check", "-o", fmt, "--fail-on", "never", "-"], DENSE, tmp_path).stdout
         last = out.rstrip("\n").splitlines()[-1]
         assert report.FEEDBACK_URL in last, fmt
@@ -86,14 +86,14 @@ def test_text_and_agent_end_with_one_feedback_line(tmp_path):
 
 
 def test_no_feedback_line_without_findings(tmp_path):
-    for fmt in ("text", "agent"):
+    for fmt in ("full", "concise", "agent"):
         out = run(["check", "-o", fmt, "--fail-on", "never", "-"], PLAIN, tmp_path).stdout
         assert report.FEEDBACK_URL not in out, fmt
 
 
 def test_feedback_line_suppressed_by_config(tmp_path):
     (tmp_path / "readcost.toml").write_text("feedback_link = false\n")
-    for fmt in ("text", "agent"):
+    for fmt in ("full", "concise", "agent"):
         out = run(["check", "-o", fmt, "--fail-on", "never", "-"], DENSE, tmp_path).stdout
         assert out and report.FEEDBACK_URL not in out, fmt
 
@@ -108,7 +108,8 @@ def test_hook_feedback_and_other_formats_have_no_link():
     r = Result(path="a.md", words=50, verdict="advise", findings=[finding()])
     assert report.FEEDBACK_URL not in feedback(Config(), r)
     assert report.FEEDBACK_URL not in report.agent([r])
-    assert report.FEEDBACK_URL not in report.text([r])
+    assert report.FEEDBACK_URL not in report.full([r])
+    assert report.FEEDBACK_URL not in report.concise([r])
     assert report.FEEDBACK_URL not in report.github([r])
 
 
