@@ -585,9 +585,26 @@ as in the paper (`scripts/reading_time_train.py`):
 Observed means are 198 to 205 ms/word. Cekini et al. report 15.0 on OneStop
 test and 16.1 on Provo for their RoBERTa model and about 19 for feature
 models on OneStop test. Word length (0.59) and frequency (0.22) carry most of
-the trees' importance. Surprisal adds nothing on OneStop and makes Provo
-worse, so readcost ships the lexical model, which needs neither torch nor a
-language model.
+the trees' importance.
+
+Surprisal studies usually report word-level fit, which tells a different
+story from the text-level error above:
+
+| Model | OneStop test, word r | OneStop test, word RMSE | Provo, word r | Provo, word RMSE | Provo, mean signed error |
+| --- | --- | --- | --- | --- | --- |
+| trees (shipped) | 0.776 | 77.2 | 0.823 | 62.7 | +4.8 |
+| trees plus surprisal | 0.786 | 75.6 | 0.831 | 65.0 | +15.0 |
+
+Surprisal improves word-level correlation everywhere, as Shain et al. 2024,
+Pimentel et al. 2023 and Tsipidi et al. 2026 find on Provo. What it costs is
+calibration across corpora: Provo's short passages give the language model
+little context, so their mean surprisal is 6.89 bits per word against 5.50 on
+OneStop, and a model fitted on OneStop predicts every Provo passage about 15
+ms per word too slow. Studies that fit their regressions within each corpus
+never see that shift. readcost applies one model to texts of every length
+and kind, so it ships the lexical model, which also needs neither torch nor a
+language model. A surprisal feature normalised per text, or computed with a
+fixed amount of context, would be the version to test next.
 
 Correction: an earlier version of this table reported 9.6 ms/word on Provo.
 Provo rows were keyed by `Word_Number`, which is missing for each passage's
