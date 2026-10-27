@@ -1,4 +1,4 @@
-"""Command line: readcost check | profile build | explain | setup | hook."""
+"""Command line: the subcommands that build_parser lists, and main."""
 
 from __future__ import annotations
 
@@ -58,25 +58,66 @@ def _walk(root: Path) -> list[Path]:
                   if p.is_file() and not any(part.startswith(".") for part in p.relative_to(root).parts))
 
 
-def _cmd_check(args) -> int:
+def _load_config(args):
     from .config import load_config
-    from .engine import Analyzer, parse_line_ranges
-    from .extract import detect_format
-    from .report import render
 
-    if args.per_record and (args.last or args.lines):
-        raise ValueError("--per-record cannot be combined with --last or --lines")
-    lines = parse_line_ranges(_line_spec(args.lines))
     cfg = load_config(args.config, start=args.paths[0] if args.paths and args.paths[0] != "-" else None)
-    if args.min_severity:
-        cfg.min_severity = args.min_severity
     if args.enable:
         cfg.enable += _feature_ids(args.enable, "--enable")
     if args.disable:
         cfg.disable += _feature_ids(args.disable, "--disable")
     if args.profile:
         cfg.profile = args.profile
-    analyzer = Analyzer(cfg)
+    return cfg
+
+
+def _cmd_check(args) -> int:
+    from .engine import Analyzer
+    from .report import render
+
+    cfg = _load_config(args)
+    if args.min_severity:
+        cfg.min_severity = args.min_severity
+    if args.baseline:
+        cfg.baseline = args.baseline
+    results, failed = _collect(args, cfg, Analyzer(cfg))
+    out = render(results, args.output, max_items=cfg.hooks.max_items, max_chars=cfg.hooks.max_chars,
+                 feedback_link=cfg.feedback_link)
+    if out:
+        print(out)
+    if failed:
+        return EXIT_USAGE
+    worst = max((VERDICT_RANK[r.verdict] for r in results), default=0)
+    threshold = {"never": 99, "advise": 1, "block": 2}[args.fail_on]
+    return EXIT_FINDINGS if worst >= threshold else EXIT_OK
+
+
+def _cmd_baseline(args) -> int:
+    from .baseline import dump_baseline
+    from .engine import Analyzer
+
+    cfg = _load_config(args)
+    # Record every finding: the verdict counts findings below min_severity too,
+    # and an existing baseline must not hide what the new one should hold.
+    cfg.min_severity, cfg.baseline = "info", ""
+    results, failed = _collect(args, cfg, Analyzer(cfg))
+    if failed:
+        return EXIT_USAGE  # a partial baseline would make the unread files' findings new
+    findings = [f for r in results for f in r.findings]
+    Path(args.output).write_text(dump_baseline(findings, args.output))
+    files = len({f.path for f in findings})
+    print(f"wrote {args.output}: {len(findings)} findings in {files} file{'s' if files != 1 else ''}")
+    return EXIT_OK
+
+
+def _collect(args, cfg, analyzer) -> tuple[list, bool]:
+    """Check every path in ``args.paths``; also say whether some file could not be read."""
+    from .engine import parse_line_ranges
+    from .extract import detect_format
+
+    if args.per_record and (args.last or args.lines):
+        raise ValueError("--per-record cannot be combined with --last or --lines")
+    lines = parse_line_ranges(_line_spec(args.lines))
 
     def check(text: str, path: str, name: str) -> list:
         fmt = args.format or ("markdown" if path == "-" else detect_format(path))
@@ -113,15 +154,7 @@ def _cmd_check(args) -> int:
                 failed = True
                 detail = exc.strerror if isinstance(exc, OSError) and exc.strerror else exc
                 print(f"readcost: {p}: {detail}", file=sys.stderr)
-    out = render(results, args.output, max_items=cfg.hooks.max_items, max_chars=cfg.hooks.max_chars,
-                 feedback_link=cfg.feedback_link)
-    if out:
-        print(out)
-    if failed:
-        return EXIT_USAGE
-    worst = max((VERDICT_RANK[r.verdict] for r in results), default=0)
-    threshold = {"never": 99, "advise": 1, "block": 2}[args.fail_on]
-    return EXIT_FINDINGS if worst >= threshold else EXIT_OK
+    return results, failed
 
 
 def _cmd_profile(args) -> int:
@@ -192,24 +225,37 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--version", action="store_true", help="print the version and exit")
     sub = p.add_subparsers(dest="cmd")
 
+    def inputs(c):
+        """Arguments that choose and read the input, shared by check and baseline."""
+        c.add_argument("paths", nargs="*", help="files or directories; '-' or nothing reads stdin")
+        c.add_argument("-f", "--format", choices=FORMATS,
+                       help="input format (default: from the file name; stdin: markdown)")
+        c.add_argument("--enable", help="comma-separated features to turn on")
+        c.add_argument("--disable", help="comma-separated features to turn off")
+        c.add_argument("--profile", help="reference profile JSON (default: built-in)")
+        c.add_argument("--field", help="for JSON/JSONL: dotted path of the text field, e.g. response or output.text")
+        c.add_argument("--per-record", action="store_true",
+                       help="for transcripts, chat JSON and JSONL: one result per message or record")
+        c.add_argument("--stdin-name", default="<stdin>", help="name to report for stdin input")
+        c.add_argument("--config", help="config file (default: discovered readcost.toml or pyproject.toml)")
+
     c = sub.add_parser("check", help="analyze files, directories, or stdin")
-    c.add_argument("paths", nargs="*", help="files or directories; '-' or nothing reads stdin")
-    c.add_argument("-f", "--format", choices=FORMATS, help="input format (default: from the file name; stdin: markdown)")
+    inputs(c)
     c.add_argument("-o", "--output", choices=OUTPUTS, default="text")
     c.add_argument("--fail-on", choices=("never", "advise", "block"), default="block",
                    help="exit 1 when any file reaches this verdict (default: block)")
     c.add_argument("--min-severity", choices=("info", "warn", "error"))
-    c.add_argument("--enable", help="comma-separated features to turn on")
-    c.add_argument("--disable", help="comma-separated features to turn off")
-    c.add_argument("--profile", help="reference profile JSON (default: built-in)")
     c.add_argument("--lines", help="only report sentences touching these lines, e.g. 10-24,40")
-    c.add_argument("--field", help="for JSON/JSONL: dotted path of the text field, e.g. response or output.text")
     c.add_argument("--last", action="store_true", help="for transcripts: only the last assistant message")
-    c.add_argument("--per-record", action="store_true",
-                   help="for transcripts, chat JSON and JSONL: one result per message or record")
-    c.add_argument("--stdin-name", default="<stdin>", help="name to report for stdin input")
-    c.add_argument("--config", help="config file (default: discovered readcost.toml or pyproject.toml)")
+    c.add_argument("--baseline", help="baseline JSON from `readcost baseline`; only findings not in it count")
     c.set_defaults(func=_cmd_check)
+
+    bl = sub.add_parser("baseline", help="record current findings so that later checks report only new ones")
+    inputs(bl)
+    bl.add_argument("-o", "--output", default=".readcost-baseline.json",
+                    help="file to write; finding paths are stored relative to its directory "
+                         "(default: .readcost-baseline.json)")
+    bl.set_defaults(func=_cmd_baseline, lines=None, last=False)
 
     pr = sub.add_parser("profile", help="build a reference profile from documents you consider readable")
     prsub = pr.add_subparsers(dest="profile_cmd", required=True)
