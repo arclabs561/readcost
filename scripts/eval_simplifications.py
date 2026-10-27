@@ -17,8 +17,9 @@ People rewrote these sentences, as models did in the paired rewrites of
 docs/evaluation.md. For every pair of an original and a simplification it
 compares four measures: findings, weighted points, cost index (weighted
 points per 1,000 words) and predicted ms per word. It prints the share of pairs where the measure went
-down, stayed, or went up, with a two-sided Wilcoxon signed-rank test on the
-differences. It then takes the pairs whose original has a finding and counts,
+down, stayed, or went up, with a two-sided Wilcoxon signed-rank test on each
+original sentence's mean difference (its ten simplifications are not
+independent). It then takes the pairs whose original has a finding and counts,
 per rule, how often the simplification no longer has it, and how often a
 simplification of a sentence without the finding adds one. Needs scipy.
 """
@@ -57,14 +58,20 @@ def main(ref: Path) -> None:
                 ms = measure(s[i]) if i < len(s) and s[i].strip() else None
                 if ms is not None:
                     pairs.append((mo, ms))
-    n_orig = len({id(p[0]) for p in pairs})
+    by_orig: dict[int, list] = {}
+    for o, s in pairs:
+        by_orig.setdefault(id(o), []).append((o, s))
+    n_orig = len(by_orig)
     print(f"{n_orig} original sentences, {len(pairs)} pairs\n")
     print("| Measure | Original median | Simplification median | Lower | Same | Higher | p |")
     print("| --- | --- | --- | --- | --- | --- | --- |")
     for k in ("words", "findings", "points", "cost_index", "ms_per_word"):
         d = [s[k] - o[k] for o, s in pairs]
         lo, same, hi = (sum(x < 0 for x in d), sum(x == 0 for x in d), sum(x > 0 for x in d))
-        p = wilcoxon([x for x in d if x]).pvalue
+        # The ten simplifications of one sentence are not independent: test the
+        # mean difference per original sentence.
+        per_orig = [statistics.mean(s[k] - o[k] for o, s in ps) for ps in by_orig.values()]
+        p = wilcoxon([x for x in per_orig if x]).pvalue
         print(f"| {k} | {statistics.median(o[k] for o, _ in pairs):.3g} | "
               f"{statistics.median(s[k] for _, s in pairs):.3g} | {lo / len(d):.0%} | {same / len(d):.0%} | "
               f"{hi / len(d):.0%} | {p:.2g} |")
