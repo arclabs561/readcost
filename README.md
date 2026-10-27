@@ -187,7 +187,7 @@ compound, not three stacked nouns. Participial-clause, nominalization and
 repeated-frame are constructions that language models use more often than
 people (Reinhart et al. 2025; Shaib et al. 2024). Center-embedding flags a
 clause nested two deep inside clauses that continue after it, which people
-judge hard in constructed sentences unless the innermost subject is a pronoun
+judge hard in constructed sentences unless the innermost subject is I, you or we
 (Gibson 1998, 2000); undefined-acronym flags an acronym used before it is
 spelled out, which readers rated as harder to read in one small report (Hales,
 Williams and Rector 2017), skipping common ones such as API and JSON. Turn any opt-in rule on
