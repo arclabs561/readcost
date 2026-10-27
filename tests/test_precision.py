@@ -30,7 +30,7 @@ def test_object_relative_with_full_noun_subject_is_reported(analyzer):
 
 @pytest.mark.parametrize("text", [
     "In my small project it feels like I just have five main files to worry about.",
-    "If a line feels too long, wrap it and indent with an extra tab.",
+    "If a sentence feels too long, split it and keep the reason in the second one.",
     "An unrecoverable error causes the program to panic and the process dies.",
 ])
 def test_thing_subject_verbs_are_not_inanimate_subjects(analyzer, text):
@@ -74,7 +74,7 @@ def test_clauses_joined_by_commas_are_not_an_inline_list(analyzer):
 
 def test_list_of_short_items_is_still_an_inline_list(analyzer):
     # Most of ten raters call these defensible (docs/evaluation.md, "Ten raters").
-    text = "Effective Go provides guidelines for naming packages, types, functions, and variables."
+    text = "The style guide covers naming modules, classes, methods, and constants."
     assert "inline-list" in feats(analyzer, text)
 
 
