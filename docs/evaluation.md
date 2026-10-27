@@ -1615,6 +1615,58 @@ the eval corpus's counts are from the readcost version that scored it.
   Gutenberg selection uses the catalog file (gutendex returned 503) and
   authors who died by 1945.
 
+## Project communities and AI-written text
+
+`scripts/fetch_people_text.py`, `scripts/fetch_ai_text.py` and
+`scripts/eval_people_ai.py` (readcost `6be1918`, `Config()` defaults, fetched
+2026-10-27) compare 5,271 texts in three ways. None of this text has a reuse
+licence beyond the host's terms, so it is analysed locally and only
+aggregates are reported; per-person figures are not published.
+
+| Corpus | Texts | Matched against |
+| --- | --- | --- |
+| Issue and PR bodies, review and thread comments by 24 developers whose writing is widely respected | 658 | the same kinds of text from 32 random repositories with 200 to 5,000 stars (277) |
+| Forum posts (Rust users and internals, discuss.python.org) and project wikis | 425 | community posts in the same forums |
+| Agent-written PRs from AIDev v3 (Codex, Devin, Copilot, Cursor, Claude Code) | 400 | a human PR in the same repository |
+| Agent PRs found live on GitHub in 2026 | 109 | the latest human PR in the same repository |
+| Machine text from RAID, MAGE and M4 | 1,644 | the human text it was generated from, or one of the same domain |
+
+Words per sentence (wps) and mean word length (mwl) are shown with each
+result because both drive readcost's rules.
+
+- Issue and PR bodies by the respected developers get fewer findings than the
+  community baseline: a median of 1.35 against 8.84 per 1,000 words (321
+  against 138 texts, p = 0.0002), and 219 against 240 predicted ms per word.
+  Sentence length is the same (16.2 wps); their words are shorter (mwl 4.55
+  against 4.72). Pooled per person or repository the gap holds (5.3 against
+  8.4 findings per 1,000 words, p = 0.006). Review comments, thread comments
+  and forum posts show no difference in findings. The spread among the
+  respected developers is wide: from about 1 to about 25 findings per 1,000
+  words.
+- Agent-written PRs cost more than human PRs in the same repository: findings
+  per 1,000 words 7.0 against 0 (medians, 333 pairs, p = 2e-6) and 275
+  against 252 ms per word. They are longer (98 against 60 words), use shorter
+  sentences (11.3 against 13.0 wps) and much longer words (mwl 5.52 against
+  4.82), and have 3.0 more stacked nouns per 1,000 words. Every agent reads
+  slower per word than its human pairs, from +7 ms (not significant) to +42
+  ms. The live 2026 sample (93 pairs) shows no difference except shorter
+  sentences.
+- Machine text from the detection benchmarks reads as cheaper than its human
+  source, the opposite of agent PRs: RAID 202 against 205 ms per word (268
+  pairs), M4 206 against 213 with fewer findings but shorter texts (695
+  pairs). MAGE shows no pooled difference, and its generators split both
+  ways at 25 pairs each: OPT-13B and GPT-NeoX read slower than their human
+  text, the generators MAGE labels only "13B" and "65B" faster.
+
+The two AI results point different ways because the texts are different:
+agent PRs describe code changes in identifiers and compressed noun phrases,
+while the benchmark generations are essays, news and reviews written to
+imitate their human source. Limits: matching is by repository, source or
+domain, not by length; about 700 comparisons were run without correction, so
+p above 0.001 is suggestive; the respected side is what search returned for
+each handle, the community side the latest activity in random repositories;
+the RAID sample covers three domains and six models.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News
