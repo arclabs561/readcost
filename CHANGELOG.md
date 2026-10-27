@@ -62,6 +62,10 @@ configuration.
 - stacked-nouns no longer counts a verb the tagger read as a plural noun
   after another plural ("merge-commit subjects scores high") when a real verb
   sits above it.
+- Predicted reading time no longer falls the longer a paragraph runs past the
+  longest training paragraph (165 words): one long paragraph read 17% faster
+  than the same text split into paragraphs, now 4%. Reference profiles are
+  rebuilt.
 
 ## [0.2.0] - 2026-10-26
 

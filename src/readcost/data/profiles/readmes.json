@@ -13,7 +13,7 @@
   "inline-list": 2.815,
   "long-dependency": 0.295,
   "reduced-object-relative": 0.134,
-  "stacked-nouns": 3.593
+  "stacked-nouns": 3.485
  },
  "sources": [
   "https://github.com/BurntSushi/ripgrep",

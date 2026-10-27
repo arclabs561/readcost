@@ -85,3 +85,23 @@ def test_features_are_compared_in_float32_like_scikit_learn():
     rows[1, f] = float(np.float32(above64))
     a, b = readtime.predict(rows)
     assert a == b
+
+
+def test_one_long_paragraph_reads_about_as_fast_as_the_same_text_in_paragraphs():
+    # Training paragraphs have at most 165 words; past that the trees used to
+    # extrapolate falling times, so this text set as one paragraph read 17%
+    # faster. The repository's own docs supply the prose.
+    from pathlib import Path
+
+    doc = (Path(__file__).resolve().parent.parent / "docs" / "evaluation.md").read_text()
+    paras = [p for p in doc.split("\n\n") if len(p.split()) > 40 and p[:1].isalpha()][:12]
+    _, split = readtime.estimate(paras)
+    _, joined = readtime.estimate([" ".join(paras)])
+    assert 0.9 < joined / split < 1.1
+
+
+def test_positions_inside_the_training_range_are_unchanged():
+    words = ("one two three " * 55).split()  # 165 words
+    assert list(readtime.features(words)[:, 4]) == list(range(165))
+    longer = readtime.features(words + ["four"])[:, 4]
+    assert longer[0] == 0 and longer[-1] == 164 and len(longer) == 166

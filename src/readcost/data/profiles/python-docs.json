@@ -29,6 +29,6 @@
   "https://github.com/python/cpython/blob/f4043ab1be0205d834a8b9aa72e289be12637344/Doc/tutorial/venv.rst"
  ],
  "note": "11 texts from the Python tutorial, fetched for readcost's evaluation corpus; rates measured with readcost 0.2.0.",
- "reading_ms_per_word": 199.6,
+ "reading_ms_per_word": 199.9,
  "words_per_sentence": 20.6
 }
