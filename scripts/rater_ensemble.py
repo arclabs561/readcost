@@ -64,7 +64,7 @@ def ask(model: str, prompt: str, schema: dict) -> tuple[dict | None, dict]:
             if attempt == 1:
                 return None, meta
             time.sleep(10)
-        except (urllib.error.URLError, TimeoutError) as exc:
+        except (OSError, json.JSONDecodeError) as exc:  # URLError, timeouts, resets mid-read
             meta["error"] = str(exc)[:300]
             if attempt == 1:
                 return None, meta
