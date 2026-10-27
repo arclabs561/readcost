@@ -57,6 +57,12 @@ configuration.
   raters accepted 14 of 30 new findings and 0 of 30 old ones. New config keys
   `long_dependency_core_min` and `long_dependency_core_always`.
 
+### Fixed
+
+- stacked-nouns no longer counts a verb the tagger read as a plural noun
+  after another plural ("merge-commit subjects scores high") when a real verb
+  sits above it.
+
 ## [0.2.0] - 2026-10-26
 
 First release on PyPI (`pip install readcost`, or `uvx readcost`).

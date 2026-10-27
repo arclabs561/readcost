@@ -310,6 +310,19 @@ def _noun_stack(token) -> list:
     return out
 
 
+# What follows a misparsed verb (its object or a modifier) rather than a noun
+# (a verb, a preposition, punctuation): "scores high", "scores the essays".
+AFTER_VERB = frozenset({"ADV", "ADJ", "DET", "PRON", "NUM"})
+
+
+def _plural_verb(t, stack) -> bool:
+    """True when the head t is a plural right after another plural in the stack, followed by what a verb takes."""
+    if t.tag_ != "NNS" or t.i + 1 >= t.sent.end:
+        return False
+    before, after = t.doc[t.i - 1], t.doc[t.i + 1]
+    return before.tag_ == "NNS" and before.i in {x.i for x in stack} and after.pos_ in AFTER_VERB
+
+
 def stacked_nouns(sent, ctx: Context, taken: set[int],
                   spans: list[set[int]] | None = None) -> list[tuple[str, str, list]]:
     # An allowed term ("write-ahead log") and a hyphenated word ("reader-patience",
@@ -339,6 +352,12 @@ def stacked_nouns(sent, ctx: Context, taken: set[int],
                 stack = [x for x in stack if x.i < verb.i]
                 if not stack:
                     continue
+        elif _plural_verb(t, stack):
+            # "merge-commit subjects scores high": the second of two plurals
+            # is the verb, misparsed even though a real verb is above it.
+            stack = [x for x in stack if x.i < t.i]
+            if not stack:
+                continue
         first = min(stack, key=lambda x: x.i)
         if first.i == sent.start and first.tag_ in ("NN", "VB") and sent.root.i in {x.i for x in stack}:
             # "Flag prose constructions that ...": with no main verb parsed,
