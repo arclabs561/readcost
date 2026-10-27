@@ -855,23 +855,35 @@ tags in a row. `scripts/eval_corpus_mode.py` runs it on each source's answers
 to the 55 HC3 questions, each answer cut to its first 120 words of prose so
 that every source contributes about the same amount of text:
 
-| Source | Texts | Words | CR-POS | Texts with a template | Tokens in templates | Top opener |
+| Source | Texts | Words | CR-POS | Texts with a template | Templates per token | Top opener |
 | --- | --- | --- | --- | --- | --- | --- |
-| human | 55 | 5,932 | 4.78 | 98% | 5.0% | it is |
-| chatgpt-2022 | 55 | 6,113 | 5.14 | 95% | 7.8% | it is |
-| google/gemini-4-argon | 55 | 6,305 | 4.62 | 89% | 5.1% | here is |
-| deepseek/deepseek-v4.1-flash | 55 | 5,883 | 4.58 | 87% | 5.6% | it is |
-| x-ai/grok-4.7 | 55 | 5,812 | 4.60 | 85% | 4.7% | it is |
-| moonshotai/kimi-k3.1-pro | 55 | 5,695 | 4.54 | 80% | 5.4% | for example |
-| mistralai/mistral-large-4-0 | 55 | 6,257 | 4.61 | 93% | 4.3% | here is |
+| human | 55 | 5,932 | 4.78 | 98% | 0.050 | it is |
+| chatgpt-2022 | 55 | 6,113 | 5.14 | 95% | 0.078 | it is |
+| google/gemini-4-argon | 55 | 6,305 | 4.62 | 89% | 0.051 | here is |
+| deepseek/deepseek-v4.1-flash | 55 | 5,883 | 4.58 | 87% | 0.056 | it is |
+| x-ai/grok-4.7 | 55 | 5,812 | 4.60 | 85% | 0.047 | it is |
+| moonshotai/kimi-k3.1-pro | 55 | 5,695 | 4.54 | 80% | 0.054 | for example |
+| mistralai/mistral-large-4-0 | 55 | 6,257 | 4.61 | 93% | 0.043 | here is |
 
 On these answers the current models are not more templated than the human
-answers: their CR-POS is slightly lower and their share of tokens in templates
-is about the same. The 2022 ChatGPT answers are the most repetitive. The share
+answers: their CR-POS is slightly lower and their templates per token about
+the same. The 2022 ChatGPT answers are the most repetitive. The share
 of texts with a template is near its ceiling for every source at this corpus
 size, so it separates nothing here. Openers show habits ("here is" leads two
-models' answers). Shaib et al. found much larger gaps in summarization; open
-questions answered at length may leave models less room to repeat a frame.
+models' answers). Shaib et al. found much larger gaps in summarization (on
+movie-review summaries, 95% of model outputs against 46% of human references
+contained a template, partly an effect of length); open questions answered at length may leave models less
+room to repeat a frame.
+
+Both measures depend on corpus size. On essays cut to 300 words each, the size
+check in the same script gives:
+
+| Essays | Words | CR-POS | Templates per token |
+| --- | --- | --- | --- |
+| 5 | 1,457 | 4.02 | 0.088 |
+| 10 | 2,910 | 4.28 | 0.064 |
+| 20 | 4,398 | 4.41 | 0.045 |
+| 40 | 8,850 | 4.56 | 0.030 |
 
 ## Not yet evaluated
 

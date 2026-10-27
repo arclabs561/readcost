@@ -212,7 +212,7 @@ def _cmd_corpus(args) -> int:
     print(f"{rep.texts} texts, {rep.words:,} words")
     print(f"CR-POS (repetitiveness of syntax)   {rep.cr_pos:.2f}")
     print(f"texts with a frequent template      {rep.template_rate:.0%}")
-    print(f"tokens in frequent templates        {rep.templates_per_token:.1%}")
+    print(f"template 6-grams per token          {rep.templates_per_token:.3f}")
     if rep.top_templates:
         print("\nmost frequent 6-tag templates:")
         for t in rep.top_templates:
