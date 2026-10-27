@@ -301,6 +301,16 @@ def stacked_nouns(sent, ctx: Context, taken: set[int],
             stack = [x for x in stack if x.i != t.i]
         if not stack:
             continue
+        if not any(a.pos_ in ("VERB", "AUX") for a in t.ancestors):
+            # With no verb above it, a plural inside the stack is usually the
+            # misparsed main verb ("specification defines slices", "keys
+            # default to"); compound modifiers are rarely plural. Keep only
+            # the words before it, the verb's subject.
+            verb = next((x for x in sorted(stack, key=lambda x: x.i) if x.i != t.i and x.tag_ == "NNS"), None)
+            if verb is not None:
+                stack = [x for x in stack if x.i < verb.i]
+                if not stack:
+                    continue
         first = min(stack, key=lambda x: x.i)
         if first.i == sent.start and first.tag_ in ("NN", "VB") and sent.root.i in {x.i for x in stack}:
             # "Flag prose constructions that ...": with no main verb parsed,
@@ -554,6 +564,10 @@ def reduced_object_relatives(sent, ctx: Context) -> list[tuple[str, str, list]]:
         rel = _relativizer(t)
         subj = [c for c in t.children if c.dep_ in ("nsubj", "nsubjpass") and (rel is None or c.i != rel.i)]
         if not subj or rel is not None or subj[0].i <= t.head.i:
+            continue
+        if t.head.dep_ == "ROOT":
+            # "The help output begins with": with the noun as the root, the
+            # "relative clause" is the main clause the parser missed.
             continue
         if subj[0].pos_ == "PRON" or t.head.lemma_.lower() in LIGHT_RELATIVE_HEADS:
             # "someone I trust", "all you need", "the first time we met": a

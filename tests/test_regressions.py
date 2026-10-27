@@ -11,6 +11,7 @@ import pytest
 
 from readcost.config import Config
 from readcost.engine import Analyzer
+from readcost.extract import extract_markdown
 
 DENSE = ("It does not own indexing, segment selection, compaction, or reader visibility. "
          "The example prints the first snapshot-search cost with persisted region-index sidecars "
@@ -254,3 +255,48 @@ def test_several_findings_in_a_short_text_still_advise():
     result = Analyzer(Config()).check_text(text, "markdown")
     assert result.words < 40 and result.points >= 2
     assert result.verdict in ("advise", "block")
+
+
+# Sentences from public READMEs (arclabs561/sporse, subsume, tranz) and this
+# repo's docs, where the tagger read the main verb as a plural noun.
+@pytest.mark.parametrize("sentence", [
+    "`serde_roundtrip.rs` verifies built-index serialization with the `serde` feature.",
+    "This self-contained example prints containment and overlap scores for a small hierarchy.",
+    "The manifest records model family, training config, split sizes, SHA-256 digests, byte sizes, "
+    "and evaluation metrics when `--eval` is used.",
+    "reduced-object-relative skips pronoun subjects and light heads;",
+])
+def test_misparsed_verb_is_not_part_of_a_noun_stack(sentence):
+    findings = Analyzer(Config()).check_text(sentence, "markdown").findings
+    assert [f.excerpt for f in findings if f.feature == "stacked-nouns"] == []
+
+
+def test_noun_stack_before_a_verb_is_still_reported():
+    findings = Analyzer(Config()).check_text("We tune the shard compaction retry budget by hand.", "markdown").findings
+    assert [f.excerpt for f in findings if f.feature == "stacked-nouns"] == ["compaction retry budget"]
+
+
+# From public READMEs (arclabs561/piku, precinct, netbraid): a noun at the
+# root plus a verb is the main clause, not an object relative.
+@pytest.mark.parametrize("sentence", [
+    "The help output begins with:",
+    "The point ANN backend is vicinity (HNSW).",
+    "The optional Zeek adapter projects `conn.log` rows into that same input type.",
+])
+def test_main_clause_after_a_root_noun_is_not_an_object_relative(sentence):
+    findings = Analyzer(Config()).check_text(sentence, "markdown").findings
+    assert [f.feature for f in findings if f.feature == "reduced-object-relative"] == []
+
+
+def test_object_relative_without_that_is_still_reported():
+    text = "It compresses a posting list, the storage-shrink use case these ID-set codecs exist for."
+    findings = Analyzer(Config()).check_text(text, "markdown").findings
+    assert [f.feature for f in findings if f.feature == "reduced-object-relative"] == ["reduced-object-relative"]
+
+
+def test_a_row_of_links_is_navigation_not_prose():
+    # From arclabs561/muxer's README: "API docs" was read as part of a noun stack.
+    nav = "[Quickstart guide](docs/QUICKSTART.md) | [API docs](https://docs.rs/muxer) | [Changelog](CHANGELOG.md)\n"
+    assert extract_markdown(nav, "a.md") == []
+    prose = "See the [quickstart guide](docs/QUICKSTART.md) and the [API docs](https://docs.rs/muxer) first.\n"
+    assert len(extract_markdown(prose, "a.md")) == 1
