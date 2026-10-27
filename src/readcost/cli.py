@@ -90,16 +90,48 @@ def _cmd_check(args) -> int:
     if args.baseline:
         cfg.baseline = args.baseline
     results, failed = _collect(args, cfg, Analyzer(cfg))
+    color = use_color(sys.stdout, args.color)
     out = render(results, args.output, max_items=cfg.hooks.max_items, max_chars=cfg.hooks.max_chars,
-                 feedback_link=cfg.feedback_link,
-                 color=use_color(sys.stdout, args.color))
+                 feedback_link=cfg.feedback_link, color=color)
     if out:
         print(out)
+    if args.hotspots and args.output in ("full", "concise"):
+        from .report import hotspots
+
+        spots = hotspots(results, args.hotspots, color)
+        if spots:
+            print("\n" + spots)
     if failed:
         return EXIT_USAGE
     worst = max((VERDICT_RANK[r.verdict] for r in results), default=0)
     threshold = {"never": 99, "advise": 1, "block": 2}["never" if args.exit_zero else args.fail_on]
     return EXIT_FINDINGS if worst >= threshold else EXIT_OK
+
+
+def _cmd_compare(args) -> int:
+    from .config import load_config
+    from .engine import Analyzer
+    from .extract import detect_format
+    from .report import compare, use_color
+
+    cfg = load_config(args.config, start=args.new if args.new != "-" else None)
+    analyzer = Analyzer(cfg)
+    results = []
+    for path in (args.old, args.new):
+        text = sys.stdin.read() if path == "-" else Path(path).read_text(encoding="utf-8", errors="ignore")
+        fmt = args.format or ("markdown" if path == "-" else detect_format(path))
+        results.append(analyzer.check_text(text, fmt, path))
+    old, new = results
+    if args.output == "json":
+        import json
+
+        print(json.dumps({"old": old.to_dict(), "new": new.to_dict()}, indent=1))
+    else:
+        print(compare(old, new, use_color(sys.stdout, args.color)))
+    slower = (old.reading_seconds is not None and new.reading_seconds is not None
+              and new.reading_seconds > old.reading_seconds)
+    worse = slower or new.points > old.points
+    return EXIT_FINDINGS if {"never": False, "slower": slower, "worse": worse}[args.fail_on] else EXIT_OK
 
 
 def _cmd_baseline(args) -> int:
@@ -298,11 +330,25 @@ def build_parser() -> argparse.ArgumentParser:
     c.add_argument("--fail-on", choices=("never", "advise", "block"), default="block",
                    help="exit 1 when any file reaches this verdict (default: block)")
     c.add_argument("--exit-zero", action="store_true", help="always exit 0 on findings (same as --fail-on never)")
+    c.add_argument("--hotspots", type=int, default=0, metavar="N",
+                   help="also list each file's N sentences predicted to cost the most reading time (experimental)")
     c.add_argument("--min-severity", choices=("info", "warn", "error"))
     c.add_argument("--lines", help="only report sentences touching these lines, e.g. 10-24,40")
     c.add_argument("--last", action="store_true", help="for transcripts: only the last assistant message")
     c.add_argument("--baseline", help="baseline JSON from `readcost baseline`; only findings not in it count")
     c.set_defaults(func=_cmd_check)
+
+    cm = sub.add_parser("compare", help="compare a rewrite with its original: reading time and findings")
+    cm.add_argument("old", help="the original ('-' for stdin)")
+    cm.add_argument("new", help="the rewrite")
+    cm.add_argument("-f", "--format", choices=FORMATS, help="input format (default: from the file name)")
+    cm.add_argument("-o", "--output", choices=("full", "json"), default="full")
+    cm.add_argument("--color", choices=("auto", "always", "never"), default="auto")
+    cm.add_argument("--config", help="config file (default: discovered from the rewrite's directory)")
+    cm.add_argument("--fail-on", choices=("never", "slower", "worse"), default="never",
+                    help="exit 1 if the rewrite is predicted to read slower, or (worse) slower or with more "
+                         "weighted findings")
+    cm.set_defaults(func=_cmd_compare)
 
     bl = sub.add_parser("baseline", help="record current findings so that later checks report only new ones")
     inputs(bl)

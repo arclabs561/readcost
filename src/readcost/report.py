@@ -409,3 +409,60 @@ def pr_comment(results: list[Result], max_items: int = 8, **_) -> str:
                 lines += ["", f"...and {len(items) - len(shown)} more; the job's annotations list them all."]
     lines += ["", f"readcost is advisory and can be wrong. [Report a false positive]({FEEDBACK_URL})."]
     return "\n".join(lines) + "\n"
+
+
+def hotspots(results: list[Result], n: int, color: bool = False) -> str:
+    """The n sentences per file predicted to cost the most reading time beyond their length."""
+    paint = _paint(color)
+    out = []
+    for r in results:
+        if not r.hotspots[:n]:
+            continue
+        out.append(paint(f"{r.path}: slowest sentences", "bold")
+                   + " (predicted reading time beyond their length; experimental)")
+        for h in r.hotspots[:n]:
+            slow = ", ".join(w["word"].strip(".,;:()\"'") for w in h["slow_words"])
+            out.append(f"  {r.path}:{h['line']}  +{h['excess_ms'] / 1000:.1f} s  {h['ms_per_word']} ms per word"
+                       f"  slowest words: {slow}")
+            text = h["sentence"]
+            out.append("    " + (text if len(text) <= 76 else text[:73] + "..."))
+    return "\n".join(out)
+
+
+def compare(old: Result, new: Result, color: bool = False) -> str:
+    """A rewrite against its original: reading time, findings by rule, and findings only in the rewrite."""
+    from .baseline import sentence_hash
+
+    paint = _paint(color)
+
+    def secs(r: Result) -> str:
+        return "-" if r.reading_seconds is None else f"{r.reading_seconds:.1f} s"
+
+    rows = [("", "old", "new", "change"),
+            ("words", str(old.words), str(new.words), f"{new.words - old.words:+d}"),
+            ("sentences", str(old.sentences), str(new.sentences), f"{new.sentences - old.sentences:+d}")]
+    if old.reading_seconds is not None and new.reading_seconds is not None:
+        d = new.reading_seconds - old.reading_seconds
+        pct = f" ({100 * d / old.reading_seconds:+.0f}%)" if old.reading_seconds else ""
+        rows.append(("predicted reading time", secs(old), secs(new), f"{d:+.1f} s{pct}"))
+        rows.append(("ms per word", f"{old.reading_ms_per_word:.0f}", f"{new.reading_ms_per_word:.0f}",
+                     f"{new.reading_ms_per_word - old.reading_ms_per_word:+.0f}"))
+    rows += [("findings", str(len(old.findings)), str(len(new.findings)),
+              f"{len(new.findings) - len(old.findings):+d}"),
+             ("weighted findings", f"{old.points:g}", f"{new.points:g}", f"{new.points - old.points:+g}"),
+             ("verdict", old.verdict, new.verdict, "")]
+    width = max(len(r[0]) for r in rows)
+    out = [f"{a:<{width}}  {b:>9}  {c:>9}  {d}".rstrip() for a, b, c, d in rows]
+    oc, nc = old.counts(), new.counts()
+    changed = [f"{k} {oc.get(k, 0)} -> {nc.get(k, 0)}" for k in sorted(set(oc) | set(nc)) if oc.get(k) != nc.get(k)]
+    if changed:
+        out += ["", "by rule: " + ", ".join(changed)]
+    seen = {(f.feature, sentence_hash(f.sentence)) for f in old.findings}
+    fresh = [f for f in new.findings if (f.feature, sentence_hash(f.sentence)) not in seen]
+    if fresh:
+        new_only = Result(path=new.path, findings=fresh, source=new.source, words=new.words,
+                          sentences=new.sentences, verdict=new.verdict)
+        blocks = full([new_only], color=color).split("\n\n")
+        out += ["", paint(f"Only in {new.path}:", "bold"), ""]
+        out += ["\n\n".join(b for b in blocks if b.lstrip().startswith(("error[", "warn[", "info[")))]
+    return "\n".join(out)
