@@ -134,6 +134,22 @@ def precision(findings: list[dict], labels: dict[str, dict[str, str]], name: str
     return rows
 
 
+def rule_precision(findings: list[dict], labels: dict[str, dict[str, str]], name: str) -> dict:
+    """Per rule: labelled findings this run still reports, and how many the eight-rater majority accepts."""
+    feature = {key(f): f["feature"] for f in findings}
+    sample = set.intersection(*(set(v) for v in labels.values()))
+    eight = [r for r in sorted(labels) if r not in LENIENT]
+    rules: dict[str, dict[str, int]] = {}
+    for k in sorted(sample & set(feature)):
+        row = rules.setdefault(feature[k], {"labelled": 0, "accepted": 0})
+        row["labelled"] += 1
+        row["accepted"] += sum(labels[r][k] in "cd" for r in eight) > len(eight) / 2
+    return {"run": name, "raters": len(eight),
+            "method": "findings sampled from essays and documentation by well-regarded writers; "
+                      "accepted means a majority of the raters labelled it correct or defensible",
+            "rules": rules}
+
+
 def examples(findings: list[dict], labels: dict[str, dict[str, str]], n: int) -> list[str]:
     eight = [r for r in labels if r not in LENIENT]
     rng = random.Random(1)
@@ -166,6 +182,7 @@ def main() -> int:
     ap.add_argument("--baseline", type=Path, help="an earlier run to compare precision against")
     ap.add_argument("--examples", type=int, default=3, help="example diagnostics per rule")
     ap.add_argument("--check", action="store_true", help="exit 1 if well-regarded writing is flagged")
+    ap.add_argument("--rule-precision", type=Path, help="also write per-rule precision as JSON to this file")
     args = ap.parse_args()
     texts, findings = load_run(args.run)
     labels = load_labels()
@@ -178,6 +195,8 @@ def main() -> int:
     if args.examples:
         out += ["## Example diagnostics", ""] + examples(findings, labels, args.examples)
     print("\n".join(out))
+    if args.rule_precision:
+        args.rule_precision.write_text(json.dumps(rule_precision(findings, labels, args.run.name), indent=1) + "\n")
     if args.check and failures:
         print("\n".join(f"check failed: {x}" for x in failures), file=sys.stderr)
         return 1

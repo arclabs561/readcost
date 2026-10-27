@@ -84,3 +84,17 @@ def test_readcost_comes_from_this_checkout(tmp_path):
                           cwd=tmp_path, capture_output=True, text=True, check=True).stdout.strip()
     assert Path(readcost.__file__).is_relative_to(SRC)
     assert Path(here).is_relative_to(SRC)
+
+
+def test_explain_reports_measured_precision_or_says_it_is_unmeasured():
+    import json
+    from importlib import resources
+
+    data = json.loads(resources.files("readcost").joinpath("data/rule_precision.json").read_text())
+    row = data["rules"]["stacked-nouns"]
+    out = subprocess.run([sys.executable, "-m", "readcost", "explain", "stacked-nouns"],
+                         capture_output=True, text=True, check=True).stdout
+    assert f"Measured: {row['accepted']} of {row['labelled']} labelled findings" in out
+    out = subprocess.run([sys.executable, "-m", "readcost", "explain", "nominalization"],
+                         capture_output=True, text=True, check=True).stdout
+    assert "Measured: too few labelled findings to measure" in out
