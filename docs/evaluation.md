@@ -1224,6 +1224,43 @@ acronym was spelled out elsewhere. Both rules stay off by default.
 center-embedding also misses doubly embedded clauses that the small parser
 attaches elsewhere: of four constructed double embeddings, it reported one.
 
+## Peaks and spread of word cost
+
+Gibson (1998) argued that a sentence is as hard as its hardest point, not its
+average, and Meister et al. (2021) found super-linear costs fit acceptability
+better than linear ones. `scripts/eval_peak_cost.py` takes each sentence's
+predicted ms per word and tests its peak (maximum, mean of the top three,
+90th percentile), its spread (standard deviation) and a super-linear sum
+(ms to the 1.25 per word) against the CEFR-SP teacher ratings, with Spearman
+partial correlations. Predicted time is mostly word length and frequency, so
+a peak may only be the longest or rarest words; the last column holds those
+fixed:
+
+| Measure | Wiki-Auto, length held | Wiki-Auto, + mean ms, longest and rarest word | Wiki-Auto, + mean ms, 3 longest and 3 rarest words | SCoRE, length held | SCoRE, + mean ms, longest and rarest word | SCoRE, + mean ms, 3 longest and 3 rarest words |
+| --- | --- | --- | --- | --- | --- | --- |
+| mean ms per word | +0.33 | | | +0.43 | | |
+| maximum | +0.32 | +0.08 | +0.07 | +0.40 | +0.05 | +0.02 |
+| mean of top three | +0.35 | +0.09 | +0.06 | +0.45 | +0.10 | +0.02 |
+| 90th percentile | +0.32 | +0.06 | +0.01 | +0.42 | +0.07 | +0.01 |
+| standard deviation | +0.34 | +0.12 | +0.08 | +0.30 | +0.05 | +0.01 |
+| ms^1.25 per word | +0.34 | +0.08 | +0.06 | +0.44 | +0.05 | +0.02 |
+
+With the three longest and three rarest words fixed, the peaks add nothing on
+SCoRE's learner sentences and at most 0.08 on Wikipedia. What carries the
+signal is word length: the mean length of a sentence's three longest words
+has a partial rho of +0.39 (Wiki-Auto) and +0.25 (SCoRE) beyond sentence
+length and mean predicted time, more than any peak of the predicted times.
+The three rarest words point the other way on Wikipedia (-0.14), where rare
+words are mostly names, and the same way on SCoRE (+0.18). On ASSET, people
+simplifying a sentence lower the top-three mean in 66% of pairs, against 57%
+for the mean (both p < 0.001 per original sentence).
+
+So the teachers' ratings track long words more than the reading-time model
+does; a peak measure would mostly re-add that. Nothing here changes the
+rules or the verdict. Within-sentence surprisal spread from a language model
+(partial rho +0.25, "Model signals") remains the strongest model-based
+signal of this kind.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News
