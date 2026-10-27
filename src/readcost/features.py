@@ -282,15 +282,32 @@ def _mostly_upper(sent) -> bool:
 
 # --------------------------------------------------------------- detectors
 
+_PHRASES: dict[int, tuple[set[str], dict[str, list[list[str]]]]] = {}
+
+
+def _phrases_by_first_word(allow: set[str]) -> dict[str, list[list[str]]]:
+    """Allowed terms split into words and indexed by their first word; cached per allow set."""
+    hit = _PHRASES.get(id(allow))
+    if hit is None or hit[0] is not allow:
+        index: dict[str, list[list[str]]] = {}
+        for phrase in {_norm(a) for a in allow}:
+            parts = phrase.split()
+            if parts:
+                index.setdefault(parts[0], []).append(parts)
+        hit = _PHRASES[id(allow)] = (allow, index)
+    return hit[1]
+
+
 def _allowed_spans(sent, allow: set[str]) -> list[set[int]]:
     """Token indices of each allowed term found in the sentence, hyphens included."""
     words = [t for t in sent if t.text != "-"]
+    lower = [w.lower_ for w in words]
+    index = _phrases_by_first_word(allow)
     spans = []
-    for phrase in {_norm(a) for a in allow}:
-        parts = phrase.split()
-        n = len(parts)
-        for k in range(len(words) - n + 1):
-            if [w.lower_ for w in words[k:k + n]] == parts:
+    for k, first in enumerate(lower):
+        for parts in index.get(first, ()):
+            n = len(parts)
+            if lower[k:k + n] == parts:
                 spans.append(set(range(words[k].i, words[k + n - 1].i + 1)))
     return spans
 
