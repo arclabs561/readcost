@@ -104,13 +104,14 @@ class Analyzer:
     @property
     def nlp(self):
         if self._nlp is None:
-            import spacy
+            from . import modelstore
 
             try:
-                self._nlp = spacy.load(self.cfg.model, disable=["ner"])
-            except OSError as exc:
+                # The default model is fetched into a cache on first use.
+                self._nlp = modelstore.load(self.cfg.model, disable=["ner"])
+            except (OSError, ValueError) as exc:
                 raise RuntimeError(
-                    f"spaCy model {self.cfg.model!r} is not installed; run `readcost setup`") from exc
+                    f"spaCy model {self.cfg.model!r} is not available ({exc}); run `readcost setup`") from exc
         return self._nlp
 
     def sentences(self, seg: Segment):
