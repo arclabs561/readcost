@@ -142,7 +142,15 @@ def main(root: Path, words_tsv: Path, out: Path, use_surprisal: bool) -> None:
     ytr = np.concatenate([t["rt"] for t in sets["train"]])
 
     def evaluate(predict) -> dict:
-        return {s: round(text_mae(sets[s], [predict(t["X"]) for t in sets[s]]), 2) for s in ("val", "test", "provo")}
+        out = {}
+        for s in ("val", "test", "provo"):
+            preds = [predict(t["X"]) for t in sets[s]]
+            out[s] = round(text_mae(sets[s], preds), 2)
+            # Word-level fit, the measure most surprisal studies report.
+            p, y = np.concatenate(preds), np.concatenate([t["rt"] for t in sets[s]])
+            out[f"{s}_word_r"] = round(float(np.corrcoef(p, y)[0, 1]), 3)
+            out[f"{s}_word_rmse"] = round(float(np.sqrt(np.mean((p - y) ** 2))), 1)
+        return out
 
     mean_rt = float(ytr.mean())
     report = {"surprisal": use_surprisal, "n_words": {s: int(sum(len(t["rt"]) for t in v)) for s, v in sets.items()},
