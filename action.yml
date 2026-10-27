@@ -1,5 +1,8 @@
 name: readcost
 description: Flag prose constructions that slow readers down, as GitHub annotations.
+branding:
+  icon: book-open
+  color: blue
 inputs:
   paths:
     description: Files or directories to check.
