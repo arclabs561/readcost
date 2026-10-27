@@ -156,24 +156,25 @@ if result.verdict != "pass":
 
 ## What it flags
 
-Each example below is a real sentence from a public README, except where the
-last column says otherwise; each rewrite keeps every fact and passes.
-Example text is in quotation marks.
+Examples are quoted sentences from READMEs on GitHub. Rules marked
+constructed use a sentence written for this table instead, because the
+evaluation sample had no clear real case. Each rewrite keeps every fact and
+passes.
 
-| Rule | Example | Rewrite | From |
-| --- | --- | --- | --- |
-| stacked-nouns | "For store restart measurement, the example prints first snapshot-query cost with persisted WAND sidecars present versus after deleting those sidecars and forcing source-segment rebuilds." | "To measure a store restart, the example prints the cost of the first snapshot query twice: with the persisted WAND sidecars present, and after deleting them, which forces each segment to be rebuilt from its source." | a public README |
-| long-dependency | "Comparisons keep the declared artifact-digest relation and packet-shape evidence as separate claims." | "Comparisons keep two claims separate: the relation that the artifact digests declare, and the evidence from packet shapes." | a public README |
-| inanimate-subject | "It does not decide how text should be split; it records the chosen span." | "The caller decides how to split the text; slabs records the span it chose." | a public README |
-| reduced-object-relative | "`compressed_postings` compresses an inverted-index posting list with cnk, the storage-shrink use case these ID-set codecs exist for." | "`compressed_postings` uses cnk to compress the posting list of an inverted index. Storing ID sets in less space is what these codecs are for." | a public README |
-| hyphen-compound | "The missing-pattern check in `gitignore_audit` is a pattern-presence heuristic." | "The missing-pattern check in `gitignore_audit` only looks for whether a pattern is present." | a public README |
-| inline-list | "`durability` provides filesystem and in-memory directories, atomic writes, WALs, record logs, checkpoint files, CRC validation, and sync helpers." | a bulleted list | a public README |
-| participial-clause (opt-in) | "The page updates automatically when the file changes on disk, highlighting what changed." | "The page updates automatically when the file changes on disk and highlights what changed." | a public README |
-| denominal-verb (opt-in) | "The script will bucket the requests by hour." | "The script will group the requests by hour." | constructed: every hit in the sample was wrong |
-| nominalization (opt-in) | "The tool performs validation of the input." | "The tool validates the input." | constructed: no hit in the sample |
-| repeated-frame (opt-in) | "This change reduces the latency of the cache. This change improves the speed of the parser. This change lowers the cost of the build." | "This change makes the cache faster, the parser quicker and the build cheaper." | constructed: no hit in the sample |
-| center-embedding (opt-in) | "The job that the script that the team maintains starts fails when the disk is full." | "The team maintains a script that starts the job, and the job fails when the disk is full." | constructed: the sample has no double embedding |
-| undefined-acronym (opt-in) | "Each shard writes its changes to the WAL before it updates the index." | "Each shard writes its changes to the write-ahead log (WAL) before it updates the index." | constructed |
+| Rule | Example | Rewrite |
+| --- | --- | --- |
+| stacked-nouns | "For store restart measurement, the example prints first snapshot-query cost with persisted WAND sidecars present versus after deleting those sidecars and forcing source-segment rebuilds." | "To measure a store restart, the example prints the cost of the first snapshot query twice: with the persisted WAND sidecars present, and after deleting them, which forces each segment to be rebuilt from its source." |
+| long-dependency | "Comparisons keep the declared artifact-digest relation and packet-shape evidence as separate claims." | "Comparisons keep two claims separate: the relation that the artifact digests declare, and the evidence from packet shapes." |
+| inanimate-subject | "It does not decide how text should be split; it records the chosen span." | "The caller decides how to split the text; slabs records the span it chose." |
+| reduced-object-relative | "`compressed_postings` compresses an inverted-index posting list with cnk, the storage-shrink use case these ID-set codecs exist for." | "`compressed_postings` uses cnk to compress the posting list of an inverted index. Storing ID sets in less space is what these codecs are for." |
+| hyphen-compound | "The missing-pattern check in `gitignore_audit` is a pattern-presence heuristic." | "The missing-pattern check in `gitignore_audit` only looks for whether a pattern is present." |
+| inline-list | "`durability` provides filesystem and in-memory directories, atomic writes, WALs, record logs, checkpoint files, CRC validation, and sync helpers." | a bulleted list |
+| participial-clause (opt-in) | "The page updates automatically when the file changes on disk, highlighting what changed." | "The page updates automatically when the file changes on disk and highlights what changed." |
+| denominal-verb (opt-in, constructed) | "The script will bucket the requests by hour." | "The script will group the requests by hour." |
+| nominalization (opt-in, constructed) | "The tool performs validation of the input." | "The tool validates the input." |
+| repeated-frame (opt-in, constructed) | "This change reduces the latency of the cache. This change improves the speed of the parser. This change lowers the cost of the build." | "This change makes the cache faster, the parser quicker and the build cheaper." |
+| center-embedding (opt-in, constructed) | "The job that the script that the team maintains starts fails when the disk is full." | "The team maintains a script that starts the job, and the job fails when the disk is full." |
+| undefined-acronym (opt-in, constructed) | "Each shard writes its changes to the WAL before it updates the index." | "Each shard writes its changes to the write-ahead log (WAL) before it updates the index." |
 
 The first five come from the paper; denominal-verb is opt-in because on
 well-edited prose nearly all its hits were settled verbs. The next two are
