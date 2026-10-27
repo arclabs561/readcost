@@ -44,6 +44,14 @@ configuration.
   raters accepted 10 of 30 findings only this measure reports, against 17 of
   30 only word distance reports, so word distance stays the default.
 
+- JSON findings carry `column`, `end_line` and `end_column`, and `precision`
+  (how many labelled findings of that rule raters accepted); `-o agent` shows
+  the same share and asks the model to rewrite only where a finding holds.
+- `readcost compare` reads the old text from git as `REV:PATH`
+  (`readcost compare HEAD:README.md README.md`).
+- docs/agents.md: using readcost from a coding agent, with an AGENTS.md
+  snippet.
+
 ### Deprecated
 
 - `enable`, `disable`, `hooks.paths` and `hooks.exclude` still work, with a
