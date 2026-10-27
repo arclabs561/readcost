@@ -321,6 +321,34 @@ affect the verdict. Code spans are left out. See
 [docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md)
 for how it was built and tested.
 
+To judge a rewrite, compare it with the original. `readcost compare` reports
+both the time per word and the total, because a clearer rewrite can still take
+longer to read if it is much longer (Cekini et al. 2026 found exactly that for
+model rewrites). For the README sentence above and the rewrite it adopted:
+
+```text
+$ readcost compare cmp-old.md cmp-new.md
+                              old        new  change
+words                          26         48  +22
+sentences                       1          2  +1
+predicted reading time      7.2 s     10.5 s  +3.2 s (+45%)
+ms per word                   301        218  -83
+findings                        2          0  -2
+weighted findings               2          0  -2
+verdict                    advise       pass
+
+by rule: hyphen-compound 1 -> 0, stacked-nouns 1 -> 0
+```
+
+`--fail-on slower` exits 1 when the rewrite is predicted to take longer in
+total, and `--fail-on worse` also when it has more weighted findings, which
+suits a check on model rewrites. `-o json` gives both results in full.
+
+`readcost check --hotspots 3` also lists each file's three sentences predicted
+to cost the most reading time beyond their length, with their slowest words.
+This is experimental: the model was tested on whole texts, not single
+sentences.
+
 ## Configuration
 
 Put a `readcost.toml` at the repository root, or a `[tool.readcost]` table in
