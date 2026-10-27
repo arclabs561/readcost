@@ -35,6 +35,9 @@ Rules:
 - reduced-object-relative: an object relative clause without "that" ("the format the reader expects").
 - hyphen-compound: an ad hoc hyphenated noun-noun compound used as a modifier ("storage-shrink use case").
 - inline-list: four or more coordinated items, or slash-joined items, inside one sentence.
+- center-embedding: a clause nested inside another clause that is itself in the middle of a larger clause
+  ("the reporter who the senator who John met attacked").
+- undefined-acronym: an acronym used before, or without, being spelled out in the document.
 
 Code spans in the sentence may appear as the placeholder word "Xcode"; treat it as a code identifier.
 Return JSON matching the schema: one entry per finding, with its "i" unchanged."""

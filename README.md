@@ -171,15 +171,22 @@ last column says otherwise; each rewrite keeps every fact and passes.
 | denominal-verb (opt-in) | The script will bucket the requests by hour. | The script will group the requests by hour. | constructed: every hit in the sample was wrong |
 | nominalization (opt-in) | The tool performs validation of the input. | The tool validates the input. | constructed: no hit in the sample |
 | repeated-frame (opt-in) | This change reduces the latency of the cache. This change improves the speed of the parser. This change lowers the cost of the build. | This change makes the cache faster, the parser quicker and the build cheaper. | constructed: no hit in the sample |
+| center-embedding (opt-in) | The job that the script that the team maintains starts fails when the disk is full. | The team maintains a script that starts the job, and the job fails when the disk is full. | constructed: the sample has no double embedding |
+| undefined-acronym (opt-in) | Each shard writes its changes to the WAL before it updates the index. | Each shard writes its changes to the write-ahead log (WAL) before it updates the index. | constructed |
 
 The first five come from the paper; denominal-verb is opt-in because on
 well-edited prose nearly all its hits were settled verbs. The next two are
 rules derived from where those constructions show up in technical writing. A
 hyphenated word counts as one noun, so "storage-shrink job" is a hyphen
-compound, not three stacked nouns. The other opt-in three are constructions
-that language models use more often than people (Reinhart et al. 2025; Shaib
-et al. 2024). Turn any opt-in rule on with a level, such as `--info
-nominalization` or `nominalization = "info"` under `[readcost.rules]`. `long-sentence` is also
+compound, not three stacked nouns. Participial-clause, nominalization and
+repeated-frame are constructions that language models use more often than
+people (Reinhart et al. 2025; Shaib et al. 2024). Center-embedding flags a
+clause nested two deep inside clauses that continue after it, which readers
+fail to follow (Gibson 2000); undefined-acronym flags an acronym used before
+it is spelled out, which readers report as harder to read (Hales, Williams and
+Rector 2017), skipping common ones such as API and JSON. Turn any opt-in rule on
+with a level, such as `--info nominalization` or `nominalization = "info"`
+under `[readcost.rules]`. `long-sentence` is also
 available but off by default. `readcost explain` prints why each one costs the
 reader and how to fix it. When a long-dependency or inline-list
 sentence gives a reason (because, since, so that, otherwise), the suggestion
@@ -393,6 +400,23 @@ suits a check on model rewrites. `-o json` gives both results in full.
 to cost the most reading time beyond their length, with their slowest words.
 This is experimental: the model was tested on whole texts, not single
 sentences.
+
+## Document measures
+
+The JSON output has a `metrics` object per file. None of it changes a finding
+or the verdict.
+
+| Key | What it measures | Essays, median | Docs, median |
+| --- | --- | --- | --- |
+| `mtld` | Lexical diversity of content words (MTLD; McCarthy and Jarvis 2010); none under 50 content words | 149 | 54 |
+| `idea_density` | Propositions per word, counted from the parse (DEPID; Sirts et al. 2017) | 0.43 | 0.41 |
+| `center_embedding_mean`, `center_embedding_max` | How deeply clauses nest inside clauses that continue after them (Gibson 2000) | 0.07, 1 | 0.04, 1 |
+| `sentence_words_profile` | Share of words in sentences of up to 27, 28 to 31, 32 to 38, and more than 38 words (Alves et al. 2010) | 73%, 8%, 10%, 7% | 74%, 9%, 8%, 5% |
+
+Medians are over the evaluation corpus (118 essays and 83 documentation
+pages). Documentation repeats its terms, so its lexical diversity is far
+lower; higher is not better in technical prose. The sentence-length bands
+split the corpus's words at 70%, 80% and 90%, counting each document equally.
 
 ## Configuration
 

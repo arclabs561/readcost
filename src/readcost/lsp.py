@@ -36,7 +36,7 @@ SEVERITY = {
 DOCUMENTED = frozenset({
     "stacked-nouns", "long-dependency", "inanimate-subject", "denominal-verb",
     "reduced-object-relative", "hyphen-compound", "inline-list", "nominalization",
-    "participial-clause", "repeated-frame",
+    "participial-clause", "repeated-frame", "center-embedding", "undefined-acronym",
 })
 DOCS_URL = "https://github.com/arclabs561/readcost#what-it-flags"
 CHANGE_DELAY = 0.5  # seconds of no typing before a changed document is checked again

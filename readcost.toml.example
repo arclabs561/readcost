@@ -21,6 +21,8 @@ long_dependency_min_tokens = 10 # long-dependency: skip sentences with fewer tok
 long_dependency_core_min = 9   # long-dependency: words between a subject or object and its verb,
                                # in a sentence whose dependencies are long overall (z above)
 long_dependency_core_always = 15 # long-dependency: that many words is reported at any z
+long_dependency_referents = 0  # long-dependency: above 0, measure gaps by new nouns and verbs (Gibson's
+                               # DLT) instead of words; 5 matches the default volume. Off: words did better
 inline_list_min_items = 4       # inline-list: this many conjoined items
 long_sentence_words = 32        # long-sentence (opt-in): more than this many words
 feedback_link = true            # text and agent output end with a link to report a wrong finding
