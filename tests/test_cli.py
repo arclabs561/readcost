@@ -54,3 +54,11 @@ def test_per_record(tmp_path):
                            "--fail-on", "never", str(f)], cwd=tmp_path).stdout)
     assert [d["verdict"] for d in data] == ["block", "pass"]
     assert data[0]["path"].endswith("#line1")
+
+
+def test_lsp_without_pygls_says_how_to_install():
+    # A None entry in sys.modules makes `import pygls` raise ImportError, as when it is not installed.
+    code = "import sys; sys.modules['pygls'] = None; from readcost.cli import main; sys.exit(main(['lsp']))"
+    proc = subprocess.run([sys.executable, "-c", code], check=False, capture_output=True, text=True, stdin=subprocess.DEVNULL)
+    assert proc.returncode == 2
+    assert proc.stderr.count("\n") == 1 and "pip install 'readcost[lsp]'" in proc.stderr

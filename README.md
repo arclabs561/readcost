@@ -353,6 +353,13 @@ why the finding is wrong. Text and agent output end with a line that links to
 the form when there are findings; `feedback_link = false` in `readcost.toml`
 turns that line off. The hooks never add it, since a model cannot act on it.
 
+## Editors
+
+`readcost lsp` is a language server, so findings show up as diagnostics in
+VS Code, Neovim, Helix and other editors with a generic LSP client. Install it
+with `pip install 'readcost[lsp]'`. [docs/editors.md](docs/editors.md) has the
+setup for each editor.
+
 ## Limits
 
 - readcost is not an AI-text detector. Construction rates and reading-time
