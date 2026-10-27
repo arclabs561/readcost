@@ -59,9 +59,10 @@ def svg(text: str) -> str:
     w, h = round((width + 3) * CHAR_W + 2 * PAD), len(lines) * LINE_H + 2 * PAD
     rows = []
     for i, line in enumerate(lines):
-        tspans = "".join(
-            f'<tspan{f" fill=\"{c}\"" if c else ""}{" font-weight=\"bold\"" if b else ""}>{html.escape(t)}</tspan>'
-            for t, c, b in spans(line))
+        tspans = ""
+        for t, c, b in spans(line):
+            attrs = (f' fill="{c}"' if c else "") + (' font-weight="bold"' if b else "")
+            tspans += f"<tspan{attrs}>{html.escape(t)}</tspan>"
         rows.append(f'<text x="{PAD}" y="{PAD + (i + 1) * LINE_H - 5}" xml:space="preserve">{tspans}</text>')
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}" '
             f'role="img" aria-label="readcost check output">\n'
