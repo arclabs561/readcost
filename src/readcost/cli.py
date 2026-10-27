@@ -181,6 +181,49 @@ def _cmd_style(args) -> int:
     return EXIT_OK
 
 
+def _cmd_corpus(args) -> int:
+    from .config import load_config
+    from .corpus import analyze, split_records
+    from .engine import Analyzer
+
+    cfg = load_config(args.config, start=args.paths[0] if args.paths and args.paths[0] != "-" else None)
+    texts: list[tuple[str, str]] = []
+    for path in args.paths or ["-"]:
+        if path == "-":
+            raw = [("-", sys.stdin.read())]
+        elif Path(path).is_dir():
+            raw = [(str(p), p.read_text(encoding="utf-8", errors="ignore"))
+                   for p in _walk(Path(path), cfg.src.respect_ignore_files) if cfg.wants(str(p))]
+        else:
+            raw = [(path, Path(path).read_text(encoding="utf-8", errors="ignore"))]
+        for name, text in raw:
+            texts += [(f"{name}#{i}", t) for i, t in enumerate(split_records(text), 1)] if args.split \
+                else [(name, text)]
+    if len(texts) < 2:
+        print("readcost: corpus needs two or more texts (use --split for one file of many)", file=sys.stderr)
+        return EXIT_USAGE
+    rep = analyze(Analyzer(cfg), texts, top=args.top)
+    if args.output == "json":
+        import dataclasses
+        import json
+
+        print(json.dumps(dataclasses.asdict(rep), indent=1))
+        return EXIT_OK
+    print(f"{rep.texts} texts, {rep.words:,} words")
+    print(f"CR-POS (repetitiveness of syntax)   {rep.cr_pos:.2f}")
+    print(f"texts with a frequent template      {rep.template_rate:.0%}")
+    print(f"tokens in frequent templates        {rep.templates_per_token:.1%}")
+    if rep.top_templates:
+        print("\nmost frequent 6-tag templates:")
+        for t in rep.top_templates:
+            print(f"  {t['count']:>4} times in {t['texts']:>3} texts  {t['tags']:<28}  e.g. {t['example']}")
+    if rep.top_openers:
+        print("\nmost frequent sentence openers:")
+        for o in rep.top_openers:
+            print(f"  {o['count']:>4} ({o['share']:.0%})  {o['opener']}")
+    return EXIT_OK
+
+
 def _cmd_baseline(args) -> int:
     from .baseline import dump_baseline
     from .engine import Analyzer
@@ -391,6 +434,15 @@ def build_parser() -> argparse.ArgumentParser:
                     help="a built-in profile (see --list), 'default', or a profile JSON file")
     st.add_argument("--list", action="store_true", help="list the built-in reference profiles")
     st.set_defaults(func=_cmd_style, lines=None, last=False)
+
+    co = sub.add_parser("corpus", help="repetition across many texts: syntactic templates and openers")
+    co.add_argument("paths", nargs="*", help="files or directories, one text each; '-' reads stdin")
+    co.add_argument("--split", action="store_true",
+                    help="treat each file as many texts separated by lines of --- or ===")
+    co.add_argument("--top", type=int, default=5, help="templates and openers to list")
+    co.add_argument("-o", "--output", choices=("text", "json"), default="text")
+    co.add_argument("--config", help="config file (default: discovered)")
+    co.set_defaults(func=_cmd_corpus)
 
     cm = sub.add_parser("compare", help="compare a rewrite with its original: reading time and findings")
     cm.add_argument("old", help="the original ('-' for stdin)")

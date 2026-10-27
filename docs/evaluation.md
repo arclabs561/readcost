@@ -846,6 +846,33 @@ are still reported instead of 74, and the eight-rater majority's share goes
 from 20.3% to 23.4%. Misparses remain: a misattached appositive or a long
 coordinated object can still be reported as a long gap.
 
+## Repetition across texts
+
+`readcost corpus` measures repetition across many texts with Shaib et al.'s
+(2024) measures: a template is one of the corpus's 100 most frequent
+part-of-speech 6-grams, and CR-POS is the gzip compression ratio of all the
+tags in a row. `scripts/eval_corpus_mode.py` runs it on each source's answers
+to the 55 HC3 questions, each answer cut to its first 120 words of prose so
+that every source contributes about the same amount of text:
+
+| Source | Texts | Words | CR-POS | Texts with a template | Tokens in templates | Top opener |
+| --- | --- | --- | --- | --- | --- | --- |
+| human | 55 | 5,932 | 4.78 | 98% | 5.0% | it is |
+| chatgpt-2022 | 55 | 6,113 | 5.14 | 95% | 7.8% | it is |
+| google/gemini-4-argon | 55 | 6,305 | 4.62 | 89% | 5.1% | here is |
+| deepseek/deepseek-v4.1-flash | 55 | 5,883 | 4.58 | 87% | 5.6% | it is |
+| x-ai/grok-4.7 | 55 | 5,812 | 4.60 | 85% | 4.7% | it is |
+| moonshotai/kimi-k3.1-pro | 55 | 5,695 | 4.54 | 80% | 5.4% | for example |
+| mistralai/mistral-large-4-0 | 55 | 6,257 | 4.61 | 93% | 4.3% | here is |
+
+On these answers the current models are not more templated than the human
+answers: their CR-POS is slightly lower and their share of tokens in templates
+is about the same. The 2022 ChatGPT answers are the most repetitive. The share
+of texts with a template is near its ceiling for every source at this corpus
+size, so it separates nothing here. Openers show habits ("here is" leads two
+models' answers). Shaib et al. found much larger gaps in summarization; open
+questions answered at length may leave models less room to repeat a frame.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News
