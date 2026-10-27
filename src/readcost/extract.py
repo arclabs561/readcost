@@ -68,6 +68,8 @@ _MD_PLAIN = _parser(front_matter=False)  # for a leading "---" that is not YAML
 URL = re.compile(r"\b(?:https?|ftp)://[^\s<>\"'`]*[^\s<>\"'`.,;:!?)\]}](?P<close>\))?")
 PATH_CANDIDATE = re.compile(r"(?<![\w/.~-])(?:(?:~|\.\.?)?/[\w.-]+(?:/[\w.-]+)*|[\w.-]+(?:/[\w.-]+)+)/?")
 EXTENSION = re.compile(r"\.[A-Za-z][A-Za-z0-9]{0,7}$")
+# Issue and pull request references: rust-lang/rust#123, #123, gh-123, GH-123.
+ISSUE_REF = re.compile(r"(?<![\w/#&-])(?:[\w.-]+/[\w.-]+#\d+|#\d+|[Gg][Hh]-\d+)\b")
 YAML_KEY = re.compile(r"^[^\s:#-][^:]*:(\s|$)")
 YAML_LINE = re.compile(r"^(\s.*|#.*|-(\s.*)?|\.\.\.|[^\s:#-][^:]*:(\s.*)?)$")
 IGNORE_NEXT = re.compile(r"readcost:\s*ignore", re.I)
@@ -110,7 +112,8 @@ def _plain(text: str) -> list[tuple[str, str | None]]:
             return f"\x00{len(originals) - 1}\x00" + out[len(CODE):]
         return repl
 
-    marked = PATH_CANDIDATE.sub(keep(_path), URL.sub(keep(_url), text.replace("\x00", "")))
+    marked = URL.sub(keep(_url), text.replace("\x00", ""))
+    marked = PATH_CANDIDATE.sub(keep(_path), ISSUE_REF.sub(keep(lambda m: CODE), marked))
     pieces: list[tuple[str, str | None]] = []
     last = 0
     for m in SENTINEL.finditer(marked):

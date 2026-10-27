@@ -57,6 +57,8 @@ First release on PyPI (`pip install readcost`, or `uvx readcost`).
 
 - inanimate-subject no longer flags groups of people ("a majority of eight
   raters judged"): a quantity noun takes the animacy of what it counts.
+- Issue and pull request references (`owner/repo#123`, `#123`, `gh-123`) count
+  as single words, like URLs, so they are no longer read as coined compounds.
 - Fewer false positives: a misparsed verb inside a noun stack ("specification
   defines slices"), a main clause read as an object relative ("The help output
   begins with:"), and a row of links read as prose
