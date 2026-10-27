@@ -24,6 +24,7 @@ long_dependency_core_always = 15 # long-dependency: that many words is reported 
 inline_list_min_items = 4       # inline-list: this many conjoined items
 long_sentence_words = 32        # long-sentence (opt-in): more than this many words
 feedback_link = true            # text and agent output end with a link to report a wrong finding
+language_check = true           # skip text that is clearly not English, with a note
 overrides = []                  # [[readcost.overrides]] tables: per-path rule levels (see below)
 
 # Rule levels: "error", "warn" or "info" turns a rule on at that severity

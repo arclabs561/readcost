@@ -19,6 +19,7 @@ from .features import (
     show,
     suggestion,
 )
+from .lang import other_language
 from .profile import Profile, load_profile
 
 WEIGHTS = {"info": 0.5, "warn": 1.0, "error": 2.0}
@@ -139,6 +140,14 @@ class Analyzer:
                 budget=None) -> Result:
         """``budget``: baselined keys left for this file, shared when one file yields several results."""
         result = Result(path=path)
+        if self.cfg.language_check:
+            lang = other_language(" ".join(seg.text for seg in segments))
+            if lang:
+                # The rules, parser and reading-time model are English only; their
+                # output on other languages would look confident and mean nothing.
+                result.notes.append(f"text looks like {lang}, not English; readcost checks English only, "
+                                    "so it reports no findings or reading time here")
+                return result
         levels = self.cfg.rule_levels(path)
         enabled = {k for k, v in levels.items() if v != "ignore"}
         forced = {k: v for k, v in levels.items() if v in SEVERITIES}  # a level set in config or flags
