@@ -47,7 +47,7 @@ SCHEMA = {"type": "object", "additionalProperties": False, "required": ["labels"
                              "reason": {"type": "string"}}}}}}
 
 
-def label(bench: Path, out: Path) -> None:
+def label(bench: Path, out: Path, prompt: str = PROMPT) -> None:
     items = [json.loads(x) for x in bench.read_text().splitlines()]
     out.mkdir(parents=True, exist_ok=True)
     payload = [{"i": i, "rule": it["rule"], "sentence": it["text"]} for i, it in enumerate(items)]
@@ -59,7 +59,7 @@ def label(bench: Path, out: Path) -> None:
             if not batch:
                 continue
             t = time.time()
-            data, meta = rater_ensemble.ask(model, PROMPT + "\n\nItems:\n" + json.dumps(batch, indent=1), SCHEMA)
+            data, meta = rater_ensemble.ask(model, prompt + "\n\nItems:\n" + json.dumps(batch, indent=1), SCHEMA)
             print(model, start, "ok" if data else f"FAILED {meta.get('error')}", meta.get("cost"),
                   f"{time.time() - t:.0f}s", flush=True)
             for lab in (data or {}).get("labels", []):
