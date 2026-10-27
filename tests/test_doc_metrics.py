@@ -13,7 +13,7 @@ def plain():
 
 @pytest.fixture(scope="module")
 def opt():
-    return Analyzer(Config(enable=["center-embedding", "undefined-acronym"]))
+    return Analyzer(Config(rules={"center-embedding": "info", "undefined-acronym": "info"}))
 
 
 def rules(a, text, feature):
@@ -141,7 +141,7 @@ def test_spelled_out_or_common_acronyms_are_not_flagged(opt, text):
 
 
 def test_acronym_in_allow_list_is_not_flagged():
-    a = Analyzer(Config(enable=["undefined-acronym"], allow=["WAL"]))
+    a = Analyzer(Config(rules={"undefined-acronym": "info"}, allow=["WAL"]))
     assert rules(a, "Every write goes to the WAL before the table changes.", "undefined-acronym") == []
 
 
@@ -151,10 +151,10 @@ def test_acronym_reported_once(opt):
 
 
 @pytest.mark.parametrize("text", [
-    # Labelled on the evaluation corpus as not center-embedded: only a
+    # Shaped like corpus sentences labelled not center-embedded: only a
     # connective of the outer clause precedes the nested clause.
-    "But if what I care about is performance on my own workloads, I have plenty of data.",
-    "Whereas when the problems you have to solve are random, they seem like noise.",
+    "But if what we measure is latency on our own servers, we have enough data.",
+    "Whereas when the failures you have to debug are rare, they look like noise.",
 ])
 def test_clause_after_a_connective_is_not_center_embedded(opt, text):
     assert rules(opt, text, "center-embedding") == []
@@ -166,9 +166,10 @@ def test_frequent_abbreviations_and_capitalised_words_are_known(opt):
 
 
 @pytest.mark.parametrize("text", [
-    # sqlite.org/lockingv3.html and sqlite.org/wal.html
-    "Locking for the newer write-ahead log or WAL mode is described separately.",
-    'Beginning with version 3.7.0, a new "Write-Ahead Log" option (hereafter referred to as "WAL") is available.',
+    # The two shapes found in database documentation: "X or ACR" and a quoted
+    # expansion followed by the acronym in parentheses.
+    "Each shard keeps a write-ahead log or WAL file next to its data.",
+    'Since version 2, a "Write-Ahead Log" setting (called "WAL" below) is available.',
 ])
 def test_spelled_out_next_to_the_acronym_counts_as_a_definition(opt, text):
     assert rules(opt, text, "undefined-acronym") == []
