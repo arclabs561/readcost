@@ -32,7 +32,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from readcost import Analyzer, Config, report
 
 ROUNDS = 6
-MODELS = ["deepseek/deepseek-v4.1-flash", "mistralai/mistral-large-4-0", "google/gemini-4-argon"]
+MODELS = ["anthropic/claude-opus-5.5", "openai/gpt-6.1-terra-pro", "google/gemini-4-argon",
+          "deepseek/deepseek-v4.1-flash", "mistralai/mistral-large-4-0"]
 JUDGE = "moonshotai/kimi-k3.1-pro"
 STYLES = ("holds", "plain")
 REWRITE = """You are editing one paragraph of technical or expository writing.
@@ -134,10 +135,23 @@ def select(ref: Path, out: Path, n: int, seed: int) -> None:
     print(f"{len(picked)} paragraphs with 2+ findings: {per_cat}")
 
 
-def run(out: Path, models: list[str], styles: list[str], rounds: int) -> None:
+def run(out: Path, models: list[str], styles: list[str], rounds: int, workers: int = 1) -> None:
+    import threading
+    from concurrent.futures import ThreadPoolExecutor
+
     import rater_ensemble
 
-    analyzer = Analyzer(Config())
+    lock = threading.Lock()  # one spaCy pipeline and one output file shared by the threads
+
+    class Locked:
+        def __init__(self, inner):
+            self.inner = inner
+
+        def check_text(self, *a, **k):
+            with lock:
+                return self.inner.check_text(*a, **k)
+
+    analyzer = Locked(Analyzer(Config()))
     paras = [json.loads(x) for x in (out / "paragraphs.jsonl").read_text().splitlines()]
     done_path = out / "loops.jsonl"
     done = {(d["id"], d["model"], d["style"]) for d in map(json.loads, done_path.read_text().splitlines())} \
@@ -146,18 +160,20 @@ def run(out: Path, models: list[str], styles: list[str], rounds: int) -> None:
         def rewrite(text, fb, model=model):
             data, _meta = rater_ensemble.ask(model, REWRITE.format(text=text, feedback=fb), TEXT_SCHEMA)
             return (data or {}).get("text", "")
-        for style in styles:
-            for p in paras:
-                if (p["id"], model, style) in done:
-                    continue
-                trace = loop(analyzer, p["text"], rewrite, style, rounds)
-                verdict, _ = rater_ensemble.ask(JUDGE, JUDGE_PROMPT.format(a=p["text"], b=trace[-1]["text"]),
-                                                JUDGE_SCHEMA)
-                row = {"id": p["id"], "category": p["category"], "model": model, "style": style,
-                       "rounds": trace, "churn": churn(trace), "judge": verdict}
+        def one(p, style, model=model, rewrite=rewrite):
+            trace = loop(analyzer, p["text"], rewrite, style, rounds)
+            verdict, _ = rater_ensemble.ask(JUDGE, JUDGE_PROMPT.format(a=p["text"], b=trace[-1]["text"]),
+                                            JUDGE_SCHEMA)
+            row = {"id": p["id"], "category": p["category"], "model": model, "style": style,
+                   "rounds": trace, "churn": churn(trace), "judge": verdict}
+            with lock:
                 with done_path.open("a") as f:
                     f.write(json.dumps(row) + "\n")
                 print(model, style, p["id"], len(trace) - 1, "rounds", row["churn"], flush=True)
+
+        todo = [(p, style) for style in styles for p in paras if (p["id"], model, style) not in done]
+        with ThreadPoolExecutor(max(1, workers)) as pool:
+            list(pool.map(lambda job: one(*job), todo))
 
 
 def summarize(rows: list[dict]) -> list[dict]:
@@ -197,12 +213,13 @@ def main(argv: list[str]) -> int:
     r = sub.add_parser("run"); r.add_argument("out", type=Path)
     r.add_argument("--models", default=",".join(MODELS)); r.add_argument("--styles", default=",".join(STYLES))
     r.add_argument("--rounds", type=int, default=ROUNDS)
+    r.add_argument("--workers", type=int, default=1, help="paragraphs edited at once")
     p = sub.add_parser("report"); p.add_argument("out", type=Path)
     a = ap.parse_args(argv)
     if a.cmd == "select":
         select(a.ref, a.out, a.n, a.seed)
     elif a.cmd == "run":
-        run(a.out, a.models.split(","), a.styles.split(","), a.rounds)
+        run(a.out, a.models.split(","), a.styles.split(","), a.rounds, a.workers)
     else:
         rows = [json.loads(x) for x in (a.out / "loops.jsonl").read_text().splitlines()]
         print(json.dumps(summarize(rows), indent=1))
