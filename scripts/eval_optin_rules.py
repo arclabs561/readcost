@@ -13,7 +13,9 @@ blind with scripts/label_rulebench.py: the rule's definition and the
 sentence, nothing else. The summary gives, per rule, findings per 1,000
 words, the share of sampled findings a majority accepts with a Wilson 95%
 interval, and that share by category. The sample, with its sentences, stays
-under OUT, outside the repository.
+under OUT, outside the repository. denominal-verb, repeated-frame and
+center-embedding were removed in 0.3 on these labels; reproducing their rows
+needs readcost 0.2.
 """
 
 import collections
