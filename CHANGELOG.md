@@ -34,9 +34,12 @@ configuration.
 - JSON output has a `metrics` object per file: lexical diversity (MTLD),
   idea density (DEPID), mean and maximum center-embedding depth, and the share
   of words in four sentence-length bands. It never changes the verdict.
-- Opt-in rules center-embedding (a clause nested two deep inside clauses that
-  continue after it) and undefined-acronym (an acronym used before it is
-  spelled out), both at info severity.
+- Opt-in rule undefined-acronym (an acronym used before it is spelled out),
+  at info severity.
+- Removed rules: denominal-verb, repeated-frame and center-embedding. Blind
+  labels on 40 findings each from the 5.7-million-word evaluation corpus
+  accepted 8%, 2% and 20% of them, and center-embedding fires about once in
+  100,000 words. A config or flag that names one warns and is ignored.
 - `scripts/eval_corpus.py --info RULES` turns on opt-in rules for a corpus run.
 
 - JSON findings carry `column`, `end_line` and `end_column`, and `precision`
