@@ -1436,6 +1436,186 @@ abstracts.
 - GOV.UK guides are not paired by topic: the comparison is between two
   publishing formats, not two treatments of one subject.
 
+## More corpora: technical and non-technical
+
+Thirteen new categories, 2,322 texts and 2.4 million readcost words, test
+readcost on Stack Exchange answers and their edits, design documents, MDN,
+man pages, release notes, and (added mid-task) fiction and essays, news, law
+and regulation, health pages for lay readers, social-science abstracts and
+Wikipedia Featured Articles. All runs are readcost `6be1918` with `Config()` defaults, fetched on
+2026-10-27. The text stays under
+`REF/broad`; only these aggregates leave it.
+
+```sh
+REF=/Volumes/Rebuildable/readcost-ref
+uv run scripts/fetch_stackexchange.py $REF/broad/stackexchange    # --per-group 25 --pairs-per-site 25
+uv run scripts/fetch_design_docs.py $REF/broad/design-docs        # --rust 150 --keps 150 --seed 1
+uv run scripts/fetch_mdn.py $REF/broad/mdn                        # --per-group 100 --seed 1
+uv run scripts/fetch_man_pages.py $REF/broad/man-pages            # --per-section 34 --seed 1
+uv run scripts/fetch_release_notes.py $REF/broad/release-notes    # --per-repo 5
+uv run scripts/fetch_domains.py $REF/broad/literature --parts literature
+uv run scripts/fetch_domains.py $REF/broad/news --parts news
+uv run scripts/fetch_domains.py $REF/broad/law --parts federal-register,uk-notes,courts
+uv run scripts/fetch_domains.py $REF/broad/health --parts medlineplus
+uv run scripts/fetch_domains.py $REF/broad/openalex --parts openalex
+uv run scripts/fetch_domains.py $REF/broad/wiki-featured --parts featured
+uv run --group eval scripts/eval_more.py $REF/broad      # -> $REF/broad/results-more/
+uv run scripts/build_all_manifest.py $REF                # -> $REF/broad/ALL.jsonl
+```
+
+Each fetch log is `$REF/broad/<dir>.log`. Full tables, every rule and every
+group comparison: `results-more/summary.md` and `summary.json`; per-pair
+Stack Exchange differences: `results-more/se_pairs.jsonl`.
+
+### Items and licences
+
+| Corpus | Items | Licence | Skipped |
+| --- | --- | --- | --- |
+| Stack Exchange answers: unix, softwareengineering, cs, math; top-scored and score 0 or 1 | 197 (25 per cell; unix low 22) | CC BY-SA 3.0 77, 2.5 70, 4.0 50 (per answer) | 227 under 80 words of prose; 41 API requests of the 300 a day |
+| Stack Exchange revision pairs, first vs last revision | 100 pairs (25 per site) | CC BY-SA, version per revision | 92 with a side under 80 words, 4 with unchanged prose |
+| Go proposals (`design/*.md`) | 113 of 116 | BSD-3-Clause | 3 stubs under 150 words |
+| Rust RFCs, evenly spaced by number | 148 of 150 (start years 2014 to 2026) | Apache-2.0 or MIT | 2 under 150 words |
+| Kubernetes KEP READMEs, random | 150 | Apache-2.0 | none |
+| MDN pages by `page-type` | 100 guides + 100 reference | CC BY-SA 2.5 | 115 under 150 words, 8 landing or listing pages, 5 guides past the quota |
+| OpenBSD man pages, sections 1 to 3 | 102 (34 per section) | BSD-3 63, ISC 17, BSD-2 16, BSD-4 3, public domain 3 | 85 DESCRIPTIONs under 150 words, 5 unclassified licences |
+| Linux man-pages 6.20, sections 1 to 3 | 80 (12, 34, 34; section 1 has only 40 pages) | per file SPDX: Linux-man-pages-copyleft 48, GPL-2.0+ 19, GPL-1.0+ 5, other 8 | 111 under 150 words, 3 unclassified |
+| GitHub release notes, 30 repositories | 142 (121 curated, 21 auto-generated) | repository SPDX: MIT 78, Apache-2.0 40, BSD-3 15, Unlicense 5, AGPL-3.0 4 | 9 first-choice repositories replaced (bodies only links, or no SPDX licence) |
+| Project Gutenberg passages, 400 to 800 words | 90 novel + 60 essay, from 75 books | Public domain (US) | none |
+| Wikinews articles, 2005 to 2024 | 120 | CC BY 4.0 (site's current statement) | 32 under 150 words |
+| Federal Register rules and notices, 2001 to 2025 | 120 | US government work, public domain | 8 under 150 words |
+| UK explanatory notes, acts of 2000 to 2025 | 120 | OGL v3.0 | 132 acts without notes |
+| Court lead opinions (COLD Cases, CourtListener and CAP data) | 120 | CC0 | 171 rows without one lead opinion or under 150 words |
+| MedlinePlus health topic summaries | 120 | Public domain (US NLM) | 58 under 150 words |
+| OpenAlex abstracts: sociology, history, economics, psychology | 120 (30 each) | CC BY, checked per work | 30 under 100 words |
+| Wikipedia Featured Articles: history, arts, biography | 120 (40 each) | CC BY-SA 4.0 | none |
+
+Not fetched:
+
+- IETF RFCs. rfc-editor.org, www.ietf.org and the datatracker document pages
+  all answer the project User-Agent with a Cloudflare 403. Only the
+  datatracker metadata API answers, and it has abstracts, not text. No
+  fetcher was written.
+- CourtListener's own API returns 401 without a token. Court opinions came
+  from COLD Cases, a CC0 dataset built from CourtListener and the Caselaw
+  Access Project, read through the Hugging Face datasets server.
+- USPTO patents: the sources need an API key.
+- Cochrane plain-language summaries: the licence is doubtful, so they were
+  not fetched. Policy and NGO reports: skipped as instructed.
+
+### Pooled distributions
+
+Cost index percentiles over texts of 150+ words; findings per 1,000 words.
+
+| Category | Texts | Words | CI p50 / p90 | Pass | ms/word p50 | Words/sentence p50 | stack | dep | inan | rel | hyph | list |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| release notes | 142 | 48,704 | 10.4 / 22.7 | 75% | 284 | 11.7 | 7.47 | 0.41 | 0.70 | 0.14 | 1.15 | 1.60 |
+| man pages (DESCRIPTION) | 182 | 103,519 | 6.5 / 13.8 | 88% | 230 | 16.2 | 4.56 | 0.88 | 0.78 | 0.25 | 0.31 | 2.02 |
+| social-science abstracts | 120 | 24,032 | 6.4 / 16.4 | 85% | 216 | 23.1 | 4.33 | 1.25 | 1.96 | 0.17 | 0.08 | 2.87 |
+| health pages for lay readers | 120 | 50,062 | 5.8 / 10.9 | 98% | 209 | 12.3 | 3.54 | 0.20 | 0.56 | 0.10 | 0.00 | 3.72 |
+| regulation | 240 | 362,311 | 4.9 / 10.1 | 92% | 221 | 24.4 | 2.48 | 1.39 | 0.29 | 0.25 | 0.02 | 2.11 |
+| design docs | 411 | 939,322 | 4.4 / 8.3 | 96% | 219 | 17.5 | 3.05 | 0.53 | 0.62 | 0.32 | 0.47 | 0.86 |
+| court opinions | 120 | 134,425 | 4.1 / 8.0 | 98% | 206 | 28.1 | 1.11 | 1.53 | 0.71 | 0.25 | 0.04 | 1.99 |
+| MDN | 200 | 181,392 | 4.0 / 10.1 | 97% | 210 | 18.0 | 2.77 | 0.29 | 0.35 | 0.38 | 0.50 | 1.69 |
+| Wikipedia Featured Articles | 120 | 236,640 | 3.0 / 5.4 | 98% | 210 | 22.7 | 1.09 | 0.75 | 0.54 | 0.21 | 0.09 | 1.69 |
+| news (Wikinews) | 120 | 45,981 | 2.9 / 9.2 | 98% | 209 | 20.3 | 1.74 | 0.70 | 0.89 | 0.20 | 0.17 | 1.02 |
+| Stack Exchange answers | 197 | 73,398 | 2.6 / 8.3 | 96% | 203 | 18.5 | 1.20 | 0.83 | 0.59 | 0.37 | 0.05 | 1.32 |
+| Stack Exchange revisions (both sides) | 200 | 110,313 | 2.1 / 5.5 | 100% | 202 | 17.4 | 1.17 | 0.63 | 0.53 | 0.45 | 0.04 | 1.11 |
+| literature (Gutenberg) | 150 | 69,758 | 2.4 / 5.9 | 100% | 195 | 20.5 | 0.10 | 0.80 | 1.09 | 0.23 | 0.09 | 2.14 |
+
+Release notes are the densest category so far, ahead of arXiv abstracts (CI
+p50 10.0): a quarter get "advise" or "block", almost all from stacked nouns
+(7.5 per 1,000 words) in short changelog items such as component and feature
+names. Nineteenth-century fiction and essays sit at the bottom, with almost no
+stacked nouns (0.10). Long dependencies are highest in court opinions (1.53)
+and regulation (1.39), which also have the longest sentences.
+
+### Stack Exchange: edited against original
+
+100 pairs, one unit each; edited minus original; two-sided Wilcoxon on the
+paired differences. "Edited lower" is the share of pairs where the edited
+text has the lower value.
+
+| Measure | Original median | Edited median | Median diff | Edited lower | Same | p |
+| --- | --- | --- | --- | --- | --- | --- |
+| findings per 1k words | 2.45 | 2.65 | 0 | 33% | 38% | 0.90 |
+| cost index | 1.38 | 1.89 | 0 | 34% | 37% | 0.72 |
+| ms per word | 203 | 204 | -0.2 | 52% | 1% | 0.36 |
+| words per sentence | 16.6 | 17.3 | +0.3 | 28% | 8% | <0.001 |
+| words | 259 | 388 | +64 | 7% | 8% | <0.001 |
+
+Edits do not change readcost's scores: findings, cost index and predicted
+reading time are flat, overall and on each site (cost index p from 0.20 to
+0.93). What edits do is add text: the edited answer is longer in 85 of 100
+pairs (median +64 words; unix +127, softwareengineering +91, cs +37, math
++15), and sentences get slightly longer (+0.3 words, p < 0.001; significant
+on softwareengineering alone, p = 0.005).
+
+### Group comparisons
+
+Medians of texts with 100+ words; Mann-Whitney U for two groups, otherwise
+Kruskal-Wallis.
+
+| Comparison | Cost index | Findings per 1k | Words/sentence | p (CI) |
+| --- | --- | --- | --- | --- |
+| Stack Exchange answers, high vs low score | 2.55 vs 0 | 3.85 vs 0 | 17.9 vs 18.5 | 0.01 |
+| Design docs: Go, Kubernetes, Rust | 4.8, 5.7, 2.7 | 5.8, 6.7, 3.6 | 18.8, 16.1, 17.7 | <0.001 |
+| Rust RFCs by start year: 2014-15, 2016-18, 2019-26 | 2.4, 2.0, 3.8 | 3.5, 2.8, 4.8 | 17.1, 17.6, 18.1 | <0.001 |
+| MDN guide vs reference | 4.1 vs 4.1 | 5.2 vs 5.4 | 18.2 vs 17.3 | 0.93 |
+| Man pages, Linux vs OpenBSD | 7.3 vs 5.7 | 8.3 vs 7.1 | 16.7 vs 15.6 | 0.14 |
+| Release notes, auto-generated vs curated | 11.8 vs 10.1 | 13.2 vs 10.7 | 10.8 vs 11.8 | 0.53 |
+| Regulation, Federal Register vs UK explanatory notes | 6.4 vs 3.8 | 8.5 vs 5.0 | 23.4 vs 25.3 | <0.001 |
+| Literature, essay vs novel | 3.6 vs 1.9 | 5.9 vs 2.5 | 26.9 vs 17.5 | <0.001 |
+| Social-science abstracts: economics, history, psychology, sociology | 10.9, 2.9, 5.6, 10.6 | 13.1, 5.3, 7.7, 13.8 | 24.7, 26.1, 21.3, 23.0 | <0.001 |
+| Featured Articles: arts, biography, history | 3.4, 2.6, 2.8 | 4.9, 3.9, 3.7 | 22.7, 22.6, 23.3 | 0.13 |
+
+MDN guides and reference pages score the same on findings, but guides have
+shorter words (4.56 against 4.86 letters) and 12 ms less predicted time per
+word (p < 0.001). Economics and sociology abstracts score like arXiv
+abstracts (stacked nouns 6.0 and 4.5 per 1,000 words at the median); history
+abstracts have none at the median.
+
+### Combined manifest
+
+`$REF/broad/ALL.jsonl` lists every text in every corpus: 10,953 texts, 3.6 MB,
+one line each with `path` (absolute), `format`, `category`, `source`,
+`licence`, `corpus`, `id`, `tokens` and `words`. Total: 5,688,012 readcost
+words (6,940,563 whitespace tokens). It includes the original eval corpus
+(1,491 texts, 817k words), the first broad samples (arXiv, READMEs,
+expert-lay: 1,698 texts), the corpora above (2,322 texts), and the
+`people` and `ai` corpora described next (5,442 texts,
+1.25 million words). `words` comes from each corpus's own scoring cache, so
+the eval corpus's counts are from the readcost version that scored it.
+
+### Surprises and limits
+
+- Edits to Stack Exchange answers add text without changing readcost's
+  scores. Revision 1 is often a short first answer, so a pair is closer to
+  "first draft against grown answer" than to "same answer copy-edited".
+- High-scored answers have more findings than low-scored ones (cost index
+  2.55 against 0), but low-scored answers are short (median 139 words against
+  349), and a short text often has no finding at all. Length, not quality,
+  probably drives this; the comparison is not length-matched.
+- Auto-generated release notes do not score worse than curated ones (p =
+  0.53); both are dense lists of names. Only 21 auto-generated releases
+  survived the 50-word floor, since link-only lines are removed.
+- MDN guides and reference pages do not differ in findings, despite
+  different audiences. Eight of the 100 reference pages came from guide
+  paths (the `page-type` decides, not the path); learning-area assessments count as
+  guides.
+- Newer Rust RFCs (2019 on) score higher than earlier ones (cost index 3.8
+  against 2.0 to 2.4); the number spacing gives 2014 and 2015 57 of the 148
+  RFCs.
+- Man page DESCRIPTION sections are terse: 65 of 99 sampled Linux section 3
+  pages were under 150 words. Option tags (`-f`) stay in the text as words.
+- MedlinePlus summaries are stored as HTML and read with readcost's HTML
+  reader; their high inline-list rate (3.72) comes from bulleted symptom
+  lists.
+- The cs site's answers have a median cost index of 0: with `[MATH]` tokens
+  and short sentences, few rules fire.
+- Wikinews now states CC BY 4.0; older articles were contributed under 2.5.
+  Gutenberg selection uses the catalog file (gutendex returned 503) and
+  authors who died by 1945.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News
