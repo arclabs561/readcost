@@ -218,6 +218,17 @@ def _cmd_hook(args) -> int:
     return hooks.run(args.harness, args.event, args.rest)
 
 
+def _cmd_lsp(args) -> int:
+    try:
+        from . import lsp
+    except ImportError as exc:
+        if (exc.name or "").split(".")[0] not in ("pygls", "lsprotocol"):
+            raise
+        print("readcost: the language server needs pygls; run pip install 'readcost[lsp]'", file=sys.stderr)
+        return EXIT_USAGE
+    return lsp.main()
+
+
 def build_parser() -> argparse.ArgumentParser:
     from .extract import FORMATS
     from .report import OUTPUTS
@@ -284,6 +295,9 @@ def build_parser() -> argparse.ArgumentParser:
     h.add_argument("event", nargs="?", default="")
     h.add_argument("rest", nargs="*")
     h.set_defaults(func=_cmd_hook)
+
+    ls = sub.add_parser("lsp", help="run a language server on stdin and stdout for editors")
+    ls.set_defaults(func=_cmd_lsp)
     return p
 
 
