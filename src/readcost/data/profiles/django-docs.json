@@ -1,0 +1,34 @@
+{
+ "name": "django-docs",
+ "words": 20099,
+ "sentences": 1177,
+ "dep_fit": [
+  0.3394388460900113,
+  0.6718790177338563,
+  0.38978138192467693
+ ],
+ "rates": {
+  "hyphen-compound": 0.299,
+  "inanimate-subject": 0.547,
+  "inline-list": 0.746,
+  "long-dependency": 0.299,
+  "reduced-object-relative": 0.398,
+  "stacked-nouns": 2.239
+ },
+ "sources": [
+  "https://github.com/django/django/blob/5c13b5a19864807cae7266339554c14e151e5961/docs/intro/overview.txt",
+  "https://github.com/django/django/blob/5c13b5a19864807cae7266339554c14e151e5961/docs/intro/tutorial01.txt",
+  "https://github.com/django/django/blob/5c13b5a19864807cae7266339554c14e151e5961/docs/intro/tutorial02.txt",
+  "https://github.com/django/django/blob/5c13b5a19864807cae7266339554c14e151e5961/docs/intro/tutorial04.txt",
+  "https://github.com/django/django/blob/5c13b5a19864807cae7266339554c14e151e5961/docs/misc/api-stability.txt",
+  "https://github.com/django/django/blob/5c13b5a19864807cae7266339554c14e151e5961/docs/misc/design-philosophies.txt",
+  "https://github.com/django/django/blob/5c13b5a19864807cae7266339554c14e151e5961/docs/topics/db/models.txt",
+  "https://github.com/django/django/blob/5c13b5a19864807cae7266339554c14e151e5961/docs/topics/db/transactions.txt",
+  "https://github.com/django/django/blob/5c13b5a19864807cae7266339554c14e151e5961/docs/topics/forms/index.txt",
+  "https://github.com/django/django/blob/5c13b5a19864807cae7266339554c14e151e5961/docs/topics/http/views.txt",
+  "https://github.com/django/django/blob/5c13b5a19864807cae7266339554c14e151e5961/docs/topics/testing/overview.txt"
+ ],
+ "note": "11 texts from the Django documentation, fetched for readcost's evaluation corpus; rates measured with readcost 0.2.0.",
+ "reading_ms_per_word": 203.7,
+ "words_per_sentence": 17.1
+}

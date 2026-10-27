@@ -1,0 +1,34 @@
+{
+ "name": "python-docs",
+ "words": 21968,
+ "sentences": 1064,
+ "dep_fit": [
+  0.42607813003333717,
+  0.6276519703980773,
+  0.39707597183438675
+ ],
+ "rates": {
+  "hyphen-compound": 0.046,
+  "inanimate-subject": 0.592,
+  "inline-list": 0.683,
+  "long-dependency": 0.455,
+  "reduced-object-relative": 0.41,
+  "stacked-nouns": 1.275
+ },
+ "sources": [
+  "https://github.com/python/cpython/blob/f4043ab1be0205d834a8b9aa72e289be12637344/Doc/tutorial/appetite.rst",
+  "https://github.com/python/cpython/blob/f4043ab1be0205d834a8b9aa72e289be12637344/Doc/tutorial/classes.rst",
+  "https://github.com/python/cpython/blob/f4043ab1be0205d834a8b9aa72e289be12637344/Doc/tutorial/controlflow.rst",
+  "https://github.com/python/cpython/blob/f4043ab1be0205d834a8b9aa72e289be12637344/Doc/tutorial/datastructures.rst",
+  "https://github.com/python/cpython/blob/f4043ab1be0205d834a8b9aa72e289be12637344/Doc/tutorial/errors.rst",
+  "https://github.com/python/cpython/blob/f4043ab1be0205d834a8b9aa72e289be12637344/Doc/tutorial/inputoutput.rst",
+  "https://github.com/python/cpython/blob/f4043ab1be0205d834a8b9aa72e289be12637344/Doc/tutorial/interpreter.rst",
+  "https://github.com/python/cpython/blob/f4043ab1be0205d834a8b9aa72e289be12637344/Doc/tutorial/introduction.rst",
+  "https://github.com/python/cpython/blob/f4043ab1be0205d834a8b9aa72e289be12637344/Doc/tutorial/modules.rst",
+  "https://github.com/python/cpython/blob/f4043ab1be0205d834a8b9aa72e289be12637344/Doc/tutorial/stdlib.rst",
+  "https://github.com/python/cpython/blob/f4043ab1be0205d834a8b9aa72e289be12637344/Doc/tutorial/venv.rst"
+ ],
+ "note": "11 texts from the Python tutorial, fetched for readcost's evaluation corpus; rates measured with readcost 0.2.0.",
+ "reading_ms_per_word": 199.6,
+ "words_per_sentence": 20.6
+}
