@@ -4,6 +4,7 @@ Each test names the defect it pins. They exercise the public entry points
 (Config, Analyzer, the CLI and the git hook) rather than internals.
 """
 
+import json
 import subprocess
 import sys
 
@@ -361,3 +362,69 @@ def test_a_coined_compound_next_to_an_issue_reference_is_still_reported():
 def test_number_unit_modifiers_are_not_stacked_nouns(sentence, excerpts):
     findings = Analyzer(Config()).check_text(sentence, "markdown").findings
     assert [f.excerpt for f in findings if f.feature == "stacked-nouns"] == excerpts
+
+
+def test_directory_walk_prunes_excluded_dirs_and_reads_nested_repos(tmp_path):
+    from readcost.cli import _walk
+    from readcost.config import Config
+
+    cfg = Config()
+    (tmp_path / "docs").mkdir()
+    (tmp_path / "docs" / "guide.md").write_text(PLAIN)
+    (tmp_path / "node_modules" / "pkg").mkdir(parents=True)
+    (tmp_path / "node_modules" / "pkg" / "README.md").write_text(PLAIN)
+    (tmp_path / ".cache").mkdir()
+    (tmp_path / ".cache" / "notes.md").write_text(PLAIN)
+    repo = tmp_path / "repo"
+    (repo / "build").mkdir(parents=True)
+    subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
+    (repo / ".gitignore").write_text("build/\n")
+    (repo / "README.md").write_text(PLAIN)
+    (repo / "build" / "out.md").write_text(PLAIN)
+    (repo / "new").mkdir()
+    (repo / "new" / "draft.md").write_text(PLAIN)  # untracked, not ignored: still checked
+    names = sorted(str(p.relative_to(tmp_path)) for p in _walk(tmp_path, True, cfg.excluded))
+    assert names == ["docs/guide.md", "repo/.gitignore", "repo/README.md", "repo/new/draft.md"]
+    # Without ignore files, git is not asked: build/ is read, hidden and excluded dirs still are not.
+    names = sorted(str(p.relative_to(tmp_path)) for p in _walk(tmp_path, False, cfg.excluded))
+    assert "repo/build/out.md" in names and not any("node_modules" in n or ".cache" in n for n in names)
+
+
+def test_git_walk_lists_an_untracked_nested_repository_by_its_own_ignore_file(tmp_path):
+    from readcost.cli import _walk
+
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    (tmp_path / "README.md").write_text(PLAIN)
+    inner = tmp_path / "vendor-docs"
+    (inner / "out").mkdir(parents=True)
+    subprocess.run(["git", "init", "-q"], cwd=inner, check=True)
+    (inner / ".gitignore").write_text("out/\n")
+    (inner / "guide.md").write_text(PLAIN)
+    (inner / "out" / "gen.md").write_text(PLAIN)
+    names = sorted(str(p.relative_to(tmp_path)) for p in _walk(tmp_path))
+    assert names == ["README.md", "vendor-docs/.gitignore", "vendor-docs/guide.md"]
+
+
+def test_parallel_check_matches_the_sequential_check(tmp_path):
+    from readcost.cli import PARALLEL_MIN_FILES
+
+    for i in range(PARALLEL_MIN_FILES):
+        (tmp_path / f"doc{i:02}.md").write_text(DENSE if i % 2 else PLAIN)
+    one = run_cli(["check", "-o", "json", "--fail-on", "never", "-j", "1", "."], cwd=tmp_path)
+    two = run_cli(["check", "-o", "json", "--fail-on", "never", "-j", "2", "."], cwd=tmp_path)
+    assert one.returncode == two.returncode == 0
+    assert json.loads(one.stdout) == json.loads(two.stdout)
+    assert len(json.loads(two.stdout)) == PARALLEL_MIN_FILES
+
+
+def test_many_file_arguments_are_checked_in_parallel_in_order(tmp_path):
+    from readcost.cli import PARALLEL_MIN_FILES
+
+    names = [f"doc{i:02}.md" for i in range(PARALLEL_MIN_FILES)]
+    for i, n in enumerate(names):
+        (tmp_path / n).write_text(DENSE if i % 2 else PLAIN)
+    args = ["check", "-o", "json", "--fail-on", "never"]
+    one = run_cli([*args, "-j", "1", *reversed(names)], cwd=tmp_path)
+    two = run_cli([*args, "-j", "2", *reversed(names)], cwd=tmp_path)
+    assert json.loads(one.stdout) == json.loads(two.stdout)
+    assert [r["path"] for r in json.loads(two.stdout)] == list(reversed(names))
