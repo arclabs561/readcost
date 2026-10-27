@@ -16,6 +16,12 @@ configuration.
 - `[readcost.src]` with `include`, `exclude`, `extend_exclude` and
   `respect_ignore_files`, and the flags `--exclude`, `--force-exclude`,
   `--no-respect-ignore-files` and `--exit-zero`.
+- `readcost compare OLD NEW`: predicted reading time in total and per word,
+  findings by rule, the verdicts, and the findings only in the rewrite;
+  `--fail-on slower` or `worse` for CI checks on rewrites.
+- `readcost check --hotspots N` lists the sentences predicted to cost the
+  most reading time beyond their length (experimental); the JSON output has
+  `hotspots` for every file.
 
 ### Deprecated
 
