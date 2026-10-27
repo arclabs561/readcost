@@ -13,7 +13,7 @@
   "inline-list": 0.967,
   "long-dependency": 0.825,
   "reduced-object-relative": 0.171,
-  "stacked-nouns": 3.614
+  "stacked-nouns": 3.585
  },
  "sources": [
   "https://sqlite.org/about.html",
@@ -28,6 +28,6 @@
   "https://sqlite.org/whentouse.html"
  ],
  "note": "10 texts from the SQLite documentation, fetched for readcost's evaluation corpus; rates measured with readcost 0.2.0.",
- "reading_ms_per_word": 210.6,
+ "reading_ms_per_word": 210.9,
  "words_per_sentence": 20.0
 }

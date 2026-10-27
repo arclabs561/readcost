@@ -13,7 +13,7 @@
   "inline-list": 1.106,
   "long-dependency": 0.572,
   "reduced-object-relative": 0.404,
-  "stacked-nouns": 1.441
+  "stacked-nouns": 1.408
  },
  "sources": [
   "https://burntsushi.net/bstr/",
@@ -136,6 +136,6 @@
   "https://www.joelonsoftware.com/2019/12/05/so-hows-that-retirement-thing-going-anyway/"
  ],
  "note": "118 texts from essays by thirteen well-regarded technical writers, fetched for readcost's evaluation corpus; rates measured with readcost 0.2.0.",
- "reading_ms_per_word": 201.5,
+ "reading_ms_per_word": 203.6,
  "words_per_sentence": 18.5
 }

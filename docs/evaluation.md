@@ -621,6 +621,18 @@ findings in the rewrite). The model is trained on newspaper paragraphs read
 by native speakers; technical prose, code-heavy text and non-native readers
 are outside its data.
 
+Paragraph layout also lies partly outside it. Training paragraphs have 50 to
+165 words. Past 165 words the trees kept lowering the time per word with
+position, so 30 essays set as one paragraph each were predicted to read 17%
+faster (median) than the same essays in their paragraphs. A longer paragraph's
+positions are now scaled into 165 words, which leaves the held-out error
+unchanged (OneStop 19.2 ms, Provo 10.3 ms, since no test paragraph is longer)
+and brings the gap to 4%. Splitting every sentence into its own paragraph
+still predicts 9% slower. Those paragraphs fall inside the training range,
+and paragraph starts may really cost readers time. Read short paragraphs as
+the start of a 50-word one instead and that figure barely moves, while
+Provo's error rises to 10.4 ms, so short paragraphs keep their positions.
+
 ## Contexts
 
 The verdict thresholds (advise at 15, block at 30) were set on ten READMEs.
