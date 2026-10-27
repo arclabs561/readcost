@@ -47,15 +47,50 @@ def _feature_ids(value: str, flag: str) -> list[str]:
     return ids
 
 
-def _walk(root: Path, respect_ignore_files: bool = True) -> list[Path]:
-    """Files under ``root``: what git tracks or would track, else non-hidden files."""
+def _git_files(root: Path) -> list[Path] | None:
+    """What git tracks or would track under ``root``, or None outside a work tree.
+
+    Untracked nested repositories come back from git as directory entries
+    ("sub/"); their own files are listed with their own ignore rules.
+    """
     proc = subprocess.run(["git", "-C", str(root), "ls-files", "-z", "--cached", "--others",
-                           "--exclude-standard"], capture_output=True) if respect_ignore_files else None
-    if proc is not None and proc.returncode == 0:
-        names = [n for n in proc.stdout.decode("utf-8", "replace").split("\0") if n]
-        return sorted(p for p in (root / n for n in names) if p.is_file())
-    return sorted(p for p in root.rglob("*")
-                  if p.is_file() and not any(part.startswith(".") for part in p.relative_to(root).parts))
+                           "--exclude-standard"], capture_output=True)
+    if proc.returncode != 0:
+        return None
+    out = []
+    for name in proc.stdout.decode("utf-8", "replace").split("\0"):
+        if not name:
+            continue
+        p = root / name
+        if name.endswith("/") and (p / ".git").exists():
+            out.extend(_git_files(p) or [])
+        elif p.is_file():
+            out.append(p)
+    return out
+
+
+def _walk(root: Path, respect_ignore_files: bool = True, prune=lambda path: False) -> list[Path]:
+    """Files under ``root``, for checking a whole tree quickly.
+
+    Inside a git work tree, what git tracks or would track. Elsewhere, a walk
+    that never descends into hidden directories or ones ``prune`` matches
+    (node_modules, target, .venv from [readcost.src] exclude), and that lists
+    each git repository it meets by its own ignore files.
+    """
+    if respect_ignore_files:
+        files = _git_files(root)
+        if files is not None:
+            return sorted(files)
+    out = []
+    for dirpath, dirnames, filenames in os.walk(root):
+        here = Path(dirpath)
+        if respect_ignore_files and here != root and (here / ".git").exists():
+            out.extend(_git_files(here) or [])
+            dirnames[:] = []
+            continue
+        dirnames[:] = sorted(d for d in dirnames if not d.startswith(".") and not prune(str(here / d) + "/"))
+        out.extend(here / f for f in filenames if not f.startswith("."))
+    return sorted(out)
 
 
 def _load_config(args):
@@ -216,7 +251,7 @@ def _cmd_corpus(args) -> int:
             raw = [("-", sys.stdin.read())]
         elif Path(path).is_dir():
             raw = [(str(p), p.read_text(encoding="utf-8", errors="ignore"))
-                   for p in _walk(Path(path), cfg.src.respect_ignore_files) if cfg.wants(str(p))]
+                   for p in _walk(Path(path), cfg.src.respect_ignore_files, cfg.excluded) if cfg.wants(str(p))]
         else:
             raw = [(path, Path(path).read_text(encoding="utf-8", errors="ignore"))]
         for name, text in raw:
@@ -265,36 +300,73 @@ def _cmd_baseline(args) -> int:
     return EXIT_OK
 
 
+def _check_one(analyzer, opts: tuple, text: str, path: str, name: str) -> list:
+    """Results for one input; ``opts`` is (format, per_record, field, last, lines)."""
+    from .extract import detect_format
+
+    fmt_opt, per_record, field_path, last, lines = opts
+    fmt = fmt_opt or ("markdown" if path == "-" else detect_format(path))
+    if per_record:
+        out = analyzer.check_records(text, fmt, name, field_path=field_path)
+    else:
+        out = [analyzer.check_text(text, fmt, name, lines=lines, field_path=field_path, last_only=last)]
+    if fmt in RECORD_FORMATS and not any(r.words for r in out):
+        what = "records with that --field" if field_path else "assistant messages"
+        print(f"readcost: warning: {name}: no prose found in {what} (format {fmt}); "
+              "is --format right?", file=sys.stderr)
+    return out
+
+
+def _read_and_check(analyzer, opts: tuple, p: Path) -> tuple[list, str | None]:
+    """(results, None), or ([], the reason) when the file cannot be read or parsed."""
+    try:
+        return _check_one(analyzer, opts, p.read_text(encoding="utf-8", errors="ignore"), str(p), str(p)), None
+    except (OSError, ValueError) as exc:
+        return [], str(exc.strerror if isinstance(exc, OSError) and exc.strerror else exc)
+
+
+# A process pool pays a model load per worker (about two seconds), so it is
+# used only for this many files or more.
+PARALLEL_MIN_FILES = 16
+_WORKER: tuple | None = None
+
+
+def _init_worker(cfg, profile, opts) -> None:
+    from .engine import Analyzer
+
+    global _WORKER
+    _WORKER = (Analyzer(cfg, profile), opts)
+
+
+def _work(p: Path) -> tuple[list, str | None]:
+    analyzer, opts = _WORKER
+    return _read_and_check(analyzer, opts, p)
+
+
+def _jobs(requested: int, files: int) -> int:
+    if files < PARALLEL_MIN_FILES:
+        return 1
+    if requested > 0:
+        return requested
+    return max(1, min(os.cpu_count() or 1, 8, files // PARALLEL_MIN_FILES))
+
+
 def _collect(args, cfg, analyzer) -> tuple[list, bool]:
     """Check every path in ``args.paths``; also say whether some file could not be read."""
     from .engine import parse_line_ranges
-    from .extract import detect_format
 
     if args.per_record and (args.last or args.lines):
         raise ValueError("--per-record cannot be combined with --last or --lines")
-    lines = parse_line_ranges(_line_spec(args.lines))
-
-    def check(text: str, path: str, name: str) -> list:
-        fmt = args.format or ("markdown" if path == "-" else detect_format(path))
-        if args.per_record:
-            out = analyzer.check_records(text, fmt, name, field_path=args.field)
-        else:
-            out = [analyzer.check_text(text, fmt, name, lines=lines, field_path=args.field,
-                                       last_only=args.last)]
-        if fmt in RECORD_FORMATS and not any(r.words for r in out):
-            what = "records with that --field" if args.field else "assistant messages"
-            print(f"readcost: warning: {name}: no prose found in {what} (format {fmt}); "
-                  "is --format right?", file=sys.stderr)
-        return out
+    opts = (args.format, args.per_record, args.field, args.last, parse_line_ranges(_line_spec(args.lines)))
 
     results, failed = [], False
     for path in args.paths or ["-"]:
         if path == "-":
-            results.extend(check(sys.stdin.read(), "-", args.stdin_name))
+            results.extend(_check_one(analyzer, opts, sys.stdin.read(), "-", args.stdin_name))
             continue
         if Path(path).is_dir():
             # --per-record also takes JSONL, which [readcost.src] include leaves out.
-            files = [p for p in _walk(Path(path), cfg.src.respect_ignore_files)
+            files = [p for p in _walk(Path(path), cfg.src.respect_ignore_files, cfg.excluded)
                      if cfg.wants(str(p)) or (args.per_record and p.suffix == ".jsonl"
                                               and not cfg.excluded(str(p)))]
             if not files:
@@ -303,14 +375,20 @@ def _collect(args, cfg, analyzer) -> tuple[list, bool]:
             files = []
         else:
             files = [Path(path)]
-        for p in files:
-            try:
-                text = p.read_text(encoding="utf-8", errors="ignore")
-                results.extend(check(text, str(p), str(p)))
-            except (OSError, ValueError) as exc:
+        jobs = _jobs(getattr(args, "jobs", 1), len(files))
+        if jobs > 1:
+            from concurrent.futures import ProcessPoolExecutor
+
+            with ProcessPoolExecutor(jobs, initializer=_init_worker,
+                                     initargs=(analyzer.cfg, analyzer.profile, opts)) as pool:
+                done = list(pool.map(_work, files, chunksize=4))
+        else:
+            done = (_read_and_check(analyzer, opts, p) for p in files)
+        for p, (out, error) in zip(files, done):
+            if error is not None:
                 failed = True
-                detail = exc.strerror if isinstance(exc, OSError) and exc.strerror else exc
-                print(f"readcost: {p}: {detail}", file=sys.stderr)
+                print(f"readcost: {p}: {error}", file=sys.stderr)
+            results.extend(out)
     return results, failed
 
 
@@ -441,6 +519,8 @@ def build_parser() -> argparse.ArgumentParser:
     c.add_argument("--fail-on", choices=("never", "advise", "block"), default="block",
                    help="exit 1 when any file reaches this verdict (default: block)")
     c.add_argument("--exit-zero", action="store_true", help="always exit 0 on findings (same as --fail-on never)")
+    c.add_argument("-j", "--jobs", type=int, default=0, metavar="N",
+                   help=f"check files in N processes (default: automatic, from {PARALLEL_MIN_FILES} files up)")
     c.add_argument("--hotspots", type=int, default=0, metavar="N",
                    help="also list each file's N sentences predicted to cost the most reading time (experimental)")
     c.add_argument("--min-severity", choices=("info", "warn", "error"))
