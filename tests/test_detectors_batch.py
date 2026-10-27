@@ -380,9 +380,10 @@ def test_readme_examples_trigger_their_detector(feature, note, example):
     # the detector it illustrates under the configuration its note names.
     cfg = Config()
     if "opt-in" in note:
-        cfg.enable.append(feature)
+        cfg.rules[feature] = "info"
     if "stacked-nouns off" in note:
-        cfg.disable.append("stacked-nouns")
+        cfg.rules["stacked-nouns"] = "ignore"
+    example = example.strip('"')  # example text is quoted in the table
     # Phrases in the table are not sentences; put them in one.
     text = example if example.endswith(".") else f"The fix keeps {example} in the module."
     assert feature in {f.feature for f in Analyzer(cfg).check_text(text, "markdown").findings}
