@@ -40,6 +40,10 @@ class Result:
     # only some lines were checked or the model data is missing.
     reading_ms_per_word: float | None = None
     reading_seconds: float | None = None
+    # Sentences predicted to cost the most reading time beyond their length,
+    # worst first (see Analyzer._hotspots). Experimental: the model was
+    # validated on whole texts, not single sentences.
+    hotspots: list[dict] = field(default_factory=list)
     # The checked text, so reports can quote the source line; not in to_dict.
     source: str = field(default="", repr=False)
 
@@ -57,6 +61,7 @@ class Result:
             "counts": self.counts(), "notes": self.notes,
             "reading_ms_per_word": None if self.reading_ms_per_word is None else round(self.reading_ms_per_word, 1),
             "reading_seconds": None if self.reading_seconds is None else round(self.reading_seconds, 1),
+            "hotspots": self.hotspots,
             "findings": [vars(f) for f in self.findings],
         }
 
@@ -141,7 +146,8 @@ class Analyzer:
         floor = severity_rank(self.cfg.min_severity)
         docs = self.nlp.pipe([s.text for s in segments])
         framed: list[tuple[Segment, object]] = []  # prose sentences for repeated-frame
-        for seg, doc in zip(segments, docs):
+        spans: list[tuple] = []  # (segment, start, end, line, text) of each checked sentence
+        for seg_index, (seg, doc) in enumerate(zip(segments, docs)):
             ctx.codes = seg.codes
             for sent in doc.sents:
                 words = [t for t in sent if t.is_alpha]
@@ -158,6 +164,7 @@ class Analyzer:
                 if not seg.in_list:
                     framed.append((seg, sent))
                 text = show(ctx, sent.doc, sent.start, sent.end - 1)
+                spans.append((seg_index, sent.start_char, sent.end_char, line, text))
                 for feature, sev, msg, toks in detect(sent, ctx):
                     if feature in seg.skip:
                         continue
@@ -193,10 +200,32 @@ class Analyzer:
         if not lexicon.has_wordnet():
             result.notes.append("lexicon data missing: denominal-verb disabled, inanimate-subject reduced")
         if lines is None and readtime.available():
-            words, ms = readtime.estimate([seg.text for seg in segments])
+            times = [readtime.word_times(seg.text) for seg in segments]
+            words = sum(len(t) for t in times)
+            ms = sum(w[3] for t in times for w in t)
             if words:
                 result.reading_ms_per_word, result.reading_seconds = ms / words, ms / 1000
+                result.hotspots = self._hotspots(segments, times, spans, ms / words)
         return result
+
+    @staticmethod
+    def _hotspots(segments, times, spans, mean_ms: float, keep: int = 5) -> list[dict]:
+        """Sentences whose predicted reading time most exceeds their word count at the document's mean rate."""
+        out = []
+        for seg_index, start, end, line, text in spans:
+            words = [w for w in times[seg_index] if start <= w[0] < end]
+            if len(words) < 8:
+                continue  # a few slow words in a short sentence are noise, not a hotspot
+            ms = sum(w[3] for w in words)
+            excess = ms - mean_ms * len(words)
+            if excess <= 0:
+                continue
+            slow = sorted(words, key=lambda w: -w[3])[:3]
+            out.append({"line": line, "sentence": text,
+                        "words": len(words), "ms": round(ms), "excess_ms": round(excess),
+                        "ms_per_word": round(ms / len(words)),
+                        "slow_words": [{"word": w[2], "ms": round(w[3])} for w in slow]})
+        return sorted(out, key=lambda h: -h["excess_ms"])[:keep]
 
     @staticmethod
     def _finding(ctx, seg, sent, text, path, line, feature, sev, msg, toks) -> Finding:

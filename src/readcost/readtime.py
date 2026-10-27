@@ -113,6 +113,19 @@ def paragraph_words(text: str) -> list[str]:
     return [w for w in text.split() if CODE not in w]
 
 
+def word_times(text: str) -> list[tuple[int, int, str, float]]:
+    """(start, end, word, predicted ms) for each word of one paragraph, read from its start.
+
+    The words are those of ``paragraph_words``, so the times add up to what
+    ``estimate`` predicts for the paragraph.
+    """
+    spans = [(m.start(), m.end(), m.group()) for m in re.finditer(r"\S+", text) if CODE not in m.group()]
+    if not spans:
+        return []
+    ms = predict(features([w for _, _, w in spans]))
+    return [(a, b, w, float(t)) for (a, b, w), t in zip(spans, ms)]
+
+
 def estimate(paragraphs: list[str]) -> tuple[int, float]:
     """(words, predicted total ms) over paragraphs, each read from its own start."""
     words, total = 0, 0.0
