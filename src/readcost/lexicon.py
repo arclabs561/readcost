@@ -33,6 +33,14 @@ def has_wordnet() -> bool:
     return bool(_lex())
 
 
+# Quantity and partitive heads: "a majority of raters", "half of the users".
+# They are people when what they count is, so their "of" complement decides.
+QUANTITY_HEADS = frozenset({
+    "majority", "minority", "most", "half", "third", "quarter", "rest", "remainder",
+    "number", "share", "percent", "percentage", "proportion", "fraction", "portion",
+    "handful", "dozen", "couple", "pair", "subset", "sample", "lot", "bunch", "plenty",
+})
+
 INANIMATE_PRONOUNS = {"it", "this", "that", "which", "these", "those"}
 
 # Verbs whose subject is normally a person or animal (selectional restriction).
@@ -122,6 +130,7 @@ HYPHEN_SECONDS = {
 ANIMATE_NOUNS_EXTRA = {
     "user", "caller", "maintainer", "developer", "contributor", "reader",
     "reviewer", "team", "people", "operator", "author", "writer", "owner",
+    "rater", "labeler", "labeller",  # evaluation roles WordNet lacks
 }
 
 

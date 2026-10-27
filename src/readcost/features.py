@@ -515,6 +515,11 @@ def inanimate_subjects(sent, ctx: Context) -> list[tuple[str, str, list]]:
             animate = None
         elif s.pos_ == "PRON" and s.lower_ in lexicon.INANIMATE_PRONOUNS:
             animate = False
+        elif s.pos_ == "NOUN" and s.lemma_.lower() in lexicon.QUANTITY_HEADS:
+            # "a majority of eight raters judged": the counted noun decides.
+            counted = [g for c in s.children if c.dep_ == "prep" and c.lower_ == "of"
+                       for g in c.children if g.dep_ == "pobj" and g.pos_ == "NOUN"]
+            animate = lexicon.noun_animacy((counted[0] if counted else s).lemma_.lower())
         elif s.pos_ == "NOUN":
             animate = lexicon.noun_animacy(s.lemma_.lower())
         else:
