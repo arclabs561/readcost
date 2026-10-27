@@ -155,7 +155,7 @@ def main() -> int:
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--category", default="", help="comma-separated categories to run (default all)")
     ap.add_argument("--code-label", help="readcost version to record when it is not a git checkout")
-    ap.add_argument("--enable", default="", help="comma-separated opt-in rules to turn on")
+    ap.add_argument("--info", default="", help="comma-separated opt-in rules to turn on at info")
     args = ap.parse_args()
     corpus: Path = args.corpus
     out = args.out or corpus / "results"
@@ -164,9 +164,9 @@ def main() -> int:
     wanted = {c for c in args.category.split(",") if c}
     entries = [e for e in manifest["entries"] if not wanted or e["category"] in wanted]
 
-    enable = [f for f in args.enable.split(",") if f]
-    prose = Analyzer(config=Config(enable=list(enable)))
-    code = Analyzer(config=Config(comments="all", enable=list(enable)))
+    enable = [f for f in args.info.split(",") if f]
+    prose = Analyzer(config=Config(rules=dict.fromkeys(enable, "info")))
+    code = Analyzer(config=Config(comments="all", rules=dict.fromkeys(enable, "info")))
     code._nlp = prose.nlp  # share the loaded model
     features = [f for f in FEATURES if f in prose.enabled]
 
