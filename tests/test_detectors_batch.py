@@ -130,6 +130,22 @@ def test_readme_inline_list_example_counts_once(analyzer):
     assert len(fs) == 1
 
 
+@pytest.mark.parametrize("text", [
+    "Rank-based: `rrf`, `isr`, `borda`, `condorcet`, `copeland`, `median_rank`.",
+    "Metrics for one ranked list: `ndcg_at_k`, `map`, `mrr`, `precision_at_k`, `recall_at_k`, and `hit_rate`.",
+])
+def test_code_catalog_keeps_each_conjuncts_code(analyzer, text):
+    assert found(analyzer, text, "inline-list") == []
+
+
+@pytest.mark.parametrize("text", [
+    "It supports apples, oranges, pears, peaches, and plums.",
+    "It supports `apples`, oranges, pears, peaches, and plums.",
+])
+def test_prose_list_with_at_most_one_code_item_is_reported(analyzer, text):
+    assert found(analyzer, text, "inline-list")
+
+
 def test_slash_list_alone_is_still_reported(analyzer):
     assert found(analyzer, "It supports standard/Sugeno/Yager negations for every operator.", "inline-list")
 
