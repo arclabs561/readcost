@@ -483,7 +483,9 @@ def _code_items(items) -> bool:
     """True when half or more of the items are code."""
     own = []
     for t in items:
-        others = {x.i for o in items if o is not t for x in o.subtree}
+        # A conjunction's head also contains this item. Subtract only nested
+        # items; subtracting ancestors would erase the item's own code token.
+        others = {x.i for o in items if t.is_ancestor(o) for x in o.subtree}
         own.append([x for x in t.subtree if x.i not in others and not x.is_punct and x.dep_ != "cc"])
     return sum(1 for words in own if any(x.text == CODE for x in words)) >= len(items) / 2
 
