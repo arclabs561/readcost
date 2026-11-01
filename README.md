@@ -115,7 +115,7 @@ uvx readcost check README.md    # run without installing
 pip install readcost            # or install it
 ```
 
-Python 3.11 or later. The dependencies are spaCy and markdown-it-py. On first
+Python 3.11 or later. The main dependencies are spaCy and markdown-it-py. On first
 use readcost downloads spaCy's English model (about 13 MB, checksum verified)
 into `~/.cache/readcost`; no pip is needed, so it also works under `uvx`.
 `readcost setup` does the download ahead of time. Set `READCOST_NO_DOWNLOAD=1`
@@ -573,7 +573,7 @@ open an issue with the
 [false positive form](https://github.com/arclabs561/readcost/issues/new?template=false-positive.yml):
 it asks for the rule, the message, the sentence, where the sentence was, and
 why the finding is wrong. Text and agent output end with a line that links to
-the form when there are findings; `feedback_link = false` in `readcost.toml`
+the issue chooser, which lists the form, when there are findings; `feedback_link = false` in `readcost.toml`
 turns that line off. The hooks never add it, since a model cannot act on it.
 
 ## Editors
