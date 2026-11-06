@@ -39,6 +39,13 @@ status is 1 when the rewrite is predicted to take longer to read in total or
 has more weighted findings (`--fail-on slower` checks time only), 2 when an
 input cannot be read, and 0 otherwise.
 
+## When to stop
+
+Most findings go after one rewrite. Stop when the text stops changing or the
+same findings come back after a rewrite: what remains is a finding the
+model has judged wrong, or one it cannot fix (docs/evaluation.md, "Agents
+editing in a loop"). Two or three rounds are enough.
+
 ## Match a house style
 
 `readcost style docs/ --against go-docs -o json` compares a draft's rule
@@ -60,6 +67,7 @@ After editing a README, a file under docs/ or a commit message, run
 finding holds; keep every fact. Then run
 `readcost compare HEAD:<file> <file> --fail-on worse`; if it fails, the
 rewrite reads slower than the original, so shorten it or keep the original.
+Stop after two or three rounds, or as soon as the same findings come back.
 Leave code spans, identifiers and quoted text as they are.
 ```
 

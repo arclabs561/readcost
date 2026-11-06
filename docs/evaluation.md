@@ -1674,6 +1674,56 @@ p above 0.001 is suggestive; the respected side is what search returned for
 each handle, the community side the latest activity in random repositories;
 the RAID sample covers three domains and six models.
 
+## Agents editing in a loop
+
+One check says what is wrong once. An agent that edits, checks and edits
+again can do other things: converge, swap one finding for another, cycle,
+lengthen the text to dilute the rate, or drift from the facts.
+`scripts/eval_agent_loop.py` runs that loop on 40 paragraphs of real
+writing with two or more findings each (commits, docs, essays, discussion,
+READMEs), for up to six rounds or until readcost finds nothing. Each model
+gets each paragraph twice: with `-o agent` as it is now ("rewrite these
+sentences where the finding holds", with each rule's measured precision),
+and with the older plain wording ("rewrite these sentences", no
+precision). A separate judge (Kimi K3.1 Pro) then lists facts the final
+text lost, added or changed against the original. Changes are medians of
+final over original; six loops ended on an empty reply and count as not
+converged.
+
+| Model | Feedback | Converged | Median rounds | Words | Total reading time | Time per word | New findings per loop | Returning per loop | Facts lost or changed |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Claude Opus 5.5 | holds | 26/40 | 2 | +3.4% | +2.3% | -1.5% | 0.40 | 0 | 4/40 |
+| Claude Opus 5.5 | plain | 37/40 | 1 | +3.3% | +1.9% | -2.2% | 0.12 | 0 | 2/40 |
+| Gemini 4 Argon | holds | 37/40 | 1 | +3.3% | +2.3% | -2.1% | 0.25 | 0 | 3/40 |
+| Gemini 4 Argon | plain | 40/40 | 1 | +2.9% | +2.2% | -1.4% | 0.40 | 0 | 4/40 |
+| DeepSeek V4.1 Flash | holds | 38/40 | 1 | +1.3% | +1.6% | -1.8% | 0.23 | 0 | 4/40 |
+| DeepSeek V4.1 Flash | plain | 38/40 | 1 | +0.0% | +1.0% | -1.6% | 0.10 | 0 | 2/40 |
+| Mistral Large 4 | holds | 39/40 | 1 | +0.5% | +0.9% | -1.0% | 0.30 | 0.10 | 4/40 |
+| Mistral Large 4 | plain | 39/40 | 1 | +1.1% | +1.2% | -1.1% | 0.25 | 0.05 | 4/40 |
+
+Most loops end after one rewrite. The text grows a little, so the total
+predicted reading time rises 1 to 2% even as the time per word falls;
+rewrites introduce 0.1 to 0.4 new findings per loop on average, and old
+findings rarely come back. The judge finds a lost or changed fact in 5 to 10% of loops,
+about as often with either wording. The hedged wording changes behaviour
+mainly for Claude Opus 5.5, which leaves findings it judges wrong: it stops
+short of zero findings in 14 of 40 loops instead of 3, without losing more
+facts.
+
+The loops that never end are of two kinds. A fixed point: the model judges
+the findings do not hold and returns the paragraph unchanged, round after
+round (three Gemini loops on inline lists). A two-cycle: the model
+alternates between two wordings around a finding it cannot fix, here a
+hyphenated CSS class name written without backticks, which readcost reads
+as a coined compound (114 and 118 words, six rounds). An agent or hook that
+loops on readcost's feedback should stop when the text stops changing or
+when the same findings come back, and treat what remains as findings to
+judge, not to chase.
+
+Each loop was judged once by one model; the fact counts are small and only
+indicative. The paragraphs had two or more findings to start with, so
+these loops are short; a longer document could take more rounds.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News
