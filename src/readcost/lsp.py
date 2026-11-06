@@ -34,9 +34,8 @@ SEVERITY = {
 # Features with a row in the README's "What it flags" table. long-sentence has
 # none; test_lsp checks this set against the README.
 DOCUMENTED = frozenset({
-    "stacked-nouns", "long-dependency", "inanimate-subject", "denominal-verb",
-    "reduced-object-relative", "hyphen-compound", "inline-list", "nominalization",
-    "participial-clause", "repeated-frame", "center-embedding", "undefined-acronym",
+    "stacked-nouns", "long-dependency", "inanimate-subject", "reduced-object-relative",
+    "hyphen-compound", "inline-list", "nominalization", "participial-clause", "undefined-acronym",
 })
 DOCS_URL = "https://github.com/arclabs561/readcost#what-it-flags"
 CHANGE_DELAY = 0.5  # seconds of no typing before a changed document is checked again

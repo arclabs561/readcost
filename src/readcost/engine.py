@@ -12,10 +12,10 @@ from .config import SEVERITIES, Config, load_config, severity_rank
 from .extract import Segment, detect_format, extract
 from .features import (
     FEATURES,
+    RETIRED_RULES,
     Context,
     Finding,
     detect,
-    repeated_frames,
     show,
     suggestion,
     undefined_acronyms,
@@ -170,7 +170,6 @@ class Analyzer:
         ctx = Context(self.cfg, self.profile, self.allow, enabled)
         floor = severity_rank(self.cfg.min_severity)
         docs = self.nlp.pipe([s.text for s in segments])
-        framed: list[tuple[Segment, object]] = []  # prose sentences for repeated-frame
         spans: list[tuple] = []  # (segment, start, end, line, text) of each checked sentence
         parsed: list[tuple[Segment, object]] = []  # every parsed segment, for document-level rules
         checked: list = []                          # every sentence checked, for metrics
@@ -190,8 +189,6 @@ class Analyzer:
                 result.sentences += 1
                 result.words += len(words)
                 checked.append(sent)
-                if not seg.in_list:
-                    framed.append((seg, sent))
                 text = show(ctx, sent.doc, sent.start, sent.end - 1)
                 spans.append((seg_index, sent.start_char, sent.end_char, line, text))
                 for feature, sev, msg, toks in detect(sent, ctx):
@@ -199,14 +196,6 @@ class Analyzer:
                         continue
                     result.findings.append(self._finding(ctx, seg, sent, text, path, line,
                                                          feature, sev, msg, toks))
-        if "repeated-frame" in enabled:
-            for seg, sent, msg, toks in repeated_frames(framed):
-                if "repeated-frame" in seg.skip:
-                    continue
-                ctx.codes = seg.codes
-                text = show(ctx, sent.doc, sent.start, sent.end - 1)
-                result.findings.append(self._finding(ctx, seg, sent, text, path, seg.line_at(sent.start_char),
-                                                     "repeated-frame", "info", msg, toks))
         if "undefined-acronym" in enabled:
             keys = {(id(s.doc), s.start) for s in checked}
             for seg, sent, msg, toks in undefined_acronyms(parsed, keys, self.allow):
@@ -232,12 +221,12 @@ class Analyzer:
         # The verdict uses every finding; min_severity only trims what is shown.
         self._verdict(result, context)
         result.findings = [f for f in result.findings if severity_rank(f.severity) >= floor]
-        unknown = sorted(set().union(*(seg.skip for seg in segments)) - set(FEATURES))
+        unknown = sorted(set().union(*(seg.skip for seg in segments)) - set(FEATURES) - set(RETIRED_RULES))
         if unknown:
             result.notes.append(f"unknown rule in a readcost directive: {', '.join(unknown)}; "
                                 "`readcost explain` lists the rules")
         if not lexicon.has_wordnet():
-            result.notes.append("lexicon data missing: denominal-verb disabled, inanimate-subject reduced")
+            result.notes.append("lexicon data missing: inanimate-subject reduced")
         if lines is None and readtime.available():
             times = readtime.word_times_many([seg.text for seg in segments])
             words = sum(len(t) for t in times)

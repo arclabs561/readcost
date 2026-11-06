@@ -1674,6 +1674,34 @@ p above 0.001 is suggestive; the respected side is what search returned for
 each handle, the community side the latest activity in random repositories;
 the RAID sample covers three domains and six models.
 
+## Opt-in rules on every corpus
+
+The opt-in rules had been judged on samples too small to say much ("no hit
+in the sample"). `scripts/eval_optin_rules.py` turns every opt-in rule on
+over the combined corpus (10,953 texts, 5.66 million words), samples up to
+40 findings per rule one category at a time, and has model raters label
+them blind (the rule's definition and the sentence only). Two raters
+(Gemini 4 Argon and DeepSeek V4.1 Flash) finished; they agreed on 243 of
+280 items, and a finding counts as accepted only when both accept it, so
+the shares are a strict, provisional estimate.
+
+| Rule | Findings | Per 1,000 words | Accepted | Wilson 95% |
+| --- | --- | --- | --- | --- |
+| long-sentence | 28,292 | 5.00 | 38 of 40 | 84 to 99% |
+| participial-clause | 6,645 | 1.17 | 25 of 40 | 47 to 76% |
+| nominalization | 821 | 0.15 | 16 of 40 | 26 to 55% |
+| undefined-acronym | 11,033 | 1.95 | 11 of 40 | 16 to 43% |
+| center-embedding | 80 | 0.01 | 8 of 40 | 10 to 35% |
+| denominal-verb | 4,279 | 0.76 | 3 of 40 | 3 to 20% |
+| repeated-frame | 6,968 | 1.23 | 1 of 40 | 0 to 13% |
+
+denominal-verb, repeated-frame and center-embedding were removed in 0.3: no
+plausible correction to these labels makes the first two worth keeping, and
+center-embedding fires about once in 100,000 words. long-sentence is
+accurate by construction (raters agree a 33-word sentence is long) and stays
+opt-in; undefined-acronym is underestimated here, since a rater sees one
+sentence and cannot tell whether the document spelled the acronym out.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News

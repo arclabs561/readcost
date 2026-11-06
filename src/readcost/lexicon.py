@@ -2,8 +2,8 @@
 
 The WordNet-derived sets live in data/lexicon.json.gz (built by
 scripts/build_lexicon.py; WordNet's license is in data/WORDNET_LICENSE), so
-nothing loads WordNet at run time. If the file is missing, denominal-verb is
-disabled and inanimate-subject uses only the explicit lists.
+nothing loads WordNet at run time. If the file is missing, inanimate-subject
+uses only the explicit lists.
 """
 
 from __future__ import annotations
@@ -68,26 +68,6 @@ TECHNICAL_VERBS = {
     "recognize", "reject", "relate", "require", "respect", "score", "see",
     "select", "skip", "solve", "spend", "test", "track", "train", "upgrade",
     "use", "validate", "verify", "view", "waste",
-}
-
-# Verbs WordNet lists mostly as nouns that are ordinary verbs in software prose.
-CONVENTIONAL_VERBS = {
-    "access", "account", "panic", "author", "back", "base", "batch", "benchmark",
-    "bit", "bound", "build", "byte", "cache", "call", "change", "check",
-    "chunk", "cluster", "compile", "condition", "contact", "copy", "cost",
-    "count", "default", "design", "disk", "document", "end", "export",
-    "feature", "file", "filter", "fix", "flag", "focus", "format", "gate",
-    "grade", "group", "handle", "hash", "head", "help", "import", "index",
-    "input", "install", "kernel", "key", "label", "limit", "link", "list",
-    "load", "lock", "log", "map", "mark", "match", "measure", "model", "name",
-    "need", "order", "output", "package", "page", "pair", "parse", "patch",
-    "pin", "pipe", "plan", "point", "pool", "power", "process", "query",
-    "range", "rank", "re", "record", "release", "report", "result", "return",
-    "run", "sample", "scope", "score", "search", "seed", "segment", "set",
-    "share", "ship", "shell", "side", "sort", "source", "split", "start",
-    "step", "store", "stream", "structure", "sum", "support", "tag", "target",
-    "test", "time", "token", "touch", "trace", "track", "type", "update",
-    "upgrade", "use", "value", "view", "weight", "work", "wrap", "zero",
 }
 
 # Common hyphenated or multi-word technical terms that are not ad hoc stacks.
@@ -158,12 +138,6 @@ def _hyphen_pairs() -> frozenset[str]:
 def is_established_pair(a: str, b: str) -> bool:
     """True if "a-b" is in common use ("key-value", "set-top"), not a coinage."""
     return f"{a}-{b}" in _hyphen_pairs()
-
-
-def is_denominal_candidate(lemma: str) -> bool:
-    if lemma in CONVENTIONAL_VERBS or not lemma.isalpha() or len(lemma) < 3:
-        return False
-    return lemma in _lex().get("denominal_candidates", ())
 
 
 @lru_cache(maxsize=4096)

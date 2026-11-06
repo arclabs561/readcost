@@ -179,25 +179,18 @@ passes.
 | hyphen-compound | "The missing-pattern check in `gitignore_audit` is a pattern-presence heuristic." | "The missing-pattern check in `gitignore_audit` only looks for whether a pattern is present." |
 | inline-list | "`durability` provides filesystem and in-memory directories, atomic writes, WALs, record logs, checkpoint files, CRC validation, and sync helpers." | a bulleted list |
 | participial-clause (opt-in) | "The page updates automatically when the file changes on disk, highlighting what changed." | "The page updates automatically when the file changes on disk and highlights what changed." |
-| denominal-verb (opt-in, constructed) | "The script will bucket the requests by hour." | "The script will group the requests by hour." |
 | nominalization (opt-in, constructed) | "The tool performs validation of the input." | "The tool validates the input." |
-| repeated-frame (opt-in, constructed) | "This change reduces the latency of the cache. This change improves the speed of the parser. This change lowers the cost of the build." | "This change makes the cache faster, the parser quicker and the build cheaper." |
-| center-embedding (opt-in, constructed) | "The job that the script that the team maintains starts fails when the disk is full." | "The team maintains a script that starts the job, and the job fails when the disk is full." |
 | undefined-acronym (opt-in, constructed) | "Each shard writes its changes to the WAL before it updates the index." | "Each shard writes its changes to the write-ahead log (WAL) before it updates the index." |
 
-The first five come from the paper; denominal-verb is opt-in because on
-well-edited prose nearly all its hits were settled verbs. The next two are
-rules derived from where those constructions show up in technical writing. A
-hyphenated word counts as one noun, so "storage-shrink job" is a hyphen
-compound, not three stacked nouns. Participial-clause, nominalization and
-repeated-frame are constructions that language models use more often than
-people (Reinhart et al. 2025; Shaib et al. 2024). Center-embedding flags a
-clause nested two deep inside clauses that continue after it, which people
-judge hard in constructed sentences unless the innermost subject is I, you or we
-(Gibson 1998, 2000); undefined-acronym flags an acronym used before it is
-spelled out, which readers rated as harder to read in one small report (Hales,
-Williams and Rector 2017), skipping common ones such as API and JSON. Turn any opt-in rule on
-with a level, such as `--info nominalization` or `nominalization = "info"`
+The first four come from the paper. The next two are rules derived from
+where those constructions show up in technical writing. A hyphenated word
+counts as one noun, so "storage-shrink job" is a hyphen compound, not three
+stacked nouns. Participial-clause and nominalization are constructions that
+language models use more often than people (Reinhart et al. 2025);
+undefined-acronym flags an acronym used before it is spelled out, which
+readers rated as harder to read in one small report (Hales, Williams and
+Rector 2017), skipping common ones such as API and JSON. Turn any opt-in rule
+on with a level, such as `--info nominalization` or `nominalization = "info"`
 under `[readcost.rules]`. `long-sentence` is also
 available but off by default. `readcost explain` prints why each one costs the
 reader and how to fix it. When a long-dependency or inline-list
@@ -597,8 +590,8 @@ setup for each editor.
 - The default spaCy model misparses some sentences. A sentence parsed with no
   verb is skipped, and a misparse can produce a false finding. Set
   `model = "en_core_web_trf"` for better parses at several times the cost.
-- inanimate-subject and denominal-verb use word lists derived from WordNet.
-  Treat their findings as prompts to reread, not verdicts.
+- inanimate-subject uses word lists derived from WordNet. Treat its findings
+  as prompts to reread, not verdicts.
 - Precision is low on well-edited prose. Ten model raters from different labs
   labelled 210 findings sampled from essays and documentation by well-regarded
   writers. Of the 64 that the current rules still report, a majority of eight

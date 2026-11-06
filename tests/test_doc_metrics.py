@@ -1,4 +1,4 @@
-"""Document metrics (metrics.py) and the opt-in center-embedding and undefined-acronym rules."""
+"""Document metrics (metrics.py) and the opt-in undefined-acronym rule."""
 
 import pytest
 
@@ -13,7 +13,7 @@ def plain():
 
 @pytest.fixture(scope="module")
 def opt():
-    return Analyzer(Config(rules={"center-embedding": "info", "undefined-acronym": "info"}))
+    return Analyzer(Config(rules={"undefined-acronym": "info"}))
 
 
 def rules(a, text, feature):
@@ -88,30 +88,7 @@ def test_sentence_profile_bands_use_the_cut_points(plain):
 
 
 def test_new_rules_are_off_by_default(plain):
-    assert rules(plain, DOUBLE, "center-embedding") == []
     assert rules(plain, "Every write goes to the WAL before the table changes.", "undefined-acronym") == []
-
-
-def test_double_center_embedding_is_flagged(opt):
-    fs = rules(opt, DOUBLE, "center-embedding")
-    assert len(fs) == 1
-    assert fs[0].severity == "info"
-    assert fs[0].excerpt == "who the senator who John met attacked"
-
-
-def test_double_embedding_with_an_indexical_innermost_subject_is_not_flagged(opt):
-    # Gibson 1998, after Bever 1974: "I" or "you" adds no new referent, and
-    # such sentences are processable. The parse still nests "met" two deep.
-    from readcost.features import center_embeddings
-
-    text = DOUBLE.replace("who John met", "who I met")
-    assert max(d for _, d in center_embeddings(next(opt.nlp(text).sents))) == 2
-    assert rules(opt, text, "center-embedding") == []
-
-
-@pytest.mark.parametrize("text", [SINGLE, RIGHT])
-def test_single_or_right_branching_clauses_are_not_flagged(opt, text):
-    assert rules(opt, text, "center-embedding") == []
 
 
 def test_acronym_never_spelled_out(opt):
@@ -143,16 +120,6 @@ def test_acronym_in_allow_list_is_not_flagged():
 def test_acronym_reported_once(opt):
     text = "Every write goes to the WAL first. Then the WAL is flushed to the disk by the job."
     assert len(rules(opt, text, "undefined-acronym")) == 1
-
-
-@pytest.mark.parametrize("text", [
-    # Shaped like corpus sentences labelled not center-embedded: only a
-    # connective of the outer clause precedes the nested clause.
-    "But if what we measure is latency on our own servers, we have enough data.",
-    "Whereas when the failures you have to debug are rare, they look like noise.",
-])
-def test_clause_after_a_connective_is_not_center_embedded(opt, text):
-    assert rules(opt, text, "center-embedding") == []
 
 
 def test_frequent_abbreviations_and_capitalised_words_are_known(opt):

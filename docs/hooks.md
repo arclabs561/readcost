@@ -213,7 +213,7 @@ no change beyond pointing the piku adapter at the new fields.
 - English only. The default model, `en_core_web_sm`, misparses some sentences;
   a sentence parsed with no verb is skipped. `model = "en_core_web_trf"` parses
   better and is several times slower.
-- inanimate-subject and denominal-verb are heuristics based on word lists. Treat them as
+- inanimate-subject is a heuristic based on word lists. Treat its findings as
   prompts to reread the sentence.
 - The reference profile is one writer's READMEs. A cost index from chat answers
   or papers is not comparable to one from READMEs; build a profile from text you
