@@ -12,7 +12,7 @@ from importlib import resources
 from pathlib import Path
 from urllib.parse import quote
 
-from .engine import Result
+from .engine import LineIndex, Result
 from .features import FEATURES
 
 OUTPUTS = ("full", "concise", "json", "sarif", "github", "agent", "pr-comment")
@@ -60,9 +60,19 @@ def _paint(on: bool):
 def _span(f, source_lines: list[str]) -> list[tuple[int, int, int]]:
     """Where ``f.excerpt`` sits in the source: (line, start, end) per line, columns from 0.
 
-    Empty when the excerpt is not found near ``f.line``, e.g. for text taken
-    from JSON, where the source line holds escaped text.
+    Taken from the finding's offsets when it has them. Otherwise the excerpt
+    is searched for near ``f.line``; empty when it is not found, e.g. for
+    text taken from JSON, where the source line holds escaped text.
     """
+    if f.column is not None and f.end_line is not None and f.end_line <= len(source_lines):
+        # Exact: the engine mapped the flagged words back to the file.
+        out = []
+        for n in range(f.line, f.end_line + 1):
+            text = source_lines[n - 1]
+            a = f.column - 1 if n == f.line else len(text) - len(text.lstrip())
+            out.append((n, a, f.end_column - 1 if n == f.end_line else len(text)))
+        return out
+    # No offsets (text from JSON, a finding built by hand): search near the line.
     words = f.excerpt.split()
     if not words or not 0 < f.line <= len(source_lines):
         return []
@@ -209,7 +219,7 @@ def full(results: list[Result], feedback_link: bool = False, color: bool = False
     out: list[str] = []
     rules: list[str] = []
     for r in results:
-        source_lines = r.source.splitlines()
+        source_lines = LineIndex(r.source).lines()
         for f in r.findings:
             sev = f.severity if f.severity in _CODES else "info"
             snippet, col, pad = _snippet(f, source_lines, paint)
@@ -252,7 +262,7 @@ def concise(results: list[Result], feedback_link: bool = False, **_) -> str:
     """One line per finding, ``path:line:col: severity: [rule] message``, for editors and grep."""
     out = []
     for r in results:
-        source_lines = r.source.splitlines()
+        source_lines = LineIndex(r.source).lines()
         for f in r.findings:
             span = _span(f, source_lines)
             where = f.where() + (f":{span[0][1] + 1}" if span else "")
@@ -283,14 +293,17 @@ def as_json(results: list[Result], **_) -> str:
     out = []
     for r in results:
         d = r.to_dict()
-        lines = r.source.splitlines()
+        lines = LineIndex(r.source).lines()
         for fd, f in zip(d["findings"], r.findings):
-            # 1-based columns of the excerpt, so a tool can edit exactly those words;
-            # null when the excerpt cannot be found in the source.
-            span = _span(f, lines)
-            fd["column"] = span[0][1] + 1 if span else None
-            fd["end_line"] = span[-1][0] if span else None
-            fd["end_column"] = span[-1][2] + 1 if span else None
+            # start and end are character offsets into the file; column and
+            # end_column are 1-based, so a tool can edit exactly those words.
+            # A finding without offsets gets columns by searching for the
+            # excerpt, and null when it is not found.
+            if f.start is None:
+                span = _span(f, lines)
+                fd["column"] = span[0][1] + 1 if span else None
+                fd["end_line"] = span[-1][0] if span else None
+                fd["end_column"] = span[-1][2] + 1 if span else None
             fd["precision"] = _precision(f.feature)
         out.append(d)
     return json.dumps(out, indent=1)
@@ -326,6 +339,22 @@ def _artifact_location(path: str) -> dict:
     return {"uri": quote(path.replace(os.sep, "/").removeprefix("./")), "uriBaseId": "%SRCROOT%"}
 
 
+def _region(f, r: Result) -> dict:
+    """A SARIF region: the line alone, or the exact span when the finding has offsets."""
+    if f.start is None or f.column is None:
+        return {"startLine": max(f.line, 1)}
+    # SARIF does not count a byte order mark; readcost's offsets do.
+    bom = 1 if r.source.startswith("\ufeff") else 0
+    region = {"startLine": f.line, "startColumn": f.column - (bom if f.line == 1 else 0),
+              "endLine": f.end_line, "endColumn": f.end_column - (bom if f.end_line == 1 else 0)}
+    if not any(n.startswith("not valid UTF-8") for n in r.notes):
+        # Offsets into text that was repaired while decoding are not offsets
+        # into the file as another tool would read it.
+        region["charOffset"] = f.start - bom
+        region["charLength"] = f.end - f.start
+    return region
+
+
 def sarif(results: list[Result], **_) -> str:
     from . import __version__
 
@@ -348,7 +377,7 @@ def sarif(results: list[Result], **_) -> str:
                 "message": {"text": f"{f.message}. {f.suggestion}"},
                 "locations": [{"physicalLocation": {
                     "artifactLocation": _artifact_location(f.path),
-                    "region": {"startLine": max(f.line, 1)},
+                    "region": _region(f, r),
                 }}],
             })
     doc = {
@@ -357,6 +386,10 @@ def sarif(results: list[Result], **_) -> str:
         "runs": [{
             "tool": {"driver": {"name": "readcost", "version": __version__,
                                 "informationUri": "https://arxiv.org/abs/2610.29162", "rules": rules}},
+            # Columns and character offsets count code points, and a lone
+            # carriage return ends a line, as in the JSON output.
+            "columnKind": "unicodeCodePoints",
+            "newlineSequences": ["\r\n", "\n", "\r"],
             "results": runs_results,
         }],
     }

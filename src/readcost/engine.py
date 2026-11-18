@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import bisect
 import re
 import statistics
 from dataclasses import dataclass, field
@@ -10,7 +11,7 @@ from pathlib import Path
 from . import lexicon, metrics, readtime
 from .baseline import load_baseline
 from .config import SEVERITIES, Config, load_config, severity_rank
-from .extract import Segment, detect_format, extract
+from .extract import Segment, detect_format, extract, line_starts
 from .features import (
     FEATURES,
     NOUN_RUN_RULES,
@@ -279,12 +280,19 @@ class Analyzer:
     @staticmethod
     def _finding(ctx, seg, sent, text, path, line, feature, sev, msg, toks) -> Finding:
         excerpt = ""
+        whole = seg.span(sent.start_char, sent.end_char)
+        span = whole  # a finding with no words of its own is about the sentence
         if toks:
             first = min(toks, key=lambda t: t.i)
+            last = max(toks, key=lambda t: t.i)
             line = seg.line_at(first.idx)
-            excerpt = show(ctx, sent.doc, first.i, max(t.i for t in toks))
+            excerpt = show(ctx, sent.doc, first.i, last.i)
+            span = seg.span(first.idx, last.idx + len(last.text))
+        start, end = span or (None, None)
+        sentence_start, sentence_end = whole or (None, None)
         return Finding(feature=feature, severity=sev, message=msg, excerpt=excerpt, sentence=text,
-                       path=path, line=line, label=seg.label, suggestion=suggestion(feature, text))
+                       path=path, line=line, label=seg.label, suggestion=suggestion(feature, text),
+                       start=start, end=end, sentence_start=sentence_start, sentence_end=sentence_end)
 
     def _verdict(self, result: Result, context: str = "prose") -> None:
         result.points = sum(WEIGHTS.get(f.severity, 0.5) for f in result.findings)
@@ -317,6 +325,7 @@ class Analyzer:
         context = "commit" if (fmt or detect_format(path, text)) == "commit" else "prose"
         result = self.analyze(segments, path, lines, context=context)
         result.source = text
+        locate(result.findings, text)
         return result
 
     def check_records(self, text: str, fmt: str, path: str, *, field_path=None) -> list[Result]:
@@ -341,6 +350,40 @@ class Analyzer:
         if note:
             result.notes.append(note)
         return result
+
+
+class LineIndex:
+    """Lines and columns for character offsets; lines end at \\n, \\r\\n or \\r."""
+
+    def __init__(self, text: str):
+        self.text = text
+        self.starts = line_starts(text)
+
+    def position(self, offset: int) -> tuple[int, int]:
+        """1-based (line, column) of ``offset``; the column counts characters."""
+        line = bisect.bisect_right(self.starts, offset)
+        return line, offset - self.starts[line - 1] + 1
+
+    def line(self, number: int) -> str:
+        """Line ``number`` (1-based) without its line break."""
+        end = self.starts[number] if number < len(self.starts) else len(self.text)
+        return self.text[self.starts[number - 1]:end].rstrip("\r\n")
+
+    def lines(self) -> list[str]:
+        return [self.line(n) for n in range(1, len(self.starts) + 1)]
+
+
+def locate(findings: list[Finding], text: str) -> None:
+    """Fill line and column fields from each finding's offsets into ``text``."""
+    if not any(f.start is not None for f in findings):
+        return
+    index = LineIndex(text)
+    for f in findings:
+        if f.start is None or f.end is None or f.end > len(text):
+            f.start = f.end = None
+            continue
+        f.line, f.column = index.position(f.start)
+        f.end_line, f.end_column = index.position(f.end)
 
 
 def read_source(path) -> tuple[str, str | None]:

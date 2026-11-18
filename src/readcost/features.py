@@ -178,6 +178,18 @@ class Finding:
     line: int
     label: str = ""
     suggestion: str = ""
+    # Where the flagged words are in the source file, as character offsets
+    # (code points of the decoded text, end exclusive), and the same span as
+    # 1-based lines and columns. None when the extractor cannot map the text
+    # back, e.g. a message inside a JSON transcript.
+    start: int | None = None
+    end: int | None = None
+    column: int | None = None
+    end_line: int | None = None
+    end_column: int | None = None
+    # The sentence that holds them, as offsets.
+    sentence_start: int | None = None
+    sentence_end: int | None = None
 
     def where(self) -> str:
         loc = self.path + (f"#{self.label}" if self.label else "")

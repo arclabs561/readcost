@@ -21,7 +21,7 @@ from pygls.uris import to_fs_path
 
 from . import __version__
 from .config import Config, load_config
-from .engine import Analyzer, Result
+from .engine import Analyzer, LineIndex, Result
 from .extract import detect_format
 from .features import Finding
 
@@ -53,18 +53,28 @@ def _units(text: str, encoding: str) -> int:
 
 def to_diagnostic(f: Finding, lines: list[str],
                   encoding: str = types.PositionEncodingKind.Utf16) -> types.Diagnostic:
-    """One finding as a diagnostic: the excerpt's span when it sits on the line, else the whole line."""
+    """One finding as a diagnostic over the flagged words.
+
+    The range comes from the finding's offsets and may cover several lines.
+    A finding without offsets gets the excerpt's span when it sits on the
+    line, else the whole line.
+    """
     row = min(max(f.line - 1, 0), max(len(lines) - 1, 0))
     text = lines[row] if lines else ""
-    start, end = 0, _units(text, encoding)
-    col = text.find(f.excerpt) if f.excerpt else -1
-    if col >= 0:
-        start = _units(text[:col], encoding)
-        end = start + _units(f.excerpt, encoding)
+    end_row, start, end = row, 0, _units(text, encoding)
+    if f.column is not None and f.end_line is not None and 0 < f.line <= f.end_line <= len(lines):
+        end_row = f.end_line - 1
+        start = _units(text[:f.column - 1], encoding)
+        end = _units(lines[end_row][:f.end_column - 1], encoding)
+    else:
+        col = text.find(f.excerpt) if f.excerpt else -1
+        if col >= 0:
+            start = _units(text[:col], encoding)
+            end = start + _units(f.excerpt, encoding)
     message = f"{f.message}. {f.suggestion}" if f.suggestion else f.message
     return types.Diagnostic(
         range=types.Range(start=types.Position(line=row, character=start),
-                          end=types.Position(line=row, character=end)),
+                          end=types.Position(line=end_row, character=end)),
         message=message,
         severity=SEVERITY.get(f.severity, types.DiagnosticSeverity.Information),
         code=f.feature,
@@ -75,7 +85,7 @@ def to_diagnostic(f: Finding, lines: list[str],
 
 def to_diagnostics(result: Result, text: str,
                    encoding: str = types.PositionEncodingKind.Utf16) -> list[types.Diagnostic]:
-    lines = text.splitlines()
+    lines = LineIndex(text).lines()  # the line breaks the protocol names: \n, \r\n and \r
     return [to_diagnostic(f, lines, encoding) for f in result.findings]
 
 
