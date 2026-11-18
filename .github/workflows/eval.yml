@@ -9,6 +9,7 @@ on:
   pull_request:
     paths:
       - .github/workflows/eval.yml
+      - .github/actions/setup/action.yml
       - scripts/eval_onestop_pairs.py
       - scripts/reading_time_prep.py
 
@@ -25,29 +26,31 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+      - uses: ./.github/actions/setup
         with:
-          python-version: "3.12"
-      - name: Install
-        run: |
-          python -m pip install --quiet uv
-          uv sync
-          uv run readcost setup
+          extras: test
+      # Corpora live under ref/ and are cached by a key that names the data,
+      # so a rerun downloads nothing. Bump the key's suffix to refetch.
       # OneStop Eye Movements, ordinary reading, and Provo: both CC BY 4.0, on OSF.
-      - name: Download reading-time corpora
+      - id: rt
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/rt/texts.jsonl
+          key: eval-rt-texts-${{ hashFiles('scripts/reading_time_prep.py') }}-v1
+      - name: Download reading-time corpora and build per-text reading times
+        if: steps.rt.outputs.cache-hit != 'true'
         run: |
+          python -m pip install --quiet "polars>=1"
           mkdir -p ref/rt/onestop ref/rt/provo ref/rt/zip
           curl -fsSL --retry 3 -o ref/rt/zip/onestop.zip https://osf.io/download/xkgfz/
           unzip -q ref/rt/zip/onestop.zip -d ref/rt/zip
           mv "$(find ref/rt/zip -name ia_Paragraph_ordinary.csv | head -1)" ref/rt/onestop/
           curl -fsSL --retry 3 -o ref/rt/provo/Provo_Corpus-Eyetracking_Data.csv https://osf.io/download/a32be/
           rm -rf ref/rt/zip
-          ls -la ref/rt/onestop ref/rt/provo
-      - name: Per-text reading times
-        run: uv run scripts/reading_time_prep.py ref/rt
+          python scripts/reading_time_prep.py ref/rt
       - name: Findings against observed reading time, paired paragraphs
         run: |
-          uv run python scripts/eval_onestop_pairs.py ref/rt/texts.jsonl | tee pairs.txt
+          python scripts/eval_onestop_pairs.py ref/rt/texts.jsonl | tee pairs.txt
           { echo '## OneStop paired paragraphs'; echo '```'; cat pairs.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:

@@ -7,3 +7,12 @@
 - Run `uv run pytest -q` and `uv run readcost check . --fail-on block` before
   committing, and `uv run readcost check README.md docs --fail-on advise`
   after changing documentation.
+- Workflows share `.github/actions/setup` (Python, readcost, the spaCy model,
+  with caches). Use it instead of installing by hand.
+- An evaluation that needs data or models the repository does not hold goes
+  in `.github/workflows/eval.yml` as its own job: download under `ref/`,
+  cache with `actions/cache` under a key that names the data, write the
+  numbers to `$GITHUB_STEP_SUMMARY`, and gate nothing. A pull request may
+  exist only to run such a job; say so in its description and record the
+  result in `docs/evaluation.md` before merging, or close it.
+- Pin actions to a commit SHA with the tag in a comment.
