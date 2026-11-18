@@ -206,6 +206,11 @@ Studies, with how each was read:
   frequency held. Contrast framing and lists of three track nothing there
   (evaluation.md, "Many datasets with human signals"). This is preference,
   not reading time: in OneStop and Provo the same measures show nothing.
+- A pre-registered test of that result failed (evaluation.md, "Repetition,
+  pre-registered"). On new model text the effect is a third of its
+  discovery size; on answers people wrote to technical questions it is
+  absent; in learner essays it tracks vocabulary. No document-level
+  repetition measure is proposed.
 
 Not read: work on entity-grid coherence in model text, and the uniform
 information density literature beyond what
