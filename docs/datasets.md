@@ -1,22 +1,27 @@
 # Datasets with human signals about prose
 
-Datasets in which people rated, edited, annotated or read English prose,
-and which question about readcost each can answer. No person has labelled
+These datasets record what people did with English prose: they rated it,
+edited it, marked problems in it or read it. Each entry says which
+question about readcost it can answer. No person has labelled
 a readcost finding, so every dataset here answers a narrower question;
 [evaluation.md](evaluation.md) reports what the ones marked "run" show.
 
 Compiled 18 November 2026. "Checked" says how each entry was confirmed:
-**card** (the Hugging Face card or file listing, read for this list),
-**repo** (the repository's README, LICENSE or files), **paper** (the
-paper's text), **earlier** (an earlier section of evaluation.md), or
-**memory** (not rechecked; a lead only). "Human label" says whether people
+
+- **card**: the Hugging Face card or file listing, read for this list;
+- **repo**: the repository's README, LICENSE or files;
+- **paper**: the paper's text;
+- **earlier**: an earlier section of evaluation.md;
+- **memory**: not rechecked, a lead only.
+
+ "Human label" says whether people
 produced the outcome, and how that was checked; sets whose labels came from
 a model are listed at the end and not used.
 
 Status: **run** means `scripts/dataset_matrix.py` reads it and the
 `matrix` job in the eval workflow runs it; **used before** means an earlier
-evaluation used it; **#83** means the discourse-patterns experiment (pull
-request 83) uses it.
+evaluation used it; **#83** means that pull request 83, an experiment on discourse
+patterns, uses it.
 
 ## Ratings, preferences and complaints
 
@@ -108,8 +113,9 @@ request 83) uses it.
 
 ## Technical text for word-pair counts
 
-For the stack-terms measurement (`scripts/eval_stack_terms.py`), which
-needs counts of word pairs in technical writing. Only counts are kept.
+`scripts/eval_stack_terms.py` asks whether counts of word pairs tell an
+established term from a coined noun stack, and needs counts from
+technical writing. Only counts are kept.
 
 | Corpus | Contents | Licence | Host | Checked | Status |
 | --- | --- | --- | --- | --- | --- |

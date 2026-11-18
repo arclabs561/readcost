@@ -226,14 +226,14 @@ def test_prep_geco_matches_columns_exactly(tmp_path):
     ws = wb.active
     ws.title = "DATA"
     # WORD_ID_WITHIN_TRIAL comes first and contains "WORD_ID": the match must be exact.
-    ws.append(["PP_NR", "WORD_ID_WITHIN_TRIAL", "WORD_ID", "WORD_TOTAL_READING_TIME"])
+    ws.append(["PP_NR", "PART", "TRIAL", "WORD_ID_WITHIN_TRIAL", "WORD_ID", "WORD_TOTAL_READING_TIME"])
     for pp in ("a", "b"):
-        ws.append([pp, 1, "1-1-1", 200 if pp == "a" else 100])
-        ws.append([pp, 2, "1-1-2", "."])
-        ws.append([pp, 1, "1-2-1", 300])
+        ws.append([pp, 1, 4, 1, "1-1-1", 200 if pp == "a" else 100])
+        ws.append([pp, 1, 4, 2, "1-1-2", "."])
+        ws.append([pp, 1, 5, 1, "1-2-1", 300])
     wb.save(tmp_path / "MonolingualReadingData.xlsx")
     out = dm.prep_geco(tmp_path)
     rows = dm.load_geco(out)
     assert [r["text"] for r in rows] == ["It rained.", "Yes."]
     assert rows[0]["outcomes"]["ms_per_word"] == pytest.approx((150 + 0) / 2)
-    assert rows[0]["group"] == "1"
+    assert [r["group"] for r in rows] == ["1-4", "1-5"]

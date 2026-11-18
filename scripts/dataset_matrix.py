@@ -584,7 +584,8 @@ def prep_geco(root: Path) -> Path:
     ROOT/MonolingualReadingData.xlsx (one row per reader and word). The
     total reading time of a skipped word (a "." in the file) counts as 0,
     as in reading_time_prep.py. Writes ROOT/texts.jsonl in that script's
-    format, one line per sentence, grouped by the part of the novel.
+    format, one line per sentence, grouped by the screen (trial) on which
+    its first word was shown, so that the bootstrap resamples screens.
     """
     import openpyxl
 
@@ -596,6 +597,7 @@ def prep_geco(root: Path) -> Path:
             if all(any(n in h for h in header) for n in need):
                 col = {n: header.index(n) if n in header else next(i for i, h in enumerate(header) if n in h)
                        for n in need}
+                col.update({n: header.index(n) for n in ("PART", "TRIAL") if n in header})
                 print(f"{path.name}/{ws.title}: columns {header}", file=sys.stderr)
                 return col, it
         raise SystemExit(f"{path.name}: no sheet has columns {need}")
@@ -615,11 +617,14 @@ def prep_geco(root: Path) -> Path:
     col, it = sheet_rows(root / "MonolingualReadingData.xlsx", ("PP_NR", "WORD_ID", "WORD_TOTAL_READING_TIME"))
     total: dict[str, float] = {}
     readers: dict[str, set] = {}
+    screen: dict[str, str] = {}  # the trial (one screen of text) a word was shown on
     for r in it:
         wid = r[col["WORD_ID"]]
         if wid is None:
             continue
         wid = str(wid).strip()
+        if wid not in screen and "TRIAL" in col:
+            screen[wid] = f"{r[col['PART']] if 'PART' in col else ''}-{r[col['TRIAL']]}"
         v = r[col["WORD_TOTAL_READING_TIME"]]
         try:
             ms = float(v)
@@ -632,7 +637,7 @@ def prep_geco(root: Path) -> Path:
         if wid not in total:
             continue
         sid = sentence_of[wid]
-        s = sentences.setdefault(sid, {"corpus": "geco", "id": sid, "group": sid.split("-")[0],
+        s = sentences.setdefault(sid, {"corpus": "geco", "id": sid, "group": screen.get(wid, sid.split("-")[0]),
                                        "words": [], "rt": [], "readers": 99})
         s["words"].append(word_of[wid])
         s["rt"].append(total[wid] / len(readers[wid]))

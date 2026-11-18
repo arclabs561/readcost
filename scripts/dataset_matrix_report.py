@@ -281,6 +281,15 @@ def revision_dataset(name: str, rows: list[dict], resamples: int) -> tuple[list[
         table.append({"dataset": name, "family": "revision", "outcome": "removed", "measure": pname,
                       "primary": pname.startswith("weighted"), "direction": 0, "n": int(has.sum()),
                       "with": int(t.sum()), "r": a, "lo": aci[0], "hi": aci[1], "raw_r": d})
+    # The other direction: an edit can also add findings to a clean text.
+    bpts = np.array([_pts(r["before"]) for r in rows])
+    apts = np.array([_pts(r["after"]) for r in rows])
+    clean = bpts == 0
+    if clean.sum() and target[clean].sum() and (1 - target[clean]).sum():
+        added_t = float((apts[clean & (target == 1)] > 0).mean())
+        added_o = float((apts[clean & (target == 0)] > 0).mean())
+        lines += ["", f"Pairs with no finding before the edit that have one after it: target {100 * added_t:.0f}% "
+                  f"of {int(target[clean].sum())}, others {100 * added_o:.0f}% of {int((1 - target[clean]).sum())}."]
     # Net change in weighted findings per 100 words over all pairs.
     delta = np.array([_num(r["after"]["points_per100"]) - _num(r["before"]["points_per100"]) for r in rows])
     ok = np.isfinite(delta)
