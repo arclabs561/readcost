@@ -32,7 +32,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from readcost import Analyzer, Config, report
 
 ROUNDS = 6
-MODELS = ["anthropic/claude-opus-5.5", "openai/gpt-6.1-terra-pro", "google/gemini-4-argon",
+# The four rewriters in docs/evaluation.md ("Agents editing in a loop"); add
+# others with --models, such as openai/gpt-6.1-terra-pro, which that run skipped.
+MODELS = ["anthropic/claude-opus-5.5", "google/gemini-4-argon",
           "deepseek/deepseek-v4.1-flash", "mistralai/mistral-large-4-0"]
 JUDGE = "moonshotai/kimi-k3.1-pro"
 STYLES = ("holds", "plain")
@@ -182,6 +184,8 @@ def summarize(rows: list[dict]) -> list[dict]:
         rs = [r for r in rows if r["model"] == model and r["style"] == style]
         first, last = [r["rounds"][0] for r in rs], [r["rounds"][-1] for r in rs]
         converged = [r for r in rs if not r["rounds"][-1]["findings"]]
+        # A fixed point: the last rewrite returned the text it was given.
+        fixed = [r for r in rs if len(r["rounds"]) > 1 and r["rounds"][-1]["text"] == r["rounds"][-2]["text"]]
 
         def ratio(key):
             vals = [b[key] / a[key] for a, b in zip(first, last) if a.get(key) and b.get(key) is not None]
@@ -190,6 +194,7 @@ def summarize(rows: list[dict]) -> list[dict]:
         out.append({
             "model": model, "style": style, "loops": len(rs),
             "converged": len(converged),
+            "fixed_points": len(fixed),
             "median_rounds_to_converge": statistics.median([len(r["rounds"]) - 1 for r in converged]) if converged else None,
             "findings_first_median": statistics.median(len(a["findings"]) for a in first),
             "findings_last_median": statistics.median(len(b["findings"]) for b in last),

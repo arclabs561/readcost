@@ -1707,8 +1707,9 @@ rewrites introduce 0.1 to 0.4 new findings per loop on average, and old
 findings rarely come back. The judge finds a lost or changed fact in 5 to 10% of loops,
 about as often with either wording. The hedged wording changes behaviour
 mainly for Claude Opus 5.5, which leaves findings it judges wrong: it stops
-short of zero findings in 14 of 40 loops instead of 3, without losing more
-facts.
+short of zero findings in 14 of 40 loops instead of 3. It lost or changed
+facts in 4 loops with that wording and 2 with the plain one, too few to tell
+apart.
 
 The loops that never end are of two kinds. A fixed point: the model judges
 the findings do not hold and returns the paragraph unchanged, round after
@@ -1723,6 +1724,20 @@ judge, not to chase.
 Each loop was judged once by one model; the fact counts are small and only
 indicative. The paragraphs had two or more findings to start with, so
 these loops are short; a longer document could take more rounds.
+
+What this measures and what it does not:
+
+- Every outcome is a proxy. Findings come from readcost, reading time from
+  readcost's own model, and lost facts from one model judge. No person read
+  the texts, so "converged" means the models removed the flagged
+  constructions, not that the paragraphs became easier to read.
+- The loop leaves out the step that docs/agents.md prescribes after each
+  edit, `readcost compare HEAD:<file> <file> --fail-on worse`. That check
+  fails on any rise in total predicted reading time. The median total rose
+  in every row of the table, so it would have rejected at least half of
+  these final rewrites. The two pieces of advice conflict until one changes.
+- The loops, the paragraphs and the judge's answers stay outside the
+  repository, so the table cannot be recomputed from it.
 
 ## Not yet evaluated
 

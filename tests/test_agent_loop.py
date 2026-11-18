@@ -47,3 +47,14 @@ def test_plain_feedback_drops_the_precision_note_and_the_hedge():
     plain, holds = m.feedback(r, "plain"), m.feedback(r, "holds")
     assert "raters accepted" in holds and "raters accepted" not in plain
     assert "where the finding holds" not in plain and "Rewrite these sentences" in plain
+
+
+def test_summary_counts_a_model_that_returns_the_text_unchanged_as_a_fixed_point():
+    m = _script()
+    analyzer = Analyzer(Config())
+    stuck = m.loop(analyzer, DENSE, lambda t, fb: t, "holds", rounds=3)
+    clean = m.loop(analyzer, DENSE, lambda t, fb: PLAIN, "holds", rounds=3)
+    rows = [{"model": "x", "style": "holds", "rounds": t, "churn": m.churn(t), "judge": None}
+            for t in (stuck, clean)]
+    (row,) = m.summarize(rows)
+    assert row["loops"] == 2 and row["converged"] == 1 and row["fixed_points"] == 1
