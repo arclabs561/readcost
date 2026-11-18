@@ -7,6 +7,8 @@ configuration.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-18
+
 ### Added
 
 - `verify_model` (opt-in): a small ONNX dependency parser
@@ -154,6 +156,8 @@ configuration.
 
 ### Fixed
 
+- `readcost explain` told users to turn an opt-in rule on with `--enable`,
+  the older spelling; it now names `--info` and the `[readcost.rules]` table.
 - A finding in a Python docstring after a line that ends in a backslash was
   reported one line too high.
 - A finding's line is now counted with the line ends editors use (`\n`,
@@ -263,5 +267,6 @@ First release on PyPI (`pip install readcost`, or `uvx readcost`).
 
 Not published. The first tagged state of the repository.
 
-[Unreleased]: https://github.com/arclabs561/readcost/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/arclabs561/readcost/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/arclabs561/readcost/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/arclabs561/readcost/releases/tag/v0.2.0

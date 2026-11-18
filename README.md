@@ -78,9 +78,8 @@ uvx readcost check README.md    # run without installing
 uv tool install readcost        # or install it; pip install readcost also works
 ```
 
-This README describes the main branch, and the release on PyPI can lag it.
-PyPI has 0.2.0, which does not have `style`, `compare`, `corpus` or rule
-levels; until 0.3 is out, run main with
+This README describes the main branch, which can be ahead of the release on
+PyPI; run main with
 `uvx --from git+https://github.com/arclabs561/readcost readcost`. readcost is
 experimental: before 1.0, output and configuration can change between minor
 versions.
