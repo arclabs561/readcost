@@ -62,7 +62,8 @@ FEATURES: dict[str, Feature] = {f.id: f for f in [
         "Readers must work out how the nouns group before they can read on, "
         "and the grouping is often ambiguous (Squad Helps Dog Bite Victim).",
         "Keep at most two nouns together. Unpack the rest with a preposition "
-        "or a relative clause.",
+        "or a relative clause, if the result reads naturally; leave an "
+        "established term as it is.",
         "forcing source segment rebuilds",
         "forcing each segment to be rebuilt from its source",
     ),

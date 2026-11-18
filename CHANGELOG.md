@@ -84,6 +84,15 @@ configuration.
   `commit_block_cost_index` now warn and are ignored. They were set from the
   evaluation corpus; change a rule's level instead. `advise_cost_index`,
   `block_cost_index` and `advise_severity` stay.
+- The stacked-nouns advice is conditional: unpack only if the result reads
+  naturally, and leave an established term alone. README "Limits" says that
+  all labels come from model raters, that the supporting studies used
+  constructed sentences, and that no rewrite has been tested on readers.
+- docs/agents.md keeps `readcost compare` as information; `--fail-on worse`
+  is for rewrites that should not grow, and predicted reading time is not a
+  target. `scripts/eval_onestop_pairs.py` tests whether fewer findings go
+  with faster reading on OneStop's paired paragraphs (not yet run on the
+  data).
 
 ### Fixed
 

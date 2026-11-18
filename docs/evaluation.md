@@ -1731,11 +1731,13 @@ What this measures and what it does not:
   readcost's own model, and lost facts from one model judge. No person read
   the texts, so "converged" means the models removed the flagged
   constructions, not that the paragraphs became easier to read.
-- The loop leaves out the step that docs/agents.md prescribes after each
-  edit, `readcost compare HEAD:<file> <file> --fail-on worse`. That check
-  fails on any rise in total predicted reading time. The median total rose
-  in every row of the table, so it would have rejected at least half of
-  these final rewrites. The two pieces of advice conflict until one changes.
+- The loop leaves out `readcost compare HEAD:<file> <file> --fail-on worse`,
+  which docs/agents.md prescribed after each edit when this was run. That
+  check fails on any rise in total predicted reading time. The median total
+  rose in every row of the table, so it would have rejected at least half of
+  these final rewrites. docs/agents.md now keeps the comparison as
+  information and reserves `--fail-on worse` for rewrites that should not
+  grow.
 - The loops, the paragraphs and the judge's answers stay outside the
   repository, so the table cannot be recomputed from it.
 
