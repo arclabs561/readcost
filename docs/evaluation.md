@@ -1825,6 +1825,195 @@ word. Surprisal is not in the model, so even a positive result would have
 been an upper bound. The simplifications are mostly paraphrase (Gruteke
 Klein et al. 2026), so they may change these constructions too little to
 test them.
+## Human reading times, gold parses and human ratings
+
+No person has labelled a readcost finding. This section uses data that
+people already produced for other purposes: reading times, hand-corrected
+parses and ratings of sentences. None of it is a label of a finding, so each
+test answers a narrower question than "is this finding right". readcost
+`190e40c`, default rules and parser, each sentence checked alone. Measured
+2026-11-18. The data is not in this repository; each script's docstring gives
+the source, the licence and the command.
+
+### Natural Stories: reading time
+
+Natural Stories (Futrell et al. 2021, CC BY-NC-SA 4.0) has ten stories of
+about 1,000 words, edited to contain rare constructions. 180 readers left
+848,875 word-by-word reading times after the corpus's own exclusions. This
+reruns the version 0.1 test with the current rules, on the corpus as
+realigned by one word on 12 May 2025.
+`scripts/eval_naturalstories_rt.py` asks whether findings predict reading
+time beyond word length, word frequency, GPT-3 surprisal (shipped with the
+corpus) and position. readcost flags 40 of 493 sentences (8%).
+
+Sentences: mean reading time per word (338 ms, SD 26) against log length,
+mean word length, mean frequency, mean surprisal, place in the story and the
+story. The controls explain 70% of the variance. Interval: bootstrap over
+sentences.
+
+| Term added | Sentences flagged | ms per word | 95% CI | In SD |
+| --- | --- | --- | --- | --- |
+| any finding | 40 | -2.6 | -6.6 to +1.3 | -0.10 |
+| inline-list | 14 | -2.6 | -9.0 to +4.2 | -0.10 |
+| reduced-object-relative | 10 | +4.0 | -4.8 to +12.1 | +0.15 |
+| inanimate-subject | 9 | -5.9 | -11.6 to -0.8 | -0.23 |
+| long-dependency | 6 | +2.9 | -13.1 to +19.4 | +0.11 |
+| stacked-nouns | 5 | -10.4 | -20.0 to -1.2 | -0.40 |
+
+Words: log reading time of each word against its own and the previous
+word's length, frequency and surprisal, and its position. The term added is
+whether the word lies inside a finding's span. "By item" fits each word's
+mean over readers, with a bootstrap over sentences. "By reader" fits each
+reader alone and averages the coefficient, with a bootstrap over readers.
+
+| Span | Words | By item | 95% CI | By reader | 95% CI |
+| --- | --- | --- | --- | --- | --- |
+| any finding | 438 | +1.1% | -0.8 to +3.0 | +1.1% | +0.4 to +1.8 |
+| any word of a flagged sentence | 1,109 | +0.6% | -0.8 to +1.9 | +0.5% | -0.0 to +1.1 |
+| inline-list | 227 | +0.8% | -1.6 to +3.7 | +1.3% | +0.2 to +2.3 |
+| long-dependency | 103 | +0.9% | -4.0 to +6.3 | +0.7% | -0.6 to +2.0 |
+| reduced-object-relative | 54 | +2.0% | -2.8 to +6.5 | +1.9% | +0.5 to +3.2 |
+| inanimate-subject | 39 | +2.0% | -1.7 to +4.1 | +2.2% | +0.8 to +3.5 |
+| stacked-nouns | 15 | -1.1% | -5.8 to +2.9 | +0.7% | -1.8 to +3.3 |
+
+Flagged sentences are not read more slowly per word. Words inside a finding
+are read about 1% (4 ms) more slowly than the controls predict. That is
+reliable across readers and not across sentences: the by-item interval
+includes zero, so the result may belong to these 40 sentences. For
+comparison, one more letter adds 0.4% and one more bit of surprisal 0.2%.
+The two negative sentence-level rows rest on 5 and 9 sentences and are not
+matched at the word level; treat them as noise. The test has little power
+per rule, and self-paced reading cannot show rereading, where object
+relatives cost most (Timkey et al. 2026). The stories are fiction, not
+technical prose.
+
+### UD treebanks: findings against hand-corrected parses
+
+`scripts/eval_gold_treebank.py` checks the sentences of two Universal
+Dependencies treebanks and compares three rules with the annotators' trees:
+EWT (web text, 16,622 sentences, 225,053 words, CC BY-SA 4.0) and GUM (15
+genres, 14,353 sentences, 222,235 words, annotations CC BY-NC-SA 4.0). The
+default parser was trained on neither. "Is the construction" compares a
+finding with a construction defined on the gold tree alone: a compound of
+three or more nouns; a clause that EWT marks as a reduced object relative
+(`Cxn=rc-red-obj`); a subject or object arc of nine or more words. "Rule on
+gold tree" converts the gold tree to the parser's label scheme, runs the
+same detector on it and compares the two sets of findings, so it isolates
+the parser. The conversion is approximate.
+
+| Rule | Treebank | Findings | Is the construction | 95% CI | Agrees with rule on gold tree | Rule on gold tree, found with the parser |
+| --- | --- | --- | --- | --- | --- | --- |
+| stacked-nouns | EWT | 308 | 84% | 79 to 87 | 79% | 242 of 371 (65%) |
+| stacked-nouns | GUM | 236 | 81% | 76 to 86 | 81% | 190 of 277 (69%) |
+| reduced-object-relative | EWT | 52 | 60% | 46 to 72 | 69% | 36 of 117 (31%) |
+| reduced-object-relative | GUM | 46 | - | - | 57% | 26 of 85 (31%) |
+| long-dependency | EWT | 127 | 67% | 58 to 75 | 58% | 74 of 123 (60%) |
+| long-dependency | GUM | 171 | 61% | 53 to 68 | 48% | 82 of 135 (61%) |
+
+Between a sixth and two fifths of findings name a construction that the
+gold parse does not have. For stacked-nouns, 71 of the 94 wrong findings
+cover a word that the annotators did not tag as a noun. For
+reduced-object-relative on EWT, 17 of the 21 wrong findings are not relative
+clauses at all; on GUM, which has no clause types, 27 of 46 findings sit on
+a gold relative clause. For long-dependency, a third of the findings report
+a long subject or object arc that the gold tree does not contain.
+
+The parser also misses constructions. With the gold tree the same rules
+would report about a fifth more stacked-nouns findings (371 against 308 on
+EWT) and about twice as many reduced object relatives (117 against 52), but
+no more long dependencies (123 against 127). Against the gold
+constructions that each rule means to report, recall is 46% (EWT) and 55%
+(GUM) for noun compounds that are not names or hyphenated, 42% for reduced
+object relatives with a noun subject (31 of 73), and 70% and 64% for
+sentences with a subject or object arc of 15 or more words.
+
+On GUM's academic, textbook and how-to documents (2,517 sentences) the
+figures are close: 80% of 65 stacked-nouns findings and 73% of 48
+long-dependency findings are the construction. This measures whether a
+finding names something real. It does not measure whether the finding is
+worth acting on, which is the larger part of the 23% in
+[Precision of the sample](#precision-of-the-sample).
+
+### Simplifications rated by people
+
+Five sets pair an original sentence with a simplification that people
+rated. `scripts/eval_simplicity_ratings.py` correlates the mean rating with
+the findings in the simplification, holding its length, mean word length
+and mean word frequency constant (partial Spearman's rho). A negative rho
+means that more findings go with a lower rating. Intervals are bootstraps
+over original sentences.
+
+| Set | Pairs | Rated | Findings per 100 words, original to simplified | Partial rho, findings | 95% CI |
+| --- | --- | --- | --- | --- | --- |
+| ASSET human ratings | 100 | simplicity | 0.64 to 0.79 | -0.08 | -0.27 to +0.10 |
+| Simplicity-DA | 600 | simplicity | 0.56 to 0.58 | -0.01 | -0.08 to +0.06 |
+| Simplicity-DA | 600 | fluency | | +0.01 | -0.08 to +0.09 |
+| SimpEval past | 2,199 | overall quality | 0.49 to 0.47 | -0.05 | -0.10 to -0.01 |
+| SimpEval 2022 | 360 | overall quality | 0.43 to 0.42 | +0.07 | -0.04 to +0.17 |
+| Wu and Arase 2026 | 6,163 | simplicity | 0.66 to 0.66 | -0.00 | -0.03 to +0.02 |
+| Wu and Arase 2026 | 6,163 | fluency | | +0.02 | -0.01 to +0.04 |
+
+Sources: ASSET (Alva-Manchego et al. 2020, CC BY-NC 4.0) and Simplicity-DA
+(Alva-Manchego, Scarton and Specia 2021, CC BY-NC-SA 4.0) rate system
+outputs on Wikipedia sentences, 15 raters each. SimpEval (Maddela et al.
+2023) rates 22 systems, and in the 2022 set two people and GPT-3.5. Wu and
+Arase 2026 rate GPT-4, Qwen2.5-72B, Llama-3.2-3B and Control-T5. The last
+two repositories state no licence.
+
+Findings do not track the ratings. Six of seven intervals include zero, and
+the seventh is a rho of -0.05. Between 88% and 94% of pairs have the same
+number of findings on both sides, so the measure hardly varies. Where the
+original had a finding, a simplification that removed every finding was
+rated 0.19 SD simpler in Wu and Arase (420 of 911 pairs, interval +0.01 to
++0.10 on a three-point scale), 0.65 SD less simple in Simplicity-DA (21 of
+62, -0.73 to -0.02 in z units), and no differently in the two SimpEval
+sets. Why the two differ was not examined. In SimpEval 2022 the two people's simplifications have 0.37 and
+0.43 findings per 100 words and GPT-3.5's have 0.35 (few-shot) and 0.62
+(zero-shot); sixty outputs per system is too few to rank them. These
+ratings concern single rewritten sentences, mostly from Wikipedia.
+
+### Biomedical abstracts rated sentence by sentence
+
+PLABA-EVAL (Bian, Yoon and Komachi, CC BY 4.0) is the only set here with
+expert technical prose: 39 biomedical abstracts and their plain-language
+versions, 609 sentences. Three lay readers per version rated every
+sentence in context for processing ease and for perceived understanding (1
+to 5). `scripts/eval_rated_sentences.py`; intervals are bootstraps over
+abstracts.
+
+| Measure | rho with processing ease | rho with perceived understanding |
+| --- | --- | --- |
+| words | -0.41 | -0.32 |
+| mean word length | -0.26 | -0.25 |
+| mean word frequency | +0.34 | +0.41 |
+| any finding (118 sentences, 19%) | -0.15 | -0.10 |
+| any finding, the three above held | +0.02 (-0.05 to +0.09) | +0.05 (-0.01 to +0.11) |
+
+Flagged sentences are rated harder, but only because they are longer and
+use rarer words. With those held, and the version, a flagged sentence is
+rated +0.02 points easier to process (-0.13 to +0.16) and +0.09 better
+understood (-0.06 to +0.24). Per rule: stacked-nouns (71 sentences) -0.03
+and +0.04; long-dependency (28) -0.03 and -0.18; inline-list (20) +0.12 and
++0.31. Every interval but the last includes zero. The plain-language
+versions are rated 0.55 and 0.75 points easier and have slightly more findings per
+100 words (1.15 against 1.05). The readers are lay people and the ratings
+are self-reports, so this does not show what an expert reader pays.
+
+### What these show together
+
+- When a finding is wrong about the parse, the gold treebanks say how
+  often: 16 to 19% for stacked-nouns, about 40% for reduced-object-relative
+  and 33 to 39% for long-dependency. A better parser can remove at most
+  that share of false findings, and would add stacked-nouns and
+  reduced-object-relative findings that the default parser misses.
+- Nothing here shows that findings in ordinary prose track what readers
+  experience once length and word frequency are known. The reading-time
+  effect is about 1% inside a span and does not hold across sentences; the
+  ratings show none.
+- The tests are weak in the same way: the rules fire on 5 to 19% of
+  sentences, so most pairs and sentences carry no signal. None of the data
+  is technical documentation, and none measures rereading or comprehension
+  per sentence.
 
 ## Not yet evaluated
 
@@ -1838,9 +2027,12 @@ simplifications and PEPs. Not covered:
   above).
 - Human labels of findings: every finding label here comes from model raters,
   which agree only modestly (Fleiss' kappa 0.23 over ten, 0.40 over eight).
-  The human data above rates sentences or rewrites them, not readcost's
-  findings. No study has checked that readers understand a rewrite faster or
-  better.
+  The human data above gives reading times, parses and ratings of
+  sentences, not labels of readcost's findings. No study has checked that
+  readers understand a rewrite faster or better.
+- Reading-time data that this machine could not fetch: OneStop Eye
+  Movements (`scripts/eval_onestop_pairs.py`), and EMTeC, eye movements on
+  model-written text, both on OSF.
 - Issue threads (pull request descriptions and review comments are above).
 - API references, docstrings at scale, man pages, CLI help and error messages.
 - Changelogs, release notes, ADRs, and design documents other than PEPs.
@@ -1869,13 +2061,30 @@ simplifications and PEPs. Not covered:
 
 ## References
 
+- Alva-Manchego, Scarton and Specia 2021. The (un)suitability of automatic
+  evaluation metrics for text simplification. Computational Linguistics
+  47(4). Simplicity-DA.
+- Bian, Yoon and Komachi. PLABA-EVAL: a multi-dimensional, in-context
+  sentence readability dataset for medical text.
+  https://github.com/SDS-NLP/PLABA-EVAL.
+- Futrell, Gibson, Tily, Blank, Vishnevetsky, Piantadosi and Fedorenko 2021.
+  The Natural Stories corpus. Language Resources and Evaluation 55(1).
 - Gordon, Hendrick and Johnson 2001. Memory interference during language
   processing. Journal of Experimental Psychology: Learning, Memory, and
   Cognition 27(6), doi 10.1037/0278-7393.27.6.1411.
 - Liu, Li, Xu, Wang, Yuan and Yang 2025. Evaluating text generation quality
   using spectral distances of surprisal. Findings of EMNLP 2025.
+- Maddela, Dou, Heineman and Xu 2023. LENS: a learnable evaluation metric
+  for text simplification. ACL. SimpEval.
 - Meister, Pimentel, Haller, Jäger, Cotterell and Levy 2021. Revisiting the
   uniform information density hypothesis. EMNLP; arXiv 2109.11635.
+
+- Silveira, Dozat, de Marneffe, Bowman, Connor, Bauer and Manning 2014. A
+  gold standard dependency corpus for English. LREC. UD English EWT.
+- Wu and Arase 2026. An in-depth evaluation of large language models in
+  sentence simplification with error-based human assessment. ACM TIST 17(4).
+- Zeldes 2017. The GUM corpus: creating multilayer resources in the
+  classroom. Language Resources and Evaluation 51(3). UD English GUM.
 
 Notes on these and the other papers cited here are in
 [docs/papers](papers/).

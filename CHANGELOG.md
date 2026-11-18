@@ -14,6 +14,12 @@ configuration.
   phrases, or no clause) and reports a gap of prepositional phrases at info.
   The default, `"words"`, is unchanged. `scripts/eval_gap_content.py` splits
   the labelled findings by gap class.
+- Evaluations against existing human data, with no new labels:
+  `scripts/eval_naturalstories_rt.py` (self-paced reading times),
+  `scripts/eval_gold_treebank.py` (UD English EWT and GUM gold parses),
+  `scripts/eval_simplicity_ratings.py` (five sets of rated simplifications)
+  and `scripts/eval_rated_sentences.py` (PLABA-EVAL). Results, including
+  the nulls, are in docs/evaluation.md.
 
 - `readcost style FILES --against NAME` compares rule rates, sentence length and
   predicted reading time with a reference; built-in references for the Rust

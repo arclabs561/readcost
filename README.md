@@ -634,14 +634,22 @@ setup for each editor.
   cost to readers.
 - Most studies that tie these constructions to harder reading used
   constructed sentences, one at a time. Whether fewer findings in ordinary prose
-  goes with faster reading has not been shown. An early test (version 0.1,
-  not rerun since) on Natural Stories self-paced reading found that finding
-  counts per sentence did not predict reading time once length, frequency
-  and surprisal were in the model. On OneStop's 162 pairs of original and
-  simplified paragraphs, the change in findings did not predict the change
-  in observed reading time once word length and frequency were in the model
-  (+1.3 ms per word per finding point per 100 words, 95% CI -7.1 to +9.5;
-  docs/evaluation.md, "Paired paragraphs").
+  goes with faster reading has not been shown. On Natural Stories
+  self-paced reading, flagged sentences were not read more slowly once
+  length, frequency and surprisal were in the model, and words inside a
+  finding were read about 1% more slowly, an effect that did not hold
+  across sentences. Human ratings of simplified sentences and of sentences
+  in biomedical abstracts did not track findings either
+  ([docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md#human-reading-times-gold-parses-and-human-ratings)).
+  On OneStop's 162 pairs of original and simplified paragraphs, the change
+  in findings did not predict the change in observed reading time once word
+  length and frequency were in the model (+1.3 ms per word per finding point
+  per 100 words, 95% CI -7.1 to +9.5; docs/evaluation.md, "Paired
+  paragraphs").
+- Against hand-corrected parses of web and mixed-genre text, 81 to 84% of
+  stacked-nouns findings, 60% of reduced-object-relative findings and 61 to
+  67% of long-dependency findings name a construction that is there. The
+  rest are the parser's errors.
 - No suggested rewrite has been tested on readers. In one study, splitting
   ordinary noun phrases made sentences look easier and understood slightly
   worse on average (Leroy et al. 2016); it did not test technical stacks.
