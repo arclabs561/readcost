@@ -1,8 +1,6 @@
 """Repetition across texts: templates, CR-POS and openers."""
 
-import subprocess
-import sys
-
+from cliproc import run_cli
 from readcost import Analyzer, Config
 from readcost.corpus import analyze, split_records
 
@@ -32,10 +30,8 @@ def test_split_records_on_separator_lines():
 
 def test_cli_needs_two_texts(tmp_path):
     (tmp_path / "a.md").write_text(FRAMED[0])
-    run = subprocess.run([sys.executable, "-m", "readcost", "corpus", "a.md"], cwd=tmp_path,
-                         capture_output=True, text=True, check=False)
+    run = run_cli(["corpus", "a.md"], cwd=tmp_path)
     assert run.returncode == 2 and "two or more texts" in run.stderr
     (tmp_path / "many.md").write_text("\n---\n".join(FRAMED))
-    run = subprocess.run([sys.executable, "-m", "readcost", "corpus", "--split", "many.md"], cwd=tmp_path,
-                         capture_output=True, text=True, check=False)
+    run = run_cli(["corpus", "--split", "many.md"], cwd=tmp_path)
     assert run.returncode == 0 and run.stdout.startswith("4 texts")

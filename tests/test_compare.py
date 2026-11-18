@@ -2,7 +2,8 @@
 
 import json
 import subprocess
-import sys
+
+from cliproc import run_cli
 
 from readcost import Analyzer, Config, readtime
 
@@ -17,8 +18,7 @@ NEW = ("To measure a store restart, the example reopens a checkpointed store and
 
 
 def run(args, cwd):
-    return subprocess.run([sys.executable, "-m", "readcost", *args], cwd=cwd, capture_output=True,
-                          text=True, check=False)
+    return run_cli(args, cwd=cwd)
 
 
 def files(tmp_path):
