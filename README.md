@@ -668,6 +668,7 @@ setup for each editor.
 
 ```sh
 uv sync && uv run pytest                       # or: pip install -e '.[test]' && python3 -m pytest
+uv run pytest -n auto                          # the same tests on every core, as CI runs them
 uv run readcost check . --fail-on block        # CI runs readcost on its own repo
 uv run --group eval scripts/eval_simplifications.py REF   # scripts without inline metadata
 uv run scripts/fetch_eval_corpus.py ref/eval   # scripts with inline metadata bring their own
@@ -677,6 +678,15 @@ uv run scripts/build_default_profile.py ref/eval   # after fetch_eval_corpus.py
 
 Scripts with inline metadata that import readcost install this checkout, not
 the release on PyPI.
+
+Most command-line tests call `readcost.cli.main` inside the test process and
+share one loaded spaCy model (`tests/cliproc.py`, `tests/conftest.py`); a few
+start a real `python -m readcost`. `READCOST_TEST_SUBPROCESS=1 uv run pytest`
+starts a real process for every one of them, which takes about five times as
+long. `tests/conftest.py` also clears the git identity, the user's git config
+and the `READCOST_*` and `GITHUB_*` variables, so a test gives the same
+result in any shell. CI installs with `uv sync --locked`, so change
+`uv.lock` (`uv lock`) in the same commit as a dependency in `pyproject.toml`.
 
 On every pull request, `scripts/ci_prose.py` also checks the title, the
 description and each commit message (`--format commit`). A commit message

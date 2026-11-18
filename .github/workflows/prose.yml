@@ -26,7 +26,7 @@ jobs:
           fetch-depth: 0   # the commit range and the diff need history
       - uses: ./.github/actions/setup
         with:
-          extras: test
+          sync-args: --no-dev
       # The SHAs go through env, and the title and description are read from
       # the event file, so no text from the pull request reaches the shell.
       - name: Commit messages, pull request text, attribution
@@ -34,7 +34,7 @@ jobs:
           BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python scripts/ci_prose.py --base "$BASE" --head "$HEAD_SHA"
+        run: uv run python scripts/ci_prose.py --base "$BASE" --head "$HEAD_SHA"
       # The repository's own action, as a user would run it: annotations on
       # the prose files that the pull request changes. The CI workflow gates
       # those files; this step only shows where the findings are.
