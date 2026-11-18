@@ -133,6 +133,13 @@ def partial_spearman(x, y, controls) -> float:
     Z1 = np.column_stack([np.ones(len(rx)), Z])
     ex = rx - Z1 @ np.linalg.lstsq(Z1, rx, rcond=None)[0]
     ey = ry - Z1 @ np.linalg.lstsq(Z1, ry, rcond=None)[0]
+    # A fully explained rank vector can leave floating-point noise after the
+    # projection. Correlating that noise would turn an undefined result into
+    # a coefficient, even 1.0 when the two rank vectors are identical.
+    tol = np.finfo(float).eps * max(Z1.shape)
+    if (np.linalg.norm(ex) <= tol * np.linalg.norm(rx)
+            or np.linalg.norm(ey) <= tol * np.linalg.norm(ry)):
+        return float("nan")
     return pearson(ex, ey)
 
 
