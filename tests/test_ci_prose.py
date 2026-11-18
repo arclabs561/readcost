@@ -1,0 +1,125 @@
+"""scripts/ci_prose.py: commit messages, pull request text and AI attribution in CI."""
+
+import importlib.util
+import json
+import subprocess
+from pathlib import Path
+
+import pytest
+
+ROOT = Path(__file__).resolve().parent.parent
+HAS_GIT = subprocess.run(["git", "--version"], capture_output=True).returncode == 0
+CLEAN = "docs: say what the cache stores\n\nThe cache keeps one entry for each term and drops the oldest first.\n"
+SESSION = "https://claude.ai/code/" + "session_0123"  # split so this file holds no whole link
+
+
+def _script():
+    spec = importlib.util.spec_from_file_location("ci_prose", ROOT / "scripts" / "ci_prose.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def _repo(tmp_path, *messages, author="Ada Lovelace <ada@example.com>"):
+    """A repository with one root commit and then one commit per message; returns (base, head)."""
+    name, email = author[:-1].split(" <")
+    env = ["-c", f"user.name={name}", "-c", f"user.email={email}"]
+    run = lambda *a: subprocess.run(["git", *a], cwd=tmp_path, check=True, capture_output=True, text=True)  # noqa: E731
+    run("init", "-q")
+    (tmp_path / "notes.md").write_text("Start.\n")
+    run("add", ".")
+    run(*env, "commit", "-q", "-m", "root")
+    base = run("rev-parse", "HEAD").stdout.strip()
+    for k, msg in enumerate(messages):
+        (tmp_path / "notes.md").write_text(f"Line {k}.\n")
+        run(*env, "commit", "-q", "-am", msg)
+    return base, run("rev-parse", "HEAD").stdout.strip()
+
+
+def _run(mod, tmp_path, base, head, capsys, event=None, extra=()):
+    args = ["--repo", str(tmp_path), "--base", base, "--head", head, *extra]
+    if event is not None:
+        path = tmp_path / "event.json"
+        path.write_text(json.dumps({"pull_request": event}))
+        args += ["--event", str(path)]
+    else:
+        args += ["--event", ""]
+    code = mod.main(args)
+    return code, capsys.readouterr().out
+
+
+pytestmark = pytest.mark.skipif(not HAS_GIT, reason="git missing")
+
+
+def test_clean_commits_and_description_pass(tmp_path, capsys, monkeypatch):
+    monkeypatch.delenv("GITHUB_STEP_SUMMARY", raising=False)
+    base, head = _repo(tmp_path, CLEAN)
+    code, out = _run(_script(), tmp_path, base, head, capsys,
+                     event={"title": "Say what the cache stores", "body": "The cache keeps one entry per term."})
+    assert code == 0
+    assert "| pull request description | pass |" in out and "AI attribution" not in out
+
+
+@pytest.mark.parametrize("trailer", [
+    f"Claude-Session: {SESSION}",
+    "Co-Authored-By: Claude Opus 5.5 <noreply@" + "anthropic.com>",
+    "\U0001f916 Generated with [" + "Claude Code](https://claude.com/claude-code)",
+])
+def test_attribution_in_a_commit_message_fails(tmp_path, capsys, trailer):
+    base, head = _repo(tmp_path, CLEAN + "\n" + trailer + "\n")
+    code, out = _run(_script(), tmp_path, base, head, capsys)
+    assert code == 1 and "::error title=AI attribution::commit" in out
+
+
+def test_an_ai_author_fails(tmp_path, capsys):
+    base, head = _repo(tmp_path, CLEAN, author="Claude <noreply@" + "anthropic.com>")
+    code, out = _run(_script(), tmp_path, base, head, capsys)
+    assert code == 1 and "AI author or committer" in out
+
+
+def test_a_session_link_in_the_description_fails(tmp_path, capsys):
+    base, head = _repo(tmp_path, CLEAN)
+    code, out = _run(_script(), tmp_path, base, head, capsys,
+                     event={"title": "Say what the cache stores", "body": f"Notes.\n\n{SESSION}\n"})
+    assert code == 1 and "pull request: AI attribution" in out
+
+
+def test_naming_a_model_is_not_attribution(tmp_path, capsys):
+    msg = CLEAN + "\nThe loop ran Claude Opus 5.5 and Gemini 4 Argon as rewriters.\n"
+    base, head = _repo(tmp_path, msg)
+    code, _ = _run(_script(), tmp_path, base, head, capsys)
+    assert code == 0
+
+
+def test_dense_description_warns_but_does_not_fail(tmp_path, capsys):
+    base, head = _repo(tmp_path, CLEAN)
+    body = "We tune the shard compaction retry budget by hand. The storage-shrink job runs nightly.\n"
+    code, out = _run(_script(), tmp_path, base, head, capsys, event={"title": "Tune it", "body": body})
+    assert code == 0 and "::warning title=readcost stacked-nouns" in out
+
+
+def test_commit_message_at_the_fail_level_fails(tmp_path, capsys):
+    dense = ("readcost: tune the index shard compaction job\n\nWe tune the shard compaction retry budget "
+             "by hand. The storage-shrink job runs nightly. The cache eviction policy tuning results "
+             "show segment merge cost growth.\n")
+    base, head = _repo(tmp_path, dense)
+    mod = _script()
+    assert _run(mod, tmp_path, base, head, capsys, extra=["--commits-fail-on", "never"])[0] == 0
+    code, out = _run(mod, tmp_path, base, head, capsys, extra=["--commits-fail-on", "advise"])
+    assert code == 1 and "::error title=readcost%3A commit" in out
+
+
+def test_attribution_in_an_added_line_fails_and_merges_are_skipped(tmp_path, capsys):
+    base, _ = _repo(tmp_path, CLEAN)
+    (tmp_path / "notes.md").write_text(f"See {SESSION}\n")
+    subprocess.run(["git", "-c", "user.name=Ada", "-c", "user.email=ada@example.com", "commit", "-q", "-am",
+                    "docs: add a link"], cwd=tmp_path, check=True)
+    head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=tmp_path, capture_output=True, text=True).stdout.strip()
+    code, out = _run(_script(), tmp_path, base, head, capsys)
+    assert code == 1 and "notes.md: AI attribution in an added line" in out
+
+
+def test_unknown_base_checks_only_the_head_commit(tmp_path, capsys):
+    _, head = _repo(tmp_path, CLEAN, "docs: second\n\nA second plain commit message for the test.\n")
+    code, out = _run(_script(), tmp_path, "0" * 40, head, capsys)
+    assert code == 0 and out.count("| commit ") == 1
