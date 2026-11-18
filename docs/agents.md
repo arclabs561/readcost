@@ -39,12 +39,19 @@ status is 1 when the rewrite is predicted to take longer to read in total or
 has more weighted findings (`--fail-on slower` checks time only), 2 when an
 input cannot be read, and 0 otherwise.
 
+`--fail-on worse` is strict: a rewrite that adds any words usually takes
+longer in total, so the check rejects it. In the measured loops
+(docs/evaluation.md, "Agents editing in a loop") it would have rejected at
+least half of the final rewrites. Use it where a rewrite should not grow.
+Elsewhere, read the comparison and judge. Predicted reading time is a rough
+estimate, not a target: do not rewrite to lower it.
+
 ## When to stop
 
 Most findings go after one rewrite. Stop when the text stops changing or the
 same findings come back after a rewrite: what remains is a finding the
 model has judged wrong, or one it cannot fix (docs/evaluation.md, "Agents
-editing in a loop"). Two or three rounds are enough.
+editing in a loop"). Two rounds are enough.
 
 ## Match a house style
 
@@ -64,10 +71,11 @@ Paste into a repository's AGENTS.md or CLAUDE.md:
 
 After editing a README, a file under docs/ or a commit message, run
 `readcost check <file> -o agent`. Rewrite a flagged sentence only where the
-finding holds; keep every fact. Then run
-`readcost compare HEAD:<file> <file> --fail-on worse`; if it fails, the
-rewrite reads slower than the original, so shorten it or keep the original.
-Stop after two or three rounds, or as soon as the same findings come back.
+finding holds and the rewrite reads naturally; keep every fact. Then run
+`readcost compare HEAD:<file> <file>` and reread both versions: if the
+rewrite is much longer or says less, keep the original. Stop after two
+rounds, or as soon as the same findings come back. Do not rewrite to lower
+the predicted reading time.
 Leave code spans, identifiers and quoted text as they are.
 ```
 

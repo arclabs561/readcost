@@ -23,7 +23,8 @@ warn[stacked-nouns]: three or more nouns in a row
   = why: Readers must work out how the nouns group before they can read on, and
          the grouping is often ambiguous (Squad Helps Dog Bite Victim).
   = help: Keep at most two nouns together. Unpack the rest with a preposition or
-          a relative clause.
+          a relative clause, if the result reads naturally; leave an established
+          term as it is.
   = example: 'forcing source segment rebuilds' -> 'forcing each segment to be
              rebuilt from its source'
 
@@ -232,7 +233,8 @@ warn[stacked-nouns]: three or more nouns in a row
    = why: Readers must work out how the nouns group before they can read on, and
           the grouping is often ambiguous (Squad Helps Dog Bite Victim).
    = help: Keep at most two nouns together. Unpack the rest with a preposition
-           or a relative clause.
+           or a relative clause, if the result reads naturally; leave an
+           established term as it is.
    = example: 'forcing source segment rebuilds' -> 'forcing each segment to be
               rebuilt from its source'
 
@@ -621,6 +623,22 @@ setup for each editor.
   theirs were seen, so 23% is an in-sample estimate. `readcost explain RULE`
   shows the count for each rule. See
   [docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md).
+- Every label behind these numbers comes from a model rater. No person has
+  labelled a finding, and agreement among model raters is not a measured
+  cost to readers. Model judges also agree less with people on model-written
+  text (docs/research.md).
+- The studies that tie each construction to harder reading used constructed
+  sentences, mostly one at a time. Whether fewer findings in ordinary prose
+  goes with faster reading has not been shown. An early test (version 0.1,
+  not rerun since) on Natural Stories self-paced reading found that finding
+  counts per sentence did not predict reading time once length, frequency
+  and surprisal were in the model. `scripts/eval_onestop_pairs.py` tests
+  this on OneStop's original and simplified paragraphs; it has not been run
+  on the data yet.
+- No suggested rewrite has been tested on readers. Unpacking a noun stack can
+  make a sentence look easier and be understood worse when the result reads
+  awkwardly (Leroy et al. 2016), so keep a rewrite only if it reads
+  naturally.
 - `hyphen-compound` skips pairs found in 5+ documents of a 2019 FineWeb-Edu
   crawl (ODC-By; see `src/readcost/data/FINEWEB_NOTICE`).
 - The paper's findings are about how often text uses these constructions,

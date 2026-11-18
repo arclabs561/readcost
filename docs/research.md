@@ -124,7 +124,31 @@ index while adding words is reported, not rewarded.
 - `readcost[lm]`: KenLM.
 - Build-time only: WordNet data (nltk or wn), lemminflect.
 
+## What has not been shown
+
+- Two rules have direct support beyond surprisal. In constructed sentences,
+  an object relative clause in the gap costs about 93 ms at the verb against
+  22 ms for a prepositional phrase of the same length (Nusbaumer et al.
+  2026), and object relatives cause more rereading than surprisal predicts
+  (Timkey et al. 2026). `long_dependency_gap = "content"` uses the first.
+- On OneStop, syntactic measures such as embedding depth and integration
+  cost did not predict how much easier simplified paragraphs were to read;
+  word length, frequency and surprisal did (Gruteke Klein et al. 2026).
+  readcost's rules have not had that test; `scripts/eval_onestop_pairs.py`
+  runs it.
+- Splitting noun phrases made health sentences look easier and understood
+  worse when the result read awkwardly (Leroy, Kauchak and Hogue 2016, read
+  in abstract only). The stacked-nouns advice is therefore conditional.
+- Model judges agree less with people on model-written text than on
+  human-written text (Bavaresco et al. 2025). The alternative annotator test
+  (Calderon, Reichart and Dror 2025) says how to check model raters against
+  three or more people on 50 to 100 items; readcost has not run it.
+
 ## Roadmap
+
+0. Human labels on about 100 findings, with the alternative annotator test;
+   the OneStop paired test. Both come before more precision work, because
+   every current number rests on model raters.
 
 1. Markdown extraction on markdown-it-py; line numbers from its block map.
 2. Contexts with per-context defaults; tag-line skipping; absolute counts for
@@ -202,3 +226,17 @@ Reading notes on each paper, with how much of it was read, are in
   code-comment inconsistencies. ICPC.
 - Wu, Bachrach, Cardenas and Schuler 2010. Complexity metrics in an
   incremental right-corner parser. ACL.
+- Bavaresco et al. 2025. LLMs instead of human judges? A large scale
+  empirical study across 20 NLP evaluation tasks. arXiv 2406.18403.
+- Calderon, Reichart and Dror 2025. The alternative annotator test for
+  LLM-as-a-judge. arXiv 2501.10970.
+- Gruteke Klein, Frenkel, Shubi and Berzak 2026. Eye tracking based cognitive
+  evaluation of automatic readability assessment methods. arXiv 2502.11150.
+- Leroy, Kauchak and Hogue 2016. Effects on text simplification: evaluation
+  of splitting up noun phrases. Journal of Health Communication 21(Suppl),
+  doi 10.1080/10810730.2015.1131775.
+- Nusbaumer et al. 2026. StructuralCost: a controlled reading time dataset
+  for modeling human sentence processing difficulty. arXiv 2610.08208.
+- Timkey et al. 2026. Eye movements reveal a dissociation between prediction
+  and structural processing difficulty in language comprehension. PNAS,
+  doi 10.1073/pnas.2532230123.
