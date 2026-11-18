@@ -339,22 +339,34 @@ def test_profile_built_from_a_document_scores_it_at_mean_z_zero(tmp_path):
     assert abs(result.mean_dep_z) < 0.05
 
 
-# ---------------------------------------------------------------- README table
+# ---------------------------------------------------------------- rule examples (docs/rules.md)
 
-def _readme_rows():
+def _rule_example_rows():
     import re
     from pathlib import Path
 
-    readme = Path(__file__).resolve().parent.parent / "README.md"
-    for line in readme.read_text().splitlines():
+    rules = Path(__file__).resolve().parent.parent / "docs" / "rules.md"
+    for line in rules.read_text().splitlines():
         m = re.match(r"\| ([a-z-]+)((?: \([^)]*\))?) \| (.+?) \| .+ \|$", line)
         if m and m.group(1) in FEATURES:  # skips other tables, such as the tool comparison
             yield m.group(1), m.group(2), m.group(3)
 
 
-@pytest.mark.parametrize("feature,note,example", list(_readme_rows()))
-def test_readme_examples_trigger_their_detector(feature, note, example):
-    # The "What it flags" table is the public claim; each example must fire
+def test_rule_examples_table_has_every_rule_in_the_readme():
+    # An empty parametrize list would skip the test below without failing.
+    import re
+    from pathlib import Path
+
+    readme = (Path(__file__).resolve().parent.parent / "README.md").read_text()
+    section = readme.split("## What it flags", 1)[1].split("\n## ", 1)[0]
+    listed = set(re.findall(r"^\| ([a-z][a-z-]+)(?: \([^)]*\))? \|", section, re.MULTILINE))
+    assert len(listed) == 10
+    assert {feature for feature, _, _ in _rule_example_rows()} == listed
+
+
+@pytest.mark.parametrize("feature,note,example", list(_rule_example_rows()))
+def test_rule_examples_trigger_their_detector(feature, note, example):
+    # The examples table in docs/rules.md is the public claim; each example must fire
     # the detector it illustrates under the configuration its note names.
     cfg = Config()
     if "opt-in" in note:

@@ -7,6 +7,8 @@ configuration.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-18
+
 ### Added
 
 - `verify_model` (opt-in): a small ONNX dependency parser
@@ -120,6 +122,12 @@ configuration.
 
 ### Changed
 
+- The README is shorter. Rule examples, verdicts, the gallery and the full
+  list of limits moved to docs/rules.md; reading time and `compare` to
+  docs/reading-time.md; `style`, `corpus` and document measures to
+  docs/style.md; configuration, baselines and output formats to
+  docs/configuration.md; the GitHub Action to docs/hooks.md; development
+  notes to docs/development.md.
 - long-dependency reports a subject, object or attribute far from its verb
   (9+ words in a sentence whose dependencies are long overall, or 15+ words
   anywhere), not the longest arc of any kind. In a blind comparison six model
@@ -131,6 +139,11 @@ configuration.
   `commit_block_cost_index` now warn and are ignored. They were set from the
   evaluation corpus; change a rule's level instead. `advise_cost_index`,
   `block_cost_index` and `advise_severity` stay.
+- readcost describes its rules as constructions that language models overuse,
+  not as constructions that slow readers: on every reading-time and rating
+  dataset tested, flagged sentences were not read more slowly or rated harder
+  once length and word frequency were held. The README opening, the package,
+  Action and CLI descriptions change.
 - The stacked-nouns advice is conditional: unpack only if the result reads
   naturally, and leave an established term alone. README "Limits" says that
   all labels come from model raters, that the supporting studies used
@@ -143,6 +156,8 @@ configuration.
 
 ### Fixed
 
+- `readcost explain` told users to turn an opt-in rule on with `--enable`,
+  the older spelling; it now names `--info` and the `[readcost.rules]` table.
 - A finding in a Python docstring after a line that ends in a backslash was
   reported one line too high.
 - A finding's line is now counted with the line ends editors use (`\n`,
@@ -252,5 +267,6 @@ First release on PyPI (`pip install readcost`, or `uvx readcost`).
 
 Not published. The first tagged state of the repository.
 
-[Unreleased]: https://github.com/arclabs561/readcost/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/arclabs561/readcost/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/arclabs561/readcost/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/arclabs561/readcost/releases/tag/v0.2.0

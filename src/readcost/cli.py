@@ -431,7 +431,7 @@ def _cmd_explain(args) -> int:
         if f is None:
             print(f"unknown feature {fid!r}; known: {', '.join(FEATURES)}", file=sys.stderr)
             return EXIT_USAGE
-        state = "on" if f.default else "off (enable with --enable)"
+        state = "on" if f.default else f"off (turn on with --info {f.id}, or a level in [readcost.rules])"
         print(f"{f.id}: {f.title}  [{f.severity}, {state}, {f.origin}]")
         print(f"  Why: {f.why}")
         print(f"  Fix: {f.fix}")
@@ -623,7 +623,7 @@ def build_parser() -> argparse.ArgumentParser:
     from .extract import FORMATS
     from .report import OUTPUTS
 
-    p = argparse.ArgumentParser(prog="readcost", description="Find prose constructions that slow readers down.")
+    p = argparse.ArgumentParser(prog="readcost", description="Find sentence constructions that language models overuse.")
     p.add_argument("--version", action="store_true", help="print the version and exit")
     sub = p.add_subparsers(dest="cmd")
 

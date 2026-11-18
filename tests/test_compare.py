@@ -7,7 +7,8 @@ from cliproc import run_cli
 
 from readcost import Analyzer, Config, readtime
 
-# The README's own before/after (see "For example, this sentence from a README").
+# The README's own before/after (see "For example, this sentence from a README");
+# docs/reading-time.md shows readcost compare on it.
 OLD = ("For store restart measurement, the example prints first snapshot-query cost\n"
        "with persisted WAND sidecars present versus after deleting those sidecars and\n"
        "forcing source-segment rebuilds.\n")
@@ -72,10 +73,10 @@ def test_hotspots_rank_sentences_by_time_beyond_their_length():
     assert not [h for h in r.hotspots if h["sentence"].startswith("We went")]
 
 
-def test_readme_compare_example_is_current(tmp_path):
+def test_docs_compare_example_is_current(tmp_path):
     from pathlib import Path
 
-    readme = (Path(__file__).resolve().parent.parent / "README.md").read_text()
+    readme = (Path(__file__).resolve().parent.parent / "docs" / "reading-time.md").read_text()
     start = readme.index("$ readcost compare cmp-old.md cmp-new.md\n") + len("$ readcost compare cmp-old.md cmp-new.md\n")
     shown = readme[start:readme.index("```", start)]
     (tmp_path / "cmp-old.md").write_text(OLD)
