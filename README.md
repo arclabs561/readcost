@@ -637,9 +637,11 @@ setup for each editor.
   goes with faster reading has not been shown. An early test (version 0.1,
   not rerun since) on Natural Stories self-paced reading found that finding
   counts per sentence did not predict reading time once length, frequency
-  and surprisal were in the model. `scripts/eval_onestop_pairs.py` tests
-  this on OneStop's original and simplified paragraphs; it has not been run
-  on the data yet.
+  and surprisal were in the model. On OneStop's 162 pairs of original and
+  simplified paragraphs, the change in findings did not predict the change
+  in observed reading time once word length and frequency were in the model
+  (+1.3 ms per word per finding point per 100 words, 95% CI -7.1 to +9.5;
+  docs/evaluation.md, "Paired paragraphs").
 - No suggested rewrite has been tested on readers. In one study, splitting
   ordinary noun phrases made sentences look easier and understood slightly
   worse on average (Leroy et al. 2016); it did not test technical stacks.

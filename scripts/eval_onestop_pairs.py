@@ -42,14 +42,18 @@ def pairs(texts: list[dict]) -> list[tuple[dict, dict]]:
     return [(v[HARD], v[EASY]) for _, v in sorted(by_key.items()) if HARD in v and EASY in v]
 
 
-def measures(analyzer, zipf, unseen: float, t: dict) -> tuple[float, float, float, float]:
-    """Observed ms per word, weighted findings per 100 words, mean word length, mean Zipf frequency."""
+def measures(analyzer, zipf, unseen: float, t: dict) -> tuple[float, float, float, float, dict]:
+    """Observed ms per word, weighted findings per 100 words, mean word length,
+    mean Zipf frequency, and findings per 100 words for each rule."""
     words = [w for w in t["words"] if w]
     result = analyzer.check_text(" ".join(words), "text")
     bare = [w.strip(".,;:!?\"'()[]").lower() for w in words]
     bare = [w for w in bare if w]
+    per_rule: dict[str, float] = {}
+    for f in result.findings:
+        per_rule[f.feature] = per_rule.get(f.feature, 0.0) + 100.0 / max(result.words, 1)
     return (float(np.mean(t["rt"])), 100.0 * result.points / max(result.words, 1),
-            float(np.mean([len(w) for w in bare])), float(np.mean([zipf.get(w, unseen) for w in bare])))
+            float(np.mean([len(w) for w in bare])), float(np.mean([zipf.get(w, unseen) for w in bare])), per_rule)
 
 
 def _ols(X: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, float]:
@@ -105,6 +109,15 @@ def main(argv: list[str]) -> int:
     print(f"with word length and frequency: {r['coef']:+.2f} ms/word "
           f"(95% CI {r['ci'][0]:+.2f} to {r['ci'][1]:+.2f}); "
           f"R2 {r['r2_controls']:.3f} without findings, {r['r2_with_findings']:.3f} with")
+    print("each rule alone, with the same controls (ms/word per finding per 100 words):")
+    for rule in sorted({k for a, e in rows for k in (*a[4], *e[4])}):
+        d_rule = np.array([a[4].get(rule, 0.0) - e[4].get(rule, 0.0) for a, e in rows])
+        if np.count_nonzero(d_rule) < 10:
+            print(f"  {rule}: differs in {np.count_nonzero(d_rule)} pairs; too few to fit")
+            continue
+        rr = fit(d[:, 0], d_rule, d[:, 2], d[:, 3])
+        print(f"  {rule}: {rr['coef']:+.2f} (95% CI {rr['ci'][0]:+.2f} to {rr['ci'][1]:+.2f}); "
+              f"differs in {np.count_nonzero(d_rule)} pairs")
     return 0
 
 

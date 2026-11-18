@@ -91,8 +91,8 @@ configuration.
 - docs/agents.md keeps `readcost compare` as information; `--fail-on worse`
   is for rewrites that should not grow, and predicted reading time is not a
   target. `scripts/eval_onestop_pairs.py` tests whether fewer findings go
-  with faster reading on OneStop's paired paragraphs (not yet run on the
-  data).
+  with faster reading on OneStop's paired paragraphs; the `eval` workflow
+  runs it, and it finds no effect (docs/evaluation.md).
 
 ### Fixed
 
