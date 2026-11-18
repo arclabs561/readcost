@@ -125,6 +125,8 @@ configuration.
   ("four- to sevenfold") as a noun.
 - long-dependency prints `(z = ...)` only when z triggered the finding; a gap
   of 15+ words reported at a low z no longer shows a z that argues against it.
+- stacked-nouns no longer reports a person's name at the start of a
+  sentence ("Guido van Rossum wrote ...").
 - A file that is not valid UTF-8 gets a note, and its undecodable bytes
   become U+FFFD instead of being dropped ("Café" in Latin-1 read as "Caf").
 

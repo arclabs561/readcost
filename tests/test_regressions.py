@@ -519,3 +519,11 @@ def test_file_that_is_not_utf8_keeps_its_bytes_and_gets_a_note(tmp_path):
 ])
 def test_misparsed_verb_path_leaves_verbs_and_terse_notes_alone(text):
     assert not Analyzer(Config()).check_text(text + "\n", "markdown").findings
+
+
+def test_person_name_at_the_start_of_a_sentence_is_not_a_noun_stack():
+    a = Analyzer(Config())
+    assert not a.check_text("Guido van Rossum wrote the first version in 1989.\n", "markdown").findings
+    # A coined stack that starts a sentence is still reported.
+    feats = [f.feature for f in a.check_text("Cache eviction policy tuning takes a week of work.\n", "markdown").findings]
+    assert "stacked-nouns" in feats
