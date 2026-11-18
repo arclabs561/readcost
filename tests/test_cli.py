@@ -9,20 +9,23 @@ DENSE = ("It does not own indexing, segment selection, compaction, or reader vis
          "We tune the shard compaction retry budget by hand.\n")
 
 
-def run(args, stdin=None, cwd=None):
-    return subprocess.run([sys.executable, "-m", "readcost", *args], input=stdin,
-                          capture_output=True, text=True, cwd=cwd)
+from cliproc import run_cli as run
+from cliproc import run_subprocess
+
+# The two tests below start a real `python -m readcost`: they cover the entry
+# point, the exit status the shell sees, and output through real pipes. The
+# other tests call the command line in this process (see cliproc.py).
 
 
 def test_exit_codes(tmp_path):
-    assert run(["check", "-"], DENSE, tmp_path).returncode == 1
+    assert run_subprocess(["check", "-"], DENSE, tmp_path).returncode == 1
     assert run(["check", "--fail-on", "never", "-"], DENSE, tmp_path).returncode == 0
     assert run(["check", "-"], "The index stores one list per term.\n", tmp_path).returncode == 0
-    assert run(["check", str(tmp_path / "missing.md")], cwd=tmp_path).returncode == 2
+    assert run_subprocess(["check", str(tmp_path / "missing.md")], cwd=tmp_path).returncode == 2
 
 
 def test_json_and_sarif_outputs_parse(tmp_path):
-    data = json.loads(run(["check", "-o", "json", "--fail-on", "never", "-"], DENSE, tmp_path).stdout)
+    data = json.loads(run_subprocess(["check", "-o", "json", "--fail-on", "never", "-"], DENSE, tmp_path).stdout)
     assert data[0]["verdict"] == "block" and data[0]["counts"]["stacked-nouns"] >= 1
     sarif = json.loads(run(["check", "-o", "sarif", "--fail-on", "never", "-"], DENSE, tmp_path).stdout)
     assert sarif["version"] == "2.1.0" and sarif["runs"][0]["results"]
@@ -92,9 +95,7 @@ def test_explain_reports_measured_precision_or_says_it_is_unmeasured():
 
     data = json.loads(resources.files("readcost").joinpath("data/rule_precision.json").read_text())
     row = data["rules"]["stacked-nouns"]
-    out = subprocess.run([sys.executable, "-m", "readcost", "explain", "stacked-nouns"],
-                         capture_output=True, text=True, check=True).stdout
+    out = run(["explain", "stacked-nouns"]).stdout
     assert f"Measured: {row['accepted']} of {row['labelled']} labelled findings" in out
-    out = subprocess.run([sys.executable, "-m", "readcost", "explain", "nominalization"],
-                         capture_output=True, text=True, check=True).stdout
+    out = run(["explain", "nominalization"]).stdout
     assert "Measured: too few labelled findings to measure" in out

@@ -10,7 +10,7 @@ downloads each source (PEPs from python/peps at a pinned commit, GitHub files
 at the commit in their URL), extracts sentences the way readcost reads them,
 and writes OUT_DIR/rulebench.jsonl with the text of every item whose hash it
 finds. scripts/rulebench.py reads that file. Items it cannot find are listed
-and left out.
+and left out. OUT_DIR/documents.jsonl holds every sentence of each source.
 """
 
 import hashlib
@@ -109,6 +109,11 @@ def main(out_dir: Path) -> int:
         rows.append(item | {"text": text})
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "rulebench.jsonl").write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows))
+    # Every sentence of each source, for measurements that ask whether a
+    # phrase recurs in its document (scripts/eval_stack_terms.py).
+    (out_dir / "documents.jsonl").write_text("".join(
+        json.dumps({"source": src, "sentences": list(found.values())}, ensure_ascii=False) + "\n"
+        for src, found in cache.items()))
     print(f"{len(rows)} of {len(items)} items -> {out_dir / 'rulebench.jsonl'}")
     for item in missing:
         print(f"not found: {item['rule']} {item['source']} {item['sha256'][:12]}", file=sys.stderr)

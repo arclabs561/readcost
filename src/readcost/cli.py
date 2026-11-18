@@ -494,6 +494,131 @@ def _cmd_lsp(args) -> int:
     return lsp.main()
 
 
+def _cmd_label_export(args) -> int:
+    import json
+
+    from . import labels
+    from .engine import Analyzer
+
+    cfg = _load_config(args)
+    # Every finding is a candidate: the study is about the rules, not this
+    # repository's thresholds or baseline.
+    cfg.min_severity, cfg.baseline = "info", ""
+    results, failed = _collect(args, cfg, Analyzer(cfg))
+    if failed:
+        return EXIT_USAGE
+    findings = [f for r in results for f in r.findings]
+    located = [f for f in findings if f.start is not None]
+    picked = labels.sample(located, args.n, args.seed)
+    if not picked:
+        print("readcost: no findings with offsets to put on a sheet", file=sys.stderr)
+        return EXIT_USAGE
+    sources = {r.path: r.source for r in results}
+    versions = {}
+    for path in {f.path for f in picked}:
+        if args.commit:
+            versions[path] = "git:" + args.commit
+        elif Path(path).is_file():
+            versions[path] = labels.content_version(Path(path).read_bytes())
+        else:  # stdin
+            versions[path] = labels.content_version(sources[path].encode("utf-8"))
+    rows, keys = labels.sheet_rows(picked, sources, versions)
+    sheet = Path(args.output)
+    key = Path(args.key) if args.key else sheet.with_suffix(".key.jsonl")
+    sheet.write_text(labels.dump_sheet(rows, "jsonl" if sheet.suffix == ".jsonl" else "csv"), encoding="utf-8")
+    key.write_text("".join(json.dumps(k, ensure_ascii=False) + "\n" for k in keys), encoding="utf-8")
+    by_rule: dict[str, int] = {}
+    for f in picked:
+        by_rule[f.feature] = by_rule.get(f.feature, 0) + 1
+    print(f"wrote {sheet}: {len(rows)} of {len(located)} findings "
+          f"({', '.join(f'{k} {n}' for k, n in sorted(by_rule.items()))})")
+    print(f"wrote {key}: where each item is; keep it, and do not give it to the raters")
+    if len(located) < len(findings):
+        print(f"left out {len(findings) - len(located)} findings without offsets (text inside JSON)")
+    return EXIT_OK
+
+
+def _read_keys(path: Path) -> list[dict]:
+    import json
+
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+
+
+def _cmd_label_import(args) -> int:
+    from . import labels
+
+    sheet = Path(args.sheet)
+    key = Path(args.key) if args.key else sheet.with_suffix(".key.jsonl")
+    found, problems = labels.read_sheet(sheet.read_text(encoding="utf-8"), _read_keys(key), rater=args.rater,
+                                        rater_kind=args.kind, prompt_version=args.prompt_version, date=args.date)
+    for problem in problems:
+        print(f"readcost: {sheet}: {problem}", file=sys.stderr)
+    with open(args.output, "a", encoding="utf-8") as out:
+        out.write(labels.dumps(found))
+    print(f"added {len(found)} labels by {args.rater} to {args.output}"
+          + (f"; {len(problems)} rows skipped" if problems else ""))
+    return EXIT_OK if found else EXIT_USAGE
+
+
+def _label_files(paths: list[str]) -> list:
+    from . import labels
+
+    return [label for path in paths for label in labels.read(path)]
+
+
+def _cmd_label_agreement(args) -> int:
+    import json
+
+    from . import labels
+
+    found = _label_files(args.files)
+    if args.kind:
+        found = [x for x in found if x.rater_kind == args.kind]
+    report = {
+        "label": labels.agreement(found),
+        "accepted": labels.agreement(found, accepted=True),
+        "present": labels.agreement(found, field="present"),
+    }
+    if args.output == "json":
+        print(json.dumps(report, indent=1))
+        return EXIT_OK
+
+    def num(x) -> str:
+        return "undefined" if x is None else f"{x:.3f}"
+
+    first = report["label"]
+    print(f"{len(first['raters'])} raters, {first['items']} items labelled by all of them"
+          + (f" ({first['items_not_shared']} more by only some)" if first["items_not_shared"] else ""))
+    titles = {"label": "correct / defensible / wrong", "accepted": "correct or defensible / wrong",
+              "present": "construction present"}
+    for name, rep in report.items():
+        if "fleiss" not in rep:
+            print(f"\n{titles[name]}: needs two raters and an item both labelled")
+            continue
+        f = rep["fleiss"]
+        print(f"\n{titles[name]} ({rep['items']} items)")
+        print(f"  Fleiss' kappa {num(f['kappa'])}  (observed agreement {f['observed']:.3f}, chance {f['chance']:.3f})")
+        print("  share of all labels: " + ", ".join(f"{c} {p:.1%}" for c, p in rep["frequencies"].items()))
+        print("  majority vote: " + ", ".join(f"{c} {n}" for c, n in rep["majority"].items()))
+        if name == "label" or len(rep["pairwise"]) <= 3:
+            print("  Cohen's kappa by pair:")
+            for pair, k in rep["pairwise"].items():
+                print(f"    {pair}: {num(k)}")
+    return EXIT_OK
+
+
+def _cmd_label_convert(args) -> int:
+    from . import labels
+
+    sample = labels.legacy_sample(args.sample) if args.sample else None
+    found = [label for path in args.files for label in labels.convert_legacy(path, sample=sample, date=args.date)]
+    labels.write(args.output, found)
+    placed = sum(x.doc is not None for x in found)
+    print(f"wrote {args.output}: {len(found)} labels by {len({x.rater for x in found})} raters; "
+          f"{placed} with a document and rule, none with offsets")
+    return EXIT_OK
+
+
 def build_parser() -> argparse.ArgumentParser:
     from .extract import FORMATS
     from .report import OUTPUTS
@@ -607,6 +732,37 @@ def build_parser() -> argparse.ArgumentParser:
     h.add_argument("event", nargs="?", default="")
     h.add_argument("rest", nargs="*")
     h.set_defaults(func=_cmd_hook)
+
+    lb = sub.add_parser("label", help="sheets for people to label findings, and agreement between raters")
+    lbsub = lb.add_subparsers(dest="label_cmd", required=True)
+    ex = lbsub.add_parser("export", help="write a blind sheet of sampled findings for raters to fill in")
+    inputs(ex)
+    ex.add_argument("-o", "--output", required=True, help="the sheet: .csv, or .jsonl for one JSON object per row")
+    ex.add_argument("--key", help="file that says where each item is (default: the sheet's name with .key.jsonl)")
+    ex.add_argument("-n", type=int, default=150, help="findings to sample, the same number per rule (default: 150)")
+    ex.add_argument("--seed", type=int, default=0, help="seed for the sample and the row order")
+    ex.add_argument("--commit", help="record git:COMMIT as each document's version, not a hash of its bytes")
+    ex.set_defaults(func=_cmd_label_export, lines=None, last=False)
+    im = lbsub.add_parser("import", help="read a filled sheet into a labels file (JSONL, appended to)")
+    im.add_argument("sheet")
+    im.add_argument("--rater", required=True, help="who filled the sheet in")
+    im.add_argument("--kind", choices=("human", "model"), default="human")
+    im.add_argument("--key", help="the key file written by export (default: the sheet's name with .key.jsonl)")
+    im.add_argument("--prompt-version", default="rubric-1", help="the instructions the rater had (default: rubric-1)")
+    im.add_argument("--date", help="ISO date of the labels (default: today)")
+    im.add_argument("-o", "--output", required=True)
+    im.set_defaults(func=_cmd_label_import)
+    ag = lbsub.add_parser("agreement", help="Fleiss' and Cohen's kappa and majority votes for labels files")
+    ag.add_argument("files", nargs="+")
+    ag.add_argument("--kind", choices=("human", "model"), help="only these raters")
+    ag.add_argument("-o", "--output", choices=("text", "json"), default="text")
+    ag.set_defaults(func=_cmd_label_agreement)
+    cv = lbsub.add_parser("convert", help="turn older eval/labels/*.json files into a labels file")
+    cv.add_argument("files", nargs="+")
+    cv.add_argument("--sample", help="sample.jsonl of the evaluation corpus, to fill in document and rule")
+    cv.add_argument("--date", help="ISO date the labels were made")
+    cv.add_argument("-o", "--output", required=True)
+    cv.set_defaults(func=_cmd_label_convert)
 
     ls = sub.add_parser("lsp", help="run a language server on stdin and stdout for editors")
     ls.set_defaults(func=_cmd_lsp)

@@ -1,8 +1,6 @@
 """The PR comment output, the false-positive link, and SARIF help links."""
 
 import json
-import subprocess
-import sys
 
 from readcost import report
 from readcost.config import Config
@@ -17,9 +15,7 @@ DENSE = ("It does not own indexing, segment selection, compaction, or reader vis
 PLAIN = "The index stores one list per term.\n"
 
 
-def run(args, stdin=None, cwd=None):
-    return subprocess.run([sys.executable, "-m", "readcost", *args], input=stdin, check=False,
-                          capture_output=True, text=True, cwd=cwd)
+from cliproc import run_cli as run  # noqa: E402
 
 
 def finding(path="a.md", line=3, severity="warn", message="3 nouns stacked", feature="stacked-nouns"):

@@ -6,7 +6,6 @@ Each test names the defect it pins. They exercise the public entry points
 
 import json
 import subprocess
-import sys
 
 import pytest
 
@@ -22,9 +21,7 @@ PLAIN = "The index stores one list of documents for each term.\n"
 HAS_GIT = subprocess.run(["git", "--version"], capture_output=True).returncode == 0
 
 
-def run_cli(args, stdin=None, cwd=None):
-    return subprocess.run([sys.executable, "-m", "readcost", *args], input=stdin,
-                          capture_output=True, text=True, cwd=cwd)
+from cliproc import run_cli, run_subprocess  # noqa: E402
 
 
 @pytest.mark.parametrize("path", [
@@ -86,8 +83,7 @@ def _repo(tmp_path):
 
 
 def _pre_commit(tmp_path):
-    return subprocess.run([sys.executable, "-m", "readcost", "hook", "git", "pre-commit"],
-                          capture_output=True, text=True, cwd=tmp_path)
+    return run_cli(["hook", "git", "pre-commit"], cwd=tmp_path)
 
 
 @pytest.mark.skipif(not HAS_GIT, reason="git missing")
@@ -426,7 +422,8 @@ def test_parallel_check_matches_the_sequential_check(tmp_path):
     for i in range(PARALLEL_MIN_FILES):
         (tmp_path / f"doc{i:02}.md").write_text(DENSE if i % 2 else PLAIN)
     one = run_cli(["check", "-o", "json", "--fail-on", "never", "-j", "1", "."], cwd=tmp_path)
-    two = run_cli(["check", "-o", "json", "--fail-on", "never", "-j", "2", "."], cwd=tmp_path)
+    # A real process for the pool: its workers start from `python -m readcost`.
+    two = run_subprocess(["check", "-o", "json", "--fail-on", "never", "-j", "2", "."], cwd=tmp_path)
     assert one.returncode == two.returncode == 0
     assert json.loads(one.stdout) == json.loads(two.stdout)
     assert len(json.loads(two.stdout)) == PARALLEL_MIN_FILES
@@ -440,7 +437,7 @@ def test_many_file_arguments_are_checked_in_parallel_in_order(tmp_path):
         (tmp_path / n).write_text(DENSE if i % 2 else PLAIN)
     args = ["check", "-o", "json", "--fail-on", "never"]
     one = run_cli([*args, "-j", "1", *reversed(names)], cwd=tmp_path)
-    two = run_cli([*args, "-j", "2", *reversed(names)], cwd=tmp_path)
+    two = run_subprocess([*args, "-j", "2", *reversed(names)], cwd=tmp_path)
     assert json.loads(one.stdout) == json.loads(two.stdout)
     assert [r["path"] for r in json.loads(two.stdout)] == list(reversed(names))
 
@@ -474,8 +471,7 @@ def test_generic_hook_reads_open_line_ranges_like_the_cli():
 
 
 def test_generic_hook_rejects_a_bad_line_range_with_exit_2():
-    proc = subprocess.run([sys.executable, "-m", "readcost", "hook", "generic"],
-                          input=json.dumps({"text": PLAIN, "lines": "-x"}), capture_output=True, text=True)
+    proc = run_cli(["hook", "generic"], json.dumps({"text": PLAIN, "lines": "-x"}))
     assert proc.returncode == 2
     assert "lines: '-x' is not a line or range" in json.loads(proc.stdout)["error"]
 

@@ -3,7 +3,6 @@
 import json
 import os
 import subprocess
-import sys
 from pathlib import Path
 
 import pytest
@@ -21,9 +20,7 @@ NEW_DENSE = ("The planner rejects the cache eviction policy override flag when t
 HAS_GIT = subprocess.run(["git", "--version"], check=False, capture_output=True).returncode == 0
 
 
-def run(args, stdin=None, cwd=None):
-    return subprocess.run([sys.executable, "-m", "readcost", *args], input=stdin,
-                          check=False, capture_output=True, text=True, cwd=cwd)
+from cliproc import run_cli as run  # noqa: E402
 
 
 def finding(sentence="We tune the shard compaction retry budget by hand.", line=3,
@@ -189,11 +186,11 @@ def test_git_pre_commit_honours_config_baseline(tmp_path):
         'baseline = ".readcost-baseline.json"\n[hooks]\nmode = "block"\n')
     git("add", ".")
     git("commit", "-qm", "init")
-    hook = [sys.executable, "-m", "readcost", "hook", "git", "pre-commit", "README.md"]
-    assert subprocess.run(hook, check=False, capture_output=True, text=True, cwd=tmp_path).returncode == 0
+    hook = ["hook", "git", "pre-commit", "README.md"]
+    assert run(hook, cwd=tmp_path).returncode == 0
     (tmp_path / "README.md").write_text(DENSE + "\n" + NEW_DENSE)
     git("add", "README.md")
-    proc = subprocess.run(hook[:-1], check=False, capture_output=True, text=True, cwd=tmp_path)
+    proc = run(hook[:-1], cwd=tmp_path)
     assert proc.returncode == 1 and "README.md:3:" in proc.stderr and "README.md:1:" not in proc.stderr
 
 
@@ -202,11 +199,9 @@ def test_claude_code_post_tool_use_honours_config_baseline(tmp_path):
     (tmp_path / "readcost.toml").write_text('baseline = ".readcost-baseline.json"\n')
     payload = {"tool_name": "Write", "cwd": str(tmp_path),
                "tool_input": {"file_path": str(tmp_path / "README.md"), "content": DENSE}}
-    proc = subprocess.run([sys.executable, "-m", "readcost", "hook", "claude-code", "post-tool-use"],
-                          input=json.dumps(payload), check=False, capture_output=True, text=True, cwd=tmp_path,
-                          env={**os.environ, "READCOST_HOOK_DEBUG": "1"})
+    proc = run(["hook", "claude-code", "post-tool-use"], json.dumps(payload), tmp_path,
+               {**os.environ, "READCOST_HOOK_DEBUG": "1"})
     assert proc.returncode == 0 and proc.stdout == "", proc.stdout + proc.stderr
     (tmp_path / "README.md").write_text(DENSE + "\n" + NEW_DENSE)
-    proc = subprocess.run([sys.executable, "-m", "readcost", "hook", "claude-code", "post-tool-use"],
-                          input=json.dumps(payload), check=False, capture_output=True, text=True, cwd=tmp_path)
+    proc = run(["hook", "claude-code", "post-tool-use"], json.dumps(payload), tmp_path)
     assert "line 3" in proc.stdout and "line 1 " not in proc.stdout

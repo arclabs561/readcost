@@ -15,6 +15,22 @@ configuration.
   by sentence hash. Off by default. `scripts/eval_second_parser.py` and the
   `second-parser` eval job measure it, en_core_web_trf and two other checks
   against UD gold parses; results in docs/evaluation.md.
+- Every finding has `start` and `end`, character offsets of the flagged
+  words in the source file, with `sentence_start` and `sentence_end`.
+  Markdown, reStructuredText, HTML, source comments, commit messages and
+  plain text all map back to the file, through code spans, links, character
+  references, CRLF line ends and wrapped sentences. Text taken from JSON has
+  no offsets. JSON output adds the four fields and keeps `column`,
+  `end_line` and `end_column`, which now come from the offsets. SARIF
+  regions gain `startColumn`, `endLine`, `endColumn`, `charOffset` and
+  `charLength`. Language server diagnostics cover the exact words, over
+  several lines when the sentence is wrapped.
+- `readcost label export`, `import`, `agreement` and `convert`, and the
+  `readcost.labels` module: a JSON Lines format for labels on findings (one
+  line per rater per finding, keyed by document, version, offsets and rule),
+  a blind sheet for people to fill in, Fleiss' kappa with category
+  frequencies, Cohen's kappa per pair, and majority votes. docs/labels.md
+  describes it.
 - `long_dependency_gap = "content"` (opt-in): long-dependency says what fills
   the gap (an object relative clause, another clause, only prepositional
   phrases, or no clause) and reports a gap of prepositional phrases at info.
@@ -26,6 +42,12 @@ configuration.
   `scripts/eval_simplicity_ratings.py` (five sets of rated simplifications)
   and `scripts/eval_rated_sentences.py` (PLABA-EVAL). Results, including
   the nulls, are in docs/evaluation.md.
+- `scripts/eval_stack_terms.py` and `scripts/build_open_pairs.py` test
+  whether counts of word pairs, counts of the whole phrase, bracketing or
+  the document tell an established term from a coined noun stack; the eval
+  workflow's `stack-terms` job runs them. On the labelled findings nothing
+  separated the two, so no rule changed. docs/research.md says what the
+  human-label study should measure.
 
 - `readcost style FILES --against NAME` compares rule rates, sentence length and
   predicted reading time with a reference; built-in references for the Rust
@@ -108,6 +130,11 @@ configuration.
 
 ### Fixed
 
+- A finding in a Python docstring after a line that ends in a backslash was
+  reported one line too high.
+- A finding's line is now counted with the line ends editors use (`\n`,
+  `\r\n`, `\r`). In source comments, commit messages and plain text a form
+  feed or a Unicode line separator used to count as a line end.
 - stacked-nouns no longer counts a verb the tagger read as a plural noun
   after another plural ("merge-commit subjects scores high") when a real verb
   sits above it.

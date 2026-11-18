@@ -1,8 +1,8 @@
 """Built-in reference profiles and `readcost style`."""
 
 import json
-import subprocess
-import sys
+
+from cliproc import run_cli
 
 from readcost.profile import Profile, builtin_profiles, load_profile
 
@@ -12,8 +12,7 @@ LISTS = ("It reads Markdown, reStructuredText, HTML, plain text, and JSON from f
 
 
 def run(args, cwd):
-    return subprocess.run([sys.executable, "-m", "readcost", *args], cwd=cwd, capture_output=True,
-                          text=True, check=False)
+    return run_cli(args, cwd=cwd)
 
 
 def test_builtin_profiles_load_with_numbers_and_sources_only():

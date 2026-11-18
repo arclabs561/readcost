@@ -1,7 +1,7 @@
 """The full (rustc-style) and concise outputs: where the caret lands and what each line says."""
 
-import subprocess
-import sys
+
+from cliproc import run_cli
 
 from readcost import report
 from readcost.engine import Result
@@ -9,8 +9,7 @@ from readcost.features import Finding
 
 
 def run(args, stdin=None, env=None):
-    return subprocess.run([sys.executable, "-m", "readcost", *args], input=stdin, check=False,
-                          capture_output=True, text=True, env=env)
+    return run_cli(args, stdin, env=env)
 
 
 def finding(excerpt, sentence, line, severity="warn"):

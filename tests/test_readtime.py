@@ -1,10 +1,9 @@
 """Predicted reading time: properties from the eye-tracking literature, and the report wiring."""
 
 import json
-import subprocess
-import sys
-
 import pytest
+
+from cliproc import run_cli
 
 from readcost import Analyzer, Config, readtime
 
@@ -57,12 +56,10 @@ def test_result_reports_reading_time_for_whole_documents_only():
 
 def test_json_and_text_output_carry_reading_time(tmp_path):
     (tmp_path / "doc.md").write_text("The index stores one list of documents for each term.\n")
-    out = subprocess.run([sys.executable, "-m", "readcost", "check", str(tmp_path / "doc.md"), "-o", "json"],
-                         capture_output=True, text=True, check=False)
+    out = run_cli(["check", str(tmp_path / "doc.md"), "-o", "json"])
     row = json.loads(out.stdout)[0]
     assert row["reading_seconds"] > 0 and row["reading_ms_per_word"] > 0
-    text = subprocess.run([sys.executable, "-m", "readcost", "check", str(tmp_path / "doc.md")],
-                          capture_output=True, text=True, check=False).stdout
+    text = run_cli(["check", str(tmp_path / "doc.md")]).stdout
     assert "predicted reading time" in text
 
 

@@ -1,9 +1,10 @@
 """Rule levels, per-path overrides and file selection, modelled on ty's configuration."""
 
 import subprocess
-import sys
 
 import pytest
+
+from cliproc import run_cli
 
 from readcost.config import load_config
 
@@ -11,8 +12,7 @@ DENSE = "We tune the shard compaction retry budget by hand.\n"  # one stacked-no
 
 
 def run(args, cwd, stdin=None):
-    return subprocess.run([sys.executable, "-m", "readcost", *args], input=stdin, cwd=cwd,
-                          capture_output=True, text=True, check=False)
+    return run_cli(args, stdin, cwd)
 
 
 def concise(cwd, *args, stdin=DENSE):

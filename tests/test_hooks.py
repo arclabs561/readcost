@@ -6,6 +6,8 @@ from pathlib import Path
 
 import pytest
 
+from cliproc import run_cli
+
 DENSE = ("It does not own indexing, segment selection, compaction, or reader visibility. "
          "The example prints the first snapshot-search cost with persisted region-index sidecars "
          "present versus after deleting those sidecars and forcing source-segment rebuilds. "
@@ -14,9 +16,7 @@ PLAIN = "The index stores one list of documents for each term.\n"
 
 
 def hook(args, payload, cwd, env=None):
-    proc = subprocess.run([sys.executable, "-m", "readcost", "hook", *args],
-                          input=json.dumps(payload), capture_output=True, text=True, cwd=cwd,
-                          env={**os.environ, **(env or {})})
+    proc = run_cli(["hook", *args], json.dumps(payload), cwd, {**os.environ, **(env or {})})
     out = json.loads(proc.stdout) if proc.stdout.strip() else None
     return proc.returncode, out, proc.stderr
 
@@ -130,8 +130,7 @@ def test_generic_protocol(tmp_path):
 
 
 def test_fail_open_on_garbage_input(tmp_path):
-    proc = subprocess.run([sys.executable, "-m", "readcost", "hook", "claude-code", "post-tool-use"],
-                          input="not json", capture_output=True, text=True, cwd=tmp_path)
+    proc = run_cli(["hook", "claude-code", "post-tool-use"], "not json", tmp_path)
     assert proc.returncode == 0 and proc.stdout == ""
 
 

@@ -486,8 +486,10 @@ GLM 5.3 FlashX, Llama 4 Maverick and MiniMax M3 (Qwen was not reachable).
 
 Fleiss' kappa over all ten is 0.23; Llama 4 Maverick and MiniMax M3 accept
 far more than the rest and agree with them little, and without those two it is
-0.40. The eight-rater majority calls 2 findings correct and 24 defensible: the
-low base rate holds across model families.
+0.40. A majority of the eight (five or more) calls 2 findings correct and 18
+defensible; a majority of all ten calls 2 correct and 24 defensible, the figure
+this section gave before 2026-11-18. The low base rate holds across model
+families.
 
 The majority also changes a conclusion. It accepts inline-list findings more
 than any other (10 of 32; 1 to 5 of 32 for the other rules), including lists
@@ -2105,6 +2107,112 @@ useful; a recall loss on long-dependency bounded tighter than the held-out
 interval allows; a model download of about 300 MB, against 13 MB for the
 default parser, accepted for every install; and a maintained source for the
 model, which today is one author's Hugging Face repository.
+## Noun stacks: established term or coined? (no usable signal yet)
+
+Two rules, stacked-nouns and hyphen-compound, report an established term
+(`goroutine call stack`, `thread-state API`) as readily as a stack that
+the writer coined, and raters reject most such findings. `scripts/eval_stack_terms.py` asks
+which evidence separates the labelled findings raters accepted from those
+they rejected. The `stack-terms` job in the eval workflow runs it; the
+numbers below are from that job on 2026-11-18.
+
+Labelled findings come from two places. In the per-rule benchmark, a
+finding on an item that should fire counts as accepted and one on a trap
+as rejected. In the sample of 210 findings, a finding counts as accepted
+when most of the eight strict raters said correct or defensible. The
+sample was drawn from an older version, so only the findings that the
+current rules still report can be joined: 18 stacked-nouns and 13
+hyphen-compound. Some bench items came from the
+sample, so each stack is counted once:
+
+| Rule | Bench | Sample | Distinct stacks | Accepted |
+| --- | --- | --- | --- | --- |
+| stacked-nouns | 15 | 18 | 27 | 10 (37%, 22 to 56) |
+| hyphen-compound | 14 | 13 | 25 | 6 (24%, 11 to 43) |
+
+Intervals are 95% Wilson intervals. Every label is a model rater's or one
+maintainer's.
+
+Evidence tested:
+
+- The lists readcost ships. `hyphen_pairs.txt.gz` holds hyphenated pairs
+  only, with no counts, and WordNet's two-word entries are few. Together
+  they know `time zone` and `team member` and almost no technical pair.
+- Counts of adjacent open pairs (`call stack`), which
+  `scripts/build_open_pairs.py` makes from one shard of FineWeb-Edu
+  (799,175 documents, 751 million token positions, the 100,000 most
+  frequent words less function words; 4.39 million pairs in three or more
+  documents). PMI uses the pair's document count against the two words'
+  token counts.
+- The whole stack as a phrase, counted in the same shard.
+- The document: the stack occurs again, or the document introduces it as a
+  term. "Introduces" means it defines the stack, names it with "called",
+  quotes or emphasises it, puts it in a heading or follows it with an
+  abbreviation.
+
+Each row is an exemption: how many accepted and rejected findings it would
+drop, and the precision of what is left.
+
+| stacked-nouns, 27 stacks | Accepted dropped | Rejected dropped | Precision after |
+| --- | --- | --- | --- |
+| no exemption | | | 10 of 27 (37%, 22 to 56) |
+| shipped lists, every adjacent pair | 0 of 10 | 0 of 17 | 37% |
+| open pairs in 5+ documents, every adjacent pair | 2 of 10 | 7 of 17 | 8 of 18 (44%, 25 to 66) |
+| open pairs in 20+ documents with PMI 3+, every adjacent pair | 1 of 10 | 4 of 17 | 9 of 22 (41%, 23 to 61) |
+| open pairs in 20+ documents with PMI 3+, some adjacent pair | 4 of 10 | 8 of 17 | 6 of 15 (40%, 20 to 64) |
+| whole stack in 5+ documents | 1 of 10 | 4 of 17 | 9 of 22 (41%, 23 to 61) |
+| whole stack in 20+ documents | 0 of 10 | 3 of 17 | 10 of 24 (42%, 24 to 61) |
+| occurs again in the document | 2 of 10 | 3 of 17 | 8 of 22 (36%, 20 to 57) |
+| introduced as a term in the document | 0 of 10 | 1 of 17 | 10 of 26 (38%, 22 to 57) |
+
+| hyphen-compound, 25 stacks | Accepted dropped | Rejected dropped | Precision after |
+| --- | --- | --- | --- |
+| no exemption | | | 6 of 25 (24%, 11 to 43) |
+| open pairs in 5+ documents, some adjacent pair | 0 of 6 | 8 of 19 | 6 of 17 (35%, 17 to 59) |
+| open pairs in 20+ documents with PMI 3+, some adjacent pair | 0 of 6 | 4 of 19 | 6 of 21 (29%, 14 to 50) |
+| whole stack in 3+ documents | 0 of 6 | 0 of 19 | 24% |
+| occurs 3+ times in the document | 0 of 6 | 3 of 19 | 6 of 22 (27%, 13 to 48) |
+| introduced as a term in the document | 0 of 6 | 2 of 19 | 6 of 23 (26%, 13 to 46) |
+
+What this shows:
+
+- Pair attestation does not separate the two groups. Ranking stacked-nouns
+  findings by their weakest adjacent pair's PMI gives an AUC of 0.58 (17
+  rejected, 10 accepted; 0.50 is chance), and 0.53 for hyphen-compound.
+  Raters accepted stacks built from common pairs: `core team member` (220
+  and 992 documents), `database file format version numbers` (`file format`
+  is in 613). Two attested pairs do not make a term.
+- Bracketing by pair strength predicts nothing. Of the three-word
+  stacked-nouns stacks, the adjacency model brackets 9 left (3 accepted)
+  and 10 right (3 accepted); the dependency model brackets 13 left (3
+  accepted) and 3 right (2 accepted).
+- The whole stack as a phrase is the only evidence that dropped rejected
+  stacked-nouns findings and no accepted one. It dropped three: `Monte Carlo methods`,
+  `computer science department` and `bank account details`, each in 45 or
+  more documents. Three findings prove nothing, and the precision moves
+  from 37% to 42% with intervals that overlap almost entirely.
+- Web text in general lacks the terms behind the false positives in
+  technical prose. `goroutine call stack`, `thread state API` and `frame pointer chain` are in no document of the shard, and `validation error messages` is in two. The exemption would need counts from technical
+  text.
+- Recurrence in the document does not help: accepted stacks recur too
+  (`core team member` five times in its PEP). readcost already reports only
+  a stack's first use.
+- Over all 894 stacked-nouns findings in the corpus's essays and
+  documentation, "whole stack in 20+ documents" would remove 55 (6%), and
+  "every adjacent pair in 20+ documents with PMI 3+" 65 (7%). Neither can
+  move overall precision far even if every removal is right.
+
+No exemption was added. With 10 accepted findings, an exemption that drops
+none of them is still compatible with dropping a quarter of accepted
+findings in general (the 95% upper bound for 0 of 10 is 28%). docs/research.md
+gives the measurement the human-label study should include.
+
+A shippable list is small enough. Open pairs in 20 or more documents with
+PMI 6 or more number 153,670 and take 732 kB as gzipped text, 0.8 MB as
+5-byte hashes or 0.2 MB as a Bloom filter with 1% false positives; with PMI
+3 or more, 363,376 pairs. A list of whole three-word terms was not built: a
+table of every three-word sequence is much larger than the pair table, so
+only the reported stacks were counted.
 
 ## Not yet evaluated
 

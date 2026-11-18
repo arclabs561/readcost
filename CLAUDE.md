@@ -7,8 +7,14 @@
 - Run `uv run pytest -q` and `uv run readcost check . --fail-on block` before
   committing, and `uv run readcost check README.md docs --fail-on advise`
   after changing documentation.
-- Workflows share `.github/actions/setup` (Python, readcost, the spaCy model,
-  with caches). Use it instead of installing by hand.
+- Workflows share `.github/actions/setup` (uv, Python, readcost from
+  `uv.lock`, the spaCy model, with caches). Use it instead of installing by
+  hand, and run tools in workflows with `uv run`. After changing a dependency
+  in `pyproject.toml`, run `uv lock` and commit `uv.lock`: CI syncs with
+  `--locked`.
+- A command-line test calls `run_cli` from `tests/cliproc.py`, which runs in
+  the test process; use `run_subprocess` only when the test needs a real
+  process. Tests must not read the caller's environment or git config.
 - An evaluation that needs data or models the repository does not hold goes
   in `.github/workflows/eval.yml` as its own job: download under `ref/`,
   cache with `actions/cache` under a key that names the data, write the
