@@ -138,13 +138,13 @@ def exemptions(with_pairs: bool) -> dict:
         "introduced as a term in the document": lambda e: e.introduced,
     }
     if with_pairs:
-        for docs, pmi in ((5, 0.0), (20, 0.0), (20, 3.0), (20, 5.0), (100, 3.0), (100, 5.0)):
+        for docs, pmi in ((5, 0.0), (20, 0.0), (20, 3.0), (20, 6.0), (20, 9.0), (100, 6.0)):
             name = f"open pairs in {docs}+ documents, PMI {pmi:g}+"
             out[f"{name}: every adjacent pair"] = (
                 lambda e, d=docs, p=pmi: bool(e.adjacent) and all(e.attested(d, p)))
             out[f"{name}: some adjacent pair"] = lambda e, d=docs, p=pmi: any(e.attested(d, p))
-        out["open pairs in 20+ documents, PMI 3+: every pair, or it occurs again"] = (
-            lambda e: (bool(e.adjacent) and all(e.attested(20, 3.0))) or e.count >= 2)
+        out["open pairs in 20+ documents, PMI 6+: every pair, or it occurs again"] = (
+            lambda e: (bool(e.adjacent) and all(e.attested(20, 6.0))) or e.count >= 2)
     return out
 
 
@@ -256,11 +256,11 @@ def report(findings: list[dict], pairs) -> list[str]:
     out.append("")
     if pairs is not None:
         out += ["### Size of an attested-pair list", "",
-                f"{pairs.docs} documents, {len(pairs.vocab)} words, {len(pairs.keys)} pairs kept.", "",
+                f"{pairs.docs} documents, {pairs.positions} token positions, {len(pairs.vocab)} words, {len(pairs.keys)} pairs kept.", "",
                 "| Documents | PMI | Pairs | As 5-byte hashes | Bloom filter, 1% false positives |",
                 "| --- | --- | --- | --- | --- |"]
         for docs in (5, 20, 100):
-            for pmi in (0.0, 3.0, 5.0):
+            for pmi in (0.0, 3.0, 6.0, 9.0):
                 n = len(pairs.select(docs, pmi))
                 out.append(f"| {docs}+ | {pmi:g}+ | {n:,} | {5 * n / 1e6:.1f} MB | {9.6 * n / 8e6:.1f} MB |")
         out.append("")

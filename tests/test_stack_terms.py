@@ -27,10 +27,10 @@ DOCS = [
 @pytest.fixture
 def table(tmp_path):
     vocab = ["call", "stack", "frames", "thread", "holds", "function", "dump"]
-    keys, counts, uni, docs = bop.count_texts(DOCS, {w: i for i, w in enumerate(vocab)})
+    keys, counts, uni, docs, positions = bop.count_texts(DOCS, {w: i for i, w in enumerate(vocab)})
     path = tmp_path / "pairs.npz"
-    np.savez_compressed(path, keys=keys, counts=counts.astype(np.int32), uni=uni.astype(np.int32),
-                        docs=docs, vocab=np.array(vocab))
+    np.savez_compressed(path, keys=keys, counts=counts.astype(np.int32), uni=uni, docs=docs,
+                        positions=positions, vocab=np.array(vocab))
     return bop.Pairs(path)
 
 
@@ -43,8 +43,9 @@ def test_counts_are_documents_not_occurrences(table):
 
 
 def test_pmi_is_log_ratio_to_chance(table):
-    # "call" is in 3 documents, "stack" in 3, the pair in 2 of 4.
-    assert table.pmi("call", "stack") == pytest.approx(math.log2(2 * 4 / (3 * 3)))
+    # "call" occurs 5 times and "stack" 5 times in 38 token positions; the pair is in 2 documents.
+    assert table.positions == 38
+    assert table.pmi("call", "stack") == pytest.approx(math.log2(2 * 38 / (5 * 5)))
     assert table.pmi("stack", "call") is None
 
 
@@ -56,8 +57,8 @@ def test_merge_sums_equal_keys():
 
 
 def test_export_applies_both_thresholds(table):
-    assert "call stack" in table.export(2, -5.0)
-    assert "call stack" not in table.export(3, -5.0)
+    assert "call stack" in table.export(2, 1.0)
+    assert "call stack" not in table.export(3, 1.0)
     assert "call stack" not in table.export(2, 5.0)
 
 
@@ -90,7 +91,7 @@ def test_evidence_brackets_by_the_stronger_pair(table):
     assert e.words == ["thread", "call", "stack"]
     assert e.df == [0, 2] and e.count == 1
     assert e.bracket("adjacency") == "right"      # "call stack" is attested, "thread call" is not
-    assert e.attested(2, -5.0) == [False, True]
+    assert e.attested(2, 1.0) == [False, True]
     assert e.weakest() == -math.inf
 
 

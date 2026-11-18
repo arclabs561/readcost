@@ -107,8 +107,9 @@ jobs:
       - name: Which evidence separates accepted from rejected findings
         run: |
           python scripts/eval_stack_terms.py --bench ref/bench --corpus ref/eval --pairs ref/pairs/open_pairs.npz > stack-terms.md
+          cat stack-terms.md
           cat stack-terms.md >> "$GITHUB_STEP_SUMMARY"
-          python scripts/build_open_pairs.py --export ref/pairs/open_pairs.npz --min-docs 20 --min-pmi 3 --to open_pairs.txt.gz
+          python scripts/build_open_pairs.py --export ref/pairs/open_pairs.npz --min-docs 20 --min-pmi 6 --to open_pairs.txt.gz
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: stack-terms
