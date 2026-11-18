@@ -127,6 +127,7 @@ def test_features_counts_rules_and_controls():
     assert f["rates"]["stacked-nouns"] == pytest.approx(100 * f["counts"]["stacked-nouns"] / f["checked_words"])
     assert f["points_per100"] > 0 and f["words"] == 13
     assert set(dm.OPT_IN) <= set(f["counts"])
+    assert set(dm.PATTERN_HITS) | set(dm.PATTERN_MEASURES) <= set(f["patterns"])
     rec = dm._text_record("summeval", dm.DATASETS["summeval"],
                           {"id": "x", "group": "g", "text": text, "pointer": {}, "outcomes": {"coherence": 3.0}})
     assert "text" not in rec and rec["sha256"] == dm.sha(text)

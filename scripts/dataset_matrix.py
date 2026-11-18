@@ -478,7 +478,9 @@ def features(text: str, fmt: str) -> dict:
             points += WEIGHTS.get(f.severity, 0.0)
     per100 = (lambda n: 100.0 * n / checked) if checked else (lambda n: float("nan"))
     m = res.metrics or {}
+    pats = pattern_measures(prose)
     return {
+        "patterns": pats,
         "words": words, "checked_words": checked, "sentences": res.sentences,
         "words_per_sentence": checked / res.sentences if res.sentences else float("nan"),
         "mean_word_len": word_len, "mean_zipf": zipf,
@@ -489,6 +491,25 @@ def features(text: str, fmt: str) -> dict:
                     "center_embedding_max": m.get("center_embedding_max"),
                     "mean_dep_z": res.mean_dep_z, "reading_ms_per_word": res.reading_ms_per_word},
     }
+
+
+PATTERN_HITS = ("contrast", "triple", "anticipatory-it", "restatement")
+PATTERN_MEASURES = ("sentence_cv", "opener_share", "adjacent_overlap", "given_rate", "lexical_density", "gzip_ratio")
+
+
+def pattern_measures(prose: str) -> dict:
+    """The experimental discourse measures of readcost.patterns (pull request 83), per 100 words.
+
+    They are not readcost rules; they are recorded so that the same tests
+    can be run on the patterns readers name (contrast framing, lists of
+    three, restatement, uniform structure).
+    """
+    from readcost import patterns
+    paragraphs = [p for p in re.split(r"\n\s*\n", prose) if p.strip()]
+    rep = patterns.measure(_STATE["analyzer"].nlp, paragraphs or [prose])
+    out = {k: (100.0 * rep.count(k) / rep.words if rep.words else float("nan")) for k in PATTERN_HITS}
+    out.update({k: rep.measures.get(k) for k in PATTERN_MEASURES})
+    return out
 
 
 def detect_word_spans(text: str) -> list[tuple[int, int, str]]:

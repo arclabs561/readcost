@@ -45,7 +45,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
-from dataset_matrix import DATASETS  # noqa: E402
+from dataset_matrix import DATASETS, PATTERN_HITS, PATTERN_MEASURES  # noqa: E402
 
 DEFAULT_RULES = ("stacked-nouns", "long-dependency", "inanimate-subject", "reduced-object-relative",
                  "hyphen-compound", "inline-list")
@@ -84,7 +84,16 @@ def measures(rows: list[dict]) -> dict[str, np.ndarray]:
         out[k] = np.array([_num(r["rates"].get(k)) for r in rows])
     for k in METRICS:
         out[k] = np.array([_num(r["metrics"].get(k)) for r in rows])
+    if all("patterns" in r for r in rows):
+        for k in PATTERN_HITS:
+            out["pattern: " + k] = np.array([_num(r["patterns"].get(k)) for r in rows])
+        for k in PATTERN_MEASURES:
+            out["pattern: " + k] = np.array([_num(r["patterns"].get(k)) for r in rows])
     return out
+
+
+def _continuous(name: str) -> bool:
+    return name in METRICS or name.removeprefix("pattern: ") in PATTERN_MEASURES
 
 
 # --------------------------------------------------------------- statistics
@@ -207,8 +216,8 @@ def text_dataset(name: str, rows: list[dict], resamples: int) -> tuple[list[str]
         for o in outcomes:
             y = np.array([_num(r["outcomes"].get(o)) for r in rows])
             sign = spec["direction"][o] or 1
-            a = association(sign * y, x, C, groups, resamples, spec.get("within", False), mname in METRICS)
-            n_with = a["with"] if mname not in METRICS else a["n"]
+            a = association(sign * y, x, C, groups, resamples, spec.get("within", False), _continuous(mname))
+            n_with = a["n"] if _continuous(mname) else a["with"]
             cells.append(_cell(a))
             table.append({"dataset": name, "family": spec["family"], "outcome": o, "measure": mname,
                           "primary": o == spec["primary"], "direction": spec["direction"][o], "n": a["n"],

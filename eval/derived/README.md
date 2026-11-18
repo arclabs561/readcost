@@ -39,6 +39,7 @@ the records show.
 | `counts`, `rates` | findings per readcost rule, as a count and per 100 checked words; default and opt-in rules |
 | `points_per100` | weighted findings of the default rules per 100 checked words (info 0.5, warn 1, error 2) |
 | `metrics` | MTLD, idea density, mean and maximum embedding depth, mean dependency z, predicted reading time per word |
+| `patterns` | the experimental discourse measures of `readcost.patterns`, not rules: contrasts, lists of three, anticipatory "it", restatements per 100 words; sentence-length spread, opener share, overlap of neighbouring sentences, share of content words already used, content words per word, gzip ratio |
 | `words`, `checked_words`, `sentences`, `words_per_sentence`, `mean_word_len`, `mean_zipf` | length and lexical controls; Zipf values from readcost's word list |
 | `words_table` | Scarecrow only: per word, the rules whose span covers it, its length and Zipf value, and the share of annotators who marked it, by category |
 
