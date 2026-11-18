@@ -133,27 +133,41 @@ index while adding words is reported, not rewarded.
 
 ## What has not been shown
 
-- Two rules have direct support beyond surprisal. In constructed sentences,
-  an object relative clause in the gap costs about 93 ms at the verb against
-  22 ms for a prepositional phrase of the same length (Nusbaumer et al.
-  2026), and object relatives cause more rereading than surprisal predicts
-  (Timkey et al. 2026). `long_dependency_gap = "content"` uses the first.
-- On OneStop, syntactic measures such as embedding depth and integration
-  cost did not predict how much easier simplified paragraphs were to read;
-  word length, frequency and surprisal did (Gruteke Klein et al. 2026).
+- One rule has support beyond surprisal, and one has indirect support. In
+  constructed sentences read word by word, a four-word gap between subject
+  and verb cost about 93 ms at the verb when an object relative filled it
+  and 22 ms when a prepositional phrase did (means; medians 45 and 13 ms;
+  Nusbaumer et al. 2026). Object relatives also cause more regressions than
+  surprisal predicts (Timkey et al. 2026). Both studies kept the
+  relativizer, so neither tests the reduced form that
+  reduced-object-relative flags. `long_dependency_gap = "content"` uses the
+  first result.
+- On OneStop, changes in embedding depth, integration cost and idea density
+  were not significantly correlated, in most evaluations, with how much
+  easier simplified sentences and paragraphs were to read; changes in word
+  length, frequency and surprisal were (Gruteke Klein et al. 2026, Figure
+  1). The simplifications were mostly paraphrase, so syntax may have changed
+  too little to show an effect.
   readcost's rules have not had that test; `scripts/eval_onestop_pairs.py`
   runs it.
-- Splitting noun phrases made health sentences look easier and understood
-  worse when the result read awkwardly (Leroy, Kauchak and Hogue 2016, read
-  in abstract only). The stacked-nouns advice is therefore conditional.
-- Model judges agree less with people on model-written text than on
-  human-written text (Bavaresco et al. 2025). The alternative annotator test
-  (Calderon, Reichart and Dror 2025) says how to check model raters against
-  three or more people on 50 to 100 items; readcost has not run it.
+- Splitting two- to four-word noun phrases in health sentences made them
+  look slightly easier and raised cloze errors from 8.5% to 10.9% (Leroy,
+  Kauchak and Hogue 2016). Splits that readers judged more natural did
+  better (r = .43 over 21 prepositions). Technical terms were excluded, so
+  the study does not cover coined stacks. The stacked-nouns advice is
+  conditional for that reason.
+- Across 20 datasets, model judges agreed with people less on the datasets
+  of model-written text than on those of human-written text (Bavaresco et
+  al. 2025); the two sets differ in task, so this is not a matched
+  comparison. The alternative annotator test (Calderon, Reichart and Dror
+  2025) says how to check model raters against three or more people on 100
+  to 150 items (50 to 100 only if the people are experts), using the version
+  for skewed labels and reporting agreement among the people. readcost has
+  not run it.
 
 ## Roadmap
 
-0. Human labels on about 100 findings, with the alternative annotator test;
+0. Human labels on 100 to 150 findings, with the alternative annotator test;
    the OneStop paired test. Both come before more precision work, because
    every current number rests on model raters.
 
