@@ -93,6 +93,10 @@ class Config:
     # long-dependency: "words" judges a gap by its length alone; "content"
     # also reports what fills it and lowers a gap with no clause to info.
     long_dependency_gap: str = "words"
+    # A second parser that checks stacked-nouns, reduced-object-relative and
+    # long-dependency findings: "" (off), "biaffine" (the copy that
+    # `readcost setup --verifier` downloads) or a model directory. See verify.py.
+    verify_model: str = ""
     # Per-rule level: "error", "warn", "info" or "ignore"; "all" sets every rule.
     rules: dict[str, str] = field(default_factory=dict)
     # [[readcost.overrides]]: {"include": [globs], "exclude": [globs], "rules": {...}}, in order.

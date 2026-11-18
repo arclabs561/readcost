@@ -2017,6 +2017,97 @@ are self-reports, so this does not show what an expert reader pays.
   is technical documentation, and none measures rereading or comprehension
   per sentence.
 
+## A second parser as a check
+
+`scripts/eval_second_parser.py` (the `second-parser` job in
+`.github/workflows/eval.yml`) asks whether a second model removes the false
+findings that the gold treebanks trace to the parser. Each finding of
+stacked-nouns, reduced-object-relative and long-dependency is scored as in
+the section above. Precision is against the gold construction; recall is
+against the gold constructions that the rule means to report. The
+configurations:
+
+- `trf`: en_core_web_trf 3.8 in place of the default parser.
+- `sm & trf`: a finding stays when trf, run on the same sentence, reports
+  the same rule on overlapping words.
+- `pos-verb`: a finding stays unless a second tagger tags a stacked word as
+  a verb, or the verb of a relative clause as something else.
+- `ud`: a finding stays when the biaffine parser's own UD tree holds the
+  construction, by the definitions used on the gold tree.
+
+The second tagger is
+[ghotriw/deberta-v3-xsmall-biaffine-dep-pos-feats-en-ewt-gum-norm](https://huggingface.co/ghotriw/deberta-v3-xsmall-biaffine-dep-pos-feats-en-ewt-gum-norm)
+(MIT, ONNX, 290 MB). It was trained on EWT and GUM, so it is scored on the
+EWT and GUM test splits ("held out") and on three treebanks it never saw:
+PUD, LinES and ParTUT (8,786 sentences, 155,993 words; "other").
+[dragonscale-ai/kniv-v7-small-en](https://huggingface.co/dragonscale-ai/kniv-v7-small-en)
+was also run as a tagger; it did no better than the biaffine tagger and
+is left out of the table. Intervals are 95% bootstrap intervals over
+documents, and changes are paired with `sm` on the same resamples. GitHub
+runner (4 CPUs), 2026-11-18, readcost `4551ddc`.
+
+| Rule | Configuration | Held out: precision (change) | Recall | Other: precision (change) | Recall |
+| --- | --- | --- | --- | --- | --- |
+| stacked-nouns | sm | 81% | 48% | 58% | 49% |
+| | trf | 89% (+8, 0 to +18) | 53% | 61% (+4, -2 to +11) | 50% |
+| | sm & trf | 92% (+11, +4 to +19) | 43% | 63% (+6, +1 to +10) | 41% |
+| | pos-verb | 84% (+4, 0 to +9) | 47% | 62% (+4, +2 to +7) | 49% |
+| | ud | 94% (+13, +6 to +22) | 45% | 60% (+2, -8 to +9) | 40% |
+| reduced-object-relative | sm | 22% of 9 | 2 of 5 | 51% of 41 (gold-tree rule) | 9% |
+| | sm & trf | 29% | 2 of 5 | 81% (+30, +19 to +42) | 9% |
+| | ud | 29% | 2 of 5 | 84% (+33, +20 to +48) | 9% |
+| long-dependency | sm | 71% | 75% | 68% | 54% |
+| | trf | 92% (+21, 0 to +39) | 67% | 96% (+28, +17 to +38) | 80% |
+| | sm & trf | 100% (+29, +14 to +45) | 67% | 98% (+31, +21 to +40) | 49% |
+| | ud | 100% (+29, +14 to +45) | 62% | 99% (+31, +21 to +41) | 53% |
+
+The other treebanks do not mark relative-clause types, so
+reduced-object-relative is scored there by agreement with the same rule
+run on the gold tree. On those treebanks the `pos` and `ud` tests on noun
+stacks each dropped about 30 findings, half of them real. `pos-verb`
+dropped 10, none real. That is why `verify_model` uses `pos-verb` for
+stacks.
+
+| Configuration | Time against `sm` | Install, beyond readcost (342 MB with its model) |
+| --- | --- | --- |
+| sm | 60 to 107 ms per 1,000 words | - |
+| trf | 30 to 48 times | 1.3 to 1.4 GB: PyTorch (CPU build), spacy-curated-transformers, the 478 MB model |
+| sm & trf (trf on flagged sentences only) | 2.2 to 2.8 times | the same |
+| sm + biaffine (flagged sentences only) | 1.3 to 1.5 times | about 400 MB: onnxruntime and tokenizers 107 to 120 MB, the model 286 MB |
+
+Times and sizes are from three runs on different runners (sizes differ
+between pip and uv installs); one runner was about 1.5 times faster than
+another throughout, and the ratios held.
+
+On the labelled bench (116 items, eval/rulebench) the three rules go from
+60% precision and 93% recall with `sm` to 83% and 86% with `trf`, 82%
+and 82% with `sm & trf`, and 84% and 93% with `verify_model`. The bench
+is built from sentences the default parser had reported, so it favours
+any second parser.
+
+What this shows. Most false long-dependency and reduced-object-relative
+findings are parser errors, and a second parse removes them: precision
+against gold rises by about 30 points, outside the training text too.
+Recall falls a little, and on the held-out split by up to 27 points
+within the interval. For noun stacks the gain is small outside the
+biaffine parser's training text. The biaffine check matches trf
+agreement at a fifth to a third of its added time and without PyTorch. trf alone is the only
+configuration that also raises recall (long-dependency, other treebanks:
+54% to 80%), at 30 to 48 times the time of `sm`.
+
+What it does not show: that the dropped findings were not worth an
+editor's time. A real construction can still be easy to read. The
+`ud` test and the gold construction share a definition, so a perfect
+parser would score 100% there; the gold-tree-rule columns in the job's
+summary give a second view (long-dependency, other treebanks: 56% to 81%).
+
+`verify_model = "biaffine"` (opt-in) applies `pos-verb` to stacked-nouns and
+`ud` to the other two rules. It stays off by default. Making it the default
+would need: human labels showing that the findings it drops are mostly not
+useful; a recall loss on long-dependency bounded tighter than the held-out
+interval allows; a model download of about 300 MB, against 13 MB for the
+default parser, accepted for every install; and a maintained source for the
+model, which today is one author's Hugging Face repository.
 ## Noun stacks: established term or coined? (no usable signal yet)
 
 Two rules, stacked-nouns and hyphen-compound, report an established term
@@ -2123,6 +2214,343 @@ PMI 6 or more number 153,670 and take 732 kB as gzipped text, 0.8 MB as
 3 or more, 363,376 pairs. A list of whole three-word terms was not built: a
 table of every three-word sequence is much larger than the pair table, so
 only the reported stacks were counted.
+## Discourse patterns and redundancy
+
+The tests above find no reader cost in readcost's constructions. People who
+find model-written text tiring name other things: contrast framing,
+padding and restatement, lists of three, signposting and uniform structure
+(docs/research.md, "Discourse patterns and redundancy"). This section asks
+two separate questions of those patterns: do models write more of them than
+people do on the same prompt ("marks model text"), and do they go with
+anything readers did, once text length, word length and word frequency are
+held ("tracks readers")? Only the second would justify a rule. The removed
+repeated-frame rule answered only the first.
+
+`src/readcost/patterns.py` holds the detectors. No rule, metric or command
+imports it. They read the parse and closed-class words only, with no phrase
+lists: contrast (four shapes: "not X but Y", "X, not Y", "rather than", and
+"It isn't X. It's Y"), comma series of exactly three items, anticipatory-it
+frames ("It is important to note that"), and restatement (a sentence whose
+content words mostly occurred together in one earlier sentence). Document
+measures: spread of sentence and paragraph lengths, share of sentences
+opening with the most common first word, content-word overlap between
+neighbouring sentences, share of content words already used, content words
+per word, and the gzip ratio of the first 150 words. `scripts/eval_patterns.py`
+runs every part; the `patterns` job in the eval workflow fetches the data.
+readcost `dfccc59`, default rules, measured 2026-11-18 (eval run of that commit).
+
+### Marks model text
+
+HAP-E (Reinhart et al. 2025, MIT): 300 human texts drawn at random, each
+continued by six models from the same first 500 words, against the human
+continuation. Rates per 1,000 words; intervals are bootstraps over texts.
+
+| Measure | People | GPT-4o | GPT-4o mini | Llama 3 8B Instruct | Llama 3 70B (base) |
+| --- | --- | --- | --- | --- | --- |
+| contrast | 0.67 | 2.49 (+1.49 to +2.14) | 2.79 | 1.66 | 0.60 (n.s.) |
+| of which "not X but Y" | 0.33 | 1.82 | 1.95 | 0.87 | 0.15 |
+| series of three | 0.64 | 1.14 (+0.28 to +0.73) | 1.24 | 0.91 | 0.74 (n.s.) |
+| anticipatory it | 0.16 | 0.08 (n.s.) | 0.12 (n.s.) | 0.07 | 0.16 (n.s.) |
+| restatement | 0.73 | 0.05 | 0.02 | 3.25 | 2.49 |
+| sentence-length spread | 0.59 | 0.38 | 0.42 | 0.38 | 0.53 |
+| readcost findings per 100 words | 0.48 | 0.46 (n.s.) | 0.42 | 0.31 | 0.37 |
+| words | 469 | 530 | 579 | 419 | 446 |
+
+The instruction-tuned models write two to four times as many contrasts as
+the people they continue, and the base model does not, so the contrast
+habit comes with instruction tuning. All six models write more uniform
+sentence lengths (GPT-4o is lower than its human pair in 94% of texts).
+Restatement goes the other way for GPT-4o, which almost never repeats
+itself, and is three times the human rate for the Llama models, whose
+continuations loop. The gap depends on genre: contrast is near the human
+rate in fiction (+0.14, n.s.) and two to four times it in news and
+transcribed speech. readcost's own findings are no more frequent in model text, and
+lower for five of the six models.
+
+On HC3 (500 questions, ChatGPT of 2022 against a person's answer, CC BY-SA
+4.0), ChatGPT writes fewer contrasts of the "not X but Y" kind (0.08
+against 0.46), more series of three (1.90 against 0.99), seven times the
+anticipatory-it frames (1.09 against 0.15), and more restatement (3.54
+against 1.28); its sentence lengths are more uniform (0.32 against 0.49).
+
+Which pattern marks model text depends on the model and its year. The
+patterns readers name mark the 2024 instruction-tuned models clearly, so a
+rule built on them would mostly report who wrote a text.
+
+### Tracks readers
+
+Each outcome below comes from people. In every set but OneStop and Provo
+all the texts are model-written, so a result there cannot come from who
+wrote the text. Partial Spearman's rho with log length, word length and
+word frequency held; 95% bootstrap intervals over paragraphs, pairs or
+prompts.
+
+| Measure | LAMP: writer's score | LAMP: share edited | LAMP: share cut as unnecessary exposition | Arena, writing requests: preferred | Arena, any request: preferred | EMTeC: ms per word | OneStop: ms per word |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| texts or pairs | 1,279 | 1,282 | 1,282 | 1,842 | 1,252 | 585 | 324 |
+| contrast | -0.04 (-0.09, +0.01) | +0.03 (-0.02, +0.09) | +0.07 (+0.02, +0.13) | +0.00 (-0.04, +0.05) | +0.02 (-0.03, +0.08) | -0.05 (-0.14, +0.06) | -0.10 (-0.19, -0.01) |
+| series of three | +0.02 | -0.03 | -0.07 (-0.13, -0.01) | +0.01 | +0.00 | -0.00 | -0.07 |
+| restatement | | | | -0.02 | -0.01 | -0.01 | +0.08 |
+| sentence-length spread | +0.01 | -0.07 (-0.12, -0.01) | +0.01 | +0.06 (+0.01, +0.11) | +0.11 (+0.03, +0.19) | -0.03 | -0.11 |
+| opener share | -0.05 | +0.12 (+0.07, +0.17) | +0.01 | -0.07 (-0.12, -0.01) | -0.12 (-0.21, -0.03) | -0.04 | +0.03 |
+| gzip ratio | -0.10 (-0.16, -0.04) | +0.03 | +0.02 | -0.09 (-0.15, -0.03) | -0.10 (-0.22, +0.02) | | |
+| neighbour overlap | -0.02 | -0.08 (-0.13, -0.03) | -0.04 | -0.11 (-0.16, -0.06) | -0.04 | +0.05 | +0.04 |
+| content words per word | +0.08 (+0.03, +0.14) | -0.10 (-0.15, -0.04) | -0.07 (-0.12, -0.01) | +0.00 | -0.04 | +0.21 (+0.05, +0.34) | +0.27 (+0.14, +0.41) |
+| readcost findings | -0.02 (-0.07, +0.04) | +0.01 (-0.05, +0.06) | +0.03 (-0.03, +0.09) | -0.01 (-0.06, +0.04) | +0.00 (-0.05, +0.06) | -0.01 (-0.15, +0.12) | +0.01 (-0.10, +0.10) |
+
+Sources: LAMP (Chakrabarty, Laban and Wu 2025, BSD-3-Clause): 1,193
+paragraphs by GPT-4o, Claude 3.5 Sonnet and Llama 3, edited and scored by
+professional writers, who labelled each edit; 13% of sentences were edited
+as "Unnecessary Exposition", the label closest to padding. Arena, writing
+requests: the Chatbot Arena part of the same repository's writing-quality
+benchmark. Arena, any request: lmarena-ai/arena-human-preference-55k
+(Apache-2.0), one-turn battles with a winner and two English prose answers
+of 60 to 600 words. EMTeC (Bolliger et al. 2025): 107 readers' total
+fixation time on texts by three models. OneStop (CC BY 4.0): people's
+paragraphs; Provo (55 texts) and the 162 paired OneStop paragraphs show the
+same pattern with wider intervals and are in the job's output. A blank cell
+is a measure that fewer than 15 texts had or that the texts were too short
+to compute.
+
+- No counted pattern tracks readers. Contrast goes with more of a paragraph
+  cut as unnecessary exposition (+0.07) and with faster reading in OneStop
+  (-0.10), and does nothing to preference or eye movements. Sentences with a
+  series of three were edited less often than their length predicts (-9.6
+  percentage points, -15.2 to -4.2), the opposite of the complaint.
+  Restatement and anticipatory-it frames are too rare in LAMP to test (3 and
+  7 sentences).
+- Three document measures of uniformity point the same way in three sets of
+  model text: answers whose sentences vary more in length were preferred,
+  and answers that open more sentences with one word, or compress better,
+  were preferred less, edited more or scored lower. Each effect is small
+  (|rho| 0.06 to 0.12). Together the seven measures that every text has add
+  0.5 to 4.7 points of variance explained to the controls (LAMP score 0.021
+  to 0.035; Arena 0.040 to 0.047; EMTeC 0.292 to 0.339).
+- readcost's construction findings track nothing here either: adding them
+  to the controls raises variance explained by at most 0.001 in any set.
+- Content words per word, the opposite of padding, goes with slower reading
+  per word (EMTeC +0.21, OneStop +0.27) and with a higher writer's score.
+  Reading time per word cannot show what padding costs, because a padded
+  text can read fast per word and still take longer for the same content;
+  none of this data measures time to the same information.
+- The new measures overlap little with readcost's: its findings, predicted
+  time, MTLD, idea density and sentence length explain 1 to 26% of the
+  variance in each, except content words per word (76 to 84%) and the share
+  of words already used (52 to 67%).
+
+About 20 measures were tested against 9 outcomes with no correction, so
+some intervals that clear zero are chance. The uniformity result is the
+only one that repeats across independent sets in the same direction. None
+of the data is technical documentation; LAMP is fiction and creative
+nonfiction, and Arena voters judge content and format as well as prose.
+
+### What follows for readcost
+
+- Do not add the counted patterns as rules or metrics. They mark
+  instruction-tuned model text and track no reader outcome. Adding them
+  would turn readcost into the AI-text detector its Limits rule out.
+- The uniformity measures (sentence-length spread, opener share, gzip
+  ratio) are the only candidates. Their effects are small, all three also
+  mark model text strongly, and the evidence is preference and editing on
+  creative and chat text, not reading or comprehension of technical
+  prose. They should not enter readcost until a test chosen before seeing
+  the data repeats them on technical text. Until then readcost keeps its
+  scope.
+- The premise needs restating more than the rule set needs extending.
+  Every test of construction findings against people is now null: reading
+  times (Natural Stories, OneStop, Provo, EMTeC), ratings (five
+  simplification sets, PLABA-EVAL) and now writers' edits and users'
+  preferences. The README's first claim, that readcost reports "sentences
+  built in a way that costs readers time", is not supported by any of it.
+
+## Many datasets with human signals
+
+No person has labelled a readcost finding, and the maintainer chose not to
+pay for a reader study for now. This section uses fourteen existing
+datasets in which people rated, edited, annotated or read prose, each run
+through one harness. [datasets.md](datasets.md) lists them with 50 others
+that were considered, their licences and how each label was checked.
+
+`scripts/dataset_matrix.py` turns every text into the same record:
+
+- findings per rule per 100 checked words, for the six default and five
+  opt-in rules, and the default rules' weighted findings per 100 words;
+- the document metrics and the discourse measures of `readcost.patterns`;
+- length, mean word length and mean Zipf frequency;
+- the human outcome.
+ `scripts/dataset_matrix_report.py`
+then analyses each dataset on its own. The statistic is a partial
+correlation with log length, mean word length and mean Zipf frequency held
+constant, signed so that a positive value goes with the outcome that is
+worse for the reader. Where several texts answer one prompt or summarise
+one article, they are compared within that group. Intervals are 95%
+bootstraps over groups. The `matrix` and `matrix-report` jobs of the eval
+workflow download the data and run it; readcost at this branch, default
+parser, measured 2026-11-18.
+
+Each dataset has one primary outcome, chosen before any result was seen,
+and one primary measure: the weighted findings of the default rules. Every
+other row is exploratory. Over all datasets, outcomes and measures there
+are 767 intervals, and 240 exclude zero where about 38 would by chance. The
+tests share texts and are not independent, so the count says only that
+there is signal somewhere.
+
+### Readers dislike it: ratings and complaints
+
+| Dataset | Texts | Who rated what | Primary outcome | Weighted findings | 95% CI |
+| --- | --- | --- | --- | --- | --- |
+| HelpSteer2 | 21,362 | Scale AI annotators, model answers, 0 to 4 | coherence | +0.00 | -0.02 to +0.03 |
+| HelpSteer3-Feedback | 12,000 | three annotators' written feedback on model answers | share that complain about length, clarity or repetition | -0.00 | -0.03 to +0.02 |
+| SummEval | 1,600 | three experts, news summaries by 16 systems | coherence | +0.03 | -0.03 to +0.09 |
+| summarize from feedback, TL;DR | 7,700 | OpenAI's labellers, Reddit summaries, 1 to 7 | coherence | +0.02 | -0.00 to +0.05 |
+| summarize from feedback, CNN/DM | 5,529 | as above, news summaries | coherence | +0.02 | -0.01 to +0.05 |
+| ReadMe++ | 2,822 | annotators, sentences from 20 domains | CEFR level | -0.01 | -0.05 to +0.03 |
+| Scarecrow | 1,308 | ten crowd workers mark error spans in GPT-2 and GPT-3 paragraphs | share of characters marked Redundant, Technical Jargon or Incoherent | +0.08 | +0.00 to +0.16 |
+
+Six of seven intervals include zero; the seventh touches it. readcost's
+findings do not track what raters say about a text once its length and
+words are known, in any of these sets. The HelpSteer3 complaint labels are
+matched by word lists from the annotators' own paragraphs (in
+`dataset_matrix.py`), so they are noisy; the rest are the datasets' own
+labels.
+
+Rule by rule, two results repeat across sets:
+
+- **undefined-acronym**, an opt-in rule, goes with the outcome readers report as
+  harder or more technical: Scarecrow's Technical Jargon spans +0.22
+  (+0.09 to +0.36) and ReadMe++ CEFR level +0.12 (+0.08 to +0.15). It does
+  nothing to HelpSteer2 or SummEval ratings, and OneStop paragraphs with
+  one were read faster (-0.15, -0.27 to -0.04, 28 paragraphs). Raters notice
+  acronyms; nothing here shows that they slow reading.
+- **inline-list** goes with lower CEFR levels in ReadMe++ (-0.09, -0.13 to
+  -0.05): sentences with a long list were rated easier than their length
+  predicts. No other set shows an effect.
+
+The default rules otherwise give scattered intervals that clear zero in one
+set and not the next, at the rate chance would give.
+
+What does track the ratings is redundancy. The discourse measures that pull
+request 83 added, applied to these sets:
+
+| Measure (higher is more repetitive) | HelpSteer2 coherence | HelpSteer3 complaints | SummEval coherence | CNN/DM coherence | Scarecrow redundancy |
+| --- | --- | --- | --- | --- | --- |
+| restatements per 100 words | +0.12 (+0.09, +0.14) | +0.10 (+0.07, +0.13) | +0.20 (+0.16, +0.24) | +0.12 (+0.07, +0.16) | +0.74 (+0.66, +0.81) |
+| share of content words already used | +0.12 (+0.10, +0.14) | +0.14 (+0.11, +0.16) | +0.29 (+0.24, +0.35) | +0.13 (+0.08, +0.17) | +0.79 (+0.73, +0.84) |
+| overlap of neighbouring sentences | +0.09 (+0.07, +0.12) | +0.07 (+0.04, +0.10) | +0.18 (+0.13, +0.24) | +0.17 (+0.10, +0.25) | +0.78 (+0.70, +0.83) |
+| gzip ratio of the first 150 words | +0.15 (+0.11, +0.18) | +0.09 (+0.05, +0.12) | | | |
+| MTLD (lower is more repetitive), sign flipped | +0.05 (+0.03, +0.08) | +0.07 (+0.04, +0.10) | | | +0.28 (+0.26, +0.32) |
+
+Texts that repeat themselves are rated less coherent, draw more complaints
+and get more of their words marked redundant, beyond their length and
+vocabulary, in five sets from four sources. The HelpSteer3 complaints of
+repetition in particular rise with restatement (+0.17, +0.13 to +0.20).
+Three cautions. Every text in these sets is written by a model, and the
+summarisers in SummEval (2019 systems) repeat themselves in a way current
+models rarely do. The Scarecrow correlation is partly the definition: a
+restatement is what an annotator marks as Redundant. And none of it is
+reading time: in OneStop and Provo these measures show nothing or the
+opposite sign. The other patterns named in complaints show nothing:
+contrast framing goes with slightly better ratings in HelpSteer2 (-0.03,
+-0.05 to -0.01) and with nothing elsewhere, and lists of three with nothing.
+MTLD and the share of words already used are document measures; readcost
+already reports MTLD in its JSON `metrics`.
+
+### It slows readers: reading time
+
+| Dataset | Texts | Readers | Weighted findings | 95% CI |
+| --- | --- | --- | --- | --- |
+| GECO, a novel, sentences | 5,262 (108 flagged) | 14 | +0.05 | +0.02 to +0.09 |
+| OneStop, news paragraphs, two levels | 324 (122) | 360 | +0.02 | -0.13 to +0.16 |
+| Provo, short passages | 55 (10) | 84 | too few flagged | |
+
+GECO gives the first sentence-level association between findings and
+reading time beyond length and frequency: sentences with findings are read
+more slowly per word, r = +0.05. Only 2% of its sentences have a finding
+(median sentence: 8 words), surprisal is not controlled, and the effect is
+small: it is about a sixth of what readcost's own predicted reading time
+shows on the same sentences (+0.09, +0.05 to +0.12). Natural Stories showed
+nothing at the sentence level (above), and OneStop shows nothing here.
+Intervals are bootstraps over the 586 screens of GECO, so sentences shown
+together stay together.
+
+### Leave one dataset out
+
+For each family, weights for the eleven rule rates were fitted on every
+dataset but one (ridge regression on the residuals after the controls, each
+dataset weighted equally) and tested on the one left out. Fitted weights
+did worse than the untuned weighted findings on every rated set; on
+ReadMe++ the fitted score was wrong in sign (-0.12, -0.16 to -0.08). On
+reading time the fitted score was -0.05 on GECO, -0.06 on OneStop and
+-0.15 on Provo, against +0.05, +0.02 and -0.18 for the untuned score. The
+rules do not combine into a score that carries from one dataset to
+another, so nothing here supports reweighting them.
+
+### Edits by intent
+
+Revision corpora give before-and-after pairs whose edits people labelled.
+Among pairs whose text before the edit had a finding, the table gives how
+often the edit removed one, for the intent most related to readability
+against all other edits. The last column holds two things constant: how
+much of the text that the edit changed, and the text's length.
+
+| Corpus | Target intent | Pairs with a finding | Removed: target | Removed: others | Adjusted difference | 95% CI |
+| --- | --- | --- | --- | --- | --- | --- |
+| IteraTeR, human labels | clarity or fluency | 867 | 22% of 529 | 28% of 338 | +3 points | -3 to +9 |
+| arXivEdits | improve readability | 185 | 56% of 27 | 28% of 158 | +20 points | -1 to +40 |
+| ParaRev, annotated | concision | 334 | 39% of 83 | 34% of 251 | +4 points | -7 to +15 |
+| HelpSteer3-Edit | summary mentions concision or clarity | 3,355 | 44% of 1,611 | 30% of 1,744 | +10 points | +6 to +13 |
+
+Edits made for clarity or concision remove findings more often than other
+edits in three of four corpora, and clearly so in the largest. Per rule,
+the clearest are long-dependency (ParaRev +26 points, +3 to +47;
+HelpSteer3-Edit +14, +6 to +22) and long-sentence (ParaRev +26, +10 to +41;
+HelpSteer3-Edit +11, +7 to +16). IteraTeR's sentence edits are small
+(median 7% of words) and its clarity edits remove no more than other edits.
+The edits do not leave fewer findings overall: the rate per 100 words after
+a clarity or concision edit is the same as after other edits in every
+corpus (changes of -0.01 to +0.03), because these edits also add findings
+to text that had none (HelpSteer3-Edit: 20% against 19%). Writers revising
+for clarity rewrite the sentences readcost flags, and write new ones that
+it flags at the same rate. The HelpSteer3-Edit intent is matched from the
+editor's summary by a word list, so it is noisy.
+
+### Scarecrow, word by word
+
+Ten annotators marked spans in each paragraph. Words inside a finding of a
+default rule, against the other words of the same paragraph with word length
+and frequency held: Technical Jargon +0.7 percentage points (+0.3 to +1.3;
+0.8% of other words are marked), Grammar and Usage +1.1 (+0.4 to +2.0;
+3.4%), Redundant +0.4 (-0.9 to +1.9), Incoherent +0.3 (-0.4 to +1.0). A
+word in a finding is about twice as likely as its neighbours to be marked
+as jargon, though jargon marks are rare.
+
+### Word pairs from technical text
+
+The test of noun stacks above found that web text lacks the terms behind
+the false positives. The `stack-terms-tech` job counts pairs in one parquet
+shard each of the Common Pile's Stack Exchange (CC BY-SA) and GitHub
+Archive (issue and pull request threads of openly licensed repositories)
+subsets instead. It does no better: ranking findings by their weakest
+pair's PMI gives an AUC of 0.56 for stacked-nouns (0.58 with FineWeb-Edu)
+and 0.61 for hyphen-compound (0.53), on the same 27 and 25 labelled stacks.
+Requiring every adjacent pair to occur in five or more documents drops 1
+accepted and 5 rejected stacked-nouns findings (precision 37% to 43%, 24 to
+63); with FineWeb-Edu it dropped 2 and 7. Two shards may be too few for the
+terms in question; the labels, not the counts, are the limit.
+
+### Taken together
+
+- Readers' ratings do not track readcost's findings in seven rating sets
+  of 52,000 texts, nor the leave-one-out score built from them.
+- Reading time tracks them weakly in one of three eye-tracking sets (GECO,
+  r = +0.05), the largest by sentence count.
+- People revising for clarity or concision rewrite flagged sentences more
+  often than other revisers do, without leaving fewer findings.
+- Repetition, which readcost does not flag, tracks ratings and complaints in
+  every rating set where texts are long enough to measure it.
+- The derived records (features and outcomes per text, pointers and hashes,
+  no text) are the `readcost-derived` artifact of each run, with the card in
+  `eval/derived/README.md`. Uploading them is left to the maintainer.
 
 ## Not yet evaluated
 

@@ -12,9 +12,20 @@ on:
       - .github/actions/setup/action.yml
       - scripts/eval_onestop_pairs.py
       - scripts/reading_time_prep.py
+      - scripts/eval_second_parser.py
+      - src/readcost/verify.py
+      - scripts/eval_gold_treebank.py
+      - scripts/fetch_rulebench.py
+      - eval/rulebench/rulebench.jsonl
       - scripts/build_open_pairs.py
       - scripts/eval_stack_terms.py
-      - scripts/fetch_rulebench.py
+      - scripts/eval_patterns.py
+      - scripts/human_signals.py
+      - src/readcost/patterns.py
+      - scripts/dataset_matrix.py
+      - scripts/dataset_matrix_report.py
+      - scripts/fetch_matrix_data.sh
+      - eval/derived/README.md
 
 permissions:
   contents: read
@@ -59,6 +70,130 @@ jobs:
           name: onestop-pairs
           path: pairs.txt
 
+  # Does a second parser or tagger make stacked-nouns, reduced-object-relative
+  # and long-dependency more precise? Scored against hand-corrected parses.
+  second-parser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      # Commits of the UniversalDependencies repositories, 2026-11-10.
+      UD_EWT: 491be069d36e378f67c29f183699eea88308ea42
+      UD_GUM: 8e168382a25686ca6253deb7c4ef839494ddb154
+      UD_PUD: a697bab43d4111073356de0df5802488bca3de7e
+      UD_LINES: a4d79cb15c8a9a592ebf90cfa3359a77c9c78909
+      UD_PARTUT: 2aca171164c5fde639d66dcdf8d58dbbcd3b68cf
+      BIAFFINE: ghotriw/deberta-v3-xsmall-biaffine-dep-pos-feats-en-ewt-gum-norm
+      KNIV: dragonscale-ai/kniv-v7-small-en
+      TRF_WHEEL: https://github.com/explosion/spacy-models/releases/download/en_core_web_trf-3.8.0/en_core_web_trf-3.8.0-py3-none-any.whl
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: ./.github/actions/setup
+        with:
+          sync-args: --no-dev
+      # UD English treebanks: EWT CC BY-SA 4.0; GUM, LinES and ParTUT
+      # CC BY-NC-SA 4.0; PUD CC BY-SA 3.0. Bump the key's suffix to refetch.
+      - id: ud
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/ud
+          key: eval-ud-english-ewt-gum-pud-lines-partut-20261110-v1
+      - name: Download the treebanks
+        if: steps.ud.outputs.cache-hit != 'true'
+        run: |
+          fetch() {
+            mkdir -p "ref/ud/UD_English-$1"
+            git -C "ref/ud/UD_English-$1" init -q
+            git -C "ref/ud/UD_English-$1" fetch -q --depth 1 "https://github.com/UniversalDependencies/UD_English-$1" "$2"
+            git -C "ref/ud/UD_English-$1" checkout -q FETCH_HEAD
+            rm -rf "ref/ud/UD_English-$1/.git"
+          }
+          fetch EWT "$UD_EWT"; fetch GUM "$UD_GUM"; fetch PUD "$UD_PUD"
+          fetch LinES "$UD_LINES"; fetch ParTUT "$UD_PARTUT"
+      # Two small ONNX taggers from Hugging Face: MIT and Apache-2.0.
+      - id: onnx
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/models
+          key: eval-onnx-taggers-biaffine-xsmall-kniv-v7-small-v1
+      - name: Download the ONNX taggers
+        if: steps.onnx.outputs.cache-hit != 'true'
+        run: |
+          get() { mkdir -p "$(dirname "$3")"; curl -fsSL --retry 3 -o "$3" "https://huggingface.co/$1/resolve/main/$2"; }
+          for f in model.onnx config.json tokenizer.json; do get "$BIAFFINE" "$f" "ref/models/biaffine/$f"; done
+          for f in onnx/plain-int8.onnx onnx/onnx_meta.json tokenizer.json; do get "$KNIV" "$f" "ref/models/kniv/$f"; done
+          for repo in "$BIAFFINE" "$KNIV"; do
+            curl -fsSL --retry 3 "https://huggingface.co/api/models/$repo" \
+              | uv run python -c 'import json, sys; d = json.load(sys.stdin); print(d["id"], d["sha"])'
+          done > ref/models/REVISIONS
+          (cd ref/models && sha256sum biaffine/* kniv/tokenizer.json kniv/onnx/* > SHA256SUMS)
+      - name: Install the second models and measure what each adds
+        run: |
+          # The project environment from uv.lock (UV_NO_SYNC keeps uv run
+          # from undoing these installs): readcost's verify extra, then the
+          # transformer model with a CPU build of PyTorch.
+          site="$(uv run python -c 'import site; print(site.getsitepackages()[0])')"
+          mb() { du -sm "$1" | cut -f1; }
+          base="$(mb "$site")"
+          uv pip install --quiet "onnxruntime>=1.18" "tokenizers>=0.19"
+          onnx="$(mb "$site")"
+          uv pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --quiet "$TRF_WHEEL"
+          trf="$(mb "$site")"
+          {
+            echo '## Install size'
+            echo
+            echo '| What | MB on disk |'
+            echo '| --- | --- |'
+            echo "| readcost, spaCy and their dependencies (site-packages) | $base |"
+            echo "| en_core_web_sm, unpacked | $(mb ~/.cache/readcost/models) |"
+            echo "| added by onnxruntime and tokenizers | $((onnx - base)) |"
+            echo "| biaffine parser: model.onnx, config, tokenizer | $(mb ref/models/biaffine) |"
+            echo "| kniv v7 small: plain-int8.onnx, metadata, tokenizer | $(mb ref/models/kniv) |"
+            echo "| added by PyTorch (CPU build), spacy-curated-transformers and en_core_web_trf | $((trf - onnx)) |"
+            echo "| of which en_core_web_trf | $(mb "$site/en_core_web_trf") |"
+            echo
+            echo 'Model revisions:'
+            echo '```'
+            cat ref/models/REVISIONS ref/models/SHA256SUMS
+            uv run python -c 'import os, torch, onnxruntime, spacy; print("torch", torch.__version__, "onnxruntime", onnxruntime.__version__, "spacy", spacy.__version__, "cpus", os.cpu_count())'
+            echo '```'
+          } > sizes.md
+          cat sizes.md
+          cat sizes.md >> "$GITHUB_STEP_SUMMARY"
+      # The labelled bench keeps references, not text; its sources are web
+      # pages, so a missing page only shrinks the bench.
+      - id: bench
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/rulebench
+          key: eval-rulebench-${{ hashFiles('eval/rulebench/rulebench.jsonl', 'scripts/fetch_rulebench.py') }}-v1
+      - name: Fetch the labelled bench's sentences
+        if: steps.bench.outputs.cache-hit != 'true'
+        continue-on-error: true
+        run: uv run --with "trafilatura>=1.12" scripts/fetch_rulebench.py ref/rulebench
+      - name: Each configuration against the gold parses
+        run: |
+          uv run python scripts/eval_second_parser.py \
+            --group "Held-out: EWT test and GUM test" \
+              ref/ud/UD_English-EWT/en_ewt-ud-test.conllu ref/ud/UD_English-GUM/en_gum-ud-test.conllu \
+            --group "Other treebanks: PUD, LinES, ParTUT" \
+              ref/ud/UD_English-PUD/*.conllu ref/ud/UD_English-LinES/*.conllu ref/ud/UD_English-ParTUT/*.conllu \
+            --group "Seen by the ONNX taggers in training: EWT and GUM train and dev" \
+              ref/ud/UD_English-EWT/en_ewt-ud-train.conllu ref/ud/UD_English-EWT/en_ewt-ud-dev.conllu \
+              ref/ud/UD_English-GUM/en_gum-ud-train.conllu ref/ud/UD_English-GUM/en_gum-ud-dev.conllu \
+            --second-spacy en_core_web_trf --biaffine ref/models/biaffine --kniv ref/models/kniv \
+            --rulebench ref/rulebench/rulebench.jsonl --examples 40 --json second_parser.json \
+            | tee second_parser.md
+          cat second_parser.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: second-parser
+          path: |
+            second_parser.md
+            second_parser.json
+            sizes.md
+
   # Do word-pair counts or the document tell an established term ("goroutine
   # call stack") from a coined noun stack? Counts come from one shard of
   # FineWeb-Edu (ODC-By 1.0); labels from eval/rulebench and eval/labels.
@@ -68,8 +203,6 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: ./.github/actions/setup
-        with:
-          extras: test
       - id: texts
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
@@ -86,15 +219,14 @@ jobs:
             martin-fowler,andrew-gallant,dan-abramov,brendan-gregg,eli-bendersky,sqlite-docs,govuk-guidance,
             stripe-docs,go-blog,effective-go,rust-book,python-tutorial,django-docs
         run: |
-          python -m pip install --quiet "trafilatura>=1.12"
-          python scripts/fetch_rulebench.py ref/bench
-          python scripts/fetch_eval_corpus.py ref/eval --ref-root ref/none --only "${SOURCES// /}"
+          uv run --with "trafilatura>=1.12" scripts/fetch_rulebench.py ref/bench
+          uv run --with "trafilatura>=1.12" scripts/fetch_eval_corpus.py ref/eval --ref-root ref/none --only "${SOURCES// /}"
       # The stacks readcost reports, so that the count below can include them
       # as whole phrases; the cache key below changes when they do.
       - name: List the stacks to count
         run: |
           mkdir -p ref/pairs
-          python scripts/eval_stack_terms.py --bench ref/bench --corpus ref/eval --list-stacks > ref/pairs/stacks.txt
+          uv run scripts/eval_stack_terms.py --bench ref/bench --corpus ref/eval --list-stacks > ref/pairs/stacks.txt
           wc -l ref/pairs/stacks.txt
       - id: pairs
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
@@ -104,21 +236,273 @@ jobs:
       - name: Count adjacent word pairs in one FineWeb-Edu shard
         if: steps.pairs.outputs.cache-hit != 'true'
         run: |
-          python -m pip install --quiet "pyarrow>=15"
           mkdir -p ref/pairs
           curl -fsSL --retry 3 -o ref/pairs/shard.parquet \
             https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu/resolve/main/data/CC-MAIN-2019-04/train-00000-of-00016.parquet
-          python scripts/build_open_pairs.py ref/pairs/shard.parquet --out ref/pairs/open_pairs.npz --phrases ref/pairs/stacks.txt
+          uv run --with "pyarrow>=15" scripts/build_open_pairs.py ref/pairs/shard.parquet --out ref/pairs/open_pairs.npz --phrases ref/pairs/stacks.txt
           rm ref/pairs/shard.parquet
       - name: Which evidence separates accepted from rejected findings
         run: |
-          python scripts/eval_stack_terms.py --bench ref/bench --corpus ref/eval --pairs ref/pairs/open_pairs.npz > stack-terms.md
+          uv run scripts/eval_stack_terms.py --bench ref/bench --corpus ref/eval --pairs ref/pairs/open_pairs.npz > stack-terms.md
           cat stack-terms.md
           cat stack-terms.md >> "$GITHUB_STEP_SUMMARY"
-          python scripts/build_open_pairs.py --export ref/pairs/open_pairs.npz --min-docs 20 --min-pmi 6 --to open_pairs.txt.gz
+          uv run scripts/build_open_pairs.py --export ref/pairs/open_pairs.npz --min-docs 20 --min-pmi 6 --to open_pairs.txt.gz
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: stack-terms
           path: |
             stack-terms.md
             open_pairs.txt.gz
+
+
+  # Experimental discourse measures (src/readcost/patterns.py; no rule uses
+  # them): rates in human and model text, and whether they track what
+  # readers did. docs/evaluation.md, "Discourse patterns and redundancy".
+  patterns:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      CREATIVITY_EVAL: 3d029879df6878f611363db88cc02d465699bc51
+      RAW: https://raw.githubusercontent.com/salesforce/creativity_eval
+      HUB: https://huggingface.co/datasets
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: ./.github/actions/setup
+        with:
+          sync-args: --no-dev --group eval   # pyarrow reads the Parquet files
+      # HAP-E (MIT), HC3 (CC BY-SA 4.0), Chatbot Arena votes (Apache-2.0),
+      # LAMP and the writing-quality benchmark (BSD-3-Clause), EMTeC (OSF).
+      - id: data
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/patterns
+          key: eval-patterns-hape-hc3-arena55-lamp-emtec-v1
+      - name: Download corpora
+        if: steps.data.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ref/patterns/hape ref/patterns/emtec
+          cd ref/patterns
+          curl -fsSL --retry 3 "https://huggingface.co/api/datasets/browndw/human-ai-parallel-corpus/parquet/default/train" \
+            | python3 -c 'import json, sys; print("\n".join(json.load(sys.stdin)))' > hape/urls.txt
+          n=0
+          while read -r url; do
+            curl -fsSL --retry 3 -o "hape/$n.parquet" "$url"
+            n=$((n + 1))
+          done < hape/urls.txt
+          curl -fsSL --retry 3 -o hc3.parquet "$HUB/Hello-SimpleAI/HC3/resolve/refs%2Fconvert%2Fparquet/all/train/0000.parquet"
+          curl -fsSL --retry 3 -o arena55.parquet "$HUB/lmarena-ai/arena-human-preference-55k/resolve/refs%2Fconvert%2Fparquet/default/train/0000.parquet"
+          curl -fsSL --retry 3 -o lamp.json "$RAW/$CREATIVITY_EVAL/Writing_Alignment/LAMP/LAMP-train-val-test.json"
+          curl -fsSL --retry 3 -o wq_lmarena.json "$RAW/$CREATIVITY_EVAL/WritingRewards/WQ-benchmark-data/wq_lmarena.json"
+          curl -fsSL --retry 3 -o emtec/stimuli.csv https://osf.io/download/vgp9a/ || true
+          curl -fsSL --retry 3 -o emtec/reading_measures_corrected.csv https://osf.io/download/wa3ty/ || true
+          ls -la . hape emtec
+      - id: rt
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/rt/texts.jsonl
+          key: eval-rt-texts-${{ hashFiles('scripts/reading_time_prep.py') }}-v1
+      - name: Download reading-time corpora and build per-text reading times
+        if: steps.rt.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ref/rt/onestop ref/rt/provo ref/rt/zip
+          curl -fsSL --retry 3 -o ref/rt/zip/onestop.zip https://osf.io/download/xkgfz/
+          unzip -q ref/rt/zip/onestop.zip -d ref/rt/zip
+          mv "$(find ref/rt/zip -name ia_Paragraph_ordinary.csv | head -1)" ref/rt/onestop/
+          curl -fsSL --retry 3 -o ref/rt/provo/Provo_Corpus-Eyetracking_Data.csv https://osf.io/download/a32be/
+          rm -rf ref/rt/zip
+          uv run scripts/reading_time_prep.py ref/rt   # polars comes from the script's inline metadata
+      # The parts run side by side; one that fails leaves its error in its
+      # file and does not stop the others.
+      - name: Measure
+        run: |
+          mkdir -p out
+          part() { uv run python scripts/eval_patterns.py "$@" > "out/$1.md" 2> "out/$1.err" || echo "$1 failed; see the log" >> "out/$1.md"; }
+          part hape ref/patterns/hape &
+          part hc3 ref/patterns/hc3.parquet &
+          part lamp ref/patterns/lamp.json &
+          part arena ref/patterns/wq_lmarena.json &
+          wait
+          part arena55 ref/patterns/arena55.parquet &
+          part rt ref/rt/texts.jsonl &
+          part emtec ref/patterns/emtec &
+          wait
+          for p in hape hc3 lamp arena arena55 rt emtec; do
+            cat "out/$p.md"; echo
+            tail -n 5 "out/$p.err"
+          done
+          for p in hape hc3 lamp arena arena55 rt emtec; do cat "out/$p.md"; echo; done >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: patterns
+          path: out
+
+  # The dataset matrix: many existing datasets with human signals about
+  # prose, each turned into the same per-text record by
+  # scripts/dataset_matrix.py (docs/datasets.md lists them and their
+  # licences). One leg per download; the report job reads every leg's
+  # records and analyses each dataset separately.
+  matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [helpsteer2, helpsteer3, summeval, axis, readmepp, scarecrow, geco, rt, iterater, arxivedits, pararev]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: ./.github/actions/setup
+        with:
+          sync-args: --no-dev --group eval
+      - id: data
+        if: matrix.part != 'rt'
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/matrix/${{ matrix.part }}
+          key: eval-matrix-${{ matrix.part }}-${{ hashFiles('scripts/fetch_matrix_data.sh') }}-v1
+      - name: Download
+        if: matrix.part != 'rt' && steps.data.outputs.cache-hit != 'true'
+        env:
+          PART: ${{ matrix.part }}
+        run: bash scripts/fetch_matrix_data.sh "$PART" ref/matrix
+      # OneStop and Provo: the same texts and cache as the onestop-pairs job.
+      - id: rt
+        if: matrix.part == 'rt'
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/rt/texts.jsonl
+          key: eval-rt-texts-${{ hashFiles('scripts/reading_time_prep.py') }}-v1
+      - name: Download reading-time corpora and build per-text reading times
+        if: matrix.part == 'rt' && steps.rt.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ref/rt/onestop ref/rt/provo ref/rt/zip
+          curl -fsSL --retry 3 -o ref/rt/zip/onestop.zip https://osf.io/download/xkgfz/
+          unzip -q ref/rt/zip/onestop.zip -d ref/rt/zip
+          mv "$(find ref/rt/zip -name ia_Paragraph_ordinary.csv | head -1)" ref/rt/onestop/
+          curl -fsSL --retry 3 -o ref/rt/provo/Provo_Corpus-Eyetracking_Data.csv https://osf.io/download/a32be/
+          rm -rf ref/rt/zip
+          uv run scripts/reading_time_prep.py ref/rt
+      - name: GECO sentence reading times
+        if: matrix.part == 'geco'
+        run: uv run --with "openpyxl>=3.1" python scripts/dataset_matrix.py prep-geco ref/matrix/geco
+      - name: Features and outcomes per text
+        env:
+          PART: ${{ matrix.part }}
+        run: |
+          x() { uv run --with "openpyxl>=3.1" python scripts/dataset_matrix.py extract "$1" "$2" out --jobs 4; }
+          case "$PART" in
+            helpsteer3) x helpsteer3_feedback ref/matrix/helpsteer3/feedback
+                        x helpsteer3_edit ref/matrix/helpsteer3/edit ;;
+            axis)       x tldr_axis ref/matrix/axis
+                        x cnndm_axis ref/matrix/axis ;;
+            rt)         x onestop ref/rt/texts.jsonl
+                        x provo ref/rt/texts.jsonl ;;
+            geco)       x geco ref/matrix/geco/texts.jsonl ;;
+            readmepp|scarecrow|arxivedits) x "$PART" "ref/matrix/$PART/repo" ;;
+            *)          x "$PART" "ref/matrix/$PART" ;;
+          esac
+          if [ -f "ref/matrix/$PART/SHA256SUMS" ]; then cp "ref/matrix/$PART/SHA256SUMS" "out/$PART.SHA256SUMS"; fi
+          ls -la out
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: matrix-${{ matrix.part }}
+          path: out
+
+  matrix-report:
+    needs: matrix
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: ./.github/actions/setup
+        with:
+          sync-args: --no-dev --group eval
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          pattern: matrix-*
+          merge-multiple: true
+          path: records
+      - name: Associations per dataset, edits by intent, leave one dataset out
+        run: |
+          ls -la records
+          uv run python scripts/dataset_matrix_report.py records --out report | tee report.md
+          cat report.md >> "$GITHUB_STEP_SUMMARY"
+      # Features and outcomes per text with pointers and hashes, no text.
+      # Not uploaded anywhere but this run; eval/derived/README.md says how
+      # a maintainer would publish it.
+      - name: Derived dataset
+        run: |
+          uv run python scripts/dataset_matrix_report.py records --derived derived
+          cp records/*.SHA256SUMS derived/ 2>/dev/null || true
+          ls -la derived
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: matrix-report
+          path: report
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: readcost-derived
+          path: derived
+
+  # Word-pair counts from openly licensed technical text, as a second column
+  # beside the stack-terms job's FineWeb-Edu counts: one parquet shard each
+  # of the Common Pile's Stack Exchange (CC BY-SA, per-document licence) and
+  # GitHub Archive (issue and pull request threads of openly licensed
+  # repositories) subsets. Only counts are kept.
+  stack-terms-tech:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: ./.github/actions/setup
+        with:
+          sync-args: --no-dev --group eval
+      - id: texts
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: |
+            ref/eval
+            ref/bench
+          key: eval-stack-terms-texts-${{ hashFiles('scripts/fetch_eval_corpus.py', 'scripts/fetch_rulebench.py', 'eval/rulebench/rulebench.jsonl') }}-v1
+      - name: Fetch the rule bench and the corpus's essays and documentation
+        if: steps.texts.outputs.cache-hit != 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SOURCES: >-
+            paul-graham,julia-evans,dan-luu,simon-willison,russ-cox,raymond-chen,hillel-wayne,joel-spolsky,
+            martin-fowler,andrew-gallant,dan-abramov,brendan-gregg,eli-bendersky,sqlite-docs,govuk-guidance,
+            stripe-docs,go-blog,effective-go,rust-book,python-tutorial,django-docs
+        run: |
+          uv run --with "trafilatura>=1.12" python scripts/fetch_rulebench.py ref/bench
+          uv run --with "trafilatura>=1.12" python scripts/fetch_eval_corpus.py ref/eval --ref-root ref/none --only "${SOURCES// /}"
+      - name: List the stacks to count
+        run: |
+          mkdir -p ref/tech
+          uv run python scripts/eval_stack_terms.py --bench ref/bench --corpus ref/eval --list-stacks > ref/tech/stacks.txt
+          wc -l ref/tech/stacks.txt
+      - id: pairs
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/tech/open_pairs.npz
+          key: eval-tech-open-pairs-se-gharchive-${{ hashFiles('scripts/build_open_pairs.py', 'ref/tech/stacks.txt') }}-v1
+      - name: Count adjacent word pairs in Stack Exchange and GitHub threads
+        if: steps.pairs.outputs.cache-hit != 'true'
+        run: |
+          base=https://huggingface.co/datasets/common-pile
+          pq="resolve/refs%2Fconvert%2Fparquet/default/partial-train/0000.parquet"
+          curl -fsSL --retry 3 -o ref/tech/se.parquet "$base/stackexchange_filtered/$pq"
+          curl -fsSL --retry 3 -o ref/tech/gh.parquet "$base/github_archive_filtered/$pq"
+          sha256sum ref/tech/*.parquet
+          uv run scripts/build_open_pairs.py ref/tech/se.parquet ref/tech/gh.parquet \
+            --out ref/tech/open_pairs.npz --phrases ref/tech/stacks.txt
+          rm ref/tech/*.parquet
+      - name: Which evidence separates accepted from rejected findings
+        run: |
+          uv run python scripts/eval_stack_terms.py --bench ref/bench --corpus ref/eval --pairs ref/tech/open_pairs.npz > stack-terms-tech.md
+          cat stack-terms-tech.md
+          { echo '## Word pairs from Stack Exchange and GitHub threads'; cat stack-terms-tech.md; } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: stack-terms-tech
+          path: stack-terms-tech.md

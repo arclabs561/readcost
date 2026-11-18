@@ -9,6 +9,12 @@ configuration.
 
 ### Added
 
+- `verify_model` (opt-in): a small ONNX dependency parser
+  (`readcost setup --verifier`, extra `verify`) checks stacked-nouns,
+  reduced-object-relative and long-dependency findings, with parses cached
+  by sentence hash. Off by default. `scripts/eval_second_parser.py` and the
+  `second-parser` eval job measure it, en_core_web_trf and two other checks
+  against UD gold parses; results in docs/evaluation.md.
 - Every finding has `start` and `end`, character offsets of the flagged
   words in the source file, with `sentence_start` and `sentence_end`.
   Markdown, reStructuredText, HTML, source comments, commit messages and
@@ -25,11 +31,24 @@ configuration.
   a blind sheet for people to fill in, Fleiss' kappa with category
   frequencies, Cohen's kappa per pair, and majority votes. docs/labels.md
   describes it.
+- `src/readcost/patterns.py` (experimental, used by no rule or command) and
+  `scripts/eval_patterns.py`: contrast framing, series of three,
+  anticipatory-it frames, restatement and document uniformity, measured
+  against model text and against writers' edits, users' preferences and
+  reading times. None tracks readers enough to add; results in
+  docs/evaluation.md, "Discourse patterns and redundancy".
 - `long_dependency_gap = "content"` (opt-in): long-dependency says what fills
   the gap (an object relative clause, another clause, only prepositional
   phrases, or no clause) and reports a gap of prepositional phrases at info.
   The default, `"words"`, is unchanged. `scripts/eval_gap_content.py` splits
   the labelled findings by gap class.
+- `scripts/dataset_matrix.py` and `scripts/dataset_matrix_report.py`, with
+  the `matrix` jobs of the eval workflow: one record per text for fourteen
+  datasets of human ratings, revisions and reading times, each analysed on
+  its own. docs/datasets.md lists the datasets considered;
+  `eval/derived/README.md` describes the derived records, which each run
+  keeps as an artifact. Results are in docs/evaluation.md, "Many datasets
+  with human signals".
 - Evaluations against existing human data, with no new labels:
   `scripts/eval_naturalstories_rt.py` (self-paced reading times),
   `scripts/eval_gold_treebank.py` (UD English EWT and GUM gold parses),
