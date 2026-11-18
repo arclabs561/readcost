@@ -20,8 +20,8 @@ readcost setup
   file's directory.
 - It picks the format from the file name, as `readcost check` does: Markdown
   for `.md`, doc comments for source files, and so on.
-- Each diagnostic covers the flagged words when they sit on one line, and the
-  whole line otherwise. The code is the feature id, such as `stacked-nouns`,
+- Each diagnostic covers the flagged words exactly, over several lines when
+  the sentence is wrapped. The code is the feature id, such as `stacked-nouns`,
   and links to the README's [What it flags](../README.md#what-it-flags) table.
   The message ends with the suggested fix.
 - Severity follows the finding: info is Information, warn is Warning, and

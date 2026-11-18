@@ -163,7 +163,9 @@ index while adding words is reported, not rewarded.
   2025) says how to check model raters against three or more people on 100
   to 150 items (50 to 100 only if the people are experts), using the version
   for skewed labels and reporting agreement among the people. readcost has
-  not run it.
+  not run it. `readcost label export` writes the sheet for the people and
+  `readcost label agreement` reports their agreement
+  ([labels.md](labels.md)).
 - Nothing readcost computes today tells an established term from a coined
   noun stack. The test used 27 labelled stacked-nouns findings and 25
   hyphen-compound findings. Counts of adjacent word pairs from web text,

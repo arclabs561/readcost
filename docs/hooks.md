@@ -161,7 +161,10 @@ nothing, so there it judges each file whole. Without the framework, copy
 ```
 
 For code scanning, run `readcost check . -o sarif --fail-on never > readcost.sarif`
-and upload the file with `github/codeql-action/upload-sarif`.
+and upload the file with `github/codeql-action/upload-sarif`. Each result's
+region has the start and end line and column of the flagged words, and
+`charOffset` and `charLength`; columns count code points
+(`columnKind: unicodeCodePoints`).
 
 ### Anything else
 

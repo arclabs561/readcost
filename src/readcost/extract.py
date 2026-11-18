@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import ast
 import bisect
+import html
 import json
 import re
 from dataclasses import dataclass, field
@@ -40,6 +41,13 @@ class Segment:
     codes: dict[int, str] = field(default_factory=dict)  # CODE offset -> original text
     in_list: bool = False  # a Markdown list item, not running prose
     skip: frozenset[str] = frozenset()  # rules a readcost directive turned off here
+    # For each character of ``text``, where it starts and ends in the source
+    # file, in characters; -1 where that is not known (a space that stands
+    # for a line break, text taken out of a JSON string). All five
+    # characters of a CODE placeholder map to the whole code span. Empty
+    # when the extractor has no offsets at all.
+    starts: list[int] = field(default_factory=list, repr=False)
+    ends: list[int] = field(default_factory=list, repr=False)
 
     def line_at(self, offset: int) -> int:
         if not self.anchors:
@@ -47,6 +55,79 @@ class Segment:
         offsets = [a[0] for a in self.anchors]
         i = bisect.bisect_right(offsets, offset) - 1
         return self.anchors[max(i, 0)][1]
+
+    def span(self, a: int, b: int) -> tuple[int, int] | None:
+        """Source offsets (start, end) of ``text[a:b]``, or None when either end is unknown."""
+        if not self.starts or not 0 <= a < b <= len(self.starts):
+            return None
+        start, end = self.starts[a], self.ends[b - 1]
+        return (start, end) if 0 <= start < end else None
+
+
+Span = tuple[int, int]  # (start, end) in the source file; (-1, -1) when unknown
+UNKNOWN: Span = (-1, -1)
+NEWLINE = re.compile(r"\r\n?|\n")  # the line breaks markdown-it, the LSP and readcost's columns use
+ENTITY = re.compile(r"&(?:#[0-9]{1,7}|#[xX][0-9a-fA-F]{1,6}|[A-Za-z][A-Za-z0-9]{1,31});?")
+
+
+def line_starts(text: str, keepends_split: bool = False) -> list[int]:
+    """Offset of each line's first character.
+
+    Lines end at ``\\n``, ``\\r\\n`` or ``\\r``. With ``keepends_split`` they
+    end wherever ``str.splitlines`` ends them, which the line-based
+    extractors use.
+    """
+    if keepends_split:
+        out, pos = [], 0
+        for line in text.splitlines(keepends=True):
+            out.append(pos)
+            pos += len(line)
+        return out or [0]
+    return [0] + [m.end() for m in NEWLINE.finditer(text)]
+
+
+def _align(text: str, raw: str, cursor: int) -> tuple[list[int], list[int], int]:
+    """Where each character of ``text`` sits in ``raw``, at or after ``cursor``.
+
+    ``text`` is ``raw`` with backslash escapes and character references
+    decoded, as a Markdown or HTML parser returns it. Returns the start and
+    end offset of each character (-1 for one that cannot be found) and the
+    offset after the last one.
+    """
+    starts, ends = [-1] * len(text), [-1] * len(text)
+    i, n = 0, len(raw)
+    while i < len(text):
+        c = text[i]
+        if cursor < n and raw[cursor] == "&":
+            m = ENTITY.match(raw, cursor)
+            decoded = html.unescape(m.group()) if m else ""
+            if m and decoded != m.group() and text.startswith(decoded, i):
+                for k in range(i, i + len(decoded)):
+                    starts[k], ends[k] = m.start(), m.end()
+                cursor, i = m.end(), i + len(decoded)
+                continue
+        if cursor < n and raw[cursor] == c:
+            starts[i], ends[i] = cursor, cursor + 1
+            cursor, i = cursor + 1, i + 1
+            continue
+        if cursor + 1 < n and raw[cursor] == "\\" and raw[cursor + 1] == c:
+            starts[i], ends[i] = cursor, cursor + 2
+            cursor, i = cursor + 2, i + 1
+            continue
+        if c.isspace() and cursor < n and raw[cursor].isspace():
+            cursor, i = cursor + 1, i + 1  # a line break the parser turned into a space
+            continue
+        # Markup the caller did not step over. Look for the next few characters;
+        # a single character only close by, where it cannot be far wrong.
+        for size, reach in ((8, n), (3, n), (1, cursor + 4)):
+            chunk = text[i:i + size]
+            found = raw.find(chunk, cursor, min(n, reach + len(chunk)))
+            if found >= 0:
+                cursor = found
+                break
+        else:
+            i += 1
+    return starts, ends, cursor
 
 
 # --------------------------------------------------------------- markdown
@@ -131,69 +212,221 @@ def _is_yaml(body: str) -> bool:
     return bool(lines) and bool(YAML_KEY.match(lines[0])) and all(YAML_LINE.match(l) for l in lines)
 
 
-def _inline_pieces(inline, line_no) -> list[tuple[str, int, str | None]]:
-    """Prose pieces of one paragraph, each paired with its source line.
+def _plain_spans(text: str) -> list[tuple[str, str | None, int, int]]:
+    """``_plain`` pieces with the range of ``text`` each one came from."""
+    out, pos = [], 0
+    for piece, original in _plain(text):
+        size = len(piece if original is None else original)
+        out.append((piece, original, pos, pos + size))
+        pos += size
+    if pos != len(text):  # a NUL was dropped; the ranges would be off
+        return [(piece, original, -1, -1) for piece, original, _, _ in out]
+    return out
+
+
+def _content_at(content: str, first: int, src_lines: list[str], at):
+    """A function from an offset in a block's content to that character's span in the file.
+
+    markdown-it gives a block's content with container markers ("> ", list
+    indents) removed, so each content line is the tail of a source line.
+    ``at(k, col)`` is the file span of column ``col`` of source line ``k``.
+    """
+    starts = [0] + [i + 1 for i, c in enumerate(content) if c == "\n"]
+    shifts: list[int | None] = []
+    for j, line in enumerate(content.split("\n")):
+        src = src_lines[first + j] if first + j < len(src_lines) else ""
+        body = line.rstrip()
+        col = len(src.rstrip()) - len(body)
+        if col < 0 or src[col:col + len(body)] != body:
+            found = src.find(line.strip()) if line.strip() else -1
+            col = found - (len(line) - len(line.lstrip())) if found >= 0 else None
+        shifts.append(col)
+
+    def span(offset: int) -> Span:
+        if offset < 0:
+            return UNKNOWN
+        j = bisect.bisect_right(starts, offset) - 1
+        if shifts[j] is None:
+            return UNKNOWN
+        return at(first + j, offset - starts[j] + shifts[j])
+
+    def spans(a: int, b: int) -> Span:
+        """The file span of content[a:b]."""
+        lo, hi = span(a), span(b - 1)
+        return (lo[0], hi[1]) if lo[0] >= 0 and hi[1] >= 0 else UNKNOWN
+
+    return spans
+
+
+def _link_tail(raw: str, i: int, href: str = "") -> int:
+    """The offset after a link's closing bracket and its destination or reference."""
+    if not raw.startswith("]", i):
+        return i
+    i += 1
+    if raw.startswith("(", i):
+        depth, j, quote = 0, i, ""
+        while j < len(raw):
+            ch = raw[j]
+            if ch == "\\":
+                j += 2
+                continue
+            if quote:
+                quote = "" if ch == quote else quote
+            elif ch in "\"'" and raw[j - 1].isspace():
+                quote = ch  # a title
+            elif ch == "(":
+                depth += 1
+            elif ch == ")":
+                depth -= 1
+                if depth == 0:
+                    dest = raw[i + 1:j].strip().lstrip("<")
+                    # "[ref](not a destination)": the parentheses are prose.
+                    same = not href or not dest or dest[0].lower() == href[0].lower() or dest[0] in "%&\\"
+                    return j + 1 if same else i
+            j += 1
+        return i
+    if raw.startswith("[", i):
+        j = raw.find("]", i)
+        return j + 1 if j >= 0 else i
+    return i
+
+
+def _image_end(raw: str, cursor: int) -> int:
+    """The offset after the image that starts at or after ``cursor``."""
+    j = raw.find("![", cursor)
+    if j < 0:
+        return cursor
+    depth, k = 0, j + 1
+    while k < len(raw):
+        if raw[k] == "\\":
+            k += 2
+            continue
+        if raw[k] == "[":
+            depth += 1
+        elif raw[k] == "]":
+            depth -= 1
+            if depth == 0:
+                return _link_tail(raw, k)
+        k += 1
+    return cursor
+
+
+BREAK = re.compile(r"[ \t]*\\?\n[ \t]*")
+Piece = tuple[str, int, "str | None", "list[Span]"]  # text, line, original of a CODE piece, span per character
+
+
+def _inline_pieces(inline, line_no, spans=None) -> list[Piece]:
+    """Prose pieces of one paragraph, each paired with its source line and offsets.
 
     The paragraph starts on ``inline.map[0]``; each soft or hard break moves
     to the next line. Code spans, math and raw HTML can also hold newlines.
+    ``spans(a, b)`` gives the file span of ``inline.content[a:b]``; ``cur``
+    walks the content in step with the tokens so each piece can be found.
     """
     first = inline.map[0]
     raw = inline.content  # the paragraph's source lines, container markers removed
     starts = [0] + [i + 1 for i, c in enumerate(raw) if c == "\n"]
     k, cursor, in_autolink = first, 0, False
-    pieces: list[tuple[str, int, str | None]] = []
+    cur = 0
+    hrefs: list[str] = []
+    pieces: list[Piece] = []
+
+    def where(a: int, b: int) -> Span:
+        return spans(a, b) if spans and 0 <= a < b else UNKNOWN
+
+    def code(text_line: int, original: str | None, a: int, b: int) -> None:
+        pieces.append((CODE, text_line, original, [where(a, b)] * len(CODE)))
+
     for child in inline.children or []:
         kind = child.type
         if in_autolink:
             in_autolink = kind != "link_close"
         elif kind == "text":
-            pieces.extend((text, line_no(k), orig) for text, orig in _plain(child.content))
+            st, en, cur = _align(child.content, raw, cur)
+            for text, orig, a, b in _plain_spans(child.content):
+                if a < 0:
+                    pieces.append((text, line_no(k), orig, [UNKNOWN] * len(text)))
+                elif orig is None:
+                    pieces.append((text, line_no(k), None,
+                                   [where(st[i], en[i]) for i in range(a, b)]))
+                else:
+                    code(line_no(k), orig, st[a], en[b - 1])
         elif kind in ("softbreak", "hardbreak"):
             k += 1
-            pieces.append((" ", line_no(k), None))
+            pieces.append((" ", line_no(k), None, [UNKNOWN]))
+            m = BREAK.match(raw, cur)
+            cur = m.end() if m else cur
         elif kind == "code_inline":
-            pieces.append((CODE, line_no(k), f"{child.markup}{child.content}{child.markup}"))
             # markdown-it folds newlines in a code span into spaces; count
             # them in the raw source instead.
-            cursor = max(cursor, starts[min(k - first, len(starts) - 1)])
-            opened = raw.find(child.markup, cursor)
-            closed = raw.find(child.markup, opened + len(child.markup)) if opened >= 0 else -1
+            cursor = max(cursor, cur, starts[min(k - first, len(starts) - 1)])
+            fence = re.compile(r"(?<!`)" + re.escape(child.markup) + r"(?!`)")
+            m = fence.search(raw, cursor)
+            opened = m.start() if m else -1
+            m = fence.search(raw, opened + len(child.markup)) if opened >= 0 else None
+            closed = m.start() if m else -1
+            code(line_no(k), f"{child.markup}{child.content}{child.markup}",
+                 opened, closed + len(child.markup) if closed >= 0 else -1)
             if closed >= 0:
                 k += raw.count("\n", opened, closed)
-                cursor = closed + len(child.markup)
+                cursor = cur = closed + len(child.markup)
         elif kind in ("math_inline", "math_inline_double"):
-            pieces.append((CODE, line_no(k), f"{child.markup}{child.content}{child.markup}"))
+            whole = f"{child.markup}{child.content}{child.markup}"
+            found = raw.find(whole, cur)
+            code(line_no(k), whole, found, found + len(whole))
+            cur = found + len(whole) if found >= 0 else cur
             k += child.content.count("\n")
         elif kind == "link_open" and child.markup == "autolink":
-            pieces.append((CODE, line_no(k), str(child.attrs.get("href", "")) or None))
+            found = raw.find("<", cur)
+            end = raw.find(">", found) + 1 if found >= 0 else 0
+            code(line_no(k), str(child.attrs.get("href", "")) or None, found if end else -1, end)
+            cur = end or cur
             in_autolink = True
+        elif kind == "link_open":
+            hrefs.append(str(child.attrs.get("href", "")))
+            cur += raw.startswith("[", cur)
+        elif kind == "link_close":
+            cur = _link_tail(raw, cur, hrefs.pop() if hrefs else "")
         elif kind == "image":
             k += sum(c.type in ("softbreak", "hardbreak") for c in child.children or [])
+            cur = _image_end(raw, cur)
         elif kind == "html_inline":
             k += child.content.count("\n")
-        # Emphasis, strikethrough, link markers and footnote references add no words.
+            found = raw.find(child.content, cur)
+            cur = found + len(child.content) if found >= 0 else cur
+        elif kind == "footnote_ref":
+            found = raw.find("[^", cur)
+            end = raw.find("]", found) + 1 if found >= 0 else 0
+            cur = end or cur
+        elif child.markup and raw.startswith(child.markup, cur):
+            cur += len(child.markup)  # emphasis and strikethrough markers add no words
     return pieces
 
 
-def _segment(pieces: list[tuple[str, int, str | None]], path: str, label: str) -> Segment | None:
+def _segment(pieces: list[Piece], path: str, label: str) -> Segment | None:
     chars: list[str] = []
     anchors: list[tuple[int, int]] = []
     codes: dict[int, str] = {}
-    for piece, line, original in pieces:
+    spans: list[Span] = []
+    for piece, line, original, where in pieces:
         if original is not None:
             codes[len(chars)] = original
-        for ch in piece:
+        for ch, span in zip(piece, where):
             if ch.isspace():
                 if chars and chars[-1] != " ":
                     chars.append(" ")
+                    spans.append(UNKNOWN)
                 continue
             if not anchors or anchors[-1][1] != line:
                 anchors.append((len(chars), line))
             chars.append(ch)
+            spans.append(span)
     text = "".join(chars).rstrip()
     if len(text.split()) < 4:
         return None
-    return Segment(text, path, anchors, label, codes)
+    spans = spans[:len(text)]
+    return Segment(text, path, anchors, label, codes,
+                   starts=[s for s, _ in spans], ends=[e for _, e in spans])
 
 
 def _link_row(tok) -> bool:
@@ -211,7 +444,9 @@ def _link_row(tok) -> bool:
     return links >= 2
 
 
-def _markdown(src: str, path: str, label: str, line_no) -> list[Segment]:
+def _markdown(src: str, path: str, label: str, line_no, at=None) -> list[Segment]:
+    """``at(k, col)`` is the file span of column ``col`` of line ``k`` of ``src``; None for no offsets."""
+    src_lines = NEWLINE.split(src) if at else []
     tokens = _MD.parse(src)
     if tokens and tokens[0].type == "front_matter" and not _is_yaml(tokens[0].content):
         tokens = _MD_PLAIN.parse(src)
@@ -274,9 +509,9 @@ def _markdown(src: str, path: str, label: str, line_no) -> list[Segment]:
             # Prose inside HTML in Markdown (<p>...</p>, <details>) is still prose.
             base = tok.map[0] if tok.map else 0
             parser = _HTMLProse()
-            parser.feed(tok.content)
-            parser._flush()
-            for seg in markdown_lines([(t, line_no(base + n - 1)) for t, n in parser.lines], path, label):
+            parser.read(tok.content, _content_at(tok.content, base, src_lines, at) if at else None)
+            for seg in markdown_lines([(t, line_no(base + n - 1), m if at else None)
+                                       for t, n, m in parser.lines], path, label):
                 seg.in_list = items > 0
                 seg.skip = seg.skip | rule_skip | off_rules
                 segments.append(seg)
@@ -285,7 +520,8 @@ def _markdown(src: str, path: str, label: str, line_no) -> list[Segment]:
             continue  # headings, table cells and definition terms are not prose
         if _link_row(tok):
             continue  # "[Guide](a) | [API docs](b) | [Changelog](c)": navigation, not prose
-        seg = _segment(_inline_pieces(tok, line_no), path, label)
+        spans = _content_at(tok.content, tok.map[0], src_lines, at) if at else None
+        seg = _segment(_inline_pieces(tok, line_no, spans), path, label)
         if seg:
             seg.in_list = items > 0
             seg.skip = rule_skip | off_rules
@@ -293,38 +529,64 @@ def _markdown(src: str, path: str, label: str, line_no) -> list[Segment]:
     return segments
 
 
-def markdown_lines(lines: Iterable[tuple[str, int]], path: str, label: str = "") -> list[Segment]:
-    """Prose segments from (text, line number) pairs that together form Markdown."""
-    lines = list(lines)
-    numbers = [n for _, n in lines] or [0]
-    src = "\n".join(t for t, _ in lines)
-    return _markdown(src, path, label, lambda k: numbers[min(k, len(numbers) - 1)])
+def markdown_lines(lines: Iterable[tuple], path: str, label: str = "") -> list[Segment]:
+    """Prose segments from lines that together form Markdown.
+
+    Each line is (text, line number) or (text, line number, map). The map
+    says where the line's characters are in the file: an offset when the
+    text is a verbatim run of the file starting there, a list with one span
+    per character when it was rewritten, None when unknown.
+    """
+    lines = [(*line, None)[:3] for line in lines]
+    numbers = [n for _, n, _ in lines] or [0]
+    src = "\n".join(t for t, _, _ in lines)
+
+    def at(k: int, col: int) -> Span:
+        if k >= len(lines):
+            return UNKNOWN
+        where = lines[k][2]
+        if where is None:
+            return UNKNOWN
+        if isinstance(where, int):
+            return (where + col, where + col + 1)
+        return where[col] if col < len(where) else UNKNOWN
+
+    return _markdown(src, path, label, lambda k: numbers[min(k, len(numbers) - 1)], at)
 
 
 def extract_markdown(text: str, path: str, label: str = "") -> list[Segment]:
-    return _markdown(text, path, label, lambda k: k + 1)
+    first = line_starts(text)
+
+    def at(k: int, col: int) -> Span:
+        return (first[k] + col, first[k] + col + 1) if k < len(first) else UNKNOWN
+
+    return _markdown(text, path, label, lambda k: k + 1, at)
 
 
 # --------------------------------------------------------------- plain text
 
 def extract_text(text: str, path: str, label: str = "") -> list[Segment]:
     segments, parts = [], []
+    first = line_starts(text, keepends_split=True)
 
     def flush() -> None:
         if parts:
-            body, anchors = "", []
-            for piece, lineno in parts:
+            body, anchors, starts = "", [], []
+            for piece, lineno, base in parts:
                 if body:
                     body += " "
+                    starts.append(-1)
                 anchors.append((len(body), lineno))
                 body += piece
+                starts.extend(range(base, base + len(piece)))
             if len(body.split()) >= 4:
-                segments.append(Segment(body, path, anchors, label))
+                segments.append(Segment(body, path, anchors, label, starts=starts,
+                                        ends=[s + 1 if s >= 0 else -1 for s in starts]))
             parts.clear()
 
     for i, line in enumerate(text.splitlines()):
         if line.strip():
-            parts.append((line.strip(), i + 1))
+            parts.append((line.strip(), i + 1, first[i] + len(line) - len(line.lstrip())))
         else:
             flush()
     flush()
@@ -341,8 +603,9 @@ RST_LINK = re.compile(r"`([^`<]+?)\s*<[^>]+>`_+")
 
 
 def extract_rst(text: str, path: str, label: str = "") -> list[Segment]:
-    out: list[tuple[str, int]] = []
+    out: list[tuple] = []
     lines = text.splitlines()
+    first = line_starts(text, keepends_split=True)
     skip_indent: int | None = None
     for i, line in enumerate(lines):
         indent = len(line) - len(line.lstrip())
@@ -362,13 +625,37 @@ def extract_rst(text: str, path: str, label: str = "") -> list[Segment]:
             continue
         # Roles become Markdown code spans, so findings can show the original;
         # ``literal`` already is one.
-        body = RST_ROLE.sub(lambda m: _code_span(m.group(1)), line)
-        body = RST_LINK.sub(r"\1", body)
+        where = [(first[i] + c, first[i] + c + 1) for c in range(len(line))]
+        body, where = _sub_spans(RST_ROLE, line, where, lambda m: (_code_span(m.group(1)), None))
+        body, where = _sub_spans(RST_LINK, body, where, lambda m: (m.group(1), 1))
         if body.rstrip().endswith("::"):
             body = body.rstrip()[:-1]
             skip_indent = indent
-        out.append((body, i + 1))
+        out.append((body, i + 1, where[:len(body)]))
     return markdown_lines(out, path, label)
+
+
+def _sub_spans(pattern: re.Pattern, text: str, where: list[Span], repl) -> tuple[str, list[Span]]:
+    """``pattern.sub`` that also carries each character's file span.
+
+    ``repl(match)`` returns (replacement, group). With a group number the
+    replacement is that group's text and keeps its spans; with None every
+    character of the replacement maps to the whole match.
+    """
+    out, spans, last = [], [], 0
+    for m in pattern.finditer(text):
+        new, group = repl(m)
+        out.append(text[last:m.start()])
+        spans.extend(where[last:m.start()])
+        out.append(new)
+        if group is None:
+            spans.extend([(where[m.start()][0], where[m.end() - 1][1])] * len(new))
+        else:
+            spans.extend(where[m.start(group):m.end(group)])
+        last = m.end()
+    out.append(text[last:])
+    spans.extend(where[last:])
+    return "".join(out), spans
 
 
 def _code_span(text: str) -> str:
@@ -388,18 +675,45 @@ class _HTMLProse(HTMLParser):
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
-        self.lines: list[tuple[str, int]] = []
+        self.lines: list[tuple[str, int, list[Span] | None]] = []
         self.skip = 0
         self.in_code = 0
         self.code: list[str] = []
-        self.buffer: list[str] = []
+        self.code_start = -1
+        self.buffer: list[tuple[str, list[Span]]] = []
         self.start_line = 1
+        self.src = ""
+        self.first: list[int] = [0]
+        self.spans = None
+
+    def read(self, text: str, spans=None) -> None:
+        """Parse ``text``; ``spans(a, b)`` is the file span of ``text[a:b]`` (default: the same offsets)."""
+        self.src = text
+        self.first = [0] + [i + 1 for i, c in enumerate(text) if c == "\n"]  # as HTMLParser counts lines
+        self.spans = spans or (lambda a, b: (a, b))
+        self.feed(text)
+        self._flush()
+
+    def _offset(self) -> int:
+        line, col = self.getpos()
+        return self.first[min(line - 1, len(self.first) - 1)] + col
 
     def _flush(self) -> None:
-        text = re.sub(r"\s+", " ", "".join(self.buffer)).strip()
+        chars: list[str] = []
+        where: list[Span] = []
+        for text, spans in self.buffer:
+            for ch, span in zip(text, spans):
+                if ch.isspace():
+                    if chars and chars[-1] != " ":
+                        chars.append(" ")
+                        where.append(UNKNOWN)
+                    continue
+                chars.append(ch)
+                where.append(span)
+        text = "".join(chars).rstrip()
         if text:
-            self.lines.append((text, self.start_line))
-        self.lines.append(("", self.start_line))
+            self.lines.append((text, self.start_line, where[:len(text)]))
+        self.lines.append(("", self.start_line, None))
         self.buffer = []
 
     def handle_starttag(self, tag, attrs):
@@ -409,6 +723,7 @@ class _HTMLProse(HTMLParser):
             self.in_code += 1
             if self.in_code == 1:
                 self.code = []
+                self.code_start = self._offset()
         elif tag in self.BLOCK:
             self._flush()
             self.start_line = self.getpos()[0]
@@ -420,7 +735,10 @@ class _HTMLProse(HTMLParser):
             self.in_code = max(0, self.in_code - 1)
             if not self.in_code and not self.skip:
                 code = re.sub(r"\s+", " ", "".join(self.code)).strip()
-                self.buffer.append(f" {_code_span(code)} ")
+                end = self.src.find(">", self._offset()) + 1
+                span = self.spans(self.code_start, end) if 0 <= self.code_start < end else UNKNOWN
+                shown = _code_span(code)
+                self.buffer.append((f" {shown} ", [UNKNOWN] + [span] * len(shown) + [UNKNOWN]))
         elif tag in self.BLOCK:
             self._flush()
 
@@ -430,15 +748,15 @@ class _HTMLProse(HTMLParser):
         if self.in_code:
             self.code.append(data)
             return
-        if not "".join(self.buffer).strip():
+        if not "".join(t for t, _ in self.buffer).strip():
             self.start_line = self.getpos()[0]
-        self.buffer.append(data)
+        starts, ends, _ = _align(data, self.src, self._offset())
+        self.buffer.append((data, [self.spans(a, b) if a >= 0 else UNKNOWN for a, b in zip(starts, ends)]))
 
 
 def extract_html(text: str, path: str, label: str = "") -> list[Segment]:
     parser = _HTMLProse()
-    parser.feed(text)
-    parser._flush()
+    parser.read(text)
     return markdown_lines(parser.lines, path, label)
 
 
@@ -454,15 +772,18 @@ LANG_BY_EXT = {
 CODEISH = re.compile(r"[;{}]\s*$|^\s*(let|fn|def|return|import|use|if|for|while|pub|var|const)\b|=>|::|\(\)\s*$")
 
 
-def _comment_blocks(lines: list[str], prefixes: tuple[str, ...]) -> Iterator[list[tuple[str, int]]]:
-    block: list[tuple[str, int]] = []
+def _comment_blocks(lines: list[str], prefixes: tuple[str, ...],
+                    first: list[int] | None = None) -> Iterator[list[tuple]]:
+    """Runs of comment lines as (body, line number, offset of the body in the file)."""
+    block: list[tuple] = []
     for i, line in enumerate(lines):
         s = line.strip()
         prefix = next((p for p in prefixes if s.startswith(p)), None)
         if prefix is not None:
             body = s[len(prefix):]
             body = body[1:] if body.startswith(" ") else body
-            block.append((body, i + 1))
+            col = len(line) - len(line.lstrip()) + len(s) - len(body)
+            block.append((body, i + 1, first[i] + col if first else None))
         elif block:
             yield block
             block = []
@@ -473,21 +794,48 @@ def _comment_blocks(lines: list[str], prefixes: tuple[str, ...]) -> Iterator[lis
 def _block_comments(text: str) -> Iterator[list[tuple[str, int]]]:
     for m in re.finditer(r"/\*\*?(.*?)\*/", text, re.S):
         start_line = text.count("\n", 0, m.start()) + 1
-        out = []
-        for k, line in enumerate(m.group(1).splitlines()):
-            out.append((re.sub(r"^\s*\*\s?", "", line), start_line + k))
+        out, pos = [], m.start(1)
+        for k, whole in enumerate(m.group(1).splitlines(keepends=True)):
+            line = whole.rstrip("\r\n")
+            body = re.sub(r"^\s*\*\s?", "", line)
+            out.append((body, start_line + k, pos + len(line) - len(body)))
+            pos += len(whole)
         yield out
+
+
+def _docstring_lines(doc: list[str], start: int, lines: list[str], first: list[int]) -> list[tuple]:
+    """(text, line number, offset in the file) for each line of a docstring that starts on line ``start``.
+
+    The text comes from the evaluated string, so a backslash at the end of a
+    source line joins two lines of it; the lines after are then looked for a
+    little further down. A line the source spells differently (an escape)
+    gets no offset.
+    """
+    out, shift = [], 0
+    for k, body in enumerate(doc):
+        n, offset = start + k + shift, None
+        for extra in range(4 if body.strip() else 0):
+            if n + extra > len(lines):
+                break
+            col = lines[n + extra - 1].find(body)
+            if col >= 0:
+                shift, n = shift + extra, n + extra
+                offset = first[n - 1] + col
+                break
+        out.append((body, n, offset))
+    return out
 
 
 def extract_source(text: str, path: str, label: str = "", comments: str = "doc") -> list[Segment]:
     """Prose from comments. ``comments`` is "doc" (doc comments only) or "all"."""
     lang = LANG_BY_EXT.get(Path(path).suffix.lower(), "c")
     lines = text.splitlines()
+    first = line_starts(text, keepends_split=True)
     # Doc comments are Markdown: code in them sits in fences, which
     # markdown_lines skips. Plain comments often hold commented-out code, so
     # only they get the line-level CODEISH filter.
-    blocks: list[list[tuple[str, int]]] = []
-    plain: list[list[tuple[str, int]]] = []
+    blocks: list[list[tuple]] = []
+    plain: list[list[tuple]] = []
     if lang == "python":
         try:
             tree = ast.parse(text)
@@ -496,7 +844,7 @@ def extract_source(text: str, path: str, label: str = "", comments: str = "doc")
                     body = getattr(node, "body", [])
                     if body and isinstance(body[0], ast.Expr) and isinstance(getattr(body[0], "value", None), ast.Constant) \
                             and isinstance(body[0].value.value, str):
-                        first = body[0].lineno
+                        start = body[0].lineno
                         doc = body[0].value.value.splitlines()
                         # Remove the docstring's own indent only, so an
                         # indented code block inside it stays code.
@@ -504,25 +852,25 @@ def extract_source(text: str, path: str, label: str = "", comments: str = "doc")
                                      default=0)
                         margin = min(margin, body[0].col_offset)
                         doc = [l.strip() if k == 0 else l[margin:].rstrip() for k, l in enumerate(doc)]
-                        blocks.append([(l, first + k) for k, l in enumerate(doc)])
+                        blocks.append(_docstring_lines(doc, start, lines, first))
         except SyntaxError:
             pass
         if comments == "all":
-            plain.extend(_comment_blocks(lines, ("#",)))
+            plain.extend(_comment_blocks(lines, ("#",), first))
     elif lang == "rust":
-        blocks.extend(_comment_blocks(lines, ("///", "//!")))
+        blocks.extend(_comment_blocks(lines, ("///", "//!"), first))
         if comments == "all":
-            plain.extend(_comment_blocks(lines, ("//",)))
+            plain.extend(_comment_blocks(lines, ("//",), first))
     elif lang == "hash":
-        plain.extend(_comment_blocks(lines, ("#",)))
+        plain.extend(_comment_blocks(lines, ("#",), first))
     else:
         blocks.extend(_block_comments(text))
-        plain.extend(_comment_blocks(lines, ("///", "//")))
+        plain.extend(_comment_blocks(lines, ("///", "//"), first))
     segments: list[Segment] = []
     for block in blocks:
         segments.extend(markdown_lines(block, path, label))
     for block in plain:
-        prose = [(b, n) for b, n in block if not CODEISH.search(b) and not b.strip().startswith("#!")]
+        prose = [line for line in block if not CODEISH.search(line[0]) and not line[0].strip().startswith("#!")]
         segments.extend(markdown_lines(prose, path, label))
     return segments
 
@@ -547,7 +895,9 @@ def _commit_prose(line: str) -> bool:
 
 def extract_commit(text: str, path: str, label: str = "") -> list[Segment]:
     kept = []
+    first = line_starts(text, keepends_split=True)
     for i, line in enumerate(text.splitlines()):
+        base = first[i]
         if line.startswith("# ------------------------ >8"):
             break
         if line.startswith("#"):
@@ -557,10 +907,10 @@ def extract_commit(text: str, path: str, label: str = "") -> list[Segment]:
         if i == 0:
             scope = COMMIT_SCOPE.match(line)
             if scope and " " not in scope.group(0).rstrip(": ").replace(", ", ","):
-                line = line[scope.end():]
+                line, base = line[scope.end():], base + scope.end()
         elif not _commit_prose(line):
             line = ""
-        kept.append((line, i + 1))
+        kept.append((line, i + 1, base))
     return markdown_lines(kept, path, label)
 
 
@@ -687,6 +1037,10 @@ def extract(text: str, path: str, fmt: str | None = None, *, field_path: str | N
             msgs = msgs[-1:]
         segments: list[Segment] = []
         for label, body in msgs:
-            segments.extend(extract_markdown(body, path, label))
+            for seg in extract_markdown(body, path, label):
+                # The offsets are into the message, which the file holds as an
+                # escaped JSON string, so they say nothing about the file.
+                seg.starts, seg.ends = [], []
+                segments.append(seg)
         return segments
     raise ValueError(f"unknown format {fmt!r}; choose one of {', '.join(FORMATS)}")
