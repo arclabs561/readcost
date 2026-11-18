@@ -417,6 +417,10 @@ def stacked_nouns(sent, ctx: Context, taken: set[int],
         capitals = sum(1 for x in stack if x.text[:1].isupper() and x.i != sent.start)
         if capitals >= 2 and not caps:
             continue  # a proper name such as "Apple M3 Max"
+        if capitals and not caps and all(x.pos_ == "PROPN" for x in stack):
+            # "Guido van Rossum wrote ...": a name at the start of a sentence,
+            # whose first word's capital says nothing and whose particle is lower case.
+            continue
         excerpt = _excerpt(sent.doc, stack, ctx)
         ids = {x.i for x in stack}
         # A leading name or acronym classifies the rest ("Go programming
