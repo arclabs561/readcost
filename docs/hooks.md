@@ -211,8 +211,9 @@ no change beyond pointing the piku adapter at the new fields.
 ## Limits
 
 - English only. The default model, `en_core_web_sm`, misparses some sentences;
-  a sentence parsed with no verb is skipped. `model = "en_core_web_trf"` parses
-  better and is several times slower.
+  a sentence parsed with no verb is skipped unless a noun in it looks like the
+  misparsed verb, and then only `stacked-nouns` and `hyphen-compound` run on it.
+  `model = "en_core_web_trf"` parses better and is several times slower.
 - inanimate-subject and denominal-verb are heuristics based on word lists. Treat them as
   prompts to reread the sentence.
 - The reference profile is one writer's READMEs. A cost index from chat answers
