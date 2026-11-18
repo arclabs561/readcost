@@ -204,34 +204,36 @@ covers the other keys, the command-line flags, and the opt-in second parser.
   English writers in particular.
 - Every label behind the precision numbers comes from a model rater; no
   person has labelled a finding. Of 64 findings on well-edited essays and
-  documentation, a majority of eight model raters judged 15 (23%) correct or
+  documentation, a majority of model raters judged 15 (23%) correct or
   defensible. The rules were revised after some of those labels were read,
-  so 23% is an in-sample estimate.
+  so 23% is an in-sample estimate, and the record does not say whether the
+  two lenient raters were in that majority.
 - Against hand-corrected parses, 81 to 84% of stacked-nouns findings, 60% of
   reduced-object-relative findings and 61 to 67% of long-dependency findings
   name a construction that is there. The rest are parser errors.
 - An opt-in second parser (`verify_model`, about 400 MB) keeps a finding only
-  when it finds the same construction. It raised long-dependency precision against those
-  parses from 68% to 99%, and makes a check 1.3 to 1.5 times slower.
+  when it finds the same construction. Against those parses it raised
+  long-dependency precision from 68% to 99%, and a check takes 1.3 to 1.5
+  times as long.
 - On reading times, findings did not predict slower reading on Natural
   Stories or OneStop once length and word frequency were held (on Natural
   Stories, surprisal too). One eye-tracking set, GECO, shows a small
   association (r = +0.05) with surprisal not held.
 - On ratings, findings did not track what people thought of a text in seven
-  rating sets of 52,000 texts, nor in sets of simplified sentences and
-  biomedical abstracts.
+  rating sets of 52,000 texts, all written by models, nor in sets of
+  simplified sentences and biomedical abstracts.
 - No suggested rewrite has been tested on readers. Keep one only if it reads
   naturally.
 - English only. The built-in reference profile is edited technical and essay
   prose, so a cost index for chat answers is not comparable to one for a
   README.
 
-[docs/rules.md](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#limits)
-has the full list, and
-[docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md)
-has the measurements, and
-[docs/research.md](https://github.com/arclabs561/readcost/blob/main/docs/research.md)
-has the evidence behind each choice and the roadmap. To report a wrong finding, use the
+The full list is in
+[docs/rules.md](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#limits),
+the measurements in
+[docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md),
+and the evidence behind each choice, with the roadmap, in
+[docs/research.md](https://github.com/arclabs561/readcost/blob/main/docs/research.md). To report a wrong finding, use the
 [false positive form](https://github.com/arclabs561/readcost/issues/new?template=false-positive.yml).
 
 ## Development
