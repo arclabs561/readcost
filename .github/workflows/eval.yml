@@ -18,6 +18,10 @@ on:
       - scripts/eval_patterns.py
       - scripts/human_signals.py
       - src/readcost/patterns.py
+      - scripts/dataset_matrix.py
+      - scripts/dataset_matrix_report.py
+      - scripts/fetch_matrix_data.sh
+      - eval/derived/README.md
 
 permissions:
   contents: read
@@ -204,3 +208,173 @@ jobs:
         with:
           name: patterns
           path: out
+
+  # The dataset matrix: many existing datasets with human signals about
+  # prose, each turned into the same per-text record by
+  # scripts/dataset_matrix.py (docs/datasets.md lists them and their
+  # licences). One leg per download; the report job reads every leg's
+  # records and analyses each dataset separately.
+  matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [helpsteer2, helpsteer3, summeval, axis, readmepp, scarecrow, geco, rt, iterater, arxivedits, pararev]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: ./.github/actions/setup
+        with:
+          sync-args: --no-dev --group eval
+      - id: data
+        if: matrix.part != 'rt'
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/matrix/${{ matrix.part }}
+          key: eval-matrix-${{ matrix.part }}-${{ hashFiles('scripts/fetch_matrix_data.sh') }}-v1
+      - name: Download
+        if: matrix.part != 'rt' && steps.data.outputs.cache-hit != 'true'
+        env:
+          PART: ${{ matrix.part }}
+        run: bash scripts/fetch_matrix_data.sh "$PART" ref/matrix
+      # OneStop and Provo: the same texts and cache as the onestop-pairs job.
+      - id: rt
+        if: matrix.part == 'rt'
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/rt/texts.jsonl
+          key: eval-rt-texts-${{ hashFiles('scripts/reading_time_prep.py') }}-v1
+      - name: Download reading-time corpora and build per-text reading times
+        if: matrix.part == 'rt' && steps.rt.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ref/rt/onestop ref/rt/provo ref/rt/zip
+          curl -fsSL --retry 3 -o ref/rt/zip/onestop.zip https://osf.io/download/xkgfz/
+          unzip -q ref/rt/zip/onestop.zip -d ref/rt/zip
+          mv "$(find ref/rt/zip -name ia_Paragraph_ordinary.csv | head -1)" ref/rt/onestop/
+          curl -fsSL --retry 3 -o ref/rt/provo/Provo_Corpus-Eyetracking_Data.csv https://osf.io/download/a32be/
+          rm -rf ref/rt/zip
+          uv run scripts/reading_time_prep.py ref/rt
+      - name: GECO sentence reading times
+        if: matrix.part == 'geco'
+        run: uv run --with "openpyxl>=3.1" python scripts/dataset_matrix.py prep-geco ref/matrix/geco
+      - name: Features and outcomes per text
+        env:
+          PART: ${{ matrix.part }}
+        run: |
+          x() { uv run --with "openpyxl>=3.1" python scripts/dataset_matrix.py extract "$1" "$2" out --jobs 4; }
+          case "$PART" in
+            helpsteer3) x helpsteer3_feedback ref/matrix/helpsteer3/feedback
+                        x helpsteer3_edit ref/matrix/helpsteer3/edit ;;
+            axis)       x tldr_axis ref/matrix/axis
+                        x cnndm_axis ref/matrix/axis ;;
+            rt)         x onestop ref/rt/texts.jsonl
+                        x provo ref/rt/texts.jsonl ;;
+            geco)       x geco ref/matrix/geco/texts.jsonl ;;
+            readmepp|scarecrow|arxivedits) x "$PART" "ref/matrix/$PART/repo" ;;
+            *)          x "$PART" "ref/matrix/$PART" ;;
+          esac
+          if [ -f "ref/matrix/$PART/SHA256SUMS" ]; then cp "ref/matrix/$PART/SHA256SUMS" "out/$PART.SHA256SUMS"; fi
+          ls -la out
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: matrix-${{ matrix.part }}
+          path: out
+
+  matrix-report:
+    needs: matrix
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: ./.github/actions/setup
+        with:
+          sync-args: --no-dev --group eval
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          pattern: matrix-*
+          merge-multiple: true
+          path: records
+      - name: Associations per dataset, edits by intent, leave one dataset out
+        run: |
+          ls -la records
+          uv run python scripts/dataset_matrix_report.py records --out report | tee report.md
+          cat report.md >> "$GITHUB_STEP_SUMMARY"
+      # Features and outcomes per text with pointers and hashes, no text.
+      # Not uploaded anywhere but this run; eval/derived/README.md says how
+      # a maintainer would publish it.
+      - name: Derived dataset
+        run: |
+          uv run python scripts/dataset_matrix_report.py records --derived derived
+          cp records/*.SHA256SUMS derived/ 2>/dev/null || true
+          ls -la derived
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: matrix-report
+          path: report
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: readcost-derived
+          path: derived
+
+  # Word-pair counts from openly licensed technical text, as a second column
+  # beside the stack-terms job's FineWeb-Edu counts: one parquet shard each
+  # of the Common Pile's Stack Exchange (CC BY-SA, per-document licence) and
+  # GitHub Archive (issue and pull request threads of openly licensed
+  # repositories) subsets. Only counts are kept.
+  stack-terms-tech:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: ./.github/actions/setup
+        with:
+          sync-args: --no-dev --group eval
+      - id: texts
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: |
+            ref/eval
+            ref/bench
+          key: eval-stack-terms-texts-${{ hashFiles('scripts/fetch_eval_corpus.py', 'scripts/fetch_rulebench.py', 'eval/rulebench/rulebench.jsonl') }}-v1
+      - name: Fetch the rule bench and the corpus's essays and documentation
+        if: steps.texts.outputs.cache-hit != 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SOURCES: >-
+            paul-graham,julia-evans,dan-luu,simon-willison,russ-cox,raymond-chen,hillel-wayne,joel-spolsky,
+            martin-fowler,andrew-gallant,dan-abramov,brendan-gregg,eli-bendersky,sqlite-docs,govuk-guidance,
+            stripe-docs,go-blog,effective-go,rust-book,python-tutorial,django-docs
+        run: |
+          uv run --with "trafilatura>=1.12" python scripts/fetch_rulebench.py ref/bench
+          uv run --with "trafilatura>=1.12" python scripts/fetch_eval_corpus.py ref/eval --ref-root ref/none --only "${SOURCES// /}"
+      - name: List the stacks to count
+        run: |
+          mkdir -p ref/tech
+          uv run python scripts/eval_stack_terms.py --bench ref/bench --corpus ref/eval --list-stacks > ref/tech/stacks.txt
+          wc -l ref/tech/stacks.txt
+      - id: pairs
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/tech/open_pairs.npz
+          key: eval-tech-open-pairs-se-gharchive-${{ hashFiles('scripts/build_open_pairs.py', 'ref/tech/stacks.txt') }}-v1
+      - name: Count adjacent word pairs in Stack Exchange and GitHub threads
+        if: steps.pairs.outputs.cache-hit != 'true'
+        run: |
+          base=https://huggingface.co/datasets/common-pile
+          pq="resolve/refs%2Fconvert%2Fparquet/default/partial-train/0000.parquet"
+          curl -fsSL --retry 3 -o ref/tech/se.parquet "$base/stackexchange_filtered/$pq"
+          curl -fsSL --retry 3 -o ref/tech/gh.parquet "$base/github_archive_filtered/$pq"
+          sha256sum ref/tech/*.parquet
+          uv run scripts/build_open_pairs.py ref/tech/se.parquet ref/tech/gh.parquet \
+            --out ref/tech/open_pairs.npz --phrases ref/tech/stacks.txt
+          rm ref/tech/*.parquet
+      - name: Which evidence separates accepted from rejected findings
+        run: |
+          uv run python scripts/eval_stack_terms.py --bench ref/bench --corpus ref/eval --pairs ref/tech/open_pairs.npz > stack-terms-tech.md
+          cat stack-terms-tech.md
+          { echo '## Word pairs from Stack Exchange and GitHub threads'; cat stack-terms-tech.md; } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: stack-terms-tech
+          path: stack-terms-tech.md

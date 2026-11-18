@@ -197,6 +197,16 @@ Studies, with how each was read:
   models (Bolliger et al. 2025). No study relates any of these patterns to
   it; the evaluation here does.
 
+- Measured since: repetition goes with worse ratings in every large rating
+  set of model text that was tried. The share of content words already
+  used, restatements and the overlap of neighbouring sentences go with lower
+  coherence ratings in HelpSteer2, SummEval and OpenAI's CNN/DM summaries
+  (partial r +0.09 to +0.29 toward worse) and with more of HelpSteer3's
+  annotators complaining about repetition (+0.17), with length and word
+  frequency held. Contrast framing and lists of three track nothing there
+  (evaluation.md, "Many datasets with human signals"). This is preference,
+  not reading time: in OneStop and Provo the same measures show nothing.
+
 Not read: work on entity-grid coherence in model text, and the uniform
 information density literature beyond what
 [evaluation.md](evaluation.md#model-signals) already tests.
@@ -255,6 +265,29 @@ information density literature beyond what
   2020). Farahmand, Smith and Nivre 2015 had experts mark 1,048 two-noun
   compounds as conventionalized or not, the closest existing labels to
   "established"; there is no such set for longer stacks.
+
+- Findings do not track what raters think of a text. In seven rating sets
+  of 52,000 texts (HelpSteer2, HelpSteer3, SummEval, two of OpenAI's
+  summary sets, ReadMe++, Scarecrow), the default rules' weighted findings
+  have partial correlations of -0.01 to +0.08 with the primary outcome once
+  length and word frequency are held, and only Scarecrow's interval clears
+  zero, barely. A score fitted on some of these sets does worse on the one
+  left out than the untuned count. The one reading-time set with a positive
+  result is GECO, a novel read by 14 people: +0.05 (+0.02 to +0.09), with
+  surprisal not held. People revising for clarity or concision rewrite
+  flagged sentences more often than other revisers (+10 points in
+  HelpSteer3-Edit, +26 for long-dependency in ParaRev), but leave as many
+  findings per 100 words as before. So the evidence supports saying that
+  readcost flags sentences that writers revising for clarity tend to
+  rewrite, and that may read slightly slower. It does not support saying
+  that a finding costs a reader time or that a document with more findings
+  is rated worse. The README's opening sentence ("whose construction slows
+  readers down") says more than this; restating it is a separate change.
+- undefined-acronym is the one opt-in rule with consistent outside support,
+  and it is support from ratings only: Scarecrow's annotators marked more of
+  a paragraph as technical jargon when it had one (+0.22), and ReadMe++
+  sentences with one were rated a higher CEFR level (+0.12). OneStop
+  paragraphs with one were read faster, on 28 paragraphs.
 
 ## Roadmap
 
