@@ -645,6 +645,14 @@ uv run scripts/build_default_profile.py ref/eval   # after fetch_eval_corpus.py
 Scripts with inline metadata that import readcost install this checkout, not
 the release on PyPI.
 
+On every pull request, `scripts/ci_prose.py` also checks the title, the
+description and each commit message (`--format commit`). A commit message
+that reaches "block" fails the check. Findings in the title and description
+are only warnings, since many findings are wrong. The check also fails on AI
+attribution in commits, in the description or in added lines: session links,
+co-author trailers, "generated with" lines, or an Anthropic no-reply author.
+Run it locally with `python scripts/ci_prose.py --base main`.
+
 ## License
 
 MIT or Apache-2.0, at your option. `src/readcost/data/lexicon.json.gz` is
