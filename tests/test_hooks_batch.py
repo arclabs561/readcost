@@ -3,11 +3,12 @@
 import json
 import os
 import subprocess
-import sys
 import time
 from pathlib import Path
 
 import pytest
+
+from cliproc import run_cli
 
 ROOT = Path(__file__).resolve().parents[1]
 DENSE = ("It does not own indexing, segment selection, compaction, or reader visibility. "
@@ -19,10 +20,8 @@ HAS_GIT = subprocess.run(["git", "--version"], capture_output=True).returncode =
 
 
 def hook(args, payload, cwd, env=None, raw=None):
-    proc = subprocess.run([sys.executable, "-m", "readcost", "hook", *args],
-                          input=raw if raw is not None else json.dumps(payload),
-                          capture_output=True, text=True, cwd=cwd,
-                          env={**os.environ, **(env or {})})
+    proc = run_cli(["hook", *args], raw if raw is not None else json.dumps(payload), cwd,
+                   {**os.environ, **(env or {})})
     out = json.loads(proc.stdout) if proc.stdout.strip() else None
     return proc.returncode, out, proc.stderr
 
@@ -41,8 +40,7 @@ def git_repo(d: Path):
 
 
 def git_hook(d: Path, *args):
-    return subprocess.run([sys.executable, "-m", "readcost", "hook", "git", "pre-commit", *args],
-                          capture_output=True, text=True, cwd=d)
+    return run_cli(["hook", "git", "pre-commit", *args], cwd=d)
 
 
 # pre-commit framework: passed filenames ---------------------------------------

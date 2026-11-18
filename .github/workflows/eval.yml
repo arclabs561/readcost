@@ -28,7 +28,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: ./.github/actions/setup
         with:
-          extras: test
+          sync-args: --no-dev
       # Corpora live under ref/ and are cached by a key that names the data,
       # so a rerun downloads nothing. Bump the key's suffix to refetch.
       # OneStop Eye Movements, ordinary reading, and Provo: both CC BY 4.0, on OSF.
@@ -40,17 +40,16 @@ jobs:
       - name: Download reading-time corpora and build per-text reading times
         if: steps.rt.outputs.cache-hit != 'true'
         run: |
-          python -m pip install --quiet "polars>=1"
           mkdir -p ref/rt/onestop ref/rt/provo ref/rt/zip
           curl -fsSL --retry 3 -o ref/rt/zip/onestop.zip https://osf.io/download/xkgfz/
           unzip -q ref/rt/zip/onestop.zip -d ref/rt/zip
           mv "$(find ref/rt/zip -name ia_Paragraph_ordinary.csv | head -1)" ref/rt/onestop/
           curl -fsSL --retry 3 -o ref/rt/provo/Provo_Corpus-Eyetracking_Data.csv https://osf.io/download/a32be/
           rm -rf ref/rt/zip
-          python scripts/reading_time_prep.py ref/rt
+          uv run scripts/reading_time_prep.py ref/rt   # polars comes from the script's inline metadata
       - name: Findings against observed reading time, paired paragraphs
         run: |
-          python scripts/eval_onestop_pairs.py ref/rt/texts.jsonl | tee pairs.txt
+          uv run python scripts/eval_onestop_pairs.py ref/rt/texts.jsonl | tee pairs.txt
           { echo '## OneStop paired paragraphs'; echo '```'; cat pairs.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:

@@ -24,9 +24,7 @@ DENSE = ("It does not own indexing, segment selection, compaction, or reader vis
 PLAIN = "The index stores one list per term.\n"
 
 
-def run(args, stdin=None, cwd=None):
-    return subprocess.run([sys.executable, "-m", "readcost", *args], input=stdin,
-                          capture_output=True, text=True, cwd=cwd)
+from cliproc import run_cli as run  # noqa: E402
 
 
 def write_cfg(tmp_path, body, name="readcost.toml"):
