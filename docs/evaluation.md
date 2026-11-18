@@ -2552,6 +2552,65 @@ terms in question; the labels, not the counts, are the limit.
   no text) are the `readcost-derived` artifact of each run, with the card in
   `eval/derived/README.md`. Uploading them is left to the maintainer.
 
+## Repetition, pre-registered
+
+The repetition result above came from 767 uncorrected intervals on model
+text. [prereg/repetition.md](prereg/repetition.md) fixed a test of it on
+four datasets not used to find it, in commit `1713e89`, pushed with pull
+request 92 before any of the data was analysed. Two measures from
+`readcost.patterns` at `fd778fd`, unchanged since the discovery (the job
+checks their hashes): M1, the share of content words already used, and M2,
+restatements per 100 words. The model is the discovery's: partial r within
+groups, with log length, mean word length and mean Zipf frequency held,
+signed toward the worse outcome. One-sided p comes from cluster-robust
+standard errors, with Holm's correction over all eight tests. A test passes
+at adjusted p < 0.05 and r ≥ +0.05. `scripts/eval_repetition_prereg.py`,
+`repetition-prereg` jobs of the eval workflow, run of commit `9a26d3d`.
+
+| Dataset | Written by | Texts (groups) | Outcome | M1 | M2 |
+| --- | --- | --- | --- | --- | --- |
+| D1 HelpSteer v1 | models | 11,125 (3,488 prompts) | coherence | +0.037 (SE 0.013), Holm p 0.011: inconclusive | +0.051 (0.013), p 0.0003: pass |
+| D2 HelpSteer3 preference, code domain | models | 12,000 (6,000 pairs) | preferred | +0.064 (0.013), p 3e-6: pass | +0.078 (0.013), p 1e-8: pass |
+| D3 Stack Exchange answers, four technical sites | people | 14,298 (4,000 questions) | vote score | -0.016 (0.010), p 1: below +0.05 | -0.001 (0.010), p 1: below +0.05 |
+| D4 ELLIPSE learner essays | people | 3,909 (44 prompts) | cohesion | +0.069 (0.016), p 0.0002: pass | -0.002 (0.016), p 1: below +0.05 |
+
+By the rules fixed in advance, none of the three claims holds:
+
+- Replication on new model text: M1 is positive but below the smallest
+  effect that counts, at about a third of its HelpSteer2 value (+0.12);
+  M2 passes at +0.05.
+- Technical text: M1 passes on model-written code answers and is absent
+  from answers people wrote on Stack Exchange. There, the one-sided upper
+  bounds are +0.001 (M1) and +0.016 (M2), and no site shows a positive
+  estimate above +0.015.
+- Human-written text: absent on Stack Exchange; M1 passes on learner
+  essays, and M2 does not.
+
+Repetition was not shown to predict reader judgements of text that people
+wrote. What survives is a small effect on model-written text, smaller than
+the discovery reported.
+
+### Exploratory, not pre-registered
+
+Uncorrected, from the same run:
+
+- In ELLIPSE, M1 goes with rated vocabulary (+0.18) and phraseology
+  (+0.15) more than with cohesion (+0.07), and MTLD, sign flipped, with
+  all four scores (+0.19 to +0.28). In learner essays, reusing words
+  probably marks a small vocabulary, not text that reads as less cohesive.
+  readcost's weighted findings also go with lower scores there (+0.11),
+  likely because errors mislead the parser (see Non-native writers).
+- On the HelpSteer3 code answers, the overlap of neighbouring sentences
+  (+0.12) and the gzip ratio (+0.15) track preference more than either
+  registered measure. Votes on Stack Exchange track none of the five
+  repetition measures (-0.016 to -0.001).
+- One deviation from the plan: the HelpSteer v1 sampler keeps whole
+  prompts, so it drew 12,001 responses, not 12,000.
+
+Limits: Stack Exchange votes judge content and timing as much as prose,
+and ELLIPSE raters score proficiency. No dataset here rates the clarity
+of human-written technical prose at scale.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News

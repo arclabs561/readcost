@@ -185,3 +185,10 @@ a document-level repetition measure.
 
 The job is `repetition-prereg` in `.github/workflows/eval.yml`, added in
 the commit after this one. readcost's rules and defaults do not change.
+
+## Amendments
+
+None to the plan. One deviation, found in the run of `9a26d3d` and
+recorded 18 November 2026 after the results were seen: D1's sampler
+(`dataset_matrix._sample_groups`) keeps whole prompts, so it drew 12,001
+responses, not at most 12,000.
