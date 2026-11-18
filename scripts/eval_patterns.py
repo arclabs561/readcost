@@ -74,6 +74,7 @@ MEASURES = ("triple_share", "sentence_cv", "paragraph_cv", "opener_share", "adja
 EXISTING = ("findings", "ms_per_word", "mtld", "idea_density", "words_per_sentence")
 NEW = RATES + MEASURES
 CONTROLS = ("log_words", "letters", "zipf")
+MIN_NONZERO = 15
 FENCE = re.compile(r"```.*?```", re.S)
 
 
@@ -145,8 +146,8 @@ def partial(rows: list[dict], y: np.ndarray, key: str, groups, controls: np.ndar
     x = column(rows, key)
     Z = controls_of(rows) if controls is None else controls
     ok = ~np.isnan(x) & ~np.isnan(y) & ~np.isnan(Z).any(axis=1)
-    if ok.sum() < 30 or np.nanstd(x[ok]) == 0:
-        return None
+    if ok.sum() < 30 or (x[ok] != 0).sum() < MIN_NONZERO or np.nanstd(x[ok]) == 0:
+        return None     # a pattern found in a handful of texts gives a rho that is one text's doing
     x, yy, Z, g = x[ok], y[ok], Z[ok], np.asarray(groups)[ok]
     rho = hs.partial_spearman(x, yy, Z)
     lo, hi = hs.cluster_bootstrap(lambda k: hs.partial_spearman(x[k], yy[k], Z[k]) if x[k].std() > 0 else float("nan"),
