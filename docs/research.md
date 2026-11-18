@@ -31,12 +31,11 @@ Panthaplackel et al. 2021).
   cannot be recovered from the code, and summarization models fail on it
   most (Chen et al. 2021). Done: when a long-dependency or inline-list sentence
   gives a reason, the suggestion says to keep it.
-- Three opt-in detectors count constructions that language models overuse:
+- Two opt-in detectors count constructions that language models overuse:
   nominalizations and present participial clauses (1.5 to 2 and 2 to 5 times
-  the human rate in Reinhart et al. 2025, over general genres), and sentence
-  frames repeated within one document. Shaib et al. 2024 count templates
-  across many outputs of one model, not within one document, and they make
-  no claim about reading time; repeated-frame is a style signal only.
+  the human rate in Reinhart et al. 2025, over general genres). Repetition
+  of sentence frames is measured across many texts by `readcost corpus`
+  (Shaib et al. 2024), not per document.
 - Two opt-in rules with weaker evidence. center-embedding flags a clause
   nested two deep inside clauses that continue after it. Gibson (1998, 2000)
   argues from acceptability judgements of constructed sentences that such
