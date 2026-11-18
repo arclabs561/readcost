@@ -678,6 +678,60 @@ def center_embedding(sent, ctx: Context) -> list[tuple[str, str, list]]:
     return [("info", f"clause '{_w(ctx, inner)}' is nested {d} deep inside clauses that continue after it", toks)]
 
 
+RELATIVE_PRONOUNS = frozenset({"that", "which", "who", "whom"})
+
+
+def _object_relative(t) -> bool:
+    """A relative clause whose subject is a noun phrase of its own: "the house (that) the contractors built".
+
+    In a subject relative ("the house that collapsed") the subject is the
+    relative pronoun itself.
+    """
+    if t.dep_ != "relcl" or t.pos_ not in ("VERB", "AUX"):
+        return False
+    subj = [c for c in t.children if c.dep_ in ("nsubj", "nsubjpass")]
+    return bool(subj) and subj[0].lower_ not in RELATIVE_PRONOUNS and subj[0].tag_ not in ("WDT", "WP")
+
+
+# Links that attach a prepositional phrase, a light modifier or the verb's
+# auxiliary to a word outside the gap: "the arguments [to the deferred function] are".
+PREPOSITIONAL_DEPS = frozenset({"prep", "advmod", "amod", "det", "nummod", "poss", "compound",
+                                "neg", "predet", "quantmod", "case", "punct", "aux", "auxpass"})
+
+
+def gap_content(dep, head) -> str:
+    """What lies between the two words of an arc.
+
+    One of "object relative", "clause", "prepositional" or "other".
+    Nusbaumer et al. (2026) held the gap at four words: a prepositional
+    phrase in it cost readers 22 ms at the verb, a subject relative 49 ms and
+    an object relative 93 ms. "clause" is any verb in the gap other than an
+    auxiliary, so a participial or reduced relative ("built once from all
+    documents") counts as one. "prepositional" is a gap with no verb, made of
+    prepositional phrases and light modifiers only; anything else without a
+    verb (an object, a list, an apposition) is "other".
+    """
+    lo, hi = sorted((dep.i, head.i))
+    gap = [t for t in dep.doc[lo + 1:hi] if not t.is_space]
+    words = [t for t in gap if not t.is_punct]
+    if any(_object_relative(t) for t in words):
+        return "object relative"
+    if any(t.pos_ in ("VERB", "AUX") and t.dep_ not in ("aux", "auxpass") for t in words):
+        return "clause"
+    inside = {t.i for t in gap}
+    # The words of the gap that attach to something outside it.
+    tops = [t for t in gap if t.head.i not in inside or t.head.i == t.i]
+    if tops and all(t.dep_ in PREPOSITIONAL_DEPS for t in tops):
+        return "prepositional"
+    return "other"
+
+
+GAP_NOTE = {"object relative": "an object relative clause in between",
+            "clause": "a clause in between",
+            "prepositional": "only prepositional phrases in between",
+            "other": "no clause in between"}
+
+
 def long_dependency(sent, ctx: Context, has_list: bool) -> list[tuple[str, str, list]]:
     z, n, longest = dependency_z(sent, ctx.profile)
     ctx.stats.setdefault("dep_z", []).append(z)
@@ -697,7 +751,15 @@ def long_dependency(sent, ctx: Context, has_list: bool) -> list[tuple[str, str, 
         # Only a z that triggered the finding is shown; below the threshold the
         # gap alone is the reason, and "z = -0.4" would read as a contradiction.
         msg += f" (z = {z:.1f})"
-    return [("warn", msg, [dep, head])]
+    sev = "warn"
+    if ctx.cfg.long_dependency_gap == "content":
+        # Opt-in: a gap of prepositional phrases costs readers little
+        # (gap_content), so it is reported at info; any other gap stays at warn.
+        kind = gap_content(dep, head)
+        msg += f"; {GAP_NOTE[kind]}"
+        if kind == "prepositional":
+            sev = "info"
+    return [(sev, msg, [dep, head])]
 
 
 def inanimate_subjects(sent, ctx: Context) -> list[tuple[str, str, list]]:
