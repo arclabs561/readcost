@@ -1792,6 +1792,40 @@ Removed in 0.3:
   measure templates across many texts, not within one, with no claim about
   reading cost. `readcost corpus` measures repetition across texts.
 
+## Paired paragraphs: findings against observed reading time
+
+OneStop Eye Movements has 162 paragraphs in an advanced and an elementary
+version, read by different people. `scripts/eval_onestop_pairs.py` takes the
+difference between the two versions in observed reading time per word and
+asks whether the difference in weighted findings per 100 words predicts it,
+with the differences in mean word length and word frequency in the model.
+The `eval` workflow downloads the data and runs it.
+
+The simplified version was read faster per word in 64% of pairs and had
+fewer weighted findings in 26%; most paragraphs have no finding in either
+version.
+
+| Predictor of the reading-time difference | ms per word | 95% CI | Pairs that differ |
+| --- | --- | --- | --- |
+| Weighted findings, no controls | +2.86 | | |
+| Weighted findings, with length and frequency | +1.31 | -7.14 to +9.45 | |
+| stacked-nouns | +4.33 | -8.13 to +16.21 | 34 |
+| inanimate-subject | -2.89 | -19.90 to +8.19 | 23 |
+| inline-list | -1.40 | -15.25 to +20.16 | 24 |
+| long-dependency | -0.27 | -21.99 to +15.94 | 21 |
+
+Each rule row counts that rule's findings per 100 words, with the same
+controls. hyphen-compound and reduced-object-relative differ in 2 and 6
+pairs, too few to fit. Word length and frequency explain 10.0% of the
+variance in the reading-time difference; adding findings makes it 10.1%.
+
+No effect is detected, and the intervals are wide: with findings differing
+in so few pairs, the test could miss an effect of several milliseconds per
+word. Surprisal is not in the model, so even a positive result would have
+been an upper bound. The simplifications are mostly paraphrase (Gruteke
+Klein et al. 2026), so they may change these constructions too little to
+test them.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News
