@@ -131,6 +131,76 @@ index while adding words is reported, not rewarded.
 - `readcost[lm]`: KenLM.
 - Build-time only: WordNet data (nltk or wn), lemminflect.
 
+## Discourse patterns and redundancy
+
+People who find model-written text tiring rarely name the constructions
+readcost flags. They name contrast framing ("it's not X, it's Y"), padding
+and restatement, lists of three, signposting, summary closers and uniform
+sentences and paragraphs. This section records what was read about those
+patterns; the measurements are in
+[evaluation.md](evaluation.md#discourse-patterns-and-redundancy).
+
+Open rule sets, read at the commits named:
+
+| Rule set | Licence | What its structural rules are | Evidence it cites |
+| --- | --- | --- | --- |
+| slop-guard (eric-tramel/slop-guard, `7ef2113`) | MIT | 24 rules. Regular expressions for "X, not Y", "not only X but Y" and a negated clause followed by "it's" (contrast-pair, setup-resolution); "A, B, and C"; sentence-length spread under 0.3 over five sentences; paragraph balance; repeated 4- to 8-word phrases; share of sentences with a copula; a closing sentence that matches two of eight stock openings | thresholds fitted to public-domain newspapers; no reader data |
+| vale-ai-tells (tbhb/vale-ai-tells, `51f646e`, v1.37.0) | MIT | 137 rule files, nearly all lists of phrases. A separate experimental style scripts sentence-length spread under 0.30, paragraph-length spread under 0.25, one first word opening over 30% of sentences, paragraph pairs with word overlap over 60%, and the share of lists with three items | style guides, blog posts, Reinhart et al. 2025 and Kobak et al. 2025; the README says a model wrote most rule definitions; no reader data |
+| SlopBench (hgaddipati1118/slop-index, `4eb24d9`) | MIT | length against the length the task asked for, repeated openers across samples, paragraph-length spread against a human corpus, fixed constructions | its crowd vote, a detector and lexical diversity each failed to confirm the ranking (Roongta et al. 2026) |
+| slop-forensics, humanizer | MIT | word and phrase lists; an agent skill built on Wikipedia's "Signs of AI writing" | none |
+
+The rule sets agree on what to count and none shows that a reader pays for
+it. The thresholds are set by eye or against human text, which makes each
+rule a marker of model text by construction.
+
+Studies, with how each was read:
+
+- Contrast framing has one study with readers. "Rather than" occurs 0.13
+  times per 1,000 words in ACL 2019 papers and 0.99 in arXiv NLP papers of
+  2026; "X, not Y" rose from 0.05 to 0.20. Two reviewers labelled uses blind:
+  almost none of the 2019 uses annoyed either, and about half of the 2026
+  papers hold a use that annoys a given reviewer. The two seldom agreed on
+  which uses. The outcome is annoyance, not reading time or comprehension,
+  and the uses that annoyed reject a position nobody holds, which no
+  pattern-matcher can see (Zamaraeva et al. 2026; results and method
+  sections read).
+- Padding is what annotators agree on, weakly. Three copy editors marked
+  spans in 213 news articles and 123 answers. Verbosity was the one code
+  that predicted every annotator's "slop" label, but agreement on that label
+  was poor (Cohen's kappa -0.15 to 0.29), and compression ratio and
+  templates per token did not predict it. A model of every automatic
+  measure reached an area under the precision-recall curve of 0.52 against a base rate of 0.25
+  (Shaib et al. 2025; sections 4 to 6 read). The repository that should hold
+  the annotations says "Coming soon" (cshaib/slop, `62c6e0a`).
+- Raters reward length. Among answers to the same prompt in PRISM, a longer
+  answer was rated higher (1.84 points per standard deviation of length);
+  24% of participants asked for longer answers and 7% for shorter (Chen,
+  Zheng and Zhu 2026; results read). YapBench measures excess length on
+  prompts with a short right answer and cites, without testing, that it
+  costs the reader (Borisov et al. 2026).
+- Markers of model text are not what readers react to. Features that
+  separate model-written comments from human ones did not predict which
+  human comments were accused of being model-written, in 421 accused
+  comments against 2,048 matched controls (Miklian and Katsos 2026; the
+  matched-control section read).
+- Redundancy is not a cost for every reader. Cohesive, explicit text helps
+  readers who know little about the topic and can hurt those who know a lot
+  (the redundancy and expertise-reversal effects; Yeung, Jin and Sweller
+  1998; Rey and Buchwald 2011; abstracts only). A measure of repetition
+  cannot say which reader a text is for.
+- Uniform sentence length, lower in model news text than in human
+  (Muñoz-Ortiz, Gómez-Rodríguez and Vilares 2024; abstract only), and
+  compression ratio (Hadad et al. 2026; abstract only) are measured as
+  differences between sources, with no reader outcome.
+- Reading time on model text has been predicted (Cekini et al. 2026, above)
+  and measured once, in EMTeC: 107 people's eye movements on texts by three
+  models (Bolliger et al. 2025). No study relates any of these patterns to
+  it; the evaluation here does.
+
+Not read: work on entity-grid coherence in model text, and the uniform
+information density literature beyond what
+[evaluation.md](evaluation.md#model-signals) already tests.
+
 ## What has not been shown
 
 - One rule has support beyond surprisal, and one has indirect support. In
@@ -197,6 +267,10 @@ Reading notes on each paper, with how much of it was read, are in
   Research Methods 40(2).
 - Biber and Gray 2010. Challenging stereotypes about academic writing.
   Journal of English for Academic Purposes 9(1).
+- Bolliger, Haller, Cretton, Reich, Kew and Jäger 2025. EMTeC: a corpus of
+  eye movements on machine-generated texts. Behavior Research Methods 57.
+- Borisov, Gröger, Mikhael and Schreiber 2026. Do chatbot LLMs talk too
+  much? The YapBench benchmark. arXiv 2601.00624.
 - Cekini et al. 2026. The cognitive cost of LLM writing. arXiv 2610.23715.
 - Chen, Xia, Hu, Lo and Li 2021. Why my code summarization model does not
   work. TOSEM 30(2), doi 10.1145/3434280.
@@ -264,3 +338,30 @@ Reading notes on each paper, with how much of it was read, are in
 - Timkey et al. 2026. Eye movements reveal a dissociation between prediction
   and structural processing difficulty in language comprehension. PNAS,
   doi 10.1073/pnas.2532230123.
+- Chakrabarty, Laban and Wu 2025. Can AI writing be salvaged? Mitigating
+  idiosyncrasies and improving human-AI alignment in the writing process
+  through edits. arXiv 2409.14509. The LAMP corpus.
+- Chen, Zheng and Zhu 2026. Abstract priorities, concrete rewards: how
+  stated preferences relate to what people reward in AI responses. arXiv
+  2610.30763.
+- Hadad, Loru, Nudo, Di Marco, Cinelli and Quattrociocchi 2026. The
+  statistical signature of LLMs. arXiv 2602.18152.
+- Kobak et al. 2025. Delving into ChatGPT usage in academic writing through
+  excess vocabulary. arXiv 2406.07016.
+- Miklian and Katsos 2026. "That's AI slop, you bot!" Studying accusations,
+  evidence, and credibility in online discourse towards LLM-generated
+  comments. arXiv 2606.12073.
+- Muñoz-Ortiz, Gómez-Rodríguez and Vilares 2024. Contrasting linguistic
+  patterns in human and LLM-generated news text. arXiv 2308.09067.
+- Rey and Buchwald 2011. The expertise reversal effect: cognitive load and
+  motivational explanations (PubMed 21443379).
+- Roongta, Gaddipati and Huynh 2026. SlopBench: how well can we rank
+  language models by slop? arXiv 2609.33905.
+- Shaib, Chakrabarty, Garcia-Olano and Wallace 2025. Measuring AI "slop" in
+  text. arXiv 2509.19163.
+- Yeung, Jin and Sweller 1998. Cognitive load and learner expertise:
+  split-attention and redundancy effects in reading with explanatory notes
+  (PubMed 9514686).
+- Zamaraeva, Gude, Santos-Ríos and Gómez-Rodríguez 2026. I would rather quit
+  NLP than read another paper like this: the rise of antithesis in NLP
+  papers. arXiv 2610.10092.
