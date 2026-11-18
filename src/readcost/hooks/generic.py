@@ -61,7 +61,10 @@ def handle(event: str, rest: list[str]) -> int:
             raise ValueError("the request must be a JSON object")
         if (req.get("text") is None) == (req.get("path") is None):
             raise ValueError("give exactly one of text or path")
-        parse_line_ranges(req.get("lines"))
+        try:
+            parse_line_ranges(req.get("lines"))
+        except ValueError as exc:
+            raise ValueError(f"lines: {exc}") from None
     except (ValueError, TypeError, AttributeError) as exc:  # bad JSON or field types
         return _fail(2, str(exc))
     try:

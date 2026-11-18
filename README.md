@@ -56,16 +56,21 @@ with the persisted WAND sidecars present, and once after deleting those
 sidecars, which forces each segment to be rebuilt from its source vectors.
 ```
 
+The rewrite is also longer, so readcost predicts that it takes less time per
+word (218 ms against 301) but more in total (10.5 s against 7.2 s);
+[Predicted reading time](#predicted-reading-time) explains how to weigh the
+two.
+
 ```sh
 uvx readcost check README.md
 ```
 
 The constructions come from "Why is AI-generated language so hard to
-understand?" ([arXiv 2610.29162](https://arxiv.org/abs/2610.29162)), which finds
-that recent language models use them more than paraphrases of the same content
-do (against human corpora, consistently only for inanimate subjects); earlier
-studies tie each of them to harder reading, some with reading times and some
-with brain responses.
+understand?" ([arXiv 2610.29162](https://arxiv.org/abs/2610.29162)). The paper
+finds that recent language models use them more often than paraphrases of the
+same content do. Against human corpora, the difference is consistent only for
+inanimate subjects. Earlier studies tie each construction to harder reading,
+some with reading times and some with brain responses.
 
 ## Scope
 
@@ -104,7 +109,10 @@ text is better than readcost's cost index does (see
 readcost's job is to say which sentence to change.
 
 Status: experimental; before 1.0, output and configuration can change between
-minor versions.
+minor versions. This README describes the main branch. The release on PyPI is
+0.2.0, which does not have `style`, `compare`, `corpus` or rule levels; until
+0.3 is out, run main with
+`uvx --from git+https://github.com/arclabs561/readcost readcost`.
 [docs/research.md](https://github.com/arclabs561/readcost/blob/main/docs/research.md)
 has the evidence behind each choice and the roadmap.
 
@@ -165,7 +173,8 @@ if result.verdict != "pass":
 
 ## What it flags
 
-Examples are quoted sentences from READMEs on GitHub. Rules marked
+Examples are quoted sentences from the READMEs of other arclabs561
+repositories on GitHub. Rules marked
 constructed use a sentence written for this table instead, because the
 evaluation sample had no clear real case. Each rewrite keeps every fact and
 passes.
@@ -212,8 +221,8 @@ inanimate subject. Code spans, URLs and file paths count as single words.
 <details>
 <summary>More real output</summary>
 
-Checked with the default settings on public READMEs; `scripts/readme_gallery.py`
-regenerates this from pinned commits.
+Checked with the default settings on the READMEs of other arclabs561
+repositories; `scripts/readme_gallery.py` regenerates this from pinned commits.
 
 ```text
 warn[stacked-nouns]: three or more nouns in a row
@@ -295,12 +304,14 @@ Not every finding is right: see [Limits](#limits) and
 
 Each finding counts 0.5 (info), 1 (warn) or 2 (error). The cost index is that
 count per 1,000 words. A file passes below 15, gets "advise" at 15 or more, and
-gets "block" at 30 or more with at least 3 weighted findings. Of 110 essays,
+gets "block" at 30 or more with at least 3 weighted findings. One error finding
+also makes a file "advise" whatever its rate; by default only a stack of five
+or more nouns is an error, and `advise_severity` changes the level. Of 110 essays,
 documentation pages and READMEs by well-regarded writers (150 words or more,
 held out from the reference profile), 107 pass and 3 get "advise"; the median
 cost index is 3.2 (measured 2026-10-26).
 
-Commit messages (`--format commit`, the commit-msg hook) are judged against
+Commit messages (`--format commit`, the `commit-msg` hook) are judged against
 their own thresholds, 50 and 100, because they are terser than prose: in 1,000
 Go commit messages the 99th percentile cost index is 49, against 8 to 16 for
 essays, docs, READMEs and discussion. Benchmark tables, shell commands and the
@@ -359,10 +370,10 @@ sentence openers, with Shaib et al.'s (2024) measures: CR-POS, the share of
 texts with one of the 100 most frequent part-of-speech 6-grams, and those
 6-grams per token. Point it at files or directories (one text each), or at
 one file of many texts separated by `---` lines with `--split`. Formulaic
-text such as merge-commit subjects scores high legitimately, and the
-measures depend on how much text there is (on essays, CR-POS rises from 4.0
-to 4.6 between 5 and 40 texts while templates per token falls), so compare
-corpora of similar size and kind.
+text, such as the subject lines of merge commits, scores high for a good
+reason. The measures also depend on how much text there is: on essays, CR-POS
+rises from 4.0 to 4.6 between 5 and 40 texts while templates per token falls.
+Compare corpora of similar size and kind.
 
 ## Predicted reading time
 
@@ -595,8 +606,11 @@ setup for each editor.
   reading time; `language_check = false` turns that off. On 2,132 English
   texts in the evaluation corpora the check skipped none.
 - The default spaCy model misparses some sentences. A sentence parsed with no
-  verb is skipped, and a misparse can produce a false finding. Set
-  `model = "en_core_web_trf"` for better parses at several times the cost.
+  verb is skipped, unless it ends with a full stop and a plural noun inside a
+  noun run looks like the verb ("the job reruns merge planning"); then only
+  `stacked-nouns` and `hyphen-compound` run on it. A misparse can produce a false
+  finding. Set `model = "en_core_web_trf"` for better parses at several times
+  the cost.
 - inanimate-subject and denominal-verb use word lists derived from WordNet.
   Treat their findings as prompts to reread, not verdicts.
 - Precision is low on well-edited prose. Ten model raters from different labs
@@ -604,9 +618,12 @@ setup for each editor.
   writers. Of the 64 that the current rules still report, a majority of eight
   raters judged 15 (23%) correct or defensible (single raters: 16 to 48%; two
   lenient raters: 75 to 77%). Agreement between raters is modest (Fleiss' kappa 0.40
-  over the eight). `readcost explain RULE` shows the count for each rule. See
+  over the eight). The rules were revised after the first rater's labels on
+  this sample were read, and the two lenient raters were set aside after
+  theirs were seen, so 23% is an in-sample estimate. `readcost explain RULE`
+  shows the count for each rule. See
   [docs/evaluation.md](https://github.com/arclabs561/readcost/blob/main/docs/evaluation.md).
-- hyphen-compound skips pairs found in 5+ documents of a 2019 FineWeb-Edu
+- `hyphen-compound` skips pairs found in 5+ documents of a 2019 FineWeb-Edu
   crawl (ODC-By; see `src/readcost/data/FINEWEB_NOTICE`).
 - The paper's findings are about how often text uses these constructions,
   not about any single sentence, and it ran no reading study on model text.

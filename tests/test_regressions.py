@@ -1,4 +1,4 @@
-"""Regression tests for defects found in the 2026-10-26 bug hunt.
+"""Regression tests for defects found in the 2026-10-26 bug hunt and the 2026-11-17 review.
 
 Each test names the defect it pins. They exercise the public entry points
 (Config, Analyzer, the CLI and the git hook) rather than internals.
@@ -428,3 +428,79 @@ def test_many_file_arguments_are_checked_in_parallel_in_order(tmp_path):
     two = run_cli([*args, "-j", "2", *reversed(names)], cwd=tmp_path)
     assert json.loads(one.stdout) == json.loads(two.stdout)
     assert [r["path"] for r in json.loads(two.stdout)] == list(reversed(names))
+
+
+# --- 2026-11-17 review ---------------------------------------------------------
+
+SWALLOWED = "The index shard compaction job reruns merge planning every hour."
+
+
+def test_sentence_whose_verb_was_parsed_as_a_noun_still_gets_the_noun_rules():
+    # The small model tags "reruns" as a noun, so the sentence has no verb.
+    # It used to be skipped with no note: the densest stacks went unreported.
+    r = Analyzer(Config()).check_text(SWALLOWED + "\n", "markdown")
+    assert r.sentences == 1
+    assert [(f.feature, f.excerpt) for f in r.findings] == [("stacked-nouns", "index shard compaction job")]
+
+
+def test_verbless_fragment_without_a_full_stop_is_still_skipped():
+    r = Analyzer(Config()).check_text(SWALLOWED.rstrip(".") + "\n", "markdown")
+    assert r.sentences == 0 and not r.findings
+
+
+def test_generic_hook_reads_open_line_ranges_like_the_cli():
+    from readcost.hooks.generic import review
+
+    text = PLAIN + "\n" + DENSE  # DENSE starts on line 3
+    assert review(text, lines="3-")["findings"]
+    assert not review(text, lines="-1")["findings"]
+    with pytest.raises(ValueError, match="runs low to high"):
+        review(text, lines="9-5")
+
+
+def test_generic_hook_rejects_a_bad_line_range_with_exit_2():
+    proc = subprocess.run([sys.executable, "-m", "readcost", "hook", "generic"],
+                          input=json.dumps({"text": PLAIN, "lines": "-x"}), capture_output=True, text=True)
+    assert proc.returncode == 2
+    assert "lines: '-x' is not a line or range" in json.loads(proc.stdout)["error"]
+
+
+def test_phrasal_verb_that_takes_things_is_not_an_inanimate_subject():
+    a = Analyzer(Config())
+    feats = lambda t: [f.feature for f in a.check_text(t, "markdown").findings]  # noqa: E731
+    assert "inanimate-subject" not in feats("Large inputs blow up the memory usage of the parser.")
+    # A figurative phrasal verb with a thing as subject is still reported.
+    assert "inanimate-subject" in feats("The parser spits out errors for every file it cannot read.")
+
+
+def test_suspended_hyphen_is_not_a_noun_in_a_stack():
+    text = "Labeling 10% of items cut prevalence error four- to sevenfold but did not improve classification.\n"
+    assert not [f for f in Analyzer(Config()).check_text(text, "markdown").findings if f.feature == "stacked-nouns"]
+
+
+def test_long_dependency_below_the_z_threshold_does_not_print_z():
+    # Reported for the 18-word gap alone (z = 1.0); "(z = 1.0)" read as a reason not to report it.
+    text = ("The index, built once from all documents and rebuilt only on compaction after every "
+            "flush of the write buffer, serves queries.\n")
+    fs = [f for f in Analyzer(Config()).check_text(text, "markdown").findings if f.feature == "long-dependency"]
+    assert [f.message for f in fs] == ["'index' and 'serves' are 18 words apart"]
+
+
+def test_file_that_is_not_utf8_keeps_its_bytes_and_gets_a_note(tmp_path):
+    p = tmp_path / "latin1.md"
+    p.write_bytes("Café owners use the storage-shrink job before each release.\n".encode("latin-1"))
+    r = Analyzer(Config()).check_file(str(p))
+    assert "�" in r.source and any("not valid UTF-8" in n for n in r.notes)
+    out = run_cli(["check", "-o", "json", "--fail-on", "never", str(p)])
+    assert any("not valid UTF-8" in n for n in json.loads(out.stdout)[0]["notes"])
+
+
+@pytest.mark.parametrize("text", [
+    # The real verb "fixes" heads the run: only two nouns come before it.
+    "A beta-binomial version with one correlation parameter fixes most of this.",
+    # Notes without articles are a list, not a clause with a swallowed verb.
+    "Experiments: Pew post-election survey (approval, binary), census age-income regression, "
+    "AlphaFold odds ratio; alpha = 0.1, 1,000 batch trials.",
+])
+def test_misparsed_verb_path_leaves_verbs_and_terse_notes_alone(text):
+    assert not Analyzer(Config()).check_text(text + "\n", "markdown").findings
