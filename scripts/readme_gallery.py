@@ -1,10 +1,10 @@
-"""Print the README's "Real findings" block from public READMEs at pinned commits.
+"""Print the "Real output" block of docs/rules.md from public READMEs at pinned commits.
 
     python scripts/readme_gallery.py
 
 Each entry names a sentence that a rule flags in a public repository, so the
-README shows real output on real prose. Commits are pinned so the output does
-not move when those READMEs change. Paste the output into README.md.
+docs show real output on real prose. Commits are pinned so the output does
+not move when those READMEs change. Paste the output into docs/rules.md.
 """
 
 from __future__ import annotations

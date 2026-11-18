@@ -281,8 +281,8 @@ information density literature beyond what
   readcost flags sentences that writers revising for clarity tend to
   rewrite, and that may read slightly slower. It does not support saying
   that a finding costs a reader time or that a document with more findings
-  is rated worse. The README's opening sentence ("whose construction slows
-  readers down") says more than this; restating it is a separate change.
+  is rated worse. The README's opening said more than this ("whose
+  construction slows readers down") until #90 restated it.
 - undefined-acronym is the one opt-in rule with consistent outside support,
   and it is support from ratings only: Scarecrow's annotators marked more of
   a paragraph as technical jargon when it had one (+0.22), and ReadMe++
