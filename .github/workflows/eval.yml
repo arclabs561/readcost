@@ -12,6 +12,9 @@ on:
       - .github/actions/setup/action.yml
       - scripts/eval_onestop_pairs.py
       - scripts/reading_time_prep.py
+      - scripts/eval_patterns.py
+      - scripts/human_signals.py
+      - src/readcost/patterns.py
 
 permissions:
   contents: read
@@ -56,3 +59,86 @@ jobs:
         with:
           name: onestop-pairs
           path: pairs.txt
+
+  # Experimental discourse measures (src/readcost/patterns.py; no rule uses
+  # them): rates in human and model text, and whether they track what
+  # readers did. docs/evaluation.md, "Discourse patterns and redundancy".
+  patterns:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      CREATIVITY_EVAL: 3d029879df6878f611363db88cc02d465699bc51
+      RAW: https://raw.githubusercontent.com/salesforce/creativity_eval
+      HUB: https://huggingface.co/datasets
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: ./.github/actions/setup
+        with:
+          extras: test,eval
+      # HAP-E (MIT), HC3 (CC BY-SA 4.0), Chatbot Arena votes (Apache-2.0),
+      # LAMP and the writing-quality benchmark (BSD-3-Clause), EMTeC (OSF).
+      - id: data
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/patterns
+          key: eval-patterns-hape-hc3-arena55-lamp-emtec-v1
+      - name: Download corpora
+        if: steps.data.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ref/patterns/hape ref/patterns/emtec
+          cd ref/patterns
+          curl -fsSL --retry 3 "https://huggingface.co/api/datasets/browndw/human-ai-parallel-corpus/parquet/default/train" \
+            | python -c 'import json, sys; print("\n".join(json.load(sys.stdin)))' > hape/urls.txt
+          n=0
+          while read -r url; do
+            curl -fsSL --retry 3 -o "hape/$n.parquet" "$url"
+            n=$((n + 1))
+          done < hape/urls.txt
+          curl -fsSL --retry 3 -o hc3.parquet "$HUB/Hello-SimpleAI/HC3/resolve/refs%2Fconvert%2Fparquet/all/train/0000.parquet"
+          curl -fsSL --retry 3 -o arena55.parquet "$HUB/lmarena-ai/arena-human-preference-55k/resolve/refs%2Fconvert%2Fparquet/default/train/0000.parquet"
+          curl -fsSL --retry 3 -o lamp.json "$RAW/$CREATIVITY_EVAL/Writing_Alignment/LAMP/LAMP-train-val-test.json"
+          curl -fsSL --retry 3 -o wq_lmarena.json "$RAW/$CREATIVITY_EVAL/WritingRewards/WQ-benchmark-data/wq_lmarena.json"
+          curl -fsSL --retry 3 -o emtec/stimuli.csv https://osf.io/download/vgp9a/ || true
+          curl -fsSL --retry 3 -o emtec/reading_measures_corrected.csv https://osf.io/download/wa3ty/ || true
+          ls -la . hape emtec
+      - id: rt
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/rt/texts.jsonl
+          key: eval-rt-texts-${{ hashFiles('scripts/reading_time_prep.py') }}-v1
+      - name: Download reading-time corpora and build per-text reading times
+        if: steps.rt.outputs.cache-hit != 'true'
+        run: |
+          python -m pip install --quiet "polars>=1"
+          mkdir -p ref/rt/onestop ref/rt/provo ref/rt/zip
+          curl -fsSL --retry 3 -o ref/rt/zip/onestop.zip https://osf.io/download/xkgfz/
+          unzip -q ref/rt/zip/onestop.zip -d ref/rt/zip
+          mv "$(find ref/rt/zip -name ia_Paragraph_ordinary.csv | head -1)" ref/rt/onestop/
+          curl -fsSL --retry 3 -o ref/rt/provo/Provo_Corpus-Eyetracking_Data.csv https://osf.io/download/a32be/
+          rm -rf ref/rt/zip
+          python scripts/reading_time_prep.py ref/rt
+      # The parts run side by side; one that fails leaves its error in its
+      # file and does not stop the others.
+      - name: Measure
+        run: |
+          mkdir -p out
+          part() { python scripts/eval_patterns.py "$@" > "out/$1.md" 2> "out/$1.err" || echo "$1 failed; see the log" >> "out/$1.md"; }
+          part hape ref/patterns/hape &
+          part hc3 ref/patterns/hc3.parquet &
+          part lamp ref/patterns/lamp.json &
+          part arena ref/patterns/wq_lmarena.json &
+          wait
+          part arena55 ref/patterns/arena55.parquet &
+          part rt ref/rt/texts.jsonl &
+          part emtec ref/patterns/emtec &
+          wait
+          for p in hape hc3 lamp arena arena55 rt emtec; do
+            cat "out/$p.md"; echo
+            tail -n 5 "out/$p.err"
+          done
+          for p in hape hc3 lamp arena arena55 rt emtec; do cat "out/$p.md"; echo; done >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: patterns
+          path: out
