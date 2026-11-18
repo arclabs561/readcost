@@ -56,6 +56,13 @@ Panthaplackel et al. 2021).
   verbs in it rather than by words. On labelled long-dependency findings it
   separated accepted from rejected findings no better than word distance
   (docs/evaluation.md), so long-dependency still counts words.
+- What fills a gap may matter more than its length. Nusbaumer et al. (2026,
+  Table 2) held the gap at four words in constructed sentences. Readers took
+  22 ms longer at the verb after a prepositional phrase, 49 ms after a subject
+  relative and 93 ms after an object relative. `long_dependency_gap =
+  "content"` names what fills the gap and lowers a prepositional gap to info.
+  It stays opt-in until `scripts/eval_gap_content.py` shows that the raters
+  accept prepositional gaps less often than the others.
 
 ## Contexts and reference profiles
 
@@ -177,6 +184,9 @@ Reading notes on each paper, with how much of it was read, are in
   comments. arXiv 1806.04616.
 - Nielebock et al. 2019. Commenting source code: is it worth it for small
   programming tasks? Empirical Software Engineering 24.
+- Nusbaumer, de-Dios-Flores, Bel, Pallier, Wisniewski and Crabbé 2026.
+  StructuralCost: a controlled reading time dataset for modeling human
+  sentence processing difficulty. arXiv 2610.08208.
 - Panthaplackel, Li, Gligoric and Mooney 2021. Deep just-in-time
   inconsistency detection between comments and source code. AAAI.
 - Peitek et al. 2021. Program comprehension and code complexity metrics: an

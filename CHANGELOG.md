@@ -9,6 +9,12 @@ configuration.
 
 ### Added
 
+- `long_dependency_gap = "content"` (opt-in): long-dependency says what fills
+  the gap (an object relative clause, another clause, only prepositional
+  phrases, or no clause) and reports a gap of prepositional phrases at info.
+  The default, `"words"`, is unchanged. `scripts/eval_gap_content.py` splits
+  the labelled findings by gap class.
+
 - `readcost style FILES --against NAME` compares rule rates, sentence length and
   predicted reading time with a reference; built-in references for the Rust
   book, Go, Python, Django, SQLite and Stripe docs, GOV.UK guidance, READMEs and

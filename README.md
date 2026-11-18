@@ -461,6 +461,12 @@ useful ones:
 - `hooks.mode`: `off`, `advise` or `block`.
 - `feedback_link`: `false` drops the line that text and agent output end
   with, which points to the false-positive form.
+- `long_dependency_gap`: `"words"` (the default) judges a long-dependency
+  gap by its length. `"content"` adds what fills the gap to the message and
+  reports a gap of only prepositional phrases at info, after a controlled
+  study in which such a gap cost readers far less than a relative clause of
+  the same length (Nusbaumer et al. 2026). It has not been checked against
+  labelled findings yet. A level set under `[readcost.rules]` still wins.
 
 ```toml
 [readcost.rules]

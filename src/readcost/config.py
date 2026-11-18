@@ -33,6 +33,7 @@ CHOICES = {
     "min_severity": SEVERITIES,
     "advise_severity": (*SEVERITIES, "off"),
     "comments": ("doc", "all"),
+    "long_dependency_gap": ("words", "content"),
 }
 FEATURE_LISTS = ("enable", "disable")
 # Rule levels, as in ty: a level turns a rule on at that severity; "ignore" turns it off.
@@ -89,6 +90,9 @@ class Config:
     feedback_link: bool = True
     # Skip text that is clearly not English (readcost/lang.py) with a note.
     language_check: bool = True
+    # long-dependency: "words" judges a gap by its length alone; "content"
+    # also reports what fills it and lowers a gap with no clause to info.
+    long_dependency_gap: str = "words"
     # Per-rule level: "error", "warn", "info" or "ignore"; "all" sets every rule.
     rules: dict[str, str] = field(default_factory=dict)
     # [[readcost.overrides]]: {"include": [globs], "exclude": [globs], "rules": {...}}, in order.

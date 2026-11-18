@@ -12,6 +12,7 @@ advise_cost_index = 15.0        # verdict "advise" at this many weighted finding
 block_cost_index = 30.0         # verdict "block" at this rate, with at least 3 weighted findings
 feedback_link = true            # text and agent output end with a link to report a wrong finding
 language_check = true           # skip text that is clearly not English, with a note
+long_dependency_gap = "words"   # words | content: "content" names what fills the gap and lowers one with no clause to info
 overrides = []                  # [[readcost.overrides]] tables: per-path rule levels (see below)
 
 # Rule levels: "error", "warn" or "info" turns a rule on at that severity
