@@ -431,7 +431,7 @@ def _cmd_explain(args) -> int:
         if f is None:
             print(f"unknown feature {fid!r}; known: {', '.join(FEATURES)}", file=sys.stderr)
             return EXIT_USAGE
-        state = "on" if f.default else "off (enable with --enable)"
+        state = "on" if f.default else f"off (turn on with --info {f.id}, or a level in [readcost.rules])"
         print(f"{f.id}: {f.title}  [{f.severity}, {state}, {f.origin}]")
         print(f"  Why: {f.why}")
         print(f"  Fix: {f.fix}")

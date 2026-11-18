@@ -43,7 +43,7 @@ it changes. Set `hooks.edited_lines_only = false` to judge the whole file.
 **Baseline.** When the config sets `baseline` (a file from `readcost
 baseline`), every hook drops the findings that file records before it
 computes a verdict, so old prose neither blocks nor adds feedback. See
-"Adopting readcost in an existing repo" in the README.
+[Adopting readcost in an existing repo](configuration.md#adopting-readcost-in-an-existing-repo).
 
 **Fail open.** Bad input, a missing spaCy model, or any exception ends the
 hook with exit 0 and no output. The error goes to stderr and, if
@@ -152,13 +152,48 @@ nothing, so there it judges each file whole. Without the framework, copy
 
 ### CI
 
+The GitHub Action (`action.yml`) annotates the lines it flags. On a pull
+request it checks only the Markdown, reStructuredText and text files that the
+pull request adds or changes; set `changed-only: "false"` to check every file
+under `paths`. With `comment: "true"` it also posts one summary comment on the
+pull request and edits that comment on later runs, so the thread gets one
+comment, not one per push. The comment counts the verdicts, lists the worst
+findings in a table, and gives the predicted reading time.
+
 ```yaml
-- uses: actions/checkout@v4
-- uses: <owner>/readcost@v0.1.0
-  with:
-    paths: README.md docs
-    fail-on: block
+name: readcost
+on: pull_request
+
+permissions:
+  contents: read
+  pull-requests: write   # only needed for comment: "true"
+
+jobs:
+  prose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0   # lets the action diff against the merge base
+      - uses: arclabs561/readcost@main   # pin a commit SHA in real use
+        with:
+          paths: README.md docs
+          fail-on: block
+          comment: "true"
 ```
+
+Inputs:
+
+- `paths`: files or directories, separated by spaces or newlines (default `.`).
+- `fail-on`: `never`, `advise` or `block` (default `block`).
+- `comment`: `"true"` to post the summary comment (default `"false"`).
+- `changed-only`: on a pull request, check only changed files (default `"true"`).
+
+Without `fetch-depth: 0` the action fetches the base commit itself and
+compares it with the checked-out commit; that list can include files that
+changed on the base branch after the pull request was opened. A pull request
+from a fork gets a read-only token, so the comment fails with a warning and the
+annotations still appear.
 
 For code scanning, run `readcost check . -o sarif --fail-on never > readcost.sarif`
 and upload the file with `github/codeql-action/upload-sarif`. Each result's
