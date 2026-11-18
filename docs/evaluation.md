@@ -2071,12 +2071,13 @@ stacks.
 | Configuration | Time against `sm` | Install, beyond readcost (342 MB with its model) |
 | --- | --- | --- |
 | sm | 60 to 107 ms per 1,000 words | - |
-| trf | 30 to 48 times | 1,416 MB: PyTorch (CPU build), spacy-curated-transformers, the 478 MB model |
+| trf | 30 to 48 times | 1.3 to 1.4 GB: PyTorch (CPU build), spacy-curated-transformers, the 478 MB model |
 | sm & trf (trf on flagged sentences only) | 2.2 to 2.8 times | the same |
-| sm + biaffine (flagged sentences only) | 1.3 to 1.5 times | 406 MB: onnxruntime and tokenizers 120 MB, the model 286 MB |
+| sm + biaffine (flagged sentences only) | 1.3 to 1.5 times | about 400 MB: onnxruntime and tokenizers 107 to 120 MB, the model 286 MB |
 
-Times are from two runs on different runners, on each group of treebanks;
-the second runner was about 1.5 times faster throughout.
+Times and sizes are from three runs on different runners (sizes differ
+between pip and uv installs); one runner was about 1.5 times faster than
+another throughout, and the ratios held.
 
 On the labelled bench (116 items, eval/rulebench) the three rules go from
 60% precision and 93% recall with `sm` to 83% and 86% with `trf`, 82%
