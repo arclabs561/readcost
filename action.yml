@@ -1,5 +1,5 @@
 name: readcost
-description: Flag prose constructions that slow readers down, as GitHub annotations.
+description: Flag sentence constructions that language models overuse, as GitHub annotations.
 branding:
   icon: book-open
   color: blue
