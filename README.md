@@ -118,9 +118,8 @@ text is better than readcost's cost index does (see
 readcost's job is to say which sentence to change.
 
 Status: experimental; before 1.0, output and configuration can change between
-minor versions. This README describes the main branch. The release on PyPI is
-0.2.0, which does not have `style`, `compare`, `corpus` or rule levels; until
-0.3 is out, run main with
+minor versions. This README describes the main branch, which can be ahead of
+the release on PyPI; run main with
 `uvx --from git+https://github.com/arclabs561/readcost readcost`.
 [docs/research.md](https://github.com/arclabs561/readcost/blob/main/docs/research.md)
 has the evidence behind each choice and the roadmap.
