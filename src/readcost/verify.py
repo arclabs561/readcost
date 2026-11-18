@@ -39,8 +39,13 @@ from dataclasses import dataclass
 from pathlib import Path
 
 REPO = "ghotriw/deberta-v3-xsmall-biaffine-dep-pos-feats-en-ewt-gum-norm"
-REVISION = ""  # filled from the evaluation run that measured this model; see FILES
-FILES: dict[str, str] = {}  # file name -> SHA-256
+# The revision and files the second-parser evaluation job downloaded and measured.
+REVISION = "47c185bbe563964a82641bd0d4dbe7ad1645db4f"
+FILES = {  # file name -> SHA-256
+    "config.json": "955d5083925821af62254e574e1f726bdf3d47629eb3169b0d43b4dbe58f6b74",
+    "tokenizer.json": "7fb827d15550c884144bec6129b81d7ee7cc42c7181a678aa6b408c04a03d764",
+    "model.onnx": "9d1393986208fae03cc4325b02a78a1b12b0e8ccf5b8404e08a6624f427affc2",
+}
 NAME = "biaffine-xsmall"
 VERIFIED_RULES = frozenset({"stacked-nouns", "reduced-object-relative", "long-dependency"})
 VERBS = ("VERB", "AUX")

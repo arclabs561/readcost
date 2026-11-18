@@ -469,6 +469,15 @@ useful ones:
   study in which such a gap cost readers far less than a relative clause of
   the same length (Nusbaumer et al. 2026). It has not been checked against
   labelled findings yet. A level set under `[readcost.rules]` still wins.
+- `verify_model` (opt-in): a second parser checks stacked-nouns,
+  reduced-object-relative and long-dependency findings, and a finding stays
+  only when its parse agrees. Install it with `pip install 'readcost[verify]'`
+  and `readcost setup --verifier` (about 400 MB with onnxruntime), then set
+  `verify_model = "biaffine"`, or a directory with the model. Against
+  hand-corrected parses of text the parser was not trained on, it raised
+  long-dependency precision from 68% to 99% and kept nearly all of the
+  recall; noun stacks gained 4 points. It makes a check 1.3 to 1.5 times
+  slower. See "A second parser as a check" in docs/evaluation.md.
 
 ```toml
 [readcost.rules]
@@ -615,8 +624,9 @@ setup for each editor.
   verb is skipped, unless it ends with a full stop and a plural noun inside a
   noun run looks like the verb ("the job reruns merge planning"); then only
   `stacked-nouns` and `hyphen-compound` run on it. A misparse can produce a false
-  finding. Set `model = "en_core_web_trf"` for better parses at several times
-  the cost.
+  finding. Set `model = "en_core_web_trf"` for better parses at 30 or more
+  times the cost, or `verify_model` (above) to have a second parser check
+  three rules' findings.
 - inanimate-subject uses word lists derived from WordNet. Treat its findings
   as prompts to reread, not verdicts.
 - Precision is low on well-edited prose. Ten model raters from different labs

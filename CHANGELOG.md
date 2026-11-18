@@ -9,6 +9,12 @@ configuration.
 
 ### Added
 
+- `verify_model` (opt-in): a small ONNX dependency parser
+  (`readcost setup --verifier`, extra `verify`) checks stacked-nouns,
+  reduced-object-relative and long-dependency findings, with parses cached
+  by sentence hash. Off by default. `scripts/eval_second_parser.py` and the
+  `second-parser` eval job measure it, en_core_web_trf and two other checks
+  against UD gold parses; results in docs/evaluation.md.
 - `long_dependency_gap = "content"` (opt-in): long-dependency says what fills
   the gap (an object relative clause, another clause, only prepositional
   phrases, or no clause) and reports a gap of prepositional phrases at info.
