@@ -1,4 +1,4 @@
-"""readcost: find constructions in prose that are known to slow readers down.
+"""readcost: find sentence constructions in prose that language models overuse.
 
 Python API::
 

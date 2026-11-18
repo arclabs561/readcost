@@ -623,7 +623,7 @@ def build_parser() -> argparse.ArgumentParser:
     from .extract import FORMATS
     from .report import OUTPUTS
 
-    p = argparse.ArgumentParser(prog="readcost", description="Find prose constructions that slow readers down.")
+    p = argparse.ArgumentParser(prog="readcost", description="Find sentence constructions that language models overuse.")
     p.add_argument("--version", action="store_true", help="print the version and exit")
     sub = p.add_subparsers(dest="cmd")
 

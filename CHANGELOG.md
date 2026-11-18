@@ -131,6 +131,11 @@ configuration.
   `commit_block_cost_index` now warn and are ignored. They were set from the
   evaluation corpus; change a rule's level instead. `advise_cost_index`,
   `block_cost_index` and `advise_severity` stay.
+- readcost describes its rules as constructions that language models overuse,
+  not as constructions that slow readers: on every reading-time and rating
+  dataset tested, flagged sentences were not read more slowly or rated harder
+  once length and word frequency were held. The README opening, the package,
+  Action and CLI descriptions change.
 - The stacked-nouns advice is conditional: unpack only if the result reads
   naturally, and leave an established term alone. README "Limits" says that
   all labels come from model raters, that the supporting studies used

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "readcost"
 dynamic = ["version"]
-description = "Flag prose constructions that slow readers down"
+description = "Flag sentence constructions that language models overuse in English prose"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT OR Apache-2.0"

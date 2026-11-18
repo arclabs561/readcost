@@ -1,9 +1,16 @@
 # readcost
 
-readcost finds the sentences in your docs, or in a model's answer, whose
-construction slows readers down: three or more nouns in a row, a subject far
-from its verb, a thing doing a person's action, and a few more. For each one it
-quotes the line, marks the words, and says how to rewrite it.
+readcost finds sentence constructions in your docs, or in a model's answer,
+that recent language models use more often than people do: three or more nouns
+in a row, a subject far from its verb, a thing doing a person's action, and a
+few more. For each one it quotes the line, marks the words, and says how to
+rewrite it.
+
+Studies of constructed sentences tie each of these to harder reading. In real
+prose that has not been shown: on every reading-time and rating dataset tested
+so far, sentences with findings were not read more slowly or rated harder once
+length and word frequency were held
+([Limits](#limits)). Treat findings as places to reread, not as measured costs.
 
 For example, this sentence from a README:
 
@@ -70,8 +77,9 @@ The constructions come from "Why is AI-generated language so hard to
 understand?" ([arXiv 2610.29162](https://arxiv.org/abs/2610.29162)). The paper
 finds that recent language models use them more often than paraphrases of the
 same content do. Against human corpora, the difference is consistent only for
-inanimate subjects. Earlier studies tie each construction to harder reading,
-some with reading times and some with brain responses.
+inanimate subjects. Earlier studies, mostly of constructed sentences, tie each
+construction to harder reading, some with reading times and some with brain
+responses.
 
 ## Scope
 
@@ -79,8 +87,8 @@ readcost is for English technical prose: READMEs, documentation, commit
 messages, doc comments, and text a model writes before you or your users read
 it. It reports:
 
-- sentences built in a way that costs readers time, with the words marked and
-  a suggested rewrite;
+- sentences with the constructions above, with the words marked and a
+  suggested rewrite;
 - a verdict per file (pass, advise, block) for CI and hooks;
 - a predicted reading time per file, from a model fitted to eye-tracking data.
 
@@ -93,7 +101,7 @@ documentation failures), or tell who wrote a text.
 
 | Tool | Checks | How |
 | --- | --- | --- |
-| readcost | Sentence constructions tied to slower reading; reading time | A dependency parse of each sentence; a model fitted to eye-tracking data |
+| readcost | Sentence constructions that models overuse; reading time | A dependency parse of each sentence; a model fitted to eye-tracking data |
 | Vale | Your style guide: terms, phrases, capitalization | Rules you write: patterns, word lists, part-of-speech sequences |
 | proselint | Usage advice gathered from authors and editors | Built-in checks |
 | write-good | Passive voice, weasel words, wordy phrases | Word patterns |
