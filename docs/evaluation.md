@@ -2017,6 +2017,97 @@ are self-reports, so this does not show what an expert reader pays.
   is technical documentation, and none measures rereading or comprehension
   per sentence.
 
+## A second parser as a check
+
+`scripts/eval_second_parser.py` (the `second-parser` job in
+`.github/workflows/eval.yml`) asks whether a second model removes the false
+findings that the gold treebanks trace to the parser. Each finding of
+stacked-nouns, reduced-object-relative and long-dependency is scored as in
+the section above. Precision is against the gold construction; recall is
+against the gold constructions that the rule means to report. The
+configurations:
+
+- `trf`: en_core_web_trf 3.8 in place of the default parser.
+- `sm & trf`: a finding stays when trf, run on the same sentence, reports
+  the same rule on overlapping words.
+- `pos-verb`: a finding stays unless a second tagger tags a stacked word as
+  a verb, or the verb of a relative clause as something else.
+- `ud`: a finding stays when the biaffine parser's own UD tree holds the
+  construction, by the definitions used on the gold tree.
+
+The second tagger is
+[ghotriw/deberta-v3-xsmall-biaffine-dep-pos-feats-en-ewt-gum-norm](https://huggingface.co/ghotriw/deberta-v3-xsmall-biaffine-dep-pos-feats-en-ewt-gum-norm)
+(MIT, ONNX, 290 MB). It was trained on EWT and GUM, so it is scored on the
+EWT and GUM test splits ("held out") and on three treebanks it never saw:
+PUD, LinES and ParTUT (8,786 sentences, 155,993 words; "other").
+[dragonscale-ai/kniv-v7-small-en](https://huggingface.co/dragonscale-ai/kniv-v7-small-en)
+was also run as a tagger; it did no better than the biaffine tagger and
+is left out of the table. Intervals are 95% bootstrap intervals over
+documents, and changes are paired with `sm` on the same resamples. GitHub
+runner (4 CPUs), 2026-11-18, readcost `4551ddc`.
+
+| Rule | Configuration | Held out: precision (change) | Recall | Other: precision (change) | Recall |
+| --- | --- | --- | --- | --- | --- |
+| stacked-nouns | sm | 81% | 48% | 58% | 49% |
+| | trf | 89% (+8, 0 to +18) | 53% | 61% (+4, -2 to +11) | 50% |
+| | sm & trf | 92% (+11, +4 to +19) | 43% | 63% (+6, +1 to +10) | 41% |
+| | pos-verb | 84% (+4, 0 to +9) | 47% | 62% (+4, +2 to +7) | 49% |
+| | ud | 94% (+13, +6 to +22) | 45% | 60% (+2, -8 to +9) | 40% |
+| reduced-object-relative | sm | 22% of 9 | 2 of 5 | 51% of 41 (gold-tree rule) | 9% |
+| | sm & trf | 29% | 2 of 5 | 81% (+30, +19 to +42) | 9% |
+| | ud | 29% | 2 of 5 | 84% (+33, +20 to +48) | 9% |
+| long-dependency | sm | 71% | 75% | 68% | 54% |
+| | trf | 92% (+21, 0 to +39) | 67% | 96% (+28, +17 to +38) | 80% |
+| | sm & trf | 100% (+29, +14 to +45) | 67% | 98% (+31, +21 to +40) | 49% |
+| | ud | 100% (+29, +14 to +45) | 62% | 99% (+31, +21 to +41) | 53% |
+
+The other treebanks do not mark relative-clause types, so
+reduced-object-relative is scored there by agreement with the same rule
+run on the gold tree. On those treebanks the `pos` and `ud` tests on noun
+stacks each dropped about 30 findings, half of them real. `pos-verb`
+dropped 10, none real. That is why `verify_model` uses `pos-verb` for
+stacks.
+
+| Configuration | Time against `sm` | Install, beyond readcost (342 MB with its model) |
+| --- | --- | --- |
+| sm | 60 to 107 ms per 1,000 words | - |
+| trf | 30 to 48 times | 1.3 to 1.4 GB: PyTorch (CPU build), spacy-curated-transformers, the 478 MB model |
+| sm & trf (trf on flagged sentences only) | 2.2 to 2.8 times | the same |
+| sm + biaffine (flagged sentences only) | 1.3 to 1.5 times | about 400 MB: onnxruntime and tokenizers 107 to 120 MB, the model 286 MB |
+
+Times and sizes are from three runs on different runners (sizes differ
+between pip and uv installs); one runner was about 1.5 times faster than
+another throughout, and the ratios held.
+
+On the labelled bench (116 items, eval/rulebench) the three rules go from
+60% precision and 93% recall with `sm` to 83% and 86% with `trf`, 82%
+and 82% with `sm & trf`, and 84% and 93% with `verify_model`. The bench
+is built from sentences the default parser had reported, so it favours
+any second parser.
+
+What this shows. Most false long-dependency and reduced-object-relative
+findings are parser errors, and a second parse removes them: precision
+against gold rises by about 30 points, outside the training text too.
+Recall falls a little, and on the held-out split by up to 27 points
+within the interval. For noun stacks the gain is small outside the
+biaffine parser's training text. The biaffine check matches trf
+agreement at a fifth to a third of its added time and without PyTorch. trf alone is the only
+configuration that also raises recall (long-dependency, other treebanks:
+54% to 80%), at 30 to 48 times the time of `sm`.
+
+What it does not show: that the dropped findings were not worth an
+editor's time. A real construction can still be easy to read. The
+`ud` test and the gold construction share a definition, so a perfect
+parser would score 100% there; the gold-tree-rule columns in the job's
+summary give a second view (long-dependency, other treebanks: 56% to 81%).
+
+`verify_model = "biaffine"` (opt-in) applies `pos-verb` to stacked-nouns and
+`ud` to the other two rules. It stays off by default. Making it the default
+would need: human labels showing that the findings it drops are mostly not
+useful; a recall loss on long-dependency bounded tighter than the held-out
+interval allows; a model download of about 300 MB, against 13 MB for the
+default parser, accepted for every install; and a maintained source for the
+model, which today is one author's Hugging Face repository.
 ## Noun stacks: established term or coined? (no usable signal yet)
 
 Two rules, stacked-nouns and hyphen-compound, report an established term

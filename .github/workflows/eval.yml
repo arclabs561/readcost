@@ -12,9 +12,13 @@ on:
       - .github/actions/setup/action.yml
       - scripts/eval_onestop_pairs.py
       - scripts/reading_time_prep.py
+      - scripts/eval_second_parser.py
+      - src/readcost/verify.py
+      - scripts/eval_gold_treebank.py
+      - scripts/fetch_rulebench.py
+      - eval/rulebench/rulebench.jsonl
       - scripts/build_open_pairs.py
       - scripts/eval_stack_terms.py
-      - scripts/fetch_rulebench.py
       - scripts/eval_patterns.py
       - scripts/human_signals.py
       - src/readcost/patterns.py
@@ -65,6 +69,130 @@ jobs:
         with:
           name: onestop-pairs
           path: pairs.txt
+
+  # Does a second parser or tagger make stacked-nouns, reduced-object-relative
+  # and long-dependency more precise? Scored against hand-corrected parses.
+  second-parser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      # Commits of the UniversalDependencies repositories, 2026-11-10.
+      UD_EWT: 491be069d36e378f67c29f183699eea88308ea42
+      UD_GUM: 8e168382a25686ca6253deb7c4ef839494ddb154
+      UD_PUD: a697bab43d4111073356de0df5802488bca3de7e
+      UD_LINES: a4d79cb15c8a9a592ebf90cfa3359a77c9c78909
+      UD_PARTUT: 2aca171164c5fde639d66dcdf8d58dbbcd3b68cf
+      BIAFFINE: ghotriw/deberta-v3-xsmall-biaffine-dep-pos-feats-en-ewt-gum-norm
+      KNIV: dragonscale-ai/kniv-v7-small-en
+      TRF_WHEEL: https://github.com/explosion/spacy-models/releases/download/en_core_web_trf-3.8.0/en_core_web_trf-3.8.0-py3-none-any.whl
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: ./.github/actions/setup
+        with:
+          sync-args: --no-dev
+      # UD English treebanks: EWT CC BY-SA 4.0; GUM, LinES and ParTUT
+      # CC BY-NC-SA 4.0; PUD CC BY-SA 3.0. Bump the key's suffix to refetch.
+      - id: ud
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/ud
+          key: eval-ud-english-ewt-gum-pud-lines-partut-20261110-v1
+      - name: Download the treebanks
+        if: steps.ud.outputs.cache-hit != 'true'
+        run: |
+          fetch() {
+            mkdir -p "ref/ud/UD_English-$1"
+            git -C "ref/ud/UD_English-$1" init -q
+            git -C "ref/ud/UD_English-$1" fetch -q --depth 1 "https://github.com/UniversalDependencies/UD_English-$1" "$2"
+            git -C "ref/ud/UD_English-$1" checkout -q FETCH_HEAD
+            rm -rf "ref/ud/UD_English-$1/.git"
+          }
+          fetch EWT "$UD_EWT"; fetch GUM "$UD_GUM"; fetch PUD "$UD_PUD"
+          fetch LinES "$UD_LINES"; fetch ParTUT "$UD_PARTUT"
+      # Two small ONNX taggers from Hugging Face: MIT and Apache-2.0.
+      - id: onnx
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/models
+          key: eval-onnx-taggers-biaffine-xsmall-kniv-v7-small-v1
+      - name: Download the ONNX taggers
+        if: steps.onnx.outputs.cache-hit != 'true'
+        run: |
+          get() { mkdir -p "$(dirname "$3")"; curl -fsSL --retry 3 -o "$3" "https://huggingface.co/$1/resolve/main/$2"; }
+          for f in model.onnx config.json tokenizer.json; do get "$BIAFFINE" "$f" "ref/models/biaffine/$f"; done
+          for f in onnx/plain-int8.onnx onnx/onnx_meta.json tokenizer.json; do get "$KNIV" "$f" "ref/models/kniv/$f"; done
+          for repo in "$BIAFFINE" "$KNIV"; do
+            curl -fsSL --retry 3 "https://huggingface.co/api/models/$repo" \
+              | uv run python -c 'import json, sys; d = json.load(sys.stdin); print(d["id"], d["sha"])'
+          done > ref/models/REVISIONS
+          (cd ref/models && sha256sum biaffine/* kniv/tokenizer.json kniv/onnx/* > SHA256SUMS)
+      - name: Install the second models and measure what each adds
+        run: |
+          # The project environment from uv.lock (UV_NO_SYNC keeps uv run
+          # from undoing these installs): readcost's verify extra, then the
+          # transformer model with a CPU build of PyTorch.
+          site="$(uv run python -c 'import site; print(site.getsitepackages()[0])')"
+          mb() { du -sm "$1" | cut -f1; }
+          base="$(mb "$site")"
+          uv pip install --quiet "onnxruntime>=1.18" "tokenizers>=0.19"
+          onnx="$(mb "$site")"
+          uv pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --quiet "$TRF_WHEEL"
+          trf="$(mb "$site")"
+          {
+            echo '## Install size'
+            echo
+            echo '| What | MB on disk |'
+            echo '| --- | --- |'
+            echo "| readcost, spaCy and their dependencies (site-packages) | $base |"
+            echo "| en_core_web_sm, unpacked | $(mb ~/.cache/readcost/models) |"
+            echo "| added by onnxruntime and tokenizers | $((onnx - base)) |"
+            echo "| biaffine parser: model.onnx, config, tokenizer | $(mb ref/models/biaffine) |"
+            echo "| kniv v7 small: plain-int8.onnx, metadata, tokenizer | $(mb ref/models/kniv) |"
+            echo "| added by PyTorch (CPU build), spacy-curated-transformers and en_core_web_trf | $((trf - onnx)) |"
+            echo "| of which en_core_web_trf | $(mb "$site/en_core_web_trf") |"
+            echo
+            echo 'Model revisions:'
+            echo '```'
+            cat ref/models/REVISIONS ref/models/SHA256SUMS
+            uv run python -c 'import os, torch, onnxruntime, spacy; print("torch", torch.__version__, "onnxruntime", onnxruntime.__version__, "spacy", spacy.__version__, "cpus", os.cpu_count())'
+            echo '```'
+          } > sizes.md
+          cat sizes.md
+          cat sizes.md >> "$GITHUB_STEP_SUMMARY"
+      # The labelled bench keeps references, not text; its sources are web
+      # pages, so a missing page only shrinks the bench.
+      - id: bench
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/rulebench
+          key: eval-rulebench-${{ hashFiles('eval/rulebench/rulebench.jsonl', 'scripts/fetch_rulebench.py') }}-v1
+      - name: Fetch the labelled bench's sentences
+        if: steps.bench.outputs.cache-hit != 'true'
+        continue-on-error: true
+        run: uv run --with "trafilatura>=1.12" scripts/fetch_rulebench.py ref/rulebench
+      - name: Each configuration against the gold parses
+        run: |
+          uv run python scripts/eval_second_parser.py \
+            --group "Held-out: EWT test and GUM test" \
+              ref/ud/UD_English-EWT/en_ewt-ud-test.conllu ref/ud/UD_English-GUM/en_gum-ud-test.conllu \
+            --group "Other treebanks: PUD, LinES, ParTUT" \
+              ref/ud/UD_English-PUD/*.conllu ref/ud/UD_English-LinES/*.conllu ref/ud/UD_English-ParTUT/*.conllu \
+            --group "Seen by the ONNX taggers in training: EWT and GUM train and dev" \
+              ref/ud/UD_English-EWT/en_ewt-ud-train.conllu ref/ud/UD_English-EWT/en_ewt-ud-dev.conllu \
+              ref/ud/UD_English-GUM/en_gum-ud-train.conllu ref/ud/UD_English-GUM/en_gum-ud-dev.conllu \
+            --second-spacy en_core_web_trf --biaffine ref/models/biaffine --kniv ref/models/kniv \
+            --rulebench ref/rulebench/rulebench.jsonl --examples 40 --json second_parser.json \
+            | tee second_parser.md
+          cat second_parser.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: second-parser
+          path: |
+            second_parser.md
+            second_parser.json
+            sizes.md
 
   # Do word-pair counts or the document tell an established term ("goroutine
   # call stack") from a coined noun stack? Counts come from one shard of
