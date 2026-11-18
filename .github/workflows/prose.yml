@@ -41,7 +41,7 @@ jobs:
       # the prose files that the pull request changes. The CI workflow gates
       # those files; this step only shows where the findings are.
       - name: readcost action on changed files
-        if: github.event_name == 'pull_request'
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}   # also after a failed check above
         uses: ./
         with:
           paths: README.md docs CHANGELOG.md
