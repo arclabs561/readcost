@@ -21,16 +21,17 @@ a model are listed at the end and not used.
 Status: **run** means `scripts/dataset_matrix.py` reads it and the
 `matrix` job in the eval workflow runs it; **used before** means an earlier
 evaluation used it; **#83** means that pull request 83, an experiment on discourse
-patterns, uses it.
+patterns, uses it; **#92** means the pre-registered repetition test
+([prereg/repetition.md](prereg/repetition.md)) uses it.
 
 ## Ratings, preferences and complaints
 
 | Dataset | Human signal | Size | Licence | Host | Human label | readcost question | Checked | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [HelpSteer2](https://huggingface.co/datasets/nvidia/HelpSteer2) | 0 to 4 for helpfulness, correctness, coherence, complexity, verbosity | 21,362 responses | CC BY 4.0 | Hugging Face | yes: card says "five human-annotated attributes", made with Scale AI | do findings go with lower coherence or more verbosity among answers to the same prompt? | card | run |
-| [HelpSteer](https://huggingface.co/datasets/nvidia/HelpSteer) | the same five attributes | about 37,000 (memory) | CC BY 4.0 | Hugging Face | yes (card) | as HelpSteer2; the card recommends v2 | card | not run |
+| [HelpSteer](https://huggingface.co/datasets/nvidia/HelpSteer) | the same five attributes | about 37,000 (memory) | CC BY 4.0 | Hugging Face | yes (card) | as HelpSteer2; the card recommends v2 | card | #92: pre-registered repetition test |
 | [HelpSteer3-Feedback](https://huggingface.co/datasets/nvidia/HelpSteer3) | three annotators each write a paragraph about a response | about 40,800 rows, two responses each | CC BY 4.0 | Hugging Face | yes (card); the complaint labels are matched here from the paragraphs | do annotators complain about length, clarity or repetition more often when findings are present? | card | run (derived labels) |
-| [HelpSteer3-Preference](https://huggingface.co/datasets/nvidia/HelpSteer3) | -3 to 3 preference between two responses, with a 1 to 2 sentence reason per annotator | 40,476 pairs | CC BY 4.0 | Hugging Face | yes (card) | is the answer with fewer findings preferred? | card | not run |
+| [HelpSteer3-Preference](https://huggingface.co/datasets/nvidia/HelpSteer3) | -3 to 3 preference between two responses, with a 1 to 2 sentence reason per annotator | 40,476 pairs | CC BY 4.0 | Hugging Face | yes (card) | is the answer with fewer findings preferred? | card | #92: code domain only, pre-registered repetition test |
 | [summarize from feedback, axis](https://huggingface.co/datasets/openai/summarize_from_feedback) | 1 to 7 for overall, accuracy, coverage, coherence | 14,900 ratings of TL;DR and CNN/DM summaries | OpenAI's modified MIT (covers the feedback data) | Hugging Face, Azure | yes: the repository calls it "our human feedback dataset" | do findings go with lower coherence among summaries of one post? | repo, card | run |
 | summarize from feedback, comparisons | which of two summaries is better | 179,000 | as above | as above | yes (repo) | as above, pairwise | card | not run |
 | [SummEval](https://huggingface.co/datasets/mteb/summeval) | mean of three experts' 1 to 5 ratings of coherence, consistency, fluency, relevance | 1,600 summaries of 100 articles | MIT | Hugging Face, [GitHub](https://github.com/Yale-LILY/SummEval) | yes (card tag `annotations_creators:human-annotated`; paper) | do findings go with lower coherence or fluency? | card, repo | run |
@@ -43,6 +44,7 @@ patterns, uses it.
 | [HANNA](https://github.com/dig-team/hanna-benchmark-asg) | three raters, six criteria including coherence and complexity | 1,056 stories | MIT | GitHub | yes (paper, memory) | do findings go with lower rated coherence of stories? | repo | not run |
 | [LitBench](https://huggingface.co/datasets/SAA-Lab/LitBench-Test) | upvotes between two Reddit stories | 2,381 pairs, as comment ids only | none on the card | Hugging Face | yes (votes) | needs the texts fetched from Reddit | card | not run |
 | [LAMP](https://github.com/salesforce/creativity_eval) | writers edit model paragraphs and label each edit (for example "Unnecessary Exposition") | 1,282 paragraphs | BSD-3-Clause | GitHub | yes (#83) | are findings edited more? | #83 | #83 |
+| [ELLIPSE](https://github.com/scrosseye/ELLIPSE-Corpus) | two trained raters score each essay 1 to 5 for overall proficiency and six analytic traits, including cohesion | 3,911 essays in the public train file, 44 prompts (measured) | CC BY 4.0 (README) | GitHub | yes (paper) | does repetition go with lower rated cohesion in text people wrote? | repo | #92 |
 | [PLABA-EVAL](https://github.com/SDS-NLP/PLABA-EVAL) | lay readers rate each sentence for ease | 609 sentences | CC BY 4.0 | GitHub | yes | as below | earlier | used before |
 | ASSET, Simplicity-DA, SimpEval, Wu and Arase | ratings of simplifications | 100 to 6,163 | various | GitHub | yes | as below | earlier | used before |
 
@@ -109,6 +111,7 @@ patterns, uses it.
 | [Comments on Comments](https://doi.org/10.5281/zenodo.5886145) (Rao et al. 2022) | review comments about code comments, with the change before and after | 65,000 cases; 240 labelled by hand | not checked | Zenodo | the 65,000 come from keyword filters (paper: precision 0.67); the 240 are human | do reviewers ask to clarify comments that have findings? | paper | not run |
 | [github-codereview](https://huggingface.co/datasets/ronantakizawa/github-codereview) | inline review comments and the code after the fix | 167,000 | permissive source repositories (card) | Hugging Face | yes: bot reviewers removed (card) | little: code, not prose | search result | not run |
 | [crc-py-dataset](https://github.com/busraicoz/crc-py-dataset) | review comments with categories including documentation | 16,711 | not checked | GitHub | no: categories from an SVM classifier (README) | none | search result | excluded |
+| [Stack Exchange preferences](https://huggingface.co/datasets/HuggingFaceH4/stack-exchange-preferences) | answers to one question with their vote score (log2 of 1 plus upvotes, plus 1 if accepted) | 10.8 million questions over 300 sites | CC BY-SA 4.0 | Hugging Face | yes, collective votes; they judge content as much as prose | does repetition go with lower scores among answers people wrote to one technical question? | card | #92: first shard of four technical sites |
 | Stack Exchange edits | a post before and after an edit | readcost's own sample | CC BY-SA | Stack Exchange API | yes (edits) | do edits remove findings? | earlier | used before |
 
 ## Technical text for word-pair counts
