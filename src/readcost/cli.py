@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import os
-import re
 import subprocess
 import sys
 from pathlib import Path
@@ -13,26 +12,18 @@ EXIT_OK, EXIT_FINDINGS, EXIT_USAGE = 0, 1, 2
 EXIT_BROKEN_PIPE = 141  # 128 + SIGPIPE, what a shell reports for a reader that went away
 VERDICT_RANK = {"pass": 0, "advise": 1, "block": 2}
 RECORD_FORMATS = ("transcript", "messages", "jsonl")
-LAST_LINE = 10**9  # stands in for "end of file" in an open range such as 40-
+def _line_ranges(spec: str | None) -> list[tuple[int, int]] | None:
+    """--lines as ranges; "40-" runs to the end and "-5" is 1-5 (engine.parse_line_ranges)."""
+    from .engine import parse_line_ranges
 
-
-def _line_spec(spec: str | None) -> str | None:
-    """Validate --lines and close open ranges: "40-" -> to the end, "-5" -> 1-5."""
     if spec is None:
         return None
-    parts = []
-    for part in spec.split(","):
-        part = part.strip()
-        m = re.fullmatch(r"(\d*)(-?)(\d*)", part)
-        if not part or not m or not (m[1] or m[3]) or (not m[2] and not m[1]):
-            raise ValueError(f"--lines: {part!r} is not a line or range; use e.g. 10-24,40 or 40-")
-        lo = int(m[1]) if m[1] else 1
-        hi = int(m[3]) if m[3] else (LAST_LINE if m[2] else lo)
-        if lo < 1 or hi < lo:
-            raise ValueError(f"--lines: {part!r} is not a valid range; lines start at 1 and a range "
-                             "runs low to high")
-        parts.append(f"{lo}-{hi}")
-    return ",".join(parts)
+    try:
+        if not spec.strip():
+            raise ValueError("'' is not a line or range; use e.g. 10-24,40 or 40-")
+        return parse_line_ranges(spec)
+    except ValueError as exc:
+        raise ValueError(f"--lines: {exc}") from None
 
 
 def _feature_ids(value: str, flag: str) -> list[str]:
@@ -319,8 +310,15 @@ def _check_one(analyzer, opts: tuple, text: str, path: str, name: str) -> list:
 
 def _read_and_check(analyzer, opts: tuple, p: Path) -> tuple[list, str | None]:
     """(results, None), or ([], the reason) when the file cannot be read or parsed."""
+    from .engine import read_source
+
     try:
-        return _check_one(analyzer, opts, p.read_text(encoding="utf-8", errors="ignore"), str(p), str(p)), None
+        text, note = read_source(p)
+        results = _check_one(analyzer, opts, text, str(p), str(p))
+        if note:
+            for r in results:
+                r.notes.append(note)
+        return results, None
     except (OSError, ValueError) as exc:
         return [], str(exc.strerror if isinstance(exc, OSError) and exc.strerror else exc)
 
@@ -353,11 +351,9 @@ def _jobs(requested: int, files: int) -> int:
 
 def _collect(args, cfg, analyzer) -> tuple[list, bool]:
     """Check every path in ``args.paths``; also say whether some file could not be read."""
-    from .engine import parse_line_ranges
-
     if args.per_record and (args.last or args.lines):
         raise ValueError("--per-record cannot be combined with --last or --lines")
-    opts = (args.format, args.per_record, args.field, args.last, parse_line_ranges(_line_spec(args.lines)))
+    opts = (args.format, args.per_record, args.field, args.last, _line_ranges(args.lines))
 
     # Every input in order: stdin text, or a file. Files from all paths are
     # checked together, so many file arguments use the pool as a directory does.

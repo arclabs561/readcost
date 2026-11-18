@@ -595,8 +595,11 @@ setup for each editor.
   reading time; `language_check = false` turns that off. On 2,132 English
   texts in the evaluation corpora the check skipped none.
 - The default spaCy model misparses some sentences. A sentence parsed with no
-  verb is skipped, and a misparse can produce a false finding. Set
-  `model = "en_core_web_trf"` for better parses at several times the cost.
+  verb is skipped, unless it ends with a full stop and a plural noun inside a
+  noun run looks like the verb ("the job reruns merge planning"); then only
+  `stacked-nouns` and `hyphen-compound` run on it. A misparse can produce a false
+  finding. Set `model = "en_core_web_trf"` for better parses at several times
+  the cost.
 - inanimate-subject and denominal-verb use word lists derived from WordNet.
   Treat their findings as prompts to reread, not verdicts.
 - Precision is low on well-edited prose. Ten model raters from different labs

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 import statistics
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -12,9 +13,11 @@ from .config import SEVERITIES, Config, load_config, severity_rank
 from .extract import Segment, detect_format, extract
 from .features import (
     FEATURES,
+    NOUN_RUN_RULES,
     Context,
     Finding,
     detect,
+    misparsed_verb,
     repeated_frames,
     show,
     suggestion,
@@ -82,17 +85,30 @@ class Result:
         }
 
 
+LAST_LINE = 10**9  # stands in for "end of file" in an open range such as 40-
+
+
 def parse_line_ranges(spec: str | None) -> list[tuple[int, int]] | None:
-    """'3-9,14,20-22' -> [(3, 9), (14, 14), (20, 22)]."""
-    if not spec:
+    """'3-9,14,40-' -> [(3, 9), (14, 14), (40, LAST_LINE)]; '-5' is lines 1 to 5.
+
+    The CLI, the generic hook and ``review()`` share this parser, so an open
+    range means the same thing in all three. Raises ValueError for a part
+    that is not a line or a range, and for a range that runs high to low.
+    """
+    if spec is None or not spec.strip():
         return None
     out = []
     for part in spec.split(","):
         part = part.strip()
-        if not part:
-            continue
-        lo, _, hi = part.partition("-")
-        out.append((int(lo), int(hi or lo)))
+        m = re.fullmatch(r"(\d*)(-?)(\d*)", part)
+        if not part or not m or not (m[1] or m[3]) or (not m[2] and not m[1]):
+            raise ValueError(f"{part!r} is not a line or range; use e.g. 10-24,40 or 40-")
+        lo = int(m[1]) if m[1] else 1
+        hi = int(m[3]) if m[3] else (LAST_LINE if m[2] else lo)
+        if lo < 1 or hi < lo:
+            raise ValueError(f"{part!r} is not a valid range; lines start at 1 and a range "
+                             "runs low to high")
+        out.append((lo, hi))
     return out
 
 
@@ -179,8 +195,15 @@ class Analyzer:
             parsed.append((seg, doc))
             for sent in doc.sents:
                 words = [t for t in sent if t.is_alpha]
-                if len(words) < 4 or not any(t.pos_ in ("VERB", "AUX") for t in sent):
+                if len(words) < 4:
                     continue
+                rules = None
+                if not any(t.pos_ in ("VERB", "AUX") for t in sent):
+                    if not misparsed_verb(sent):
+                        continue  # a heading, label or fragment
+                    # The parser read the verb as a noun. The rules that need
+                    # the verb would see a broken parse; the noun-run rules do not.
+                    rules = NOUN_RUN_RULES
                 line = seg.line_at(sent.start_char)
                 # A hard-wrapped sentence spans several lines; keep it when any
                 # of them was edited, not only its first.
@@ -194,7 +217,7 @@ class Analyzer:
                     framed.append((seg, sent))
                 text = show(ctx, sent.doc, sent.start, sent.end - 1)
                 spans.append((seg_index, sent.start_char, sent.end_char, line, text))
-                for feature, sev, msg, toks in detect(sent, ctx):
+                for feature, sev, msg, toks in detect(sent, ctx, rules):
                     if feature in seg.skip:
                         continue
                     result.findings.append(self._finding(ctx, seg, sent, text, path, line,
@@ -326,8 +349,26 @@ class Analyzer:
 
     def check_file(self, path: str, fmt: str | None = None, *, lines=None,
                    field_path=None, last_only=False) -> Result:
-        text = Path(path).read_text(encoding="utf-8", errors="ignore")
-        return self.check_text(text, fmt, path, lines=lines, field_path=field_path, last_only=last_only)
+        text, note = read_source(path)
+        result = self.check_text(text, fmt, path, lines=lines, field_path=field_path, last_only=last_only)
+        if note:
+            result.notes.append(note)
+        return result
+
+
+def read_source(path) -> tuple[str, str | None]:
+    """A file's text, and a note when it is not valid UTF-8.
+
+    Bytes that do not decode become U+FFFD instead of vanishing: Latin-1
+    "Café" used to read as "Caf". The note says that the text was altered.
+    """
+    data = Path(path).read_bytes()
+    try:
+        return data.decode("utf-8"), None
+    except UnicodeDecodeError as exc:
+        return data.decode("utf-8", errors="replace"), (
+            f"not valid UTF-8 (first bad byte at offset {exc.start}); bytes that do not "
+            "decode were replaced with U+FFFD, so findings near them may be off")
 
 
 _DEFAULT: Analyzer | None = None

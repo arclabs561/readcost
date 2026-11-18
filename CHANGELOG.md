@@ -86,6 +86,26 @@ configuration.
   development with a lock file, and `uv run --group eval` runs the evaluation
   scripts; scripts whose inline metadata names readcost now use the checkout
   instead of the PyPI release.
+- A sentence whose verb the parser read as a noun ("The index shard
+  compaction job reruns merge planning every hour.") was skipped as having
+  no verb, so the densest noun stacks went unreported. When such a sentence
+  ends with a full stop, and a plural noun inside a noun run comes after a
+  determiner and before an object or adverb, stacked-nouns and
+  hyphen-compound now run on it; the other rules still skip it. A plural
+  head followed by its object is read as the verb ("one correlation
+  parameter fixes most of this"), which also drops two old false positives
+  in this repository's docs.
+- The generic hook and `readcost.hooks.generic.review()` read `lines` as the
+  CLI does: `40-` runs to the end, `-5` is lines 1 to 5, and a malformed or
+  reversed range is an error (exit 2) instead of a Python error or no lines.
+- inanimate-subject no longer reports "blow up", "pick up" or "wake up" with
+  a thing as subject ("large inputs blow up the memory use").
+- stacked-nouns no longer counts the first half of a suspended hyphen
+  ("four- to sevenfold") as a noun.
+- long-dependency prints `(z = ...)` only when z triggered the finding; a gap
+  of 15+ words reported at a low z no longer shows a z that argues against it.
+- A file that is not valid UTF-8 gets a note, and its undecodable bytes
+  become U+FFFD instead of being dropped ("Café" in Latin-1 read as "Caf").
 
 ## [0.2.0] - 2026-10-26
 

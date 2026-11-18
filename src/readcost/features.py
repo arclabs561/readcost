@@ -330,6 +330,13 @@ def _measure_unit(token) -> bool:
             and not doc[token.i - 1].whitespace_ and doc[token.i - 2].like_num)
 
 
+def _stack_word(token) -> bool:
+    """A token that can be one of the nouns in a stack: a word, not a number or symbol."""
+    # Nor the first half of a suspended hyphen: in "cut the error four- to
+    # sevenfold", spaCy keeps "four-" as one token and the small model tags it NOUN.
+    return any(c.isalpha() for c in token.text) and not token.text.endswith("-")
+
+
 def _noun_stack(token) -> list:
     # Iterative: a very long run of nouns would overflow Python's recursion limit.
     out, todo = [], [token]
@@ -367,14 +374,14 @@ def stacked_nouns(sent, ctx: Context, taken: set[int],
         if t.pos_ not in ("NOUN", "PROPN") or t.dep_ == "compound" or t.text == CODE:
             continue
         stack = [x for x in _noun_stack(t) if not _measure_unit(x)]
-        if any(not any(c.isalpha() for c in x.text) for x in stack):
+        if any(not _stack_word(x) for x in stack):
             # "cost +5.86 ms", "+1.30 x10^-2 nats": a number or symbol splits the
             # run; the words on either side are a compound and a quantity, not one
             # stack. Keep the longest run of words between them. A name with a
             # digit ("HTTP/2", "S3") is still a word.
             runs, run = [], []
             for x in sorted(stack, key=lambda x: x.i):
-                if any(c.isalpha() for c in x.text):
+                if _stack_word(x):
                     run.append(x)
                 else:
                     runs.append(run)
@@ -392,6 +399,12 @@ def stacked_nouns(sent, ctx: Context, taken: set[int],
             # default to"); compound modifiers are rarely plural. Keep only
             # the words before it, the verb's subject.
             verb = next((x for x in sorted(stack, key=lambda x: x.i) if x.i != t.i and x.tag_ == "NNS"), None)
+            nxt = t.doc[t.i + 1] if t.i + 1 < t.sent.end else None
+            if verb is None and t.tag_ == "NNS" and len(stack) > 1 and nxt is not None \
+                    and nxt.pos_ in AFTER_VERB:
+                # "one correlation parameter fixes most of this": the head
+                # itself is the verb, followed by its object.
+                verb = t
             if verb is not None:
                 stack = [x for x in stack if x.i < verb.i]
                 if not stack:
@@ -691,7 +704,12 @@ def long_dependency(sent, ctx: Context, has_list: bool) -> list[tuple[str, str, 
     if not (dist >= LONG_DEPENDENCY_CORE_ALWAYS
             or (dist >= LONG_DEPENDENCY_CORE_MIN and z >= LONG_DEPENDENCY_Z)):
         return []
-    return [("warn", f"'{_w(ctx, dep)}' and '{_w(ctx, head)}' are {dist} words apart (z = {z:.1f})", [dep, head])]
+    msg = f"'{_w(ctx, dep)}' and '{_w(ctx, head)}' are {dist} words apart"
+    if z >= LONG_DEPENDENCY_Z:
+        # Only a z that triggered the finding is shown; below the threshold the
+        # gap alone is the reason, and "z = -0.4" would read as a contradiction.
+        msg += f" (z = {z:.1f})"
+    return [("warn", msg, [dep, head])]
 
 
 def inanimate_subjects(sent, ctx: Context) -> list[tuple[str, str, list]]:
@@ -702,6 +720,9 @@ def inanimate_subjects(sent, ctx: Context) -> list[tuple[str, str, list]]:
         subjects = [c for c in t.children if c.dep_ == "nsubj"]
         if not subjects or not lexicon.is_animate_verb(t.lemma_.lower()):
             continue
+        particles = {c.lower_ for c in t.children if c.dep_ == "prt"}
+        if any((t.lemma_.lower(), p) in lexicon.THING_PHRASAL_VERBS for p in particles):
+            continue  # "inputs blow up the memory use": the phrasal verb takes things
         s = subjects[0]
         if s.lower_ in ("that", "which") and t.dep_ == "relcl":
             # "the engineer that owns": the relative pronoun stands for its antecedent.
@@ -983,11 +1004,43 @@ def suggestion(feature: str, sentence: str) -> str:
             "clause can be a sentence of its own.")
 
 
-def detect(sent, ctx: Context) -> list[tuple[str, str, str, list]]:
-    """Run enabled detectors on one sentence: (feature, severity, message, tokens)."""
+# Rules that look only at noun runs, so they can run on a sentence whose verb
+# the parser read as a noun (misparsed_verb).
+NOUN_RUN_RULES = frozenset({"stacked-nouns", "hyphen-compound"})
+
+
+def misparsed_verb(sent) -> bool:
+    """True for a sentence with no verb parsed because the parser read its verb as a noun.
+
+    The signs: the sentence ends with a full stop, question mark or
+    exclamation mark; a plural noun right after another noun is followed by
+    what a verb takes (an object, an adverb); and a determiner comes before
+    it, as in the subject of a clause. Headings, labels and table cells seldom
+    end with a full stop, and notes written without articles have no
+    determiner.
+    """
+    # "The index shard compaction job reruns merge planning every hour." tags
+    # "reruns" as a noun; skipped as verbless, its stack of four went unreported.
+    # "Experiments: census age-income regression, odds ratio." is a note, not a clause.
+    words = [t for t in sent if not t.is_space]
+    if len(words) < 2 or words[-1].text not in (".", "?", "!"):
+        return False
+    takes = AFTER_VERB | {"NOUN", "PROPN"}
+    return any(t.tag_ == "NNS" and k > 0 and words[k - 1].pos_ in ("NOUN", "PROPN")
+               and k + 1 < len(words) - 1 and words[k + 1].pos_ in takes
+               and any(w.pos_ == "DET" or w.tag_ == "PRP$" for w in words[:k])
+               for k, t in enumerate(words))
+
+
+def detect(sent, ctx: Context, rules: frozenset[str] | None = None) -> list[tuple[str, str, str, list]]:
+    """Run enabled detectors on one sentence: (feature, severity, message, tokens).
+
+    ``rules`` limits the run to those rules (NOUN_RUN_RULES for a sentence
+    with a misparsed verb); None runs every enabled rule.
+    """
     results: list[tuple[str, str, str, list]] = []
     taken: set[int] = set()
-    on = ctx.enabled
+    on = ctx.enabled if rules is None else ctx.enabled & rules
 
     def add(feature, items):
         for sev, msg, toks in items:

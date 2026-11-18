@@ -186,6 +186,14 @@ THING_SUBJECT_VERBS = {
     "resolve", "remind", "surprise", "overwhelm", "perturb", "react", "crash",
 }
 
+# Phrasal verbs whose verb alone is a person's action but which take a thing
+# as subject: "large inputs blow up the memory use", "the daemon picks up the
+# change", "the worker wakes up every second". (verb lemma, particle).
+# Figurative ones such as "spits out" and "shrugs off" stay reported.
+THING_PHRASAL_VERBS = {
+    ("blow", "up"), ("pick", "up"), ("wake", "up"),
+}
+
 
 @lru_cache(maxsize=4096)
 def is_animate_verb(lemma: str) -> bool:
