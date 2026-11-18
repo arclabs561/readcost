@@ -156,6 +156,8 @@ configuration.
 
 ### Fixed
 
+- `readcost explain` told users to turn an opt-in rule on with `--enable`,
+  the older spelling; it now names `--info` and the `[readcost.rules]` table.
 - A finding in a Python docstring after a line that ends in a backslash was
   reported one line too high.
 - A finding's line is now counted with the line ends editors use (`\n`,
