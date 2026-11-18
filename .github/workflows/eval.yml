@@ -74,7 +74,8 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: ./.github/actions/setup
         with:
-          extras: test,eval
+          extras: test
+      - run: python -m pip install --quiet "pyarrow>=15"
       # HAP-E (MIT), HC3 (CC BY-SA 4.0), Chatbot Arena votes (Apache-2.0),
       # LAMP and the writing-quality benchmark (BSD-3-Clause), EMTeC (OSF).
       - id: data
