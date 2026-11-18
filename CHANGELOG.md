@@ -20,6 +20,12 @@ configuration.
   `scripts/eval_simplicity_ratings.py` (five sets of rated simplifications)
   and `scripts/eval_rated_sentences.py` (PLABA-EVAL). Results, including
   the nulls, are in docs/evaluation.md.
+- `scripts/eval_stack_terms.py` and `scripts/build_open_pairs.py` test
+  whether counts of word pairs, counts of the whole phrase, bracketing or
+  the document tell an established term from a coined noun stack; the eval
+  workflow's `stack-terms` job runs them. On the labelled findings nothing
+  separated the two, so no rule changed. docs/research.md says what the
+  human-label study should measure.
 
 - `readcost style FILES --against NAME` compares rule rates, sentence length and
   predicted reading time with a reference; built-in references for the Rust

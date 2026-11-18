@@ -164,6 +164,25 @@ index while adding words is reported, not rewarded.
   to 150 items (50 to 100 only if the people are experts), using the version
   for skewed labels and reporting agreement among the people. readcost has
   not run it.
+- Nothing readcost computes today tells an established term from a coined
+  noun stack. The test used 27 labelled stacked-nouns findings and 25
+  hyphen-compound findings. Counts of adjacent word pairs from web text,
+  bracketing by pair strength and recurrence in the document all failed to
+  separate accepted from rejected findings. Counts of the whole stack as a
+  phrase dropped three rejected findings and no accepted one, which is too
+  few to act on (docs/evaluation.md, "Noun stacks"). Earlier work explains
+  part of this. Pair counts were built to bracket a compound, not to say
+  whether it is a term: Lauer 1995 got 77.5% of 244 three-noun compounds
+  right with the dependency model and 68.9% with the adjacency model, and
+  Nakov and Hearst 2005 reached 89.3% by adding surface cues from the web.
+  Term extraction scores the whole candidate instead: C-value is the
+  candidate's frequency, lowered when it mostly occurs inside longer
+  candidates and weighted by its length (Frantzi, Ananiadou and Mima
+  2000). Trained extractors are still imprecise: the best English system at
+  TermEval 2020 had 35% precision and 71% recall (Rigouts Terryn et al.
+  2020). Farahmand, Smith and Nivre 2015 had experts mark 1,048 two-noun
+  compounds as conventionalized or not, the closest existing labels to
+  "established"; there is no such set for longer stacks.
 
 ## Roadmap
 
@@ -182,6 +201,50 @@ index while adding words is reported, not rewarded.
 7. Optional obvious-comment check (a doc comment that only restates its
    function's name, or an inline comment of two words or fewer; Steidl,
    Hummel and Juergens 2013) and complexity-ordered triage.
+
+### Terms in the human-label study
+
+Item 0 should settle whether a term exemption for stacked-nouns and
+hyphen-compound is worth having. The model labels cannot: they cover 27
+and 25 findings, of which 10 and 6 were accepted.
+
+- Sample by evidence, not at random. Run `scripts/eval_stack_terms.py` over
+  the study's texts and draw stacked-nouns findings from three groups: the
+  whole stack is attested (five or more documents of a reference corpus),
+  only its pairs are attested, and neither. About one finding in ten has an
+  attested stack, so a random sample of 150 would hold about 15. Draw 40
+  from each group. For hyphen-compound, draw 30 whose hyphenated pair is
+  attested as an open pair and 30 whose pair is not. Weight the groups back
+  to their shares when reporting overall precision.
+- Count in technical text as well as FineWeb-Edu: READMEs, documentation
+  and Stack Overflow answers, where `call stack` and `pull request` are
+  common. The web shard held none of the Go and CPython terms in the bench.
+  `scripts/build_open_pairs.py --phrases` counts whole stacks. A general
+  list of three-word terms needs a tagger run over the corpus, or C-value
+  over its noun phrases.
+- Ask each rater two questions per finding: would an editor change this,
+  and would a reader of this document already know the phrase as a term.
+  The second question separates "the exemption is wrong" from "the stack is
+  a term and still worth unpacking". Raters accepted `core team member`,
+  which is the second kind.
+- Record whether the stack occurs again in the document and whether the
+  document introduces it, so that the document's own evidence gets the same
+  test.
+- Decide beforehand. The exemption becomes an opt-in setting if people
+  accept at most 1 of 40 attested stacks (a 95% upper bound under 15%) and
+  clearly more of the unattested ones. It becomes the default only if that
+  holds on texts from a second project and it removes at least a tenth of
+  the stacked-nouns findings there. An exemption that removes 6% of
+  findings cannot change the rule's precision much.
+
+A larger list can ship. FineWeb-Edu is under ODC-By 1.0, which asks for
+attribution only, and readcost already carries its notice. Pairs in 20 or
+more documents with PMI 6 or more fit in 0.2 MB as a Bloom filter.
+Wiktionary's category of English multiword terms has about 228,000 entries
+and Wikipedia has millions of titles. Both are under CC BY-SA, whose
+share-alike term may reach a list made from them, so check before shipping
+either in a package under MIT or Apache-2.0. The licence of the two wikis
+is stated from memory; the other facts here were read at the source.
 
 ## References
 
@@ -264,3 +327,16 @@ Reading notes on each paper, with how much of it was read, are in
 - Timkey et al. 2026. Eye movements reveal a dissociation between prediction
   and structural processing difficulty in language comprehension. PNAS,
   doi 10.1073/pnas.2532230123.
+- Farahmand, Smith and Nivre 2015. A multiword expression data set:
+  annotating non-compositionality and conventionalization for English noun
+  compounds. Workshop on Multiword Expressions, NAACL.
+- Frantzi, Ananiadou and Mima 2000. Automatic recognition of multi-word
+  terms: the C-value/NC-value method. International Journal on Digital
+  Libraries 3(2).
+- Lauer 1995. Corpus statistics meet the noun compound: some empirical
+  results. ACL. arXiv cmp-lg/9504033.
+- Nakov and Hearst 2005. Search engine statistics beyond the n-gram:
+  application to noun compound bracketing. CoNLL.
+- Rigouts Terryn, Hoste, Drouin and Lefever 2020. TermEval 2020: shared
+  task on automatic term extraction using the ACTER dataset. Computerm
+  workshop, LREC.
