@@ -18,10 +18,14 @@ the evaluation measured it, how often raters accepted that rule's findings
 ("raters accepted 3 of 19 such findings"). A low share means the finding is
 often wrong: judge it before rewriting.
 
-In `-o json` each finding has `line`, `column`, `end_line` and `end_column`
-(1-based; the end column is exclusive), so a tool can select exactly the
-words in `excerpt`; they are `null` when the excerpt is not found in the
-source (text read from JSON, for example). `precision` is
+In `-o json` each finding has `start` and `end`, character offsets into the
+file with the end exclusive, so a tool can replace exactly the flagged
+words: `text[start:end]`. `line`, `column`, `end_line` and `end_column` say
+the same span in 1-based lines and columns (the end column is exclusive),
+and `sentence_start` and `sentence_end` are the offsets of the sentence.
+The offsets are `null` for text read from JSON; the columns are then found
+by searching for the excerpt, and are `null` when it is not found.
+[labels.md](labels.md) says how characters are counted. `precision` is
 `{"accepted": N, "labelled": M}` from the same evaluation, or `null` when too
 few findings were labelled. `suggestion` is the fix in words.
 
