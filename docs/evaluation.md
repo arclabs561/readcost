@@ -2576,9 +2576,10 @@ at adjusted p < 0.05 and r ≥ +0.05. `scripts/eval_repetition_prereg.py`,
 
 By the rules fixed in advance, none of the three claims holds:
 
-- Replication on new model text: M1 is positive but below the smallest
-  effect that counts, at about a third of its HelpSteer2 value (+0.12);
-  M2 passes at +0.05.
+- Replication on new model text: inconclusive. M1 is positive at +0.037,
+  about a third of its HelpSteer2 value (+0.12), and its one-sided upper
+  bound (+0.058) does not rule out the smallest effect that counts. M2
+  passes at +0.05.
 - Technical text: M1 passes on model-written code answers and is absent
   from answers people wrote on Stack Exchange. There, the one-sided upper
   bounds are +0.001 (M1) and +0.016 (M2), and no site shows a positive
