@@ -75,6 +75,15 @@ def test_partial_spearman_removes_what_the_control_explains():
     assert abs(hs.partial_spearman(x, y, z)) < 0.15
 
 
+def test_partial_spearman_is_undefined_if_controls_explain_either_side():
+    hs = _mod("human_signals")
+    x = np.arange(10)
+    y = np.array([8, 3, 1, 5, 2, 0, 9, 4, 6, 7])
+    assert np.isnan(hs.partial_spearman(x, y, x))
+    assert np.isnan(hs.partial_spearman(y, x, x))
+    assert np.isnan(hs.partial_spearman(x, x**2, x))
+
+
 def test_cluster_bootstrap_is_wider_when_rows_of_a_group_move_together():
     hs = _mod("human_signals")
     rng = np.random.default_rng(1)

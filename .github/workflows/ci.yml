@@ -1,9 +1,14 @@
 name: CI
 
+# merge_group runs the same jobs for a merge queue, which waits for the
+# required checks `test (3.11)` and `test (3.13)`. There is no paths filter:
+# a workflow that a filter skips never reports those checks, and the tests
+# read README.md and docs/, so a docs-only change still needs them.
 on:
   push:
     branches: [main]
   pull_request:
+  merge_group:
 
 permissions:
   contents: read
@@ -16,6 +21,7 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -25,12 +31,14 @@ jobs:
       - uses: ./.github/actions/setup
         with:
           python-version: ${{ matrix.python-version }}
+      # One pytest-xdist worker per core; each loads the spaCy model once.
+      # tests/conftest.py writes the timing table to the job summary.
       - name: Test
-        run: python -m pytest -q
+        run: uv run pytest -q -n auto -p no:cacheprovider --durations=10
       # readcost checks its own repo: every file readcost.toml selects
       # (docs, docstrings, YAML and TOML comments) must not block, and the
       # user-facing docs must stay below "advise".
       - name: Check own repo
-        run: readcost check . --fail-on block
+        run: uv run readcost check . --fail-on block
       - name: Check own docs
-        run: readcost check README.md docs --fail-on advise
+        run: uv run readcost check README.md docs --fail-on advise
