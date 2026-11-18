@@ -406,7 +406,7 @@ def report(data: dict[str, list[dict]], resamples: int) -> tuple[str, list[dict]
             out += lodo(data, family, resamples) + [""]
     tests = [t for t in table if t["r"] == t["r"] and t["lo"] == t["lo"]]
     clear = [t for t in tests if t["lo"] > 0 or t["hi"] < 0]
-    prim = [t for t in tests if t["primary"]]
+    prim = [t for t in tests if t["primary"] and t["measure"] == "weighted findings, default rules"]
     out += ["## Multiple comparisons", "",
             f"{len(tests)} intervals in all; {len(clear)} exclude zero (about {round(0.05 * len(tests))} would by "
             f"chance if nothing were there, and the tests are not independent). Of the {len(prim)} primary tests "

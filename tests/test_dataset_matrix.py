@@ -211,3 +211,29 @@ def test_derive_writes_no_text_and_a_manifest(tmp_path):
     assert manifest["files"][0]["records"] == 1 and manifest["files"][0]["licence"]
     assert "text" not in json.loads((tmp_path / "out" / "readmepp.jsonl").read_text())
     assert (tmp_path / "out" / "README.md").exists()
+
+
+def test_prep_geco_matches_columns_exactly(tmp_path):
+    openpyxl = pytest.importorskip("openpyxl")
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "ALL"
+    ws.append(["WORD_ID", "SENTENCE_ID", "WORD"])
+    for wid, sid, w in [("1-1-1", "1-1", "It"), ("1-1-2", "1-1", "rained."), ("1-2-1", "1-2", "Yes.")]:
+        ws.append([wid, sid, w])
+    wb.save(tmp_path / "EnglishMaterial.xlsx")
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "DATA"
+    # WORD_ID_WITHIN_TRIAL comes first and contains "WORD_ID": the match must be exact.
+    ws.append(["PP_NR", "WORD_ID_WITHIN_TRIAL", "WORD_ID", "WORD_TOTAL_READING_TIME"])
+    for pp in ("a", "b"):
+        ws.append([pp, 1, "1-1-1", 200 if pp == "a" else 100])
+        ws.append([pp, 2, "1-1-2", "."])
+        ws.append([pp, 1, "1-2-1", 300])
+    wb.save(tmp_path / "MonolingualReadingData.xlsx")
+    out = dm.prep_geco(tmp_path)
+    rows = dm.load_geco(out)
+    assert [r["text"] for r in rows] == ["It rained.", "Yes."]
+    assert rows[0]["outcomes"]["ms_per_word"] == pytest.approx((150 + 0) / 2)
+    assert rows[0]["group"] == "1"

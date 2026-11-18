@@ -53,13 +53,13 @@ WEIGHTS = {"info": 0.5, "warn": 1.0, "error": 2.0}
 # prompt or summarise one article, so texts are compared within that group.
 DATASETS: dict[str, dict] = {
     "helpsteer2": dict(
-        kind="text", within=True, family="rated", fmt="markdown", cap=4000, licence="CC-BY-4.0",
+        kind="text", within=True, family="rated", fmt="markdown", cap=None, licence="CC-BY-4.0",
         source="nvidia/HelpSteer2 (Hugging Face), train and validation",
         signal="Scale AI annotators rate each response 0 to 4 on five attributes",
         primary="coherence",
         direction={"coherence": -1, "helpfulness": -1, "correctness": -1, "verbosity": +1, "complexity": 0}),
     "helpsteer3_feedback": dict(
-        kind="text", within=True, family="rated", fmt="markdown", cap=4000, licence="CC-BY-4.0", derived=True,
+        kind="text", within=True, family="rated", fmt="markdown", cap=12000, licence="CC-BY-4.0", derived=True,
         source="nvidia/HelpSteer3 config feedback (Hugging Face); General and STEM domains, English",
         signal="three annotators each write a paragraph about a response; shares that complain "
                "about length, clarity or repetition are matched here",
@@ -73,13 +73,13 @@ DATASETS: dict[str, dict] = {
         primary="coherence",
         direction={"coherence": -1, "fluency": -1, "consistency": 0, "relevance": 0}),
     "tldr_axis": dict(
-        kind="text", within=True, family="rated", fmt="text", cap=3000, licence="Modified MIT (OpenAI)",
+        kind="text", within=True, family="rated", fmt="text", cap=None, licence="Modified MIT (OpenAI)",
         source="openai/summarize_from_feedback config axis (Hugging Face), TL;DR posts",
         signal="labellers rate summaries of Reddit posts 1 to 7 on overall, accuracy, coverage, coherence",
         primary="coherence",
         direction={"coherence": -1, "overall": -1, "accuracy": 0, "coverage": 0}),
     "cnndm_axis": dict(
-        kind="text", within=True, family="rated", fmt="text", cap=3000, licence="Modified MIT (OpenAI)",
+        kind="text", within=True, family="rated", fmt="text", cap=None, licence="Modified MIT (OpenAI)",
         source="openai/summarize_from_feedback config axis (Hugging Face), CNN/DM articles",
         signal="as tldr_axis, for news summaries",
         primary="coherence",
@@ -128,7 +128,7 @@ DATASETS: dict[str, dict] = {
         signal="two annotators label the intent of each revised paragraph of an OpenReview paper",
         target="concision", other="rewriting, development or content"),
     "helpsteer3_edit": dict(
-        kind="revision", family="revision", fmt="markdown", cap=2000, licence="CC-BY-4.0", derived=True,
+        kind="revision", family="revision", fmt="markdown", cap=6000, licence="CC-BY-4.0", derived=True,
         source="nvidia/HelpSteer3 config edit (Hugging Face); General and STEM domains, English",
         signal="annotators edit a model response from others' feedback and summarise the change",
         target="change summary mentions concision or clarity", other="other edits"),
@@ -594,7 +594,8 @@ def prep_geco(root: Path) -> Path:
             it = ws.iter_rows(values_only=True)
             header = [str(h).strip().upper() if h is not None else "" for h in next(it)]
             if all(any(n in h for h in header) for n in need):
-                col = {n: next(i for i, h in enumerate(header) if h == n or n in h) for n in need}
+                col = {n: header.index(n) if n in header else next(i for i, h in enumerate(header) if n in h)
+                       for n in need}
                 print(f"{path.name}/{ws.title}: columns {header}", file=sys.stderr)
                 return col, it
         raise SystemExit(f"{path.name}: no sheet has columns {need}")
