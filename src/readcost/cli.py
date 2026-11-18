@@ -27,9 +27,9 @@ def _line_ranges(spec: str | None) -> list[tuple[int, int]] | None:
 
 
 def _feature_ids(value: str, flag: str) -> list[str]:
-    from .config import unknown_features
+    from .config import drop_retired, unknown_features
 
-    ids = [i.strip() for i in value.split(",") if i.strip()]
+    ids = drop_retired([i.strip() for i in value.split(",") if i.strip()], flag)
     bad = unknown_features(ids)
     if bad:
         from .features import FEATURES

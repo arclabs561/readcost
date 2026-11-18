@@ -37,6 +37,12 @@ configuration.
 - Opt-in rules center-embedding (a clause nested two deep inside clauses that
   continue after it) and undefined-acronym (an acronym used before it is
   spelled out), both at info severity.
+- Removed rules: denominal-verb, whose findings raters rejected almost
+  entirely in two separate samples (1 of 32 correct or defensible in the
+  210-finding sample, 3 of 40 in the opt-in sample), and repeated-frame, which marks
+  model text, makes no claim about reading cost, and is covered across texts
+  by `readcost corpus`. A config or flag that names one warns and is ignored;
+  a readcost directive that names one is ignored without a note.
 - `scripts/eval_corpus.py --info RULES` turns on opt-in rules for a corpus run.
 
 - JSON findings carry `column`, `end_line` and `end_column`, and `precision`

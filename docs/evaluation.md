@@ -1739,6 +1739,57 @@ What this measures and what it does not:
 - The loops, the paragraphs and the judge's answers stay outside the
   repository, so the table cannot be recomputed from it.
 
+## Opt-in rules on every corpus (provisional)
+
+The opt-in rules had been judged on samples too small to say much ("no hit
+in the sample"). `scripts/eval_optin_rules.py` turns every opt-in rule on
+over the combined corpus (10,953 texts, 5.66 million words), samples up to
+40 findings per rule one category at a time, and has model raters label
+them blind: each rater sees the rule's definition and the flagged sentence,
+nothing else. The script was written for six raters and a majority vote.
+Two (Gemini 4 Argon and DeepSeek V4.1 Flash) finished, and a majority of two
+is both, so a finding counts as accepted only when both accept it. They
+agreed on 243 of 280 items. The labels are not in the repository, so the
+table cannot be recomputed from it.
+
+| Rule | Findings | Per 1,000 words | Accepted | Wilson 95% |
+| --- | --- | --- | --- | --- |
+| long-sentence | 28,292 | 5.00 | 38 of 40 | 84 to 99% |
+| participial-clause | 6,645 | 1.17 | 25 of 40 | 47 to 76% |
+| nominalization | 821 | 0.15 | 16 of 40 | 26 to 55% |
+| undefined-acronym | 11,033 | 1.95 | 11 of 40 | 16 to 43% |
+| center-embedding | 80 | 0.01 | 8 of 40 | 10 to 35% |
+| denominal-verb | 4,279 | 0.76 | 3 of 40 | 3 to 20% |
+| repeated-frame | 6,968 | 1.23 | 1 of 40 | 0 to 13% |
+
+What the table can and cannot say:
+
+- Two rules cannot be judged from one sentence. repeated-frame reports three
+  or more sentences, anywhere in a document, that share a run of seven
+  part-of-speech tags. A rater shown the first of them sees no repetition,
+  and the rater's definition ("several sentences in a row built on the same
+  opening frame") was not the rule's. undefined-acronym depends on whether
+  the document spelled the acronym out earlier, which the rater cannot see.
+  Both rows are therefore biased low, and repeated-frame's 1 of 40 says
+  little about that rule.
+- long-sentence is accurate by construction: raters agree that a 33-word
+  sentence is long.
+- center-embedding's 8 of 40 (10 to 35%) overlaps undefined-acronym's 11 of
+  40 (16 to 43%), and is not clearly below the default rules' share under
+  the more lenient eight-rater majority (23%, README "Limits"). It stays
+  opt-in. Its rarity, about once in 100,000 words, costs nothing for a rule
+  that is off by default.
+
+Removed in 0.3:
+
+- denominal-verb. Two separate samples reject it. In the 210-finding sample
+  above, the first rater judged 1 of 32 findings correct or defensible and
+  found the construction really there in 1 (3%); here 3 of 40 were accepted.
+- repeated-frame, on its own description rather than on this table. It marks
+  model text, which readcost does not try to detect, and Shaib et al. (2024)
+  measure templates across many texts, not within one, with no claim about
+  reading cost. `readcost corpus` measures repetition across texts.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News
