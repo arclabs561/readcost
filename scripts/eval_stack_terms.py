@@ -11,6 +11,7 @@ accepted ones from the rejected ones:
   two-word entries);
 - counts of adjacent open pairs ("call stack") from scripts/build_open_pairs.py,
   as document frequency and as pointwise mutual information (``--pairs``);
+- the whole stack as a phrase: how many documents contain it;
 - bracketing a three-noun stack by which pair is stronger, under the
   adjacency model (A B against B C) and the dependency model (A B against
   A C; Lauer 1995);
@@ -108,6 +109,8 @@ class Evidence:
         self.pmi = [pairs.pmi(a, b) for a, b in self.adjacent] if pairs else []
         # The dependency model's pair for a three-word stack: does A modify C?
         self.skip = pairs.pmi(self.words[0], self.words[2]) if pairs and len(self.words) == 3 else None
+        # Documents with the whole stack as a phrase; None when it was not counted.
+        self.whole = pairs.phrase_df(self.words) if pairs else None
 
     def attested(self, min_docs: int, min_pmi: float) -> list[bool]:
         return [n >= min_docs and p is not None and p >= min_pmi for n, p in zip(self.df, self.pmi)]
@@ -143,8 +146,9 @@ def exemptions(with_pairs: bool) -> dict:
             out[f"{name}: every adjacent pair"] = (
                 lambda e, d=docs, p=pmi: bool(e.adjacent) and all(e.attested(d, p)))
             out[f"{name}: some adjacent pair"] = lambda e, d=docs, p=pmi: any(e.attested(d, p))
-        out["open pairs in 20+ documents, PMI 6+: every pair, or it occurs again"] = (
-            lambda e: (bool(e.adjacent) and all(e.attested(20, 6.0))) or e.count >= 2)
+        for docs in (3, 5, 20):
+            out[f"whole stack in {docs}+ documents"] = lambda e, d=docs: (e.whole or 0) >= d
+        out["whole stack in 5+ documents, or introduced as a term"] = lambda e: (e.whole or 0) >= 5 or e.introduced
     return out
 
 
@@ -208,7 +212,9 @@ def report(findings: list[dict], pairs) -> list[str]:
         out += [f"### {rule}", ""]
         splits = [("bench", [f for f in of_rule if f["split"] == "bench"]),
                   ("sample", [f for f in of_rule if f["split"] == "sample"])]
-        splits.append(("bench and sample", splits[0][1] + splits[1][1]))
+        # Some bench items were taken from the sample; count each stack once.
+        merged = {" ".join(f["evidence"].words): f for f in splits[1][1] + splits[0][1]}
+        splits.append(("bench and sample, each stack once", list(merged.values())))
         for name, rows in splits:
             good = sum(f["accepted"] for f in rows)
             out += [f"{name}: {len(rows)} labelled findings, accepted {share(good, len(rows))}.", ""]
@@ -243,8 +249,9 @@ def report(findings: list[dict], pairs) -> list[str]:
                     for label, test in tests.items()]
             out.append("")
     out += ["### Labelled findings", "",
-            "| Rule | Split | Label | Stack | Times in document | Introduced | Shipped | Documents per pair | PMI per pair |",
-            "| --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
+            ("| Rule | Split | Label | Stack | Times in document | Introduced | Shipped | Documents per pair "
+             "| PMI per pair | Documents with the stack |"),
+            "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
     for f in findings:
         if f["accepted"] is None:
             continue
@@ -252,7 +259,8 @@ def report(findings: list[dict], pairs) -> list[str]:
         pmi = " ".join("none" if p is None else f"{p:.1f}" for p in e.pmi)
         out.append(f"| {f['rule']} | {f['split']} | {'accepted' if f['accepted'] else 'rejected'} | "
                    f"{' '.join(e.words)} | {e.count} | {'yes' if e.introduced else 'no'} | "
-                   f"{' '.join('yes' if s else 'no' for s in e.shipped)} | {' '.join(map(str, e.df))} | {pmi} |")
+                   f"{' '.join('yes' if s else 'no' for s in e.shipped)} | {' '.join(map(str, e.df))} | {pmi} | "
+                   f"{'not counted' if e.whole is None else e.whole} |")
     out.append("")
     if pairs is not None:
         out += ["### Size of an attested-pair list", "",
@@ -272,6 +280,8 @@ def main() -> int:
     ap.add_argument("--bench", type=Path, help="directory written by scripts/fetch_rulebench.py")
     ap.add_argument("--corpus", type=Path, help="directory written by scripts/fetch_eval_corpus.py")
     ap.add_argument("--pairs", type=Path, help="table written by scripts/build_open_pairs.py")
+    ap.add_argument("--list-stacks", action="store_true",
+                    help="print each finding's stack, one per line, for build_open_pairs.py --phrases")
     args = ap.parse_args()
     if not args.bench and not args.corpus:
         ap.error("give --bench, --corpus or both")
@@ -286,6 +296,9 @@ def main() -> int:
     findings = bench_findings(args.bench, analyzer) if args.bench else []
     if args.corpus:
         findings += corpus_findings(args.corpus, analyzer)
+    if args.list_stacks:
+        print("\n".join(sorted({" ".join(stack_words(f["excerpt"])) for f in findings} - {""})))
+        return 0
     print("\n".join(report(findings, pairs)))
     return 0
 

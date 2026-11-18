@@ -71,20 +71,6 @@ jobs:
       - uses: ./.github/actions/setup
         with:
           extras: test
-      - id: pairs
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
-        with:
-          path: ref/pairs/open_pairs.npz
-          key: eval-fineweb-edu-open-pairs-${{ hashFiles('scripts/build_open_pairs.py') }}-v1
-      - name: Count adjacent word pairs in one FineWeb-Edu shard
-        if: steps.pairs.outputs.cache-hit != 'true'
-        run: |
-          python -m pip install --quiet "pyarrow>=15"
-          mkdir -p ref/pairs
-          curl -fsSL --retry 3 -o ref/pairs/shard.parquet \
-            https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu/resolve/main/data/CC-MAIN-2019-04/train-00000-of-00016.parquet
-          python scripts/build_open_pairs.py ref/pairs/shard.parquet --out ref/pairs/open_pairs.npz
-          rm ref/pairs/shard.parquet
       - id: texts
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
@@ -104,6 +90,27 @@ jobs:
           python -m pip install --quiet "trafilatura>=1.12"
           python scripts/fetch_rulebench.py ref/bench
           python scripts/fetch_eval_corpus.py ref/eval --ref-root ref/none --only "${SOURCES// /}"
+      # The stacks readcost reports, so that the count below can include them
+      # as whole phrases; the cache key below changes when they do.
+      - name: List the stacks to count
+        run: |
+          mkdir -p ref/pairs
+          python scripts/eval_stack_terms.py --bench ref/bench --corpus ref/eval --list-stacks > ref/pairs/stacks.txt
+          wc -l ref/pairs/stacks.txt
+      - id: pairs
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/pairs/open_pairs.npz
+          key: eval-fineweb-edu-open-pairs-${{ hashFiles('scripts/build_open_pairs.py', 'ref/pairs/stacks.txt') }}-v1
+      - name: Count adjacent word pairs in one FineWeb-Edu shard
+        if: steps.pairs.outputs.cache-hit != 'true'
+        run: |
+          python -m pip install --quiet "pyarrow>=15"
+          mkdir -p ref/pairs
+          curl -fsSL --retry 3 -o ref/pairs/shard.parquet \
+            https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu/resolve/main/data/CC-MAIN-2019-04/train-00000-of-00016.parquet
+          python scripts/build_open_pairs.py ref/pairs/shard.parquet --out ref/pairs/open_pairs.npz --phrases ref/pairs/stacks.txt
+          rm ref/pairs/shard.parquet
       - name: Which evidence separates accepted from rejected findings
         run: |
           python scripts/eval_stack_terms.py --bench ref/bench --corpus ref/eval --pairs ref/pairs/open_pairs.npz > stack-terms.md

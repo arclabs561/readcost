@@ -27,10 +27,12 @@ DOCS = [
 @pytest.fixture
 def table(tmp_path):
     vocab = ["call", "stack", "frames", "thread", "holds", "function", "dump"]
-    keys, counts, uni, docs, positions = bop.count_texts(DOCS, {w: i for i, w in enumerate(vocab)})
+    phrases = ["call stack frame", "thread call stack"]
+    keys, counts, uni, docs, positions, phrase_df = bop.count_texts(
+        DOCS, {w: i for i, w in enumerate(vocab)}, phrases)
     path = tmp_path / "pairs.npz"
     np.savez_compressed(path, keys=keys, counts=counts.astype(np.int32), uni=uni, docs=docs,
-                        positions=positions, vocab=np.array(vocab))
+                        positions=positions, vocab=np.array(vocab), phrases=np.array(phrases), phrase_df=phrase_df)
     return bop.Pairs(path)
 
 
@@ -47,6 +49,15 @@ def test_pmi_is_log_ratio_to_chance(table):
     assert table.positions == 38
     assert table.pmi("call", "stack") == pytest.approx(math.log2(2 * 38 / (5 * 5)))
     assert table.pmi("stack", "call") is None
+
+
+def test_phrases_count_documents_and_ignore_a_plural(table):
+    assert table.phrase_df(["call", "stack", "frame"]) == 0     # "call stack of frames" has a word between
+    assert table.phrase_df(["thread", "call", "stack"]) == 0
+    assert table.phrase_df(["never", "counted", "phrase"]) is None
+    index = bop.phrase_index(["call stack frame"])
+    assert bop.phrases_in("the call stack frames grow".split(), index) == {0}
+    assert bop.phrases_in("the call stack".split(), index) == set()
 
 
 def test_merge_sums_equal_keys():
@@ -105,6 +116,7 @@ def test_report_counts_dropped_findings(table):
     text = "\n".join(est.report(findings, table))
     assert "bench: 2 labelled findings, accepted 1 of 2" in text
     assert "| occurs again in the document | 0 of 1 | 1 of 1 | 1 of 1 (100%" in text
+    assert "| call stack frames | 2 |" in text
     assert "Size of an attested-pair list" in text
 
 

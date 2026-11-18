@@ -21,6 +21,13 @@ mutual information needs:
 The pair's document count stands in for its frequency, so the measure is
 a little low for a phrase that pages repeat.
 
+``--phrases FILE`` also counts the documents that contain each longer
+phrase listed in FILE, one per line ("time zone database"). A table of
+every three-word sequence would be far larger than the pair table, so only
+the phrases asked for are counted; scripts/eval_stack_terms.py --list-stacks
+writes the ones its measurement needs. The last word matches with or
+without a plural "s", and a hyphen between two words counts as a space.
+
 Pairs seen in fewer than --keep documents (default 3) are dropped from the
 output; a pair that rare is treated as unattested anyway. Only counts are
 kept, no text. FineWeb-Edu is released under ODC-By 1.0; see
@@ -82,9 +89,37 @@ def merge(parts: list[tuple[np.ndarray, np.ndarray]]) -> tuple[np.ndarray, np.nd
     return keys[start], np.add.reduceat(counts, start)
 
 
-def count_texts(texts, ids: dict[str, int]) -> tuple[np.ndarray, np.ndarray, np.ndarray, int, int]:
-    """(pair keys, pair document counts, word counts, documents, token positions) for an iterable of texts."""
+def singular(word: str) -> str:
+    """The word without a plural "s"; crude, and applied to both sides of a comparison."""
+    return word[:-1] if len(word) > 3 and word.endswith("s") and not word.endswith("ss") else word
+
+
+def phrase_index(phrases: list[str]) -> dict[str, list[tuple[int, list[str], str]]]:
+    """First word -> (position in ``phrases``, the words between, last word in the singular)."""
+    index: dict[str, list[tuple[int, list[str], str]]] = {}
+    for k, phrase in enumerate(phrases):
+        words = phrase.split()
+        if len(words) >= 3:
+            index.setdefault(words[0], []).append((k, words[1:-1], singular(words[-1])))
+    return index
+
+
+def phrases_in(tokens: list[str], index: dict) -> set[int]:
+    """Positions of the indexed phrases that occur in a token list."""
+    found: set[int] = set()
+    for i, tok in enumerate(tokens):
+        for k, middle, last in index.get(tok, ()):
+            end = i + 1 + len(middle)
+            if end < len(tokens) and tokens[i + 1:end] == middle and singular(tokens[end]) == last:
+                found.add(k)
+    return found
+
+
+def count_texts(texts, ids: dict[str, int], phrases: list[str] | None = None):
+    """(pair keys, pair document counts, word counts, documents, token positions, phrase document counts)."""
     size = len(ids)
+    index = phrase_index(phrases or [])
+    phrase_df = np.zeros(len(phrases or []), dtype=np.int64)
     uni = np.zeros(size, dtype=np.int64)
     positions = 0
     parts: list[tuple[np.ndarray, np.ndarray]] = []
@@ -99,7 +134,11 @@ def count_texts(texts, ids: dict[str, int]) -> tuple[np.ndarray, np.ndarray, np.
 
     for text in texts:
         docs += 1
-        seq = np.fromiter((ids.get(w, -1) for w in TOKEN.findall(text.lower())), dtype=np.int64)
+        tokens = TOKEN.findall(text.lower())
+        if index:
+            # A hyphen counts as a space here: "frame-pointer chain" is the phrase "frame pointer chain".
+            phrase_df[list(phrases_in([t for t in tokens if t != "-"], index))] += 1
+        seq = np.fromiter((ids.get(w, -1) for w in tokens), dtype=np.int64)
         positions += len(seq)
         if len(seq) < 2:
             continue
@@ -110,30 +149,31 @@ def count_texts(texts, ids: dict[str, int]) -> tuple[np.ndarray, np.ndarray, np.
             flush()
     flush()
     keys, counts = merge(parts) if parts else (np.zeros(0, np.int64), np.zeros(0, np.int64))
-    return keys, counts, uni, docs, positions
+    return keys, counts, uni, docs, positions, phrase_df
 
 
-def _count_group(job: tuple[str, int, int, str]) -> str:
+def _count_group(job: tuple[str, int, int, str, list[str]]) -> str:
     """Count one row group of a shard; the result goes to a file, since it is large."""
     import pyarrow.parquet as pq
 
-    path, group, limit, tmp = job
+    path, group, limit, tmp, phrases = job
     ids = {w: i for i, w in enumerate(vocabulary(limit))}
     texts = pq.ParquetFile(path).read_row_group(group, columns=["text"]).column(0).to_pylist()
-    keys, counts, uni, docs, positions = count_texts(texts, ids)
+    keys, counts, uni, docs, positions, phrase_df = count_texts(texts, ids, phrases)
     out = Path(tmp) / f"{Path(path).stem}-{group}.npz"
-    np.savez(out, keys=keys, counts=counts, uni=uni, docs=docs, positions=positions)
+    np.savez(out, keys=keys, counts=counts, uni=uni, docs=docs, positions=positions, phrase_df=phrase_df)
     return str(out)
 
 
-def build(shards: list[str], out: Path, limit: int, keep: int, workers: int) -> None:
+def build(shards: list[str], out: Path, limit: int, keep: int, workers: int, phrases: list[str]) -> None:
     import pyarrow.parquet as pq
 
     jobs = []
     with tempfile.TemporaryDirectory() as tmp:
         for shard in shards:
-            jobs += [(shard, g, limit, tmp) for g in range(pq.ParquetFile(shard).metadata.num_row_groups)]
+            jobs += [(shard, g, limit, tmp, phrases) for g in range(pq.ParquetFile(shard).metadata.num_row_groups)]
         uni = np.zeros(limit, dtype=np.int64)
+        phrase_df = np.zeros(len(phrases), dtype=np.int64)
         docs = positions = 0
         table = (np.zeros(0, np.int64), np.zeros(0, np.int64))
         waiting: list[tuple[np.ndarray, np.ndarray]] = []
@@ -144,6 +184,7 @@ def build(shards: list[str], out: Path, limit: int, keep: int, workers: int) -> 
                 uni[:len(part["uni"])] += part["uni"]
                 docs += int(part["docs"])
                 positions += int(part["positions"])
+                phrase_df += part["phrase_df"]
                 Path(path).unlink()
                 # Merging sorts the whole table, so do it in large steps.
                 if sum(len(k) for k, _ in waiting) >= 40_000_000 or n == len(jobs):
@@ -154,7 +195,8 @@ def build(shards: list[str], out: Path, limit: int, keep: int, workers: int) -> 
     kept = counts >= keep
     out.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(out, keys=keys[kept], counts=counts[kept].astype(np.int32), uni=uni,
-                        docs=docs, positions=positions, vocab=np.array(vocabulary(limit)))
+                        docs=docs, positions=positions, vocab=np.array(vocabulary(limit)),
+                        phrases=np.array(phrases, dtype=str), phrase_df=phrase_df)
     print(f"{docs} documents, {len(keys)} pairs, {int(kept.sum())} in {keep}+ documents -> {out}")
 
 
@@ -167,6 +209,12 @@ class Pairs:
         self.docs, self.positions = int(data["docs"]), int(data["positions"])
         self.vocab = [str(w) for w in data["vocab"]]
         self.ids = {w: i for i, w in enumerate(self.vocab)}
+        self.phrases = ({str(p): int(n) for p, n in zip(data["phrases"], data["phrase_df"])}
+                        if "phrases" in data else {})
+
+    def phrase_df(self, words: list[str]) -> int | None:
+        """Documents that contain the whole phrase; None when it was not among the phrases counted."""
+        return self.phrases.get(" ".join(words))
 
     def df(self, a: str, b: str) -> int:
         """Documents that contain "a b"; 0 when either word is outside the vocabulary or the pair is rare."""
@@ -205,6 +253,7 @@ def main() -> int:
     ap.add_argument("--vocab", type=int, default=100_000, help="most frequent words to count pairs of")
     ap.add_argument("--keep", type=int, default=3, help="drop pairs in fewer documents than this")
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--phrases", type=Path, help="longer phrases to count, one per line")
     ap.add_argument("--export", type=Path, help="a table from an earlier run to write a pair list from")
     ap.add_argument("--min-docs", type=int, default=20)
     ap.add_argument("--min-pmi", type=float, default=6.0)
@@ -218,7 +267,8 @@ def main() -> int:
         return 0
     if not args.shards:
         ap.error("give at least one parquet shard, or --export")
-    build(args.shards, args.out, args.vocab, args.keep, args.workers)
+    phrases = sorted(set(args.phrases.read_text().split("\n")) - {""}) if args.phrases else []
+    build(args.shards, args.out, args.vocab, args.keep, args.workers, phrases)
     return 0
 
 
