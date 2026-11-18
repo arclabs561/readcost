@@ -139,6 +139,21 @@ class Analyzer:
         self.enabled = {k for k, v in self.cfg.rule_levels().items() if v != "ignore"}
         self.allow = {a.lower() for a in lexicon.DEFAULT_ALLOW} | {a.lower() for a in self.cfg.allow}
         self.baseline = load_baseline(self.cfg.baseline) if self.cfg.baseline else None
+        self._verifier = None
+
+    @property
+    def verifier(self):
+        """The second parser named by ``verify_model``, or None when it is off."""
+        if not self.cfg.verify_model:
+            return None
+        if self._verifier is None:
+            from . import verify
+
+            try:
+                self._verifier = verify.load(self.cfg.verify_model)
+            except (OSError, ValueError) as exc:
+                raise RuntimeError(f"verify_model {self.cfg.verify_model!r}: {exc}") from exc
+        return self._verifier
 
     @property
     def nlp(self):
@@ -212,7 +227,10 @@ class Analyzer:
                 else:
                     # Unedited prose can introduce a term used on an edited line.
                     rules = NOUN_RUN_RULES
-                for feature, sev, msg, toks in detect(sent, ctx, rules):
+                found = detect(sent, ctx, rules)
+                if self.verifier is not None:
+                    found = self.verifier.filter(sent, found)
+                for feature, sev, msg, toks in found:
                     if feature in seg.skip:
                         continue
                     finding = self._finding(ctx, seg, sent, text, path, line, feature, sev, msg, toks)

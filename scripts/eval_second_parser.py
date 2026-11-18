@@ -26,6 +26,9 @@ filter that drops a finding the second model does not support:
   sm + NAME ud       NAME's own Universal Dependencies tree must hold the
                      construction, by the definitions used on the gold tree
                      (eval_gold_treebank.gold_stacks and the others)
+  sm + biaffine, readcost verify_model
+                     the tests in readcost/verify.py: pos-verb for
+                     stacked-nouns, ud for the other two rules
 
 NAME is one of two ONNX models from Hugging Face:
 
@@ -367,6 +370,22 @@ def apply_filter(findings: list[Finding], tagger: Cached, keep) -> list[Finding]
     return out
 
 
+VERIFY = "sm + biaffine, readcost verify_model"
+
+
+def package_filter(findings: list[Finding], tagger: Cached) -> list[Finding]:
+    """readcost.verify's per-rule tests on the biaffine parse: the setting this experiment led to."""
+    from readcost import verify
+
+    out = []
+    for f in findings:
+        p = tagger.tag(f.words)
+        parse = None if p is None else verify.Parse(tuple(p.upos), tuple(p.heads), tuple(p.deprels))
+        if verify.keep(f.rule, parse, list(f.words), list(f.tokens)):
+            out.append(f)
+    return out
+
+
 def agree(findings: list[Finding], other: list[Finding]) -> list[Finding]:
     """Findings that the other parser reports too: the same rule on overlapping words."""
     return [f for f in findings if any(g.rule == f.rule and tb.overlaps(f.span, g.span) for g in other)]
@@ -563,6 +582,10 @@ def run_group(name: str, sentences: list[dict], analyzers: dict, taggers: dict[s
             found[key] = [apply_filter(fs, tagger, keep) for fs in found["sm"]]
             seconds[key] = seconds["sm"] + cost
             reparsed[key] = len(flagged)
+        if tname == "biaffine":
+            found[VERIFY] = [package_filter(fs, tagger) for fs in found["sm"]]
+            seconds[VERIFY] = seconds["sm"] + cost
+            reparsed[VERIFY] = len(flagged)
     tables = {rule: {} for rule in RULES}
     clusters = [s["cluster"] for s in sentences]
     for key, per_sentence in found.items():
@@ -596,7 +619,7 @@ def dropped_examples(sentences, found, refs, limit: int) -> dict:
     return out
 
 
-def run_rulebench(path: Path, analyzers: dict, taggers: dict[str, Cached]) -> dict:
+def run_rulebench(path: Path, analyzers: dict, taggers: dict[str, Cached], verify_dir: Path | None = None) -> dict:
     """The labelled bench under each configuration: an item fires when a finding of its rule survives."""
     from readcost.extract import extract
     from readcost.features import NOUN_RUN_RULES, Context, detect, misparsed_verb
@@ -628,24 +651,32 @@ def run_rulebench(path: Path, analyzers: dict, taggers: dict[str, Cached]) -> di
         configs[key] = [it["rule"] in rules for it, (rules, _f) in zip(items, rows)]
 
     def filtered(kept_of) -> list[bool]:
+        """``kept_of(k, findings)``: the findings of item k that survive."""
         out = []
-        for it, (rules, mine) in zip(items, per["sm"]):
+        for k, (it, (rules, mine)) in enumerate(zip(items, per["sm"])):
             if it["rule"] in RULES:
-                out.append(any(f.rule == it["rule"] for f in kept_of(mine)))
+                out.append(any(f.rule == it["rule"] for f in kept_of(k, mine)))
             else:
                 out.append(it["rule"] in rules)  # a rule the filters do not touch
         return out
 
     if "trf" in per:
-        other = [mine for _rules, mine in per["trf"]]
-        pairs = iter(other)
-        configs["sm & trf"] = filtered(lambda mine: agree(mine, next(pairs)))
+        configs["sm & trf"] = filtered(lambda k, mine: agree(mine, per["trf"][k][1]))
     for tname, tagger in taggers.items():
         for fname, keep in FILTERS.items():
             if fname == "ud" and tname == "kniv":
                 continue
-            configs[f"sm + {tname} {fname}"] = filtered(lambda mine, keep=keep, tagger=tagger:
+            configs[f"sm + {tname} {fname}"] = filtered(lambda k, mine, keep=keep, tagger=tagger:
                                                         apply_filter(mine, tagger, keep))
+        if tname == "biaffine":
+            configs[VERIFY] = filtered(lambda k, mine, tagger=tagger: package_filter(mine, tagger))
+    if verify_dir is not None:
+        # End to end: readcost's own check_text with the setting on, as a user would run it.
+        from readcost import Analyzer, Config
+
+        a = Analyzer(Config(verify_model=str(verify_dir)))
+        configs["readcost check, verify_model on"] = [
+            it["rule"] in {f.feature for f in a.check_text(it["text"], "markdown").findings} for it in items]
     out = {}
     for key, fires in configs.items():
         scores: dict[str, dict] = {}
@@ -797,7 +828,8 @@ def main(argv: list[str] | None = None) -> int:
     result["accuracy"] = {f"{g} / {m}": r for (g, m), r in accuracy.items()}
     print(report_accuracy(accuracy))
     if args.rulebench and args.rulebench.is_file():
-        result["rulebench"] = run_rulebench(args.rulebench, analyzers, taggers)
+        result["rulebench"] = run_rulebench(args.rulebench, analyzers, taggers,
+                                            args.biaffine if "biaffine" in taggers else None)
         print(report_rulebench(result["rulebench"]))
     if args.json:
         args.json.write_text(json.dumps(result, indent=1, default=float), encoding="utf-8")

@@ -446,6 +446,19 @@ def _cmd_explain(args) -> int:
 def _cmd_setup(args) -> int:
     from . import modelstore
 
+    if args.verifier:
+        from . import verify
+
+        try:
+            path = verify.resolve("biaffine")
+        except OSError:
+            try:
+                path = verify.fetch()
+            except (OSError, ValueError) as exc:
+                print(f"readcost: {exc}", file=sys.stderr)
+                return EXIT_USAGE
+        print(f"verifier model {verify.REPO}: {path}")
+        print('set verify_model = "biaffine" in readcost.toml to use it; it needs pip install \'readcost[verify]\'')
     model = args.model
     try:
         import spacy
@@ -585,6 +598,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     s = sub.add_parser("setup", help="download the spaCy model if it is missing")
     s.add_argument("--model", default="en_core_web_sm")
+    s.add_argument("--verifier", action="store_true",
+                   help="also download the second parser that verify_model uses (about 300 MB)")
     s.set_defaults(func=_cmd_setup)
 
     h = sub.add_parser("hook", help="adapter for a harness; reads the harness's JSON on stdin")

@@ -290,3 +290,26 @@ def test_run_group_and_report_without_a_second_model(sp, analyzer, tmp_path):
                                                      "gold_has_it": True}
     text = sp.report_group(group)
     assert "| sm + fake pos | 0 | 1 (1) |" in text and "no treebank here marks" in text
+
+
+def test_rulebench_pairs_each_item_with_its_own_second_parse(sp, analyzer, tmp_path):
+    # An item of a rule the filters do not touch comes first; it must not shift the pairing.
+    items = [{"rule": "inline-list", "expected": "fire",
+              "text": "It reads JSON, YAML, TOML, INI and XML files from the project directory."},
+             {"rule": "stacked-nouns", "expected": "fire", "text": STACK}]
+    bench = tmp_path / "bench.jsonl"
+    bench.write_text("".join(json.dumps(it) + "\n" for it in items))
+    out = sp.run_rulebench(bench, {"sm": analyzer, "trf": analyzer}, {})
+    assert out["configs"]["sm & trf"] == out["configs"]["sm"]
+    assert out["configs"]["sm"]["stacked-nouns"]["tp"] == 1
+
+
+def test_package_filter_matches_the_measured_tests(sp):
+    class Tagger:
+        def tag(self, words):
+            return sp.Parse(["NOUN"] * len(words), [-1] * len(words), ["dep"] * len(words))
+
+    words = ["a", "b", "c", "d"]
+    stack = finding(sp, "stacked-nouns", words, [0, 1, 2])
+    dep = finding(sp, "long-dependency", words, [0, 3])
+    assert sp.package_filter([stack, dep], sp.Cached(Tagger())) == [stack]  # no long arc in a flat parse

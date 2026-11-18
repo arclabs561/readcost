@@ -13,6 +13,7 @@ on:
       - scripts/eval_onestop_pairs.py
       - scripts/reading_time_prep.py
       - scripts/eval_second_parser.py
+      - src/readcost/verify.py
       - scripts/eval_gold_treebank.py
       - scripts/fetch_rulebench.py
       - eval/rulebench/rulebench.jsonl
@@ -145,7 +146,9 @@ jobs:
             cat ref/models/REVISIONS ref/models/SHA256SUMS
             python -c 'import os, torch, onnxruntime, spacy; print("torch", torch.__version__, "onnxruntime", onnxruntime.__version__, "spacy", spacy.__version__, "cpus", os.cpu_count())'
             echo '```'
-          } | tee sizes.md >> "$GITHUB_STEP_SUMMARY"
+          } > sizes.md
+          cat sizes.md
+          cat sizes.md >> "$GITHUB_STEP_SUMMARY"
       # The labelled bench keeps references, not text; its sources are web
       # pages, so a missing page only shrinks the bench.
       - id: bench
