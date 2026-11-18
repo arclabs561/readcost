@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 concurrency:
   group: prose-${{ github.ref }}
@@ -36,6 +37,7 @@ jobs:
         env:
           BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/ci_prose.py --base "$BASE" --head "$HEAD_SHA"
       # The repository's own action, as a user would run it: annotations on
       # the prose files that the pull request changes. The CI workflow gates
