@@ -227,6 +227,21 @@ def test_a_repeated_compound_is_reported_once_per_document():
     assert len(stacked) == 1 and stacked[0].line == 1
 
 
+@pytest.mark.parametrize(("sentence", "rule"), [
+    ("The region index sidecar keeps one record per segment.", "stacked-nouns"),
+    ("It runs the storage-shrink job every night.", "hyphen-compound"),
+])
+def test_edited_lines_preserve_the_first_use_of_a_compound(sentence, rule):
+    analyzer = Analyzer(Config())
+    text = f"{sentence}\n\n{sentence}\n"
+    first = analyzer.check_text(text, "markdown", lines=[(1, 1)])
+    later = analyzer.check_text(text, "markdown", lines=[(3, 3)])
+    assert [(f.feature, f.line) for f in first.findings if f.feature == rule] == [(rule, 1)]
+    assert not any(f.feature == rule for f in later.findings)
+    assert first.sentences == later.sentences == 1
+    assert first.words == later.words
+
+
 def test_identifier_subjects_are_not_inanimate_subject_findings():
     assert not _findings("The `parse()` function decides which branch to take next.\n",
                          "inanimate-subject")

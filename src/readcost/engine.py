@@ -112,10 +112,7 @@ def parse_line_ranges(spec: str | None) -> list[tuple[int, int]] | None:
     return out
 
 
-TERM_FEATURES = ("stacked-nouns", "hyphen-compound")
-
-
-def _first_use_only(findings: list[Finding]) -> list[Finding]:
+def _first_use(f: Finding, seen: set[tuple[str, str]]) -> bool:
     """Keep a compound's first use; later uses are a term the reader has met.
 
     Technical prose repeats compressed terms on purpose, so the cost is taken
@@ -124,16 +121,13 @@ def _first_use_only(findings: list[Finding]) -> list[Finding]:
     efficient for expert readers and costly for newcomers, and do not study
     repeated use.
     """
-    seen: set[tuple[str, str]] = set()
-    out = []
-    for f in findings:
-        if f.feature in TERM_FEATURES:
-            key = (f.feature, " ".join(f.excerpt.lower().replace("-", " ").split()))
-            if key in seen:
-                continue
-            seen.add(key)
-        out.append(f)
-    return out
+    if f.feature not in NOUN_RUN_RULES:
+        return True
+    key = (f.feature, " ".join(f.excerpt.lower().replace("-", " ").split()))
+    if key in seen:
+        return False
+    seen.add(key)
+    return True
 
 
 class Analyzer:
@@ -189,6 +183,7 @@ class Analyzer:
         spans: list[tuple] = []  # (segment, start, end, line, text) of each checked sentence
         parsed: list[tuple[Segment, object]] = []  # every parsed segment, for document-level rules
         checked: list = []                          # every sentence checked, for metrics
+        seen_terms: set[tuple[str, str]] = set()
         for seg_index, (seg, doc) in enumerate(zip(segments, docs)):
             ctx.codes = seg.codes
             parsed.append((seg, doc))
@@ -207,18 +202,22 @@ class Analyzer:
                 # A hard-wrapped sentence spans several lines; keep it when any
                 # of them was edited, not only its first.
                 last_line = seg.line_at(max(sent.end_char - 1, sent.start_char))
-                if lines and not any(lo <= last_line and line <= hi for lo, hi in lines):
-                    continue
-                result.sentences += 1
-                result.words += len(words)
-                checked.append(sent)
+                selected = not lines or any(lo <= last_line and line <= hi for lo, hi in lines)
                 text = show(ctx, sent.doc, sent.start, sent.end - 1)
-                spans.append((seg_index, sent.start_char, sent.end_char, line, text))
+                if selected:
+                    result.sentences += 1
+                    result.words += len(words)
+                    checked.append(sent)
+                    spans.append((seg_index, sent.start_char, sent.end_char, line, text))
+                else:
+                    # Unedited prose can introduce a term used on an edited line.
+                    rules = NOUN_RUN_RULES
                 for feature, sev, msg, toks in detect(sent, ctx, rules):
                     if feature in seg.skip:
                         continue
-                    result.findings.append(self._finding(ctx, seg, sent, text, path, line,
-                                                         feature, sev, msg, toks))
+                    finding = self._finding(ctx, seg, sent, text, path, line, feature, sev, msg, toks)
+                    if _first_use(finding, seen_terms) and selected:
+                        result.findings.append(finding)
         if "undefined-acronym" in enabled:
             keys = {(id(s.doc), s.start) for s in checked}
             for seg, sent, msg, toks in undefined_acronyms(parsed, keys, self.allow):
@@ -228,7 +227,6 @@ class Analyzer:
                 text = show(ctx, sent.doc, sent.start, sent.end - 1)
                 result.findings.append(self._finding(ctx, seg, sent, text, path, seg.line_at(sent.start_char),
                                                      "undefined-acronym", "info", msg, toks))
-        result.findings = _first_use_only(result.findings)
         for f in result.findings:
             # A level set in [readcost.rules], an override or a flag replaces the detector's own.
             if f.feature in forced:
