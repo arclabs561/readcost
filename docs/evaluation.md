@@ -1298,7 +1298,7 @@ signal of this kind.
 Three new samples test readcost outside the essays, docs and PEPs above:
 arXiv abstracts and introductions, GitHub READMEs stratified by language and
 stars, and texts written for experts alongside texts on the same subject
-written for lay readers. All runs are readcost `9655bea` with `Config()`
+written for lay readers. All runs are readcost `9b1df7e` with `Config()`
 defaults, fetched on 2026-10-27. The text stays under `REF/broad`; only these
 aggregates leave it.
 
@@ -1449,7 +1449,7 @@ Thirteen new categories, 2,322 texts and 2.4 million readcost words, test
 readcost on Stack Exchange answers and their edits, design documents, MDN, man
 pages, release notes, and fiction and essays, news, law and regulation, health
 pages for lay readers, social-science abstracts and Wikipedia Featured
-Articles. All runs are readcost `6be1918` with `Config()` defaults, fetched on
+Articles. All runs are readcost `a603737` with `Config()` defaults, fetched on
 2026-10-27. The text stays under `REF/broad`; only these aggregates leave it.
 
 ```sh
@@ -1625,7 +1625,7 @@ the eval corpus's counts are from the readcost version that scored it.
 ## Project communities and AI-written text
 
 `scripts/fetch_people_text.py`, `scripts/fetch_ai_text.py` and
-`scripts/eval_people_ai.py` (readcost `6be1918`, `Config()` defaults, fetched
+`scripts/eval_people_ai.py` (readcost `a603737`, `Config()` defaults, fetched
 2026-10-27) compare 5,271 texts in three ways. None of this text has a reuse
 licence beyond the host's terms, so it is analysed locally and only
 aggregates are reported; per-person figures are not published.
