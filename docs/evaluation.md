@@ -486,8 +486,10 @@ GLM 5.3 FlashX, Llama 4 Maverick and MiniMax M3 (Qwen was not reachable).
 
 Fleiss' kappa over all ten is 0.23; Llama 4 Maverick and MiniMax M3 accept
 far more than the rest and agree with them little, and without those two it is
-0.40. The eight-rater majority calls 2 findings correct and 24 defensible: the
-low base rate holds across model families.
+0.40. A majority of the eight (five or more) calls 2 findings correct and 18
+defensible; a majority of all ten calls 2 correct and 24 defensible, the figure
+this section gave before 2026-11-18. The low base rate holds across model
+families.
 
 The majority also changes a conclusion. It accepts inline-list findings more
 than any other (10 of 32; 1 to 5 of 32 for the other rules), including lists
