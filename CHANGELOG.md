@@ -36,6 +36,13 @@ configuration.
   phrases, or no clause) and reports a gap of prepositional phrases at info.
   The default, `"words"`, is unchanged. `scripts/eval_gap_content.py` splits
   the labelled findings by gap class.
+- `scripts/dataset_matrix.py` and `scripts/dataset_matrix_report.py`, with
+  the `matrix` jobs of the eval workflow: one record per text for fourteen
+  datasets of human ratings, revisions and reading times, each analysed on
+  its own. docs/datasets.md lists the datasets considered;
+  `eval/derived/README.md` describes the derived records, which each run
+  keeps as an artifact. Results are in docs/evaluation.md, "Many datasets
+  with human signals".
 - Evaluations against existing human data, with no new labels:
   `scripts/eval_naturalstories_rt.py` (self-paced reading times),
   `scripts/eval_gold_treebank.py` (UD English EWT and GUM gold parses),
