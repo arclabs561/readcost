@@ -31,6 +31,12 @@ configuration.
   a blind sheet for people to fill in, Fleiss' kappa with category
   frequencies, Cohen's kappa per pair, and majority votes. docs/labels.md
   describes it.
+- `src/readcost/patterns.py` (experimental, used by no rule or command) and
+  `scripts/eval_patterns.py`: contrast framing, series of three,
+  anticipatory-it frames, restatement and document uniformity, measured
+  against model text and against writers' edits, users' preferences and
+  reading times. None tracks readers enough to add; results in
+  docs/evaluation.md, "Discourse patterns and redundancy".
 - `long_dependency_gap = "content"` (opt-in): long-dependency says what fills
   the gap (an object relative clause, another clause, only prepositional
   phrases, or no clause) and reports a gap of prepositional phrases at info.

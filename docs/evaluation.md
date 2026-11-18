@@ -2213,6 +2213,154 @@ PMI 6 or more number 153,670 and take 732 kB as gzipped text, 0.8 MB as
 3 or more, 363,376 pairs. A list of whole three-word terms was not built: a
 table of every three-word sequence is much larger than the pair table, so
 only the reported stacks were counted.
+## Discourse patterns and redundancy
+
+The tests above find no reader cost in readcost's constructions. People who
+find model-written text tiring name other things: contrast framing,
+padding and restatement, lists of three, signposting and uniform structure
+(docs/research.md, "Discourse patterns and redundancy"). This section asks
+two separate questions of those patterns: do models write more of them than
+people do on the same prompt ("marks model text"), and do they go with
+anything readers did, once text length, word length and word frequency are
+held ("tracks readers")? Only the second would justify a rule. The removed
+repeated-frame rule answered only the first.
+
+`src/readcost/patterns.py` holds the detectors. No rule, metric or command
+imports it. They read the parse and closed-class words only, with no phrase
+lists: contrast (four shapes: "not X but Y", "X, not Y", "rather than", and
+"It isn't X. It's Y"), comma series of exactly three items, anticipatory-it
+frames ("It is important to note that"), and restatement (a sentence whose
+content words mostly occurred together in one earlier sentence). Document
+measures: spread of sentence and paragraph lengths, share of sentences
+opening with the most common first word, content-word overlap between
+neighbouring sentences, share of content words already used, content words
+per word, and the gzip ratio of the first 150 words. `scripts/eval_patterns.py`
+runs every part; the `patterns` job in the eval workflow fetches the data.
+readcost `dfccc59`, default rules, measured 2026-11-18 (eval run of that commit).
+
+### Marks model text
+
+HAP-E (Reinhart et al. 2025, MIT): 300 human texts drawn at random, each
+continued by six models from the same first 500 words, against the human
+continuation. Rates per 1,000 words; intervals are bootstraps over texts.
+
+| Measure | People | GPT-4o | GPT-4o mini | Llama 3 8B Instruct | Llama 3 70B (base) |
+| --- | --- | --- | --- | --- | --- |
+| contrast | 0.67 | 2.49 (+1.49 to +2.14) | 2.79 | 1.66 | 0.60 (n.s.) |
+| of which "not X but Y" | 0.33 | 1.82 | 1.95 | 0.87 | 0.15 |
+| series of three | 0.64 | 1.14 (+0.28 to +0.73) | 1.24 | 0.91 | 0.74 (n.s.) |
+| anticipatory it | 0.16 | 0.08 (n.s.) | 0.12 (n.s.) | 0.07 | 0.16 (n.s.) |
+| restatement | 0.73 | 0.05 | 0.02 | 3.25 | 2.49 |
+| sentence-length spread | 0.59 | 0.38 | 0.42 | 0.38 | 0.53 |
+| readcost findings per 100 words | 0.48 | 0.46 (n.s.) | 0.42 | 0.31 | 0.37 |
+| words | 469 | 530 | 579 | 419 | 446 |
+
+The instruction-tuned models write two to four times as many contrasts as
+the people they continue, and the base model does not, so the contrast
+habit comes with instruction tuning. All six models write more uniform
+sentence lengths (GPT-4o is lower than its human pair in 94% of texts).
+Restatement goes the other way for GPT-4o, which almost never repeats
+itself, and is three times the human rate for the Llama models, whose
+continuations loop. The gap depends on genre: contrast is near the human
+rate in fiction (+0.14, n.s.) and two to four times it in news and
+transcribed speech. readcost's own findings are no more frequent in model text, and
+lower for five of the six models.
+
+On HC3 (500 questions, ChatGPT of 2022 against a person's answer, CC BY-SA
+4.0), ChatGPT writes fewer contrasts of the "not X but Y" kind (0.08
+against 0.46), more series of three (1.90 against 0.99), seven times the
+anticipatory-it frames (1.09 against 0.15), and more restatement (3.54
+against 1.28); its sentence lengths are more uniform (0.32 against 0.49).
+
+Which pattern marks model text depends on the model and its year. The
+patterns readers name mark the 2024 instruction-tuned models clearly, so a
+rule built on them would mostly report who wrote a text.
+
+### Tracks readers
+
+Each outcome below comes from people. In every set but OneStop and Provo
+all the texts are model-written, so a result there cannot come from who
+wrote the text. Partial Spearman's rho with log length, word length and
+word frequency held; 95% bootstrap intervals over paragraphs, pairs or
+prompts.
+
+| Measure | LAMP: writer's score | LAMP: share edited | LAMP: share cut as unnecessary exposition | Arena, writing requests: preferred | Arena, any request: preferred | EMTeC: ms per word | OneStop: ms per word |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| texts or pairs | 1,279 | 1,282 | 1,282 | 1,842 | 1,252 | 585 | 324 |
+| contrast | -0.04 (-0.09, +0.01) | +0.03 (-0.02, +0.09) | +0.07 (+0.02, +0.13) | +0.00 (-0.04, +0.05) | +0.02 (-0.03, +0.08) | -0.05 (-0.14, +0.06) | -0.10 (-0.19, -0.01) |
+| series of three | +0.02 | -0.03 | -0.07 (-0.13, -0.01) | +0.01 | +0.00 | -0.00 | -0.07 |
+| restatement | | | | -0.02 | -0.01 | -0.01 | +0.08 |
+| sentence-length spread | +0.01 | -0.07 (-0.12, -0.01) | +0.01 | +0.06 (+0.01, +0.11) | +0.11 (+0.03, +0.19) | -0.03 | -0.11 |
+| opener share | -0.05 | +0.12 (+0.07, +0.17) | +0.01 | -0.07 (-0.12, -0.01) | -0.12 (-0.21, -0.03) | -0.04 | +0.03 |
+| gzip ratio | -0.10 (-0.16, -0.04) | +0.03 | +0.02 | -0.09 (-0.15, -0.03) | -0.10 (-0.22, +0.02) | | |
+| neighbour overlap | -0.02 | -0.08 (-0.13, -0.03) | -0.04 | -0.11 (-0.16, -0.06) | -0.04 | +0.05 | +0.04 |
+| content words per word | +0.08 (+0.03, +0.14) | -0.10 (-0.15, -0.04) | -0.07 (-0.12, -0.01) | +0.00 | -0.04 | +0.21 (+0.05, +0.34) | +0.27 (+0.14, +0.41) |
+| readcost findings | -0.02 (-0.07, +0.04) | +0.01 (-0.05, +0.06) | +0.03 (-0.03, +0.09) | -0.01 (-0.06, +0.04) | +0.00 (-0.05, +0.06) | -0.01 (-0.15, +0.12) | +0.01 (-0.10, +0.10) |
+
+Sources: LAMP (Chakrabarty, Laban and Wu 2025, BSD-3-Clause): 1,193
+paragraphs by GPT-4o, Claude 3.5 Sonnet and Llama 3, edited and scored by
+professional writers, who labelled each edit; 13% of sentences were edited
+as "Unnecessary Exposition", the label closest to padding. Arena, writing
+requests: the Chatbot Arena part of the same repository's writing-quality
+benchmark. Arena, any request: lmarena-ai/arena-human-preference-55k
+(Apache-2.0), one-turn battles with a winner and two English prose answers
+of 60 to 600 words. EMTeC (Bolliger et al. 2025): 107 readers' total
+fixation time on texts by three models. OneStop (CC BY 4.0): people's
+paragraphs; Provo (55 texts) and the 162 paired OneStop paragraphs show the
+same pattern with wider intervals and are in the job's output. A blank cell
+is a measure that fewer than 15 texts had or that the texts were too short
+to compute.
+
+- No counted pattern tracks readers. Contrast goes with more of a paragraph
+  cut as unnecessary exposition (+0.07) and with faster reading in OneStop
+  (-0.10), and does nothing to preference or eye movements. Sentences with a
+  series of three were edited less often than their length predicts (-9.6
+  percentage points, -15.2 to -4.2), the opposite of the complaint.
+  Restatement and anticipatory-it frames are too rare in LAMP to test (3 and
+  7 sentences).
+- Three document measures of uniformity point the same way in three sets of
+  model text: answers whose sentences vary more in length were preferred,
+  and answers that open more sentences with one word, or compress better,
+  were preferred less, edited more or scored lower. Each effect is small
+  (|rho| 0.06 to 0.12). Together the seven measures that every text has add
+  0.5 to 4.7 points of variance explained to the controls (LAMP score 0.021
+  to 0.035; Arena 0.040 to 0.047; EMTeC 0.292 to 0.339).
+- readcost's construction findings track nothing here either: adding them
+  to the controls raises variance explained by at most 0.001 in any set.
+- Content words per word, the opposite of padding, goes with slower reading
+  per word (EMTeC +0.21, OneStop +0.27) and with a higher writer's score.
+  Reading time per word cannot show what padding costs, because a padded
+  text can read fast per word and still take longer for the same content;
+  none of this data measures time to the same information.
+- The new measures overlap little with readcost's: its findings, predicted
+  time, MTLD, idea density and sentence length explain 1 to 26% of the
+  variance in each, except content words per word (76 to 84%) and the share
+  of words already used (52 to 67%).
+
+About 20 measures were tested against 9 outcomes with no correction, so
+some intervals that clear zero are chance. The uniformity result is the
+only one that repeats across independent sets in the same direction. None
+of the data is technical documentation; LAMP is fiction and creative
+nonfiction, and Arena voters judge content and format as well as prose.
+
+### What follows for readcost
+
+- Do not add the counted patterns as rules or metrics. They mark
+  instruction-tuned model text and track no reader outcome. Adding them
+  would turn readcost into the AI-text detector its Limits rule out.
+- The uniformity measures (sentence-length spread, opener share, gzip
+  ratio) are the only candidates. Their effects are small, all three also
+  mark model text strongly, and the evidence is preference and editing on
+  creative and chat text, not reading or comprehension of technical
+  prose. They should not enter readcost until a test chosen before seeing
+  the data repeats them on technical text. Until then readcost keeps its
+  scope.
+- The premise needs restating more than the rule set needs extending.
+  Every test of construction findings against people is now null: reading
+  times (Natural Stories, OneStop, Provo, EMTeC), ratings (five
+  simplification sets, PLABA-EVAL) and now writers' edits and users'
+  preferences. The README's first claim, that readcost reports "sentences
+  built in a way that costs readers time", is not supported by any of it.
 
 ## Not yet evaluated
 
