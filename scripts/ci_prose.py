@@ -49,6 +49,7 @@ ATTRIBUTION = re.compile(
 # Files that name these patterns on purpose: this script and its test, and the
 # evaluation fetcher that searches GitHub for pull requests that carry them.
 ATTRIBUTION_EXEMPT = ("scripts/ci_prose.py", "tests/test_ci_prose.py",
+                      "scripts/strip_attribution.py", "tests/test_strip_attribution.py",
                       "scripts/fetch_ai_text.py", "tests/test_broad_fetchers.py")
 
 
@@ -93,9 +94,30 @@ def added_lines(base: str, head: str) -> list[tuple[str, str]]:
 
 
 def pull_request(event_path: str | None) -> dict | None:
+    """The pull request from the event, with its current title and description.
+
+    The event holds the text as it was when the run started. A rerun after an
+    edit by the repository token (strip-attribution), which starts no run of
+    its own, must see the edited text, so the live copy is read when a token
+    is available.
+    """
     if not event_path or not Path(event_path).is_file():
         return None
-    return json.loads(Path(event_path).read_text()).get("pull_request")
+    pr = json.loads(Path(event_path).read_text()).get("pull_request")
+    token, repo = os.environ.get("GH_TOKEN"), os.environ.get("GITHUB_REPOSITORY")
+    if pr and token and repo:
+        import urllib.request
+
+        req = urllib.request.Request(f"https://api.github.com/repos/{repo}/pulls/{pr['number']}",
+                                     headers={"Authorization": f"Bearer {token}",
+                                              "Accept": "application/vnd.github+json"})
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                live = json.loads(resp.read())
+            pr = {**pr, "title": live.get("title"), "body": live.get("body")}
+        except OSError as exc:
+            print(f"::warning::could not read the live pull request text ({exc}); using the event's copy")
+    return pr
 
 
 def main(argv: list[str] | None = None) -> int:
