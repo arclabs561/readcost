@@ -6,6 +6,7 @@ Each test names the defect it pins. They exercise the public entry points
 
 import json
 import subprocess
+from pathlib import Path
 
 import pytest
 
@@ -545,3 +546,95 @@ def test_inline_list_is_off_in_doc_comments_unless_asked_for():
     assert "inline-list" in rules(Config(rules={"inline-list": "info"}), py, None, "a.py")
     assert "inline-list" in rules(Config(overrides=[{"include": ["*.py"], "rules": {"inline-list": "warn"}}]),
                                   py, None, "a.py")
+
+
+# An inline footnote, "^[text]", becomes a paragraph with no line map at the end
+# of markdown-it's tokens, and readcost 0.3.0 raised TypeError on it. A regex
+# such as ^[a-z] in a doc comment parses as one. The fixtures are made up and
+# have the shapes of the three files the kinds-precision draw dropped.
+
+def footnote_body(segs, words):
+    return next(s for s in segs if s.text == words)
+
+
+def test_inline_footnote_is_read_on_the_line_that_holds_it():
+    from readcost.extract import extract
+
+    src = ("# Names\n\nThe first line of this paragraph is plain.\n"
+           "Names must match ^[a lowercase letter and then more letters] or the\n"
+           "service rejects them at once.\n")
+    segs = extract(src, "names.md")
+    assert segs[0].text == "The first line of this paragraph is plain. Names must match or the service rejects them at once."
+    assert segs[0].span(segs[0].text.index("or the"), segs[0].text.index("or the") + 6) == \
+        (src.index("or the"), src.index("or the") + 6)
+    note = footnote_body(segs, "a lowercase letter and then more letters")
+    assert note.line_at(0) == 4
+    assert note.span(0, len(note.text)) == (src.index("a lowercase"), src.index("letters]") + 7)
+
+
+@pytest.mark.parametrize("src,line", [
+    ("- One item.\n- Another item, with a note ^[the note here has five words] in it.\n", 2),
+    ("> A quote.\n>\n> The second paragraph ^[the note here has five words] goes on.\n", 3),
+    ("# A heading ^[the note here has five words]\n\nSome text follows the heading here.\n", 1),
+    ("| a | b |\n|---|---|\n| x | cell ^[the note here has five words] |\n", 3),
+    ("Outer ^[the note here has five words ^[and an inner note in it]] text.\n", 1),
+])
+def test_inline_footnote_in_any_container_gets_a_line(src, line):
+    from readcost.extract import extract
+
+    segs = extract(src, "x.md")
+    assert any(s.text.startswith("the note here has five words") and s.line_at(0) == line for s in segs)
+
+
+@pytest.mark.parametrize("path,src,line", [
+    ("castprefix.py", ('def tamper(value):\n    """Put a cast before the value.\n\n'
+                       "    The rule is anchored with '^[a word or a digit]+', so it only sees a keyword\n"
+                       '    at the start of the value.\n    """\n    return value\n'), 4),
+    ("space_pb.ts", ("/**\n * The slug of the space must match\n"
+                     " * ^[a lowercase letter or digit]([a-z0-9-]{0,34}[a-z0-9])?$.\n */\nexport const slug = 1;\n"), 3),
+])
+def test_inline_footnote_in_a_doc_comment(path, src, line):
+    from readcost.extract import extract
+
+    segs = extract(src, path)
+    note = next(s for s in segs if s.text.startswith("a "))
+    assert note.line_at(0) == line
+
+
+def test_extraction_error_is_a_note_on_that_file_and_the_run_goes_on(tmp_path, monkeypatch):
+    import readcost.engine
+
+    real = readcost.engine.extract
+
+    def extract(text, path, *a, **kw):
+        if path.endswith("bad.md"):
+            raise TypeError("'NoneType' object is not subscriptable")
+        return real(text, path, *a, **kw)
+
+    monkeypatch.setattr(readcost.engine, "extract", extract)
+    (tmp_path / "bad.md").write_text(PLAIN)
+    (tmp_path / "good.md").write_text(DENSE)
+    r = run_cli(["check", "-o", "json", "bad.md", "good.md"], cwd=tmp_path)
+    data = {Path(d["path"]).name: d for d in json.loads(r.stdout)}
+    assert "Traceback" not in r.stderr and "internal error" not in r.stderr
+    assert data["bad.md"]["words"] == 0 and "TypeError" in data["bad.md"]["notes"][0]
+    assert data["good.md"]["verdict"] == "block"
+    assert "bad.md: not checked: TypeError" in r.stderr
+    assert r.returncode == 2  # a file readcost could not check is not a pass
+
+
+def test_other_error_on_one_file_is_reported_and_the_rest_are_checked(tmp_path, monkeypatch):
+    real = Analyzer.analyze
+
+    def analyze(self, segments, path, *a, **kw):
+        if path.endswith("bad.md"):
+            raise KeyError("boom")
+        return real(self, segments, path, *a, **kw)
+
+    monkeypatch.setattr(Analyzer, "analyze", analyze)
+    (tmp_path / "bad.md").write_text(PLAIN)
+    (tmp_path / "good.md").write_text(DENSE)
+    r = run_cli(["check", "-o", "json", "bad.md", "good.md"], cwd=tmp_path)
+    assert "bad.md: internal error: KeyError" in r.stderr
+    assert [Path(d["path"]).name for d in json.loads(r.stdout)] == ["good.md"]
+    assert r.returncode == 2

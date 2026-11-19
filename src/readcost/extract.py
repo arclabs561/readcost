@@ -16,7 +16,7 @@ import re
 from dataclasses import dataclass, field
 from html.parser import HTMLParser
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Any, Iterable, Iterator
 
 from markdown_it import MarkdownIt
 from mdit_py_plugins.deflist import deflist_plugin
@@ -399,6 +399,10 @@ def _inline_pieces(inline, line_no, spans=None) -> list[Piece]:
             k += child.content.count("\n")
             found = raw.find(child.content, cur)
             cur = found + len(child.content) if found >= 0 else cur
+        elif kind == "footnote_ref" and "label" not in (child.meta or {}):
+            # An inline footnote, "^[text]": its text is read as its own paragraph.
+            found = raw.find("^[", cur)
+            cur = _bracket_end(raw, found + 1) if found >= 0 else cur
         elif kind == "footnote_ref":
             found = raw.find("[^", cur)
             end = raw.find("]", found) + 1 if found >= 0 else 0
@@ -434,6 +438,62 @@ def _segment(pieces: list[Piece], path: str, label: str) -> Segment | None:
                    starts=[s for s, _ in spans], ends=[e for _, e in spans])
 
 
+def _bracket_end(raw: str, i: int) -> int:
+    """The offset after the "]" that closes the "[" at ``raw[i]``, nested brackets and escapes included."""
+    depth, j = 0, i
+    while j < len(raw):
+        if raw[j] == "\\":
+            j += 2
+            continue
+        depth += {"[": 1, "]": -1}.get(raw[j], 0)
+        j += 1
+        if depth == 0:
+            return j
+    return i
+
+
+def _fill_maps(tokens) -> None:
+    """Give each token that has no line map the lines its text came from.
+
+    The footnote plugin builds the paragraph of an inline footnote
+    ("^[text]") at the end of the token stream with no map. That
+    paragraph takes the line of its "^[" in the paragraph that holds it;
+    any other token without a map takes the map of the nearest enclosing
+    token that has one, or else of the token before it.
+    """
+    holder: dict[int, Any] = {}  # inline footnote id -> the inline token that holds it
+    searched: dict[int, int] = {}  # id(inline token) -> where the next "^[" search starts
+    open_maps: list = []
+    last, note = None, None
+    for tok in tokens:
+        if tok.type == "footnote_open":
+            note = tok.meta.get("id")
+        elif tok.type == "footnote_close":
+            note = None
+        if tok.map is None and tok.nesting != -1:
+            parent = holder.get(note) if tok.type == "inline" else None
+            found = -1
+            if parent is not None:
+                found = parent.content.find(f"^[{tok.content}]", searched.get(id(parent), 0))
+            if found >= 0:
+                searched[id(parent)] = found + 2
+                line = parent.map[0] + parent.content.count("\n", 0, found)
+                tok.map = [line, line + 1 + tok.content.count("\n")]
+            else:
+                inner = next((m for m in reversed(open_maps) if m is not None), None)
+                tok.map = list(inner or last or [0, 1])
+        if tok.nesting == 1:
+            open_maps.append(tok.map)
+        elif tok.nesting == -1 and open_maps:
+            open_maps.pop()
+        if tok.map is not None:
+            last = tok.map
+        if tok.type == "inline":
+            for child in tok.children or []:
+                if child.type == "footnote_ref" and "label" not in (child.meta or {}):
+                    holder.setdefault(child.meta.get("id"), tok)
+
+
 def _link_row(tok) -> bool:
     """True when an inline token is only links joined by separators such as | or ·."""
     depth, links = 0, 0
@@ -455,6 +515,7 @@ def _markdown(src: str, path: str, label: str, line_no, at=None) -> list[Segment
     tokens = _MD.parse(src)
     if tokens and tokens[0].type == "front_matter" and not _is_yaml(tokens[0].content):
         tokens = _MD_PLAIN.parse(src)
+    _fill_maps(tokens)
     segments: list[Segment] = []
     disabled = False
     ignore_level: int | None = None  # a readcost: ignore waits at this nesting level
