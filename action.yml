@@ -21,6 +21,23 @@ inputs:
       files under `paths` that the pull request adds or changes. Ignored on
       other events.
     default: "true"
+  check-pr-text:
+    description: >-
+      "true" to also check the pull request title and description, read from
+      the event file, on pull_request and pull_request_target events. "only"
+      checks them and no files, for a job without a checkout. Advisory unless
+      `pr-text-fail-on` says otherwise.
+    default: "false"
+  pr-text-fail-on:
+    description: >-
+      never, advise, or block: the verdict of the pull request text that fails
+      the job. Separate from `fail-on`, which applies to files.
+    default: never
+  pr-text-min-words:
+    description: >-
+      Pull request text with fewer words of prose than this, outside code and
+      HTML comments, is not checked.
+    default: "30"
 runs:
   using: composite
   steps:
@@ -49,6 +66,9 @@ runs:
         READCOST_FAIL_ON: ${{ inputs.fail-on }}
         READCOST_COMMENT: ${{ inputs.comment }}
         READCOST_CHANGED_ONLY: ${{ inputs.changed-only }}
+        READCOST_PR_TEXT: ${{ inputs.check-pr-text }}
+        READCOST_PR_TEXT_FAIL_ON: ${{ inputs.pr-text-fail-on }}
+        READCOST_PR_TEXT_MIN_WORDS: ${{ inputs.pr-text-min-words }}
         READCOST_PR: ${{ github.event.pull_request.number }}
         READCOST_BASE: ${{ github.event.pull_request.base.sha }}
         READCOST_VENV: ${{ runner.temp }}/readcost-venv
@@ -57,7 +77,17 @@ runs:
       run: |
         read -r -d '' -a paths <<< "$READCOST_PATHS" || true
         files=("${paths[@]}")
-        if [[ -n "$READCOST_PR" && "$READCOST_CHANGED_ONLY" == "true" ]]; then
+        # The pull request text is read from the event file by readcost
+        # itself: it is written by whoever opened the pull request, so it never
+        # passes through an expression or the shell.
+        pr_text=()
+        if [[ -n "$READCOST_PR" && ( "$READCOST_PR_TEXT" == "true" || "$READCOST_PR_TEXT" == "only" ) ]]; then
+          pr_text=(--pr-text "$GITHUB_EVENT_PATH" --pr-text-min-words "$READCOST_PR_TEXT_MIN_WORDS"
+                   --pr-text-fail-on "$READCOST_PR_TEXT_FAIL_ON")
+        fi
+        if [[ "$READCOST_PR_TEXT" == "only" ]]; then
+          files=()
+        elif [[ -n "$READCOST_PR" && "$READCOST_CHANGED_ONLY" == "true" ]]; then
           # A shallow checkout lacks the base commit; fetch just that commit.
           if ! git cat-file -e "$READCOST_BASE^{commit}" 2>/dev/null; then
             git fetch --quiet --no-tags --depth=1 origin "$READCOST_BASE"
@@ -79,16 +109,20 @@ runs:
 
         if [[ -n "$READCOST_PR" && "$READCOST_COMMENT" == "true" ]]; then
           body="$READCOST_TMP/readcost-comment.md"
-          if (( ${#files[@]} )); then
-            "$READCOST_VENV/bin/readcost" check "${files[@]}" --output pr-comment --fail-on never > "$body" || true
+          if (( ${#files[@]} + ${#pr_text[@]} )); then
+            "$READCOST_VENV/bin/readcost" check "${files[@]}" "${pr_text[@]}" --output pr-comment \
+              --fail-on never --pr-text-fail-on never > "$body" || true
           else
             "$READCOST_VENV/bin/python" -c 'from readcost.report import pr_comment; print(pr_comment([]), end="")' > "$body"
           fi
           jq -Rs '{body: .}' < "$body" > "$body.json"
           # The comment is a convenience: a token without write access (a
-          # pull request from a fork) gets a warning, not a failed job.
+          # pull request from a fork) gets a warning, not a failed job. Only
+          # a comment this token posted is edited, not one that anybody else
+          # started with the marker.
           id=$(gh api --paginate "repos/$GITHUB_REPOSITORY/issues/$READCOST_PR/comments" \
-                 --jq '.[] | select(.body | startswith("<!-- readcost -->")) | .id' | head -n 1) || id=""
+                 --jq '.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("<!-- readcost -->"))) | .id' \
+                 | head -n 1) || id=""
           if [[ -n "$id" ]]; then
             gh api --method PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$id" --input "$body.json" > /dev/null \
               || echo "::warning title=readcost::could not update the pull request comment"
@@ -98,6 +132,7 @@ runs:
           fi
         fi
 
-        if (( ${#files[@]} )); then
-          "$READCOST_VENV/bin/readcost" check "${files[@]}" --output github --fail-on "$READCOST_FAIL_ON"
+        if (( ${#files[@]} + ${#pr_text[@]} )); then
+          "$READCOST_VENV/bin/readcost" check "${files[@]}" "${pr_text[@]}" --output github \
+            --fail-on "$READCOST_FAIL_ON"
         fi

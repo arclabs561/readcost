@@ -67,3 +67,30 @@ def test_comment_inputs_exist_and_marker_matches_report():
     assert f'startswith("{COMMENT_MARKER}")' in text
     assert re.search(r'^  comment:\n(    .*\n)*?    default: "false"$', text, re.MULTILINE)
     assert re.search(r'^  changed-only:\n(    .*\n)*?    default: "true"$', text, re.MULTILINE)
+
+
+def test_pr_text_inputs_are_opt_in_and_advisory():
+    text = ACTION.read_text()
+    assert re.search(r'^  check-pr-text:\n(    .*\n)*?    default: "false"$', text, re.MULTILINE)
+    assert re.search(r'^  pr-text-fail-on:\n(    .*\n)*?    default: never$', text, re.MULTILINE)
+    assert re.search(r'^  pr-text-min-words:\n(    .*\n)*?    default: "30"$', text, re.MULTILINE)
+    assert '--pr-text "$GITHUB_EVENT_PATH"' in text
+
+
+def test_pull_request_text_never_reaches_an_expression():
+    # The title and description are written by whoever opened the pull
+    # request; readcost reads them from the event file, not from ${{ }}.
+    text = ACTION.read_text()
+    for field in ("title", "body", "head.ref", "head.label"):
+        assert f"pull_request.{field}" not in text, field
+
+
+def test_the_action_checks_nothing_out():
+    # Safe under pull_request_target: no step fetches or checks out the
+    # pull request's head.
+    text = ACTION.read_text()
+    assert "actions/checkout" not in text and "head.sha" not in text and "git checkout" not in text
+
+
+def test_only_the_actions_own_comment_is_edited():
+    assert 'select(.user.login == "github-actions[bot]"' in ACTION.read_text()

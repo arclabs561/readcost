@@ -42,3 +42,18 @@ jobs:
         run: uv run readcost check . --fail-on block
       - name: Check own docs
         run: uv run readcost check README.md docs --fail-on advise
+
+  # The GitHub Action as a user runs it, from this checkout: the docs a pull
+  # request changes, and its title and description, which stay advisory.
+  action:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - uses: ./
+        with:
+          paths: README.md docs
+          fail-on: advise
+          check-pr-text: "true"

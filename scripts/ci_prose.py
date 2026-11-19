@@ -33,6 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
 from readcost import Analyzer, load_config  # noqa: E402
+from readcost.prtext import check_pull_request, read_event  # noqa: E402
 from readcost.report import _gh_data, _gh_property  # noqa: E402
 
 VERDICT_RANK = {"never": 99, "pass": 0, "advise": 1, "block": 2}
@@ -103,7 +104,7 @@ def pull_request(event_path: str | None) -> dict | None:
     """
     if not event_path or not Path(event_path).is_file():
         return None
-    pr = json.loads(Path(event_path).read_text()).get("pull_request")
+    pr = read_event(event_path)
     token, repo = os.environ.get("GH_TOKEN"), os.environ.get("GITHUB_REPOSITORY")
     if pr and token and repo:
         import urllib.request
@@ -164,8 +165,10 @@ def main(argv: list[str] | None = None) -> int:
         title, body = pr.get("title") or "", pr.get("body") or ""
         if ATTRIBUTION.search(title) or ATTRIBUTION.search(body):
             attribution.append("pull request: AI attribution in the title or description")
-        report("pull request title", analyzer.check_text(title, "text", "title"), args.pr_fail_on)
-        report("pull request description", analyzer.check_text(body, "markdown", "description"), args.pr_fail_on)
+        # The same checks as `readcost check --pr-text`, without its minimum length.
+        title_result, body_result = check_pull_request(analyzer, pr)
+        report("pull request title", title_result, args.pr_fail_on)
+        report("pull request description", body_result, args.pr_fail_on)
 
     for path, line in added_lines(args.base, args.head):
         if ATTRIBUTION.search(line):
