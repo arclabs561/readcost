@@ -1332,20 +1332,20 @@ def extract_notebook(text: str, path: str, label: str = "", comments: str = "doc
         notes.append(f"not a readable Jupyter notebook ({exc}); nothing was checked")
         return []
     cells = nb.get("cells") if isinstance(nb, dict) else None
-    if cells is None and isinstance(nb, dict) and isinstance(nb.get("worksheets"), list):  # nbformat 3
-        cells = [c for ws in nb["worksheets"] if isinstance(ws, dict)
-                 for c in ws.get("cells") or [] if isinstance(ws.get("cells"), list)]
+    worksheets = nb.get("worksheets") if isinstance(nb, dict) else None
+    legacy = cells is None and isinstance(worksheets, list)
+    if legacy:
+        cells = [cell for ws in worksheets if isinstance(ws, dict) and isinstance(ws.get("cells"), list)
+                 for cell in ws["cells"]]
     if not isinstance(cells, list):
         notes.append("not a Jupyter notebook: no list of cells; nothing was checked")
         return []
     meta = nb.get("metadata") if isinstance(nb.get("metadata"), dict) else {}
-    name = _get_path(meta, "kernelspec.language") or _get_path(meta, "language_info.name") \
+    kernel_language = _get_path(meta, "kernelspec.language") or _get_path(meta, "language_info.name") \
         or meta.get("language") or ""
-    name = str(name).strip().lower() if isinstance(name, str) else ""
-    lang = NOTEBOOK_LANGS.get(name) or NOTEBOOK_LANGS.get(re.sub(r"[\d.]+$", "", name))
     file_starts = line_starts(text)
     segments: list[Segment] = []
-    unread_code = False
+    unread_languages: set[str] = set()
     for cell in cells:
         if not isinstance(cell, dict):
             continue
@@ -1354,8 +1354,11 @@ def extract_notebook(text: str, path: str, label: str = "", comments: str = "doc
             body, spans = _cell_text(text, cell.get("source"))
             segs, cell_starts = extract_markdown(body, path, label), line_starts(body)
         elif kind == "code" and comments == "all":
+            name = cell.get("language", kernel_language) if legacy else kernel_language
+            name = name.strip().lower() if isinstance(name, str) else ""
+            lang = NOTEBOOK_LANGS.get(name) or NOTEBOOK_LANGS.get(re.sub(r"[\d.]+$", "", name))
             if lang is None:
-                unread_code = True
+                unread_languages.add(name)
                 continue
             body, spans = _cell_text(text, cell.get("source", cell.get("input")))
             segs = _source_segments(body, path, label, "all", lang)
@@ -1364,8 +1367,9 @@ def extract_notebook(text: str, path: str, label: str = "", comments: str = "doc
             continue  # raw cells, and outputs, are not prose
         _remap(segs, cell_starts, spans, file_starts)
         segments.extend(segs)
-    if unread_code:
-        notes.append(f"code cells not read: readcost has no comment syntax for the notebook's "
+    for name in sorted(unread_languages):
+        source = "cell" if legacy else "notebook"
+        notes.append(f"code cells not read: readcost has no comment syntax for the {source}'s "
                      f"language {name or '(none given)'!r}")
     return segments
 

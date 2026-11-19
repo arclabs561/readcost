@@ -293,11 +293,42 @@ def test_notebook_with_an_unknown_kernel_language_skips_code_cells_with_a_note()
     assert notes == ["code cells not read: readcost has no comment syntax for the notebook's language 'scheme'"]
 
 
-def test_nbformat_3_worksheets():
-    nb = {"worksheets": [{"cells": [{"cell_type": "markdown", "source": [STACK]},
-                                    {"cell_type": "code", "input": [f"# {PLAIN}\n"], "language": "python"}]}],
+@pytest.mark.parametrize("metadata", [{"name": ""}, {"language": "scheme"}])
+def test_nbformat_3_uses_the_code_cells_language(metadata):
+    nb = {"worksheets": [{"cells": [md(STACK)]},
+                         {"cells": [{"cell_type": "code", "language": "python",
+                                     "input": [f"# {PLAIN}\n"], "outputs": []}]}],
+          "metadata": metadata, "nbformat": 3, "nbformat_minor": 0}
+    src = json.dumps(nb, indent=1)
+    notes = []
+    assert texts(extract(src, "nb.ipynb")) == [STACK]
+    segs = extract(src, "nb.ipynb", comments="all", notes=notes)
+    assert texts(segs) == [STACK, PLAIN]
+    assert notes == []
+    assert segs[1].line_at(0) == file_position(src, PLAIN)[0]
+    spans_match(src, segs)
+
+
+def test_nbformat_3_unknown_cell_language_does_not_hide_other_cells():
+    def legacy_code(language):
+        return {"cell_type": "code", "language": language, "input": f"# {PLAIN}", "outputs": []}
+
+    nb = {"worksheets": [{"cells": [legacy_code("scheme"), legacy_code("python"),
+                                    legacy_code("scheme")]}],
+          "metadata": {"language": "python"}, "nbformat": 3, "nbformat_minor": 0}
+    notes = []
+    segs = extract(json.dumps(nb), "nb.ipynb", comments="all", notes=notes)
+    assert texts(segs) == [PLAIN]
+    assert len(notes) == 1 and "scheme" in notes[0]
+
+
+def test_nbformat_3_falls_back_to_metadata_and_skips_a_malformed_worksheet():
+    nb = {"worksheets": [{"cells": 12},
+                         {"cells": [{"cell_type": "code", "input": f"# {PLAIN}"}]}],
           "metadata": {"language": "python"}, "nbformat": 3}
-    assert texts(extract(json.dumps(nb, indent=1), "nb.ipynb", comments="all")) == [STACK, PLAIN]
+    notes = []
+    assert texts(extract(json.dumps(nb), "nb.ipynb", comments="all", notes=notes)) == [PLAIN]
+    assert notes == []
 
 
 @pytest.mark.parametrize("bad", ['{"cells": [', "", "[1, 2]", '{"cells": 3}', '{"a": 1} x'])

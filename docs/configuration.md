@@ -98,7 +98,8 @@ readcost picks the format from the file name; `--format` overrides it.
 - Jupyter notebooks (`.ipynb`): the Markdown cells. With
   `comments = "all"`, also the comments in code cells, read with the syntax
   of the kernel's language (`metadata.kernelspec.language`, else
-  `language_info.name`). Outputs and raw cells are not read. Lines and
+  `language_info.name`). In older notebooks that use worksheets, each code
+  cell supplies its own language. Outputs and raw cells are not read. Lines and
   columns point into the `.ipynb` file, at the characters inside the JSON
   strings; an escaped character such as `\"` maps to its whole escape. A
   `readcost: off` directive ends at the end of its cell. A file that is not
