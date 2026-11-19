@@ -638,3 +638,63 @@ def test_other_error_on_one_file_is_reported_and_the_rest_are_checked(tmp_path, 
     assert "bad.md: internal error: KeyError" in r.stderr
     assert [Path(d["path"]).name for d in json.loads(r.stdout)] == ["good.md"]
     assert r.returncode == 2
+
+
+# The sentence around an inline footnote is still checked: with and without
+# "^[a-z] " it gives the same finding on the same line, at the column where its
+# words are in each source (the same column when the footnote comes after them).
+
+FN = "^[a-z] "
+STACK = "cache invalidation request handler"
+
+
+def stacks(src, fmt, path):
+    r = Analyzer(Config()).check_text(src, fmt, path)
+    return [(f.feature, f.line, f.column) for f in r.findings if f.feature == "stacked-nouns"]
+
+
+def column_of(src, needle):
+    line = next(i for i, text in enumerate(src.split("\n"), 1) if needle in text)
+    return line, src.split("\n")[line - 1].index(needle) + 1
+
+
+@pytest.mark.parametrize("fmt,path,template", [
+    ("markdown", "a.md", "# Names\n\nThe {STACK} checks names against {FN}before it stores them.\n"),
+    ("markdown", "a.md", "# Names\n\nNames that match the pattern {FN}go to the {STACK} first.\n"),
+    ("markdown", "a.md", "# Names\n\n{FN}names go to the {STACK} before it stores them.\n"),
+    ("markdown", "a.md", "# Names\n\n- A first item.\n- Names that match {FN}go to the {STACK} first.\n"),
+    ("markdown", "a.md", "> A quote.\n>\n> Names that match {FN}go to the {STACK} first.\n"),
+    ("markdown", "a.md", "Names that match {FN}go to the {STACK} first.[^1]\n\n[^1]: A note on the names.\n"),
+    (None, "a.py", 'def f():\n    """Store a name.\n\n    Names that match {FN}go to the {STACK} first.\n    """\n'),
+    ("commit", "COMMIT_EDITMSG", "Check names before the write\n\nNames that match {FN}go to the {STACK} first.\n"),
+])
+def test_sentence_around_an_inline_footnote_is_still_checked(fmt, path, template):
+    with_fn = template.format(FN=FN, STACK=STACK)
+    without = template.format(FN="", STACK=STACK)
+    assert stacks(with_fn, fmt, path) == [("stacked-nouns", *column_of(with_fn, STACK))]
+    assert stacks(without, fmt, path) == [("stacked-nouns", *column_of(without, STACK))]
+    if with_fn.index(STACK) < with_fn.index(FN):
+        assert stacks(with_fn, fmt, path) == stacks(without, fmt, path)
+
+
+@pytest.mark.parametrize("template", [
+    "# Names {FN}in a heading\n\nThe {STACK} checks every name first.\n",
+    "| a | b |\n|---|---|\n| x | names {FN}here |\n\nThe {STACK} checks every name first.\n",
+])
+def test_footnote_in_a_heading_or_table_cell_leaves_the_next_paragraph_checked(template):
+    # Headings and table cells are not prose either way; the paragraph after them is.
+    with_fn = template.format(FN=FN, STACK=STACK)
+    without = template.format(FN="", STACK=STACK)
+    assert stacks(with_fn, "markdown", "a.md") == stacks(without, "markdown", "a.md") == \
+        [("stacked-nouns", *column_of(with_fn, STACK))]
+
+
+def test_verbless_sentence_reads_the_same_with_and_without_an_inline_footnote():
+    # spaCy tags "Match" and "retries" as nouns, so this sentence has no verb and
+    # readcost skips it as a fragment, with or without the footnote.
+    a = Analyzer(Config())
+    src = "Match names with the pattern {}and the cache invalidation request handler retries.\n\nNext paragraph.\n"
+    with_fn, without = (a.check_text(src.format(fn), "markdown", "fn.md") for fn in (FN, ""))
+    assert [(f.feature, f.line, f.column) for f in with_fn.findings] == \
+        [(f.feature, f.line, f.column) for f in without.findings]
+    assert (with_fn.words, with_fn.sentences) == (without.words, without.sentences)
