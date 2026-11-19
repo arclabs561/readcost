@@ -161,12 +161,16 @@ Read on 18 November 2026; nothing here was run.
 
 ## Older label files
 
-`eval/labels/*.json` hold ten model raters' labels of 210 findings. Each
-label is keyed by the first 16 hex digits of a hash of the text id, the rule
-and the sentence.
+`eval/labels/*.json`, apart from the manifest `raters.json`, hold ten
+model raters' labels of 210 findings. Each label is keyed by the first 16
+hex digits of a hash of the text id, the rule and the sentence.
+
+`eval/labels/labels.jsonl` collects these and the labels of the three
+held-out rounds in one table, one row per round, item and rater; its
+README says how it is built and how to add a rater.
 
 ```sh
-readcost label convert eval/labels/*.json -o model-labels.jsonl
+readcost label convert $(ls eval/labels/*.json | grep -v raters.json) -o model-labels.jsonl
 readcost label agreement model-labels.jsonl
 ```
 

@@ -1,0 +1,244 @@
+{
+"labels": [
+{
+"i": 346712,
+"label": "w",
+"present": false,
+"cause": "fragment misread as subject"
+},
+{
+"i": 703814,
+"label": "d",
+"present": true,
+"cause": "four-word stack with names"
+},
+{
+"i": 214637,
+"label": "w",
+"present": false,
+"cause": "gerund subject"
+},
+{
+"i": 740526,
+"label": "d",
+"present": true,
+"cause": "ordinary technical compound"
+},
+{
+"i": 607812,
+"label": "d",
+"present": true,
+"cause": "long compound subject"
+},
+{
+"i": 567624,
+"label": "w",
+"present": false,
+"cause": "not a list"
+},
+{
+"i": 994430,
+"label": "w",
+"present": false,
+"cause": "wrong pair"
+},
+{
+"i": 210086,
+"label": "c",
+"present": true,
+"cause": "bare relative, stranded out of"
+},
+{
+"i": 588823,
+"label": "d",
+"present": true,
+"cause": "short stack, clear"
+},
+{
+"i": 884658,
+"label": "w",
+"present": false,
+"cause": "three items plus etc"
+},
+{
+"i": 674605,
+"label": "w",
+"present": false,
+"cause": "emphasis capitals, not acronym"
+},
+{
+"i": 441140,
+"label": "d",
+"present": true,
+"cause": "short stack, clear"
+},
+{
+"i": 197025,
+"label": "c",
+"present": true,
+"cause": "list with broken parallelism"
+},
+{
+"i": 948693,
+"label": "w",
+"present": false,
+"cause": "depending on is prepositional"
+},
+{
+"i": 260299,
+"label": "d",
+"present": true,
+"cause": "short bare relative"
+},
+{
+"i": 365293,
+"label": "w",
+"present": false,
+"cause": "not a noun stack"
+},
+{
+"i": 954406,
+"label": "w",
+"present": false,
+"cause": "wrong pair"
+},
+{
+"i": 833039,
+"label": "w",
+"present": false,
+"cause": "three items"
+},
+{
+"i": 899363,
+"label": "w",
+"present": true,
+"cause": "established term hyphenated"
+},
+{
+"i": 267259,
+"label": "w",
+"present": false,
+"cause": "wrong pair across parenthesis"
+},
+{
+"i": 732551,
+"label": "d",
+"present": true,
+"cause": "coined modifier, slightly dense"
+},
+{
+"i": 929000,
+"label": "d",
+"present": true,
+"cause": "parenthesis before verb, mild"
+},
+{
+"i": 819332,
+"label": "d",
+"present": true,
+"cause": "participle in terse changelog item"
+},
+{
+"i": 762755,
+"label": "w",
+"present": false,
+"cause": "three items plus etc"
+},
+{
+"i": 376223,
+"label": "d",
+"present": true,
+"cause": "short bare relative"
+},
+{
+"i": 586951,
+"label": "w",
+"present": true,
+"cause": "UART known to audience"
+},
+{
+"i": 483490,
+"label": "w",
+"present": false,
+"cause": "wrong pair"
+},
+{
+"i": 798124,
+"label": "w",
+"present": true,
+"cause": "DHCP well known"
+},
+{
+"i": 670075,
+"label": "w",
+"present": false,
+"cause": "not a list"
+},
+{
+"i": 415641,
+"label": "d",
+"present": true,
+"cause": "short bare relative"
+},
+{
+"i": 254175,
+"label": "w",
+"present": false,
+"cause": "one clause in subject"
+},
+{
+"i": 764016,
+"label": "c",
+"present": true,
+"cause": "bare relative garden path"
+},
+{
+"i": 837010,
+"label": "w",
+"present": false,
+"cause": "short gap, explicit that"
+},
+{
+"i": 921067,
+"label": "w",
+"present": false,
+"cause": "defined in the same sentence"
+},
+{
+"i": 332682,
+"label": "d",
+"present": true,
+"cause": "short bare relative"
+},
+{
+"i": 569344,
+"label": "w",
+"present": false,
+"cause": "heading with module names"
+},
+{
+"i": 128813,
+"label": "d",
+"present": true,
+"cause": "stack with hyphen compound"
+},
+{
+"i": 722591,
+"label": "w",
+"present": true,
+"cause": "page claims is idiomatic"
+},
+{
+"i": 768685,
+"label": "d",
+"present": true,
+"cause": "short bare relative"
+},
+{
+"i": 514580,
+"label": "w",
+"present": true,
+"cause": "game term in quoted string"
+}
+]
+}

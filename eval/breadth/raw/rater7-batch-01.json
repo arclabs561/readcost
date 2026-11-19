@@ -1,0 +1,238 @@
+{
+ "labels": [
+  {
+   "i": 540475,
+   "label": "w",
+   "present": false,
+   "cause": "only two nouns, rule needs three"
+  },
+  {
+   "i": 916081,
+   "label": "w",
+   "present": false,
+   "cause": "two-item coordinations, no list of four"
+  },
+  {
+   "i": 835354,
+   "label": "d",
+   "present": true,
+   "cause": "ad hoc compound naming a test scenario"
+  },
+  {
+   "i": 779182,
+   "label": "w",
+   "present": false,
+   "cause": "gerund subject, not a trailing participle"
+  },
+  {
+   "i": 832415,
+   "label": "d",
+   "present": true,
+   "cause": "subject and verb split by relative clause"
+  },
+  {
+   "i": 910696,
+   "label": "w",
+   "present": true,
+   "cause": "fixed product name, costs nothing"
+  },
+  {
+   "i": 422739,
+   "label": "w",
+   "present": false,
+   "cause": "only two nouns, rule needs three"
+  },
+  {
+   "i": 595443,
+   "label": "w",
+   "present": false,
+   "cause": "preposition breaks the noun sequence"
+  },
+  {
+   "i": 767829,
+   "label": "w",
+   "present": false,
+   "cause": "no relative clause present"
+  },
+  {
+   "i": 222712,
+   "label": "w",
+   "present": false,
+   "cause": "flagged verbs are not dependent on each other"
+  },
+  {
+   "i": 872354,
+   "label": "d",
+   "present": true,
+   "cause": "subject and verb split by 13 words"
+  },
+  {
+   "i": 706360,
+   "label": "w",
+   "present": false,
+   "cause": "no relative clause present"
+  },
+  {
+   "i": 980779,
+   "label": "w",
+   "present": false,
+   "cause": "clause coordination, no list of four"
+  },
+  {
+   "i": 225595,
+   "label": "d",
+   "present": true,
+   "cause": "five-item protocol list in one sentence"
+  },
+  {
+   "i": 159883,
+   "label": "d",
+   "present": true,
+   "cause": "four-item parallel list of server types"
+  },
+  {
+   "i": 662490,
+   "label": "w",
+   "present": false,
+   "cause": "three-item list, not four"
+  },
+  {
+   "i": 564842,
+   "label": "w",
+   "present": false,
+   "cause": "only two nouns, rule needs three"
+  },
+  {
+   "i": 868217,
+   "label": "w",
+   "present": false,
+   "cause": "navigation menu labels, not a noun phrase"
+  },
+  {
+   "i": 243130,
+   "label": "d",
+   "present": true,
+   "cause": "subject and verb split by long modifier"
+  },
+  {
+   "i": 241586,
+   "label": "d",
+   "present": true,
+   "cause": "EDK used as framework name, unexpanded"
+  },
+  {
+   "i": 832258,
+   "label": "w",
+   "present": false,
+   "cause": "option identifier, not an acronym"
+  },
+  {
+   "i": 318746,
+   "label": "w",
+   "present": false,
+   "cause": "misparsed pair; the use verb is local"
+  },
+  {
+   "i": 349114,
+   "label": "w",
+   "present": true,
+   "cause": "terse docstring participle, attachment clear"
+  },
+  {
+   "i": 694945,
+   "label": "d",
+   "present": true,
+   "cause": "six-item list of checks"
+  },
+  {
+   "i": 163600,
+   "label": "d",
+   "present": true,
+   "cause": "three-noun term for a pipeline component"
+  },
+  {
+   "i": 542193,
+   "label": "w",
+   "present": false,
+   "cause": "verb does not require a person"
+  },
+  {
+   "i": 854331,
+   "label": "w",
+   "present": false,
+   "cause": "flagged words belong to different clauses"
+  },
+  {
+   "i": 796315,
+   "label": "w",
+   "present": true,
+   "cause": "RTP is a standard term, costs nothing"
+  },
+  {
+   "i": 107638,
+   "label": "w",
+   "present": false,
+   "cause": "three-item list, not four"
+  },
+  {
+   "i": 405519,
+   "label": "w",
+   "present": true,
+   "cause": "trailing participle with clear attachment"
+  },
+  {
+   "i": 755269,
+   "label": "d",
+   "present": true,
+   "cause": "three-noun technical term, dense"
+  },
+  {
+   "i": 441140,
+   "label": "w",
+   "present": true,
+   "cause": "standard framework name, reads clearly"
+  },
+  {
+   "i": 489535,
+   "label": "w",
+   "present": false,
+   "cause": "only two nouns, rule needs three"
+  },
+  {
+   "i": 282061,
+   "label": "w",
+   "present": false,
+   "cause": "NULL is a code identifier, not an acronym"
+  },
+  {
+   "i": 541648,
+   "label": "d",
+   "present": true,
+   "cause": "reduced object relative, mildly garden-pathed"
+  },
+  {
+   "i": 154350,
+   "label": "w",
+   "present": true,
+   "cause": "parser as subject is accepted usage"
+  },
+  {
+   "i": 876010,
+   "label": "w",
+   "present": false,
+   "cause": "verb does not require a person"
+  },
+  {
+   "i": 604408,
+   "label": "d",
+   "present": true,
+   "cause": "Allow selection of for select; verb buried"
+  },
+  {
+   "i": 291381,
+   "label": "w",
+   "present": true,
+   "cause": "Imperative with plain coordinated objects"
+  }
+ ]
+}

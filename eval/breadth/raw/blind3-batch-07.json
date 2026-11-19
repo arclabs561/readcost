@@ -1,0 +1,204 @@
+{
+ "labels": [
+  {
+   "i": 662490,
+   "label": "c",
+   "cause": "overlong subject list, dangling or add one"
+  },
+  {
+   "i": 984112,
+   "label": "w",
+   "cause": "clear explanation"
+  },
+  {
+   "i": 167684,
+   "label": "c",
+   "cause": "unclear It antecedent, long clause chain"
+  },
+  {
+   "i": 193466,
+   "label": "w",
+   "cause": "clear doc sentence"
+  },
+  {
+   "i": 107638,
+   "label": "w",
+   "cause": "clear commit subject"
+  },
+  {
+   "i": 291493,
+   "label": "w",
+   "cause": "clear commit description"
+  },
+  {
+   "i": 358243,
+   "label": "w",
+   "cause": "clear rationale"
+  },
+  {
+   "i": 313194,
+   "label": "w",
+   "cause": "clear history note"
+  },
+  {
+   "i": 210086,
+   "label": "d",
+   "cause": "stranded preposition, dense phrasing"
+  },
+  {
+   "i": 706360,
+   "label": "d",
+   "cause": "dense run of test descriptions"
+  },
+  {
+   "i": 959772,
+   "label": "w",
+   "cause": "clear description"
+  },
+  {
+   "i": 980779,
+   "label": "w",
+   "cause": "clear commit summary"
+  },
+  {
+   "i": 100978,
+   "label": "w",
+   "cause": "clear statement"
+  },
+  {
+   "i": 749460,
+   "label": "w",
+   "cause": "clear generated comment"
+  },
+  {
+   "i": 911250,
+   "label": "d",
+   "cause": "long dashed aside inside clause chain"
+  },
+  {
+   "i": 650668,
+   "label": "w",
+   "cause": "clear lead-in"
+  },
+  {
+   "i": 313406,
+   "label": "w",
+   "cause": "clear description"
+  },
+  {
+   "i": 234754,
+   "label": "d",
+   "cause": "reduced relative clause, slightly hard"
+  },
+  {
+   "i": 221161,
+   "label": "w",
+   "cause": "clear scope statement"
+  },
+  {
+   "i": 768685,
+   "label": "w",
+   "cause": "clear, comment wrap marker only"
+  },
+  {
+   "i": 261336,
+   "label": "w",
+   "cause": "clear checklist lead-in"
+  },
+  {
+   "i": 616321,
+   "label": "d",
+   "cause": "vague unfinished-feeling may be set"
+  },
+  {
+   "i": 847698,
+   "label": "w",
+   "cause": "clear behavior statement"
+  },
+  {
+   "i": 404274,
+   "label": "d",
+   "cause": "pronoun agreement with directory"
+  },
+  {
+   "i": 258760,
+   "label": "w",
+   "cause": "clear doc comment"
+  },
+  {
+   "i": 483490,
+   "label": "w",
+   "cause": "clear comment"
+  },
+  {
+   "i": 109202,
+   "label": "w",
+   "cause": "clear behavior statement"
+  },
+  {
+   "i": 942984,
+   "label": "w",
+   "cause": "clear, scope of accessible is fine"
+  },
+  {
+   "i": 410453,
+   "label": "c",
+   "cause": "garden-path reduced relative, hard to parse"
+  },
+  {
+   "i": 198843,
+   "label": "w",
+   "cause": "clear feature list"
+  },
+  {
+   "i": 199954,
+   "label": "w",
+   "cause": "clear commit summary"
+  },
+  {
+   "i": 395917,
+   "label": "w",
+   "cause": "clear optimization note"
+  },
+  {
+   "i": 902709,
+   "label": "w",
+   "cause": "clear list lead-in"
+  },
+  {
+   "i": 174070,
+   "label": "w",
+   "cause": "clear script description"
+  },
+  {
+   "i": 434707,
+   "label": "w",
+   "cause": "clear documentation sentence"
+  },
+  {
+   "i": 343163,
+   "label": "w",
+   "cause": "clear pointer to analogous step"
+  },
+  {
+   "i": 163513,
+   "label": "w",
+   "cause": "clear heading"
+  },
+  {
+   "i": 555090,
+   "label": "w",
+   "cause": "clear list of flushes"
+  },
+  {
+   "i": 636583,
+   "label": "w",
+   "cause": "clear limitation statement"
+  },
+  {
+   "i": 893397,
+   "label": "w",
+   "cause": "Clear and complete"
+  }
+ ]
+}

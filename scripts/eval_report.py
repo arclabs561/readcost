@@ -52,7 +52,7 @@ def load_run(run: Path) -> tuple[list[dict], list[dict]]:
 
 def load_labels() -> dict[str, dict[str, str]]:
     return {p.stem: {k: v["label"] for k, v in json.loads(p.read_text())["labels"].items()}
-            for p in sorted(LABELS.glob("*.json"))}
+            for p in sorted(LABELS.glob("*.json")) if p.name != "raters.json"}  # raters.json: the manifest
 
 
 def pct(xs: list[float], p: float) -> float:
