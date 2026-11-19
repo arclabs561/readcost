@@ -69,8 +69,10 @@ JUDGE_SCHEMA = {"type": "object", "properties": {
 def feedback(result, style: str) -> str:
     text = report.agent([result], feedback_link=False)
     if style == "plain":
-        text = text.replace("Rewrite these sentences where the finding holds", "Rewrite these sentences")
-        text = re.sub(r" \(raters accepted \d+ of \d+ such findings\)", "", text)
+        # The same findings, stated as instructions: no question, no hedge, no measured share.
+        text = re.sub(r" that may be hard to follow\. These are questions.*?leave the rest\.",
+                      ". Rewrite these sentences.", text, count=1)
+        text = re.sub(r" Is it hard to follow here\?( Raters said .*? more optional\.)? If it is, ", " Fix: ", text)
     return text
 
 

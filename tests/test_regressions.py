@@ -6,6 +6,7 @@ Each test names the defect it pins. They exercise the public entry points
 
 import json
 import subprocess
+from pathlib import Path
 
 import pytest
 
@@ -545,3 +546,155 @@ def test_inline_list_is_off_in_doc_comments_unless_asked_for():
     assert "inline-list" in rules(Config(rules={"inline-list": "info"}), py, None, "a.py")
     assert "inline-list" in rules(Config(overrides=[{"include": ["*.py"], "rules": {"inline-list": "warn"}}]),
                                   py, None, "a.py")
+
+
+# An inline footnote, "^[text]", becomes a paragraph with no line map at the end
+# of markdown-it's tokens, and readcost 0.3.0 raised TypeError on it. A regex
+# such as ^[a-z] in a doc comment parses as one. The fixtures are made up and
+# have the shapes of the three files the kinds-precision draw dropped.
+
+def footnote_body(segs, words):
+    return next(s for s in segs if s.text == words)
+
+
+def test_inline_footnote_is_read_on_the_line_that_holds_it():
+    from readcost.extract import extract
+
+    src = ("# Names\n\nThe first line of this paragraph is plain.\n"
+           "Names must match ^[a lowercase letter and then more letters] or the\n"
+           "service rejects them at once.\n")
+    segs = extract(src, "names.md")
+    assert segs[0].text == "The first line of this paragraph is plain. Names must match or the service rejects them at once."
+    assert segs[0].span(segs[0].text.index("or the"), segs[0].text.index("or the") + 6) == \
+        (src.index("or the"), src.index("or the") + 6)
+    note = footnote_body(segs, "a lowercase letter and then more letters")
+    assert note.line_at(0) == 4
+    assert note.span(0, len(note.text)) == (src.index("a lowercase"), src.index("letters]") + 7)
+
+
+@pytest.mark.parametrize("src,line", [
+    ("- One item.\n- Another item, with a note ^[the note here has five words] in it.\n", 2),
+    ("> A quote.\n>\n> The second paragraph ^[the note here has five words] goes on.\n", 3),
+    ("# A heading ^[the note here has five words]\n\nSome text follows the heading here.\n", 1),
+    ("| a | b |\n|---|---|\n| x | cell ^[the note here has five words] |\n", 3),
+    ("Outer ^[the note here has five words ^[and an inner note in it]] text.\n", 1),
+])
+def test_inline_footnote_in_any_container_gets_a_line(src, line):
+    from readcost.extract import extract
+
+    segs = extract(src, "x.md")
+    assert any(s.text.startswith("the note here has five words") and s.line_at(0) == line for s in segs)
+
+
+@pytest.mark.parametrize("path,src,line", [
+    ("castprefix.py", ('def tamper(value):\n    """Put a cast before the value.\n\n'
+                       "    The rule is anchored with '^[a word or a digit]+', so it only sees a keyword\n"
+                       '    at the start of the value.\n    """\n    return value\n'), 4),
+    ("space_pb.ts", ("/**\n * The slug of the space must match\n"
+                     " * ^[a lowercase letter or digit]([a-z0-9-]{0,34}[a-z0-9])?$.\n */\nexport const slug = 1;\n"), 3),
+])
+def test_inline_footnote_in_a_doc_comment(path, src, line):
+    from readcost.extract import extract
+
+    segs = extract(src, path)
+    note = next(s for s in segs if s.text.startswith("a "))
+    assert note.line_at(0) == line
+
+
+def test_extraction_error_is_a_note_on_that_file_and_the_run_goes_on(tmp_path, monkeypatch):
+    import readcost.engine
+
+    real = readcost.engine.extract
+
+    def extract(text, path, *a, **kw):
+        if path.endswith("bad.md"):
+            raise TypeError("'NoneType' object is not subscriptable")
+        return real(text, path, *a, **kw)
+
+    monkeypatch.setattr(readcost.engine, "extract", extract)
+    (tmp_path / "bad.md").write_text(PLAIN)
+    (tmp_path / "good.md").write_text(DENSE)
+    r = run_cli(["check", "-o", "json", "bad.md", "good.md"], cwd=tmp_path)
+    data = {Path(d["path"]).name: d for d in json.loads(r.stdout)}
+    assert "Traceback" not in r.stderr and "internal error" not in r.stderr
+    assert data["bad.md"]["words"] == 0 and "TypeError" in data["bad.md"]["notes"][0]
+    assert data["good.md"]["verdict"] == "block"
+    assert "bad.md: not checked: TypeError" in r.stderr
+    assert r.returncode == 2  # a file readcost could not check is not a pass
+
+
+def test_other_error_on_one_file_is_reported_and_the_rest_are_checked(tmp_path, monkeypatch):
+    real = Analyzer.analyze
+
+    def analyze(self, segments, path, *a, **kw):
+        if path.endswith("bad.md"):
+            raise KeyError("boom")
+        return real(self, segments, path, *a, **kw)
+
+    monkeypatch.setattr(Analyzer, "analyze", analyze)
+    (tmp_path / "bad.md").write_text(PLAIN)
+    (tmp_path / "good.md").write_text(DENSE)
+    r = run_cli(["check", "-o", "json", "bad.md", "good.md"], cwd=tmp_path)
+    assert "bad.md: internal error: KeyError" in r.stderr
+    assert [Path(d["path"]).name for d in json.loads(r.stdout)] == ["good.md"]
+    assert r.returncode == 2
+
+
+# The sentence around an inline footnote is still checked: with and without
+# "^[a-z] " it gives the same finding on the same line, at the column where its
+# words are in each source (the same column when the footnote comes after them).
+
+FN = "^[a-z] "
+STACK = "cache invalidation request handler"
+
+
+def stacks(src, fmt, path):
+    r = Analyzer(Config()).check_text(src, fmt, path)
+    return [(f.feature, f.line, f.column) for f in r.findings if f.feature == "stacked-nouns"]
+
+
+def column_of(src, needle):
+    line = next(i for i, text in enumerate(src.split("\n"), 1) if needle in text)
+    return line, src.split("\n")[line - 1].index(needle) + 1
+
+
+@pytest.mark.parametrize("fmt,path,template", [
+    ("markdown", "a.md", "# Names\n\nThe {STACK} checks names against {FN}before it stores them.\n"),
+    ("markdown", "a.md", "# Names\n\nNames that match the pattern {FN}go to the {STACK} first.\n"),
+    ("markdown", "a.md", "# Names\n\n{FN}names go to the {STACK} before it stores them.\n"),
+    ("markdown", "a.md", "# Names\n\n- A first item.\n- Names that match {FN}go to the {STACK} first.\n"),
+    ("markdown", "a.md", "> A quote.\n>\n> Names that match {FN}go to the {STACK} first.\n"),
+    ("markdown", "a.md", "Names that match {FN}go to the {STACK} first.[^1]\n\n[^1]: A note on the names.\n"),
+    (None, "a.py", 'def f():\n    """Store a name.\n\n    Names that match {FN}go to the {STACK} first.\n    """\n'),
+    ("commit", "COMMIT_EDITMSG", "Check names before the write\n\nNames that match {FN}go to the {STACK} first.\n"),
+])
+def test_sentence_around_an_inline_footnote_is_still_checked(fmt, path, template):
+    with_fn = template.format(FN=FN, STACK=STACK)
+    without = template.format(FN="", STACK=STACK)
+    assert stacks(with_fn, fmt, path) == [("stacked-nouns", *column_of(with_fn, STACK))]
+    assert stacks(without, fmt, path) == [("stacked-nouns", *column_of(without, STACK))]
+    if with_fn.index(STACK) < with_fn.index(FN):
+        assert stacks(with_fn, fmt, path) == stacks(without, fmt, path)
+
+
+@pytest.mark.parametrize("template", [
+    "# Names {FN}in a heading\n\nThe {STACK} checks every name first.\n",
+    "| a | b |\n|---|---|\n| x | names {FN}here |\n\nThe {STACK} checks every name first.\n",
+])
+def test_footnote_in_a_heading_or_table_cell_leaves_the_next_paragraph_checked(template):
+    # Headings and table cells are not prose either way; the paragraph after them is.
+    with_fn = template.format(FN=FN, STACK=STACK)
+    without = template.format(FN="", STACK=STACK)
+    assert stacks(with_fn, "markdown", "a.md") == stacks(without, "markdown", "a.md") == \
+        [("stacked-nouns", *column_of(with_fn, STACK))]
+
+
+def test_verbless_sentence_reads_the_same_with_and_without_an_inline_footnote():
+    # spaCy tags "Match" and "retries" as nouns, so this sentence has no verb and
+    # readcost skips it as a fragment, with or without the footnote.
+    a = Analyzer(Config())
+    src = "Match names with the pattern {}and the cache invalidation request handler retries.\n\nNext paragraph.\n"
+    with_fn, without = (a.check_text(src.format(fn), "markdown", "fn.md") for fn in (FN, ""))
+    assert [(f.feature, f.line, f.column) for f in with_fn.findings] == \
+        [(f.feature, f.line, f.column) for f in without.findings]
+    assert (with_fn.words, with_fn.sentences) == (without.words, without.sentences)

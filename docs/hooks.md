@@ -228,12 +228,89 @@ Inputs:
 - `fail-on`: `never`, `advise` or `block` (default `block`).
 - `comment`: `"true"` to post the summary comment (default `"false"`).
 - `changed-only`: on a pull request, check only changed files (default `"true"`).
+- `check-pr-text`: `"true"` to also check the pull request title and
+  description, `"only"` to check them and no files (default `"false"`).
+- `pr-text-fail-on`: the verdict of the pull request text that fails the job:
+  `never`, `advise` or `block` (default `never`).
+- `pr-text-min-words`: skip pull request text with fewer words of prose
+  than this (default `"30"`).
 
 Without `fetch-depth: 0` the action fetches the base commit itself and
 compares it with the checked-out commit; that list can include files that
 changed on the base branch after the pull request was opened. A pull request
 from a fork gets a read-only token, so the comment fails with a warning and the
 annotations still appear.
+
+#### Pull request descriptions
+
+With `check-pr-text: "true"`, on `pull_request` and `pull_request_target`
+events, the action also checks the pull request's title as plain text and
+its description as Markdown. It skips code, link targets and HTML
+comments, which hold the instructions of a pull request template. Text with fewer than
+`pr-text-min-words` words of prose, title and description together, is
+skipped: "Fixes #12" has no reading cost to report. The minimum of 30 was
+chosen, not measured.
+
+Findings appear in the summary comment and as annotations, located by the
+text and the line within it: "pull request description, line 4". These
+annotations name no file, so GitHub lists them on the run's summary page,
+not beside the diff.
+
+The pull request text is advisory: it never fails the job unless
+`pr-text-fail-on` is `advise` or `block`. `fail-on` applies only to files.
+In the held-out test across formats (evaluation, "Precision across
+formats"), findings in pull request descriptions fared about as well as
+findings in Markdown docs, and in every format raters said few of them
+needed an editor's fix, so failing a pull request on its description would mostly block
+good ones.
+
+Add `edited` to the event types so that a changed description is checked
+again:
+
+```yaml
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+```
+
+The description comes from whoever opened the pull request. readcost reads
+it from the event file (`GITHUB_EVENT_PATH`) and only analyses it; no step
+puts it in a shell command or an expression. Do the same in your own steps:
+never write `${{ github.event.pull_request.body }}` in a `run:` script.
+
+A pull request from a fork gets a read-only token under `pull_request`, so
+the comment cannot be posted. `pull_request_target` runs with a write
+token in the base repository. There, use `check-pr-text: "only"` and no
+checkout step: the job then reads only the event file, and no code or
+configuration from the pull request runs with that token.
+
+```yaml
+name: readcost description
+on:
+  pull_request_target:
+    types: [opened, edited, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  description:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: arclabs561/readcost@main   # pin a commit SHA in real use
+        with:
+          check-pr-text: only
+          comment: "true"
+```
+
+Never check out the pull request's head (`ref: ${{ github.event.pull_request.head.sha }}`)
+in a `pull_request_target` job. The comment carries one marker, so turn on
+`comment` in one job only; two jobs that both post it would overwrite each
+other. The action edits only a comment that `github-actions[bot]` posted.
+
+From the command line, `readcost check --pr-text EVENT_FILE` does the same
+with any event file; with no paths it checks only the pull request text.
+Issue bodies are not checked.
 
 For code scanning, run `readcost check . -o sarif --fail-on never > readcost.sarif`
 and upload the file with `github/codeql-action/upload-sarif`. Each result's
@@ -257,7 +334,7 @@ environment error (a missing spaCy model, an unreadable file or config) exits
 ```json
 {"verdict": "advise", "cost_index": 21.4, "words": 233, "points": 5.0,
  "counts": {"stacked-nouns": 3, "inline-list": 2},
- "feedback": "readcost: 5 hard-to-read constructions in 233 words. ...",
+ "feedback": "readcost: 5 sentences in 233 words that may be hard to follow. ...",
  "findings": [{"feature": "stacked-nouns", "severity": "warn", "line": 3, "...": "..."}]}
 ```
 

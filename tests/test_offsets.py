@@ -52,7 +52,7 @@ INLINE = [
     lambda w: f"[{w} docs](<https://example.com/a b> \"the {w} title\")", lambda w: f"[{w}][ref]",
     lambda w: f"![{w} picture](img/{w}.png)", lambda w: f"<https://example.com/{w}>",
     lambda w: f"{w} &amp; {w}", lambda w: f"{w}&nbsp;&mdash; {w}", lambda w: f"\\*{w}\\*",
-    lambda w: f"<b>{w}</b>", lambda w: f"{w}[^1]", lambda w: f"https://example.com/{w}.",
+    lambda w: f"<b>{w}</b>", lambda w: f"{w}[^1]", lambda w: f"{w}^[a note on {w} here]", lambda w: f"https://example.com/{w}.",
     lambda w: f"src/{w}.py", lambda w: f"#12 and {w}", lambda w: f"***{w}***", lambda w: f"$x_{w}$",
     lambda w: f"[**{w}** and `{w}`](https://example.com/q?{w}=1)", lambda w: f"({w})", lambda w: f"“{w}”",
 ]
