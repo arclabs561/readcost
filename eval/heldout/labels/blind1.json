@@ -1,0 +1,2987 @@
+[
+ {
+  "id": 240193,
+  "label": "w",
+  "cause": "clear participial clause"
+ },
+ {
+  "id": 466381,
+  "label": "d",
+  "cause": "dense; 'read as tilt' briefly ambiguous"
+ },
+ {
+  "id": 271379,
+  "label": "w",
+  "cause": "plain clause"
+ },
+ {
+  "id": 813635,
+  "label": "w",
+  "cause": "plain noun phrase"
+ },
+ {
+  "id": 157644,
+  "label": "w",
+  "cause": "quoted question as modifier, readable"
+ },
+ {
+  "id": 555674,
+  "label": "d",
+  "cause": "vague nominalized list"
+ },
+ {
+  "id": 984258,
+  "label": "w",
+  "cause": "list readable in context"
+ },
+ {
+  "id": 516659,
+  "label": "d",
+  "cause": "long sentence with inserted aside"
+ },
+ {
+  "id": 301611,
+  "label": "w",
+  "cause": "simple list"
+ },
+ {
+  "id": 459516,
+  "label": "w",
+  "cause": "feature list fragment, fine"
+ },
+ {
+  "id": 351514,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 988028,
+  "label": "d",
+  "cause": "'the answers' referent unclear"
+ },
+ {
+  "id": 516414,
+  "label": "d",
+  "cause": "long subject before 'is'"
+ },
+ {
+  "id": 928150,
+  "label": "c",
+  "cause": "stacked possessive noun phrase"
+ },
+ {
+  "id": 826692,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 892013,
+  "label": "w",
+  "cause": "conventional participial clause"
+ },
+ {
+  "id": 352385,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 307642,
+  "label": "d",
+  "cause": "unformatted menu name in parenthesis"
+ },
+ {
+  "id": 378352,
+  "label": "w",
+  "cause": "clear passive"
+ },
+ {
+  "id": 500729,
+  "label": "c",
+  "cause": "nested parentheticals in huge sentence"
+ },
+ {
+  "id": 284877,
+  "label": "w",
+  "cause": "plain term"
+ },
+ {
+  "id": 537636,
+  "label": "d",
+  "cause": "nested comma list in parenthesis"
+ },
+ {
+  "id": 385526,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 532638,
+  "label": "w",
+  "cause": "long but orderly list"
+ },
+ {
+  "id": 311581,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 518460,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 137950,
+  "label": "c",
+  "cause": "center-embedded relative clause before list"
+ },
+ {
+  "id": 690323,
+  "label": "d",
+  "cause": "terse notation in very long list"
+ },
+ {
+  "id": 928059,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 423840,
+  "label": "d",
+  "cause": "cryptic shorthand description"
+ },
+ {
+  "id": 839933,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 397019,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 999589,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 522079,
+  "label": "d",
+  "cause": "long modifier pile"
+ },
+ {
+  "id": 646368,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 532297,
+  "label": "d",
+  "cause": "comma-joined clauses, verb lists"
+ },
+ {
+  "id": 997364,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 619115,
+  "label": "c",
+  "cause": "comma splice; 'keep up' vague"
+ },
+ {
+  "id": 244463,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 644179,
+  "label": "c",
+  "cause": "garden path: 'log records' noun compound"
+ },
+ {
+  "id": 318750,
+  "label": "c",
+  "cause": "vague 'the two'; long reduced clause"
+ },
+ {
+  "id": 881177,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 173271,
+  "label": "c",
+  "cause": "garbled absolute phrases"
+ },
+ {
+  "id": 699965,
+  "label": "c",
+  "cause": "overloaded sentence, nested parentheses"
+ },
+ {
+  "id": 490450,
+  "label": "w",
+  "cause": "plain list"
+ },
+ {
+  "id": 749475,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 116913,
+  "label": "w",
+  "cause": "terse but conventional notation"
+ },
+ {
+  "id": 288698,
+  "label": "d",
+  "cause": "'come on' vague; repeated name"
+ },
+ {
+  "id": 194384,
+  "label": "w",
+  "cause": "readable"
+ },
+ {
+  "id": 213842,
+  "label": "w",
+  "cause": "readable participial clause"
+ },
+ {
+  "id": 511198,
+  "label": "d",
+  "cause": "arrow shorthand in dense sentence"
+ },
+ {
+  "id": 335277,
+  "label": "w",
+  "cause": "domain jargon, fine for readers"
+ },
+ {
+  "id": 249634,
+  "label": "w",
+  "cause": "readable list item"
+ },
+ {
+  "id": 583015,
+  "label": "w",
+  "cause": "standard notation list"
+ },
+ {
+  "id": 971398,
+  "label": "w",
+  "cause": "simple list"
+ },
+ {
+  "id": 408871,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 509152,
+  "label": "d",
+  "cause": "two sent.json mentions confuse"
+ },
+ {
+  "id": 477095,
+  "label": "w",
+  "cause": "jargon with clear role"
+ },
+ {
+  "id": 875055,
+  "label": "w",
+  "cause": "long but parallel"
+ },
+ {
+  "id": 520575,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 824755,
+  "label": "d",
+  "cause": "'in one batch' attachment ambiguous"
+ },
+ {
+  "id": 695941,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 784647,
+  "label": "c",
+  "cause": "jargon pile, stacked modifiers"
+ },
+ {
+  "id": 117356,
+  "label": "w",
+  "cause": "name in list"
+ },
+ {
+  "id": 438492,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 878418,
+  "label": "d",
+  "cause": "dense fragment, many parameters"
+ },
+ {
+  "id": 985199,
+  "label": "w",
+  "cause": "technical terms, fine"
+ },
+ {
+  "id": 942930,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 288645,
+  "label": "w",
+  "cause": "marked phrase fine"
+ },
+ {
+  "id": 230133,
+  "label": "w",
+  "cause": "flow notation fine"
+ },
+ {
+  "id": 483567,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 829169,
+  "label": "d",
+  "cause": "data dump better as table"
+ },
+ {
+  "id": 123770,
+  "label": "w",
+  "cause": "parallel list, readable"
+ },
+ {
+  "id": 282651,
+  "label": "c",
+  "cause": "long subject with nested comparison"
+ },
+ {
+  "id": 572770,
+  "label": "d",
+  "cause": "terse slash shorthand"
+ },
+ {
+  "id": 597418,
+  "label": "d",
+  "cause": "long semicolon chain"
+ },
+ {
+  "id": 697485,
+  "label": "w",
+  "cause": "clear in context"
+ },
+ {
+  "id": 866800,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 334207,
+  "label": "w",
+  "cause": "readable"
+ },
+ {
+  "id": 611094,
+  "label": "d",
+  "cause": "cryptic parenthetical list"
+ },
+ {
+  "id": 538399,
+  "label": "d",
+  "cause": "telegraphic fragment without verbs"
+ },
+ {
+  "id": 478927,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 614544,
+  "label": "d",
+  "cause": "elliptical 'the square's'"
+ },
+ {
+  "id": 470209,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 503600,
+  "label": "w",
+  "cause": "orderly list"
+ },
+ {
+  "id": 597002,
+  "label": "w",
+  "cause": "plain phrase"
+ },
+ {
+  "id": 380173,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 329773,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 325214,
+  "label": "c",
+  "cause": "cryptic offsets in nested parenthesis"
+ },
+ {
+  "id": 488807,
+  "label": "w",
+  "cause": "label fine"
+ },
+ {
+  "id": 370508,
+  "label": "d",
+  "cause": "long compound subject"
+ },
+ {
+  "id": 311131,
+  "label": "w",
+  "cause": "terse list, readable"
+ },
+ {
+  "id": 577190,
+  "label": "d",
+  "cause": "'ours' referent unclear"
+ },
+ {
+  "id": 560629,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 333944,
+  "label": "d",
+  "cause": "long, nested parenthetical"
+ },
+ {
+  "id": 961467,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 914268,
+  "label": "c",
+  "cause": "garden path, missing commas"
+ },
+ {
+  "id": 461961,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 605328,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 596157,
+  "label": "w",
+  "cause": "domain term"
+ },
+ {
+  "id": 704065,
+  "label": "c",
+  "cause": "missing 'of' twice"
+ },
+ {
+  "id": 699228,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 278963,
+  "label": "w",
+  "cause": "button list fine"
+ },
+ {
+  "id": 384280,
+  "label": "w",
+  "cause": "clear list"
+ },
+ {
+  "id": 710374,
+  "label": "w",
+  "cause": "understandable"
+ },
+ {
+  "id": 793256,
+  "label": "w",
+  "cause": "short noun compound, fine"
+ },
+ {
+  "id": 298691,
+  "label": "w",
+  "cause": "slogan, fine"
+ },
+ {
+  "id": 851503,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 921454,
+  "label": "c",
+  "cause": "'A B / BL to outside' confusing"
+ },
+ {
+  "id": 729449,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 430610,
+  "label": "w",
+  "cause": "parallel gerunds"
+ },
+ {
+  "id": 546753,
+  "label": "w",
+  "cause": "clear question"
+ },
+ {
+  "id": 608015,
+  "label": "w",
+  "cause": "roadmap list fine"
+ },
+ {
+  "id": 951446,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 591090,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 458054,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 294564,
+  "label": "d",
+  "cause": "buzzword-heavy list"
+ },
+ {
+  "id": 605269,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 804026,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 436414,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 946697,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 727646,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 672238,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 729058,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 997910,
+  "label": "c",
+  "cause": "enormous sentence, nested lists"
+ },
+ {
+  "id": 704851,
+  "label": "c",
+  "cause": "heavy subject, inverted clause"
+ },
+ {
+  "id": 763460,
+  "label": "c",
+  "cause": "elliptical 'sent without'; cramped aside"
+ },
+ {
+  "id": 863670,
+  "label": "w",
+  "cause": "plain list"
+ },
+ {
+  "id": 234382,
+  "label": "d",
+  "cause": "component names read as plain words"
+ },
+ {
+  "id": 326731,
+  "label": "w",
+  "cause": "standard legal boilerplate"
+ },
+ {
+  "id": 945042,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 366995,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 451960,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 440724,
+  "label": "w",
+  "cause": "clear list"
+ },
+ {
+  "id": 755910,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 347785,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 695195,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 135405,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 183712,
+  "label": "c",
+  "cause": "dangling opener, confusing appositive"
+ },
+ {
+  "id": 559064,
+  "label": "w",
+  "cause": "well-formed interruption"
+ },
+ {
+  "id": 340672,
+  "label": "d",
+  "cause": "dense parenthetical"
+ },
+ {
+  "id": 267688,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 768847,
+  "label": "d",
+  "cause": "terse noun stack"
+ },
+ {
+  "id": 580776,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 840313,
+  "label": "w",
+  "cause": "clear list"
+ },
+ {
+  "id": 408662,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 132445,
+  "label": "d",
+  "cause": "'caliber' unclear word choice"
+ },
+ {
+  "id": 856187,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 504060,
+  "label": "w",
+  "cause": "conventional participial clause"
+ },
+ {
+  "id": 296254,
+  "label": "c",
+  "cause": "garden path: adjectives read as verbs"
+ },
+ {
+  "id": 567806,
+  "label": "d",
+  "cause": "unformatted button name mid-sentence"
+ },
+ {
+  "id": 390490,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 338760,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 536231,
+  "label": "d",
+  "cause": "abstract passive filler"
+ },
+ {
+  "id": 459857,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 679738,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 882044,
+  "label": "w",
+  "cause": "standard legal phrasing"
+ },
+ {
+  "id": 844924,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 518277,
+  "label": "d",
+  "cause": "vague qualifying phrase"
+ },
+ {
+  "id": 105167,
+  "label": "c",
+  "cause": "garden path object relative"
+ },
+ {
+  "id": 298903,
+  "label": "w",
+  "cause": "natural phrasing"
+ },
+ {
+  "id": 438387,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 394330,
+  "label": "c",
+  "cause": "'is the same' unclear; tangled clauses"
+ },
+ {
+  "id": 218796,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 284608,
+  "label": "c",
+  "cause": "dense rule names, awkward possessive"
+ },
+ {
+  "id": 597652,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 104189,
+  "label": "w",
+  "cause": "clear result clause"
+ },
+ {
+  "id": 616520,
+  "label": "w",
+  "cause": "clear list"
+ },
+ {
+  "id": 280566,
+  "label": "w",
+  "cause": "readable answer fragment"
+ },
+ {
+  "id": 695271,
+  "label": "w",
+  "cause": "clear examples"
+ },
+ {
+  "id": 849394,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 867106,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 695972,
+  "label": "w",
+  "cause": "well-formed explanation"
+ },
+ {
+  "id": 156812,
+  "label": "c",
+  "cause": "cramped parenthetical with semicolons"
+ },
+ {
+  "id": 954207,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 491715,
+  "label": "d",
+  "cause": "repeated 'pixels', stacked modifiers"
+ },
+ {
+  "id": 544683,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 851018,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 667207,
+  "label": "d",
+  "cause": "formula in prose hard to parse"
+ },
+ {
+  "id": 223366,
+  "label": "w",
+  "cause": "marked phrase clear"
+ },
+ {
+  "id": 453062,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 789966,
+  "label": "w",
+  "cause": "domain jargon, fine"
+ },
+ {
+  "id": 588584,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 496743,
+  "label": "w",
+  "cause": "gapping, readable"
+ },
+ {
+  "id": 281647,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 664719,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 844598,
+  "label": "w",
+  "cause": "long but structured"
+ },
+ {
+  "id": 916765,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 433852,
+  "label": "d",
+  "cause": "fragment with dangling 'while'"
+ },
+ {
+  "id": 282595,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 865069,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 404601,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 792803,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 449674,
+  "label": "d",
+  "cause": "unformatted names make 'draws with' odd"
+ },
+ {
+  "id": 978602,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 335883,
+  "label": "c",
+  "cause": "garbled machine translation"
+ },
+ {
+  "id": 756744,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 372602,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 681158,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 851063,
+  "label": "w",
+  "cause": "readable fragment"
+ },
+ {
+  "id": 312327,
+  "label": "w",
+  "cause": "clear dash list"
+ },
+ {
+  "id": 488009,
+  "label": "d",
+  "cause": "cluttered parenthetical, comma splice"
+ },
+ {
+  "id": 504419,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 151336,
+  "label": "w",
+  "cause": "standard legal phrasing"
+ },
+ {
+  "id": 487453,
+  "label": "d",
+  "cause": "trailing 'or nothing' unclear"
+ },
+ {
+  "id": 569475,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 751424,
+  "label": "w",
+  "cause": "terse notes, readable"
+ },
+ {
+  "id": 936383,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 852724,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 692024,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 438200,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 609063,
+  "label": "d",
+  "cause": "ambiguous modifier stack in list"
+ },
+ {
+  "id": 135464,
+  "label": "d",
+  "cause": "mixed list subject; odd 'at most'"
+ },
+ {
+  "id": 793510,
+  "label": "c",
+  "cause": "odd word order, cryptic aside"
+ },
+ {
+  "id": 153949,
+  "label": "d",
+  "cause": "'while the corner says so' cryptic"
+ },
+ {
+  "id": 957895,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 522326,
+  "label": "c",
+  "cause": "dangling opener, redundant restatement"
+ },
+ {
+  "id": 190162,
+  "label": "d",
+  "cause": "shifting subjects in one sentence"
+ },
+ {
+  "id": 883634,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 196039,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 887993,
+  "label": "c",
+  "cause": "convoluted qualifiers"
+ },
+ {
+  "id": 997283,
+  "label": "w",
+  "cause": "readable noun phrase"
+ },
+ {
+  "id": 526311,
+  "label": "w",
+  "cause": "domain jargon"
+ },
+ {
+  "id": 842705,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 242809,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 946537,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 324813,
+  "label": "w",
+  "cause": "clear legal list"
+ },
+ {
+  "id": 928995,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 544056,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 933799,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 963114,
+  "label": "w",
+  "cause": "readable"
+ },
+ {
+  "id": 750037,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 841014,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 303960,
+  "label": "d",
+  "cause": "ambiguous 'it' twice"
+ },
+ {
+  "id": 299937,
+  "label": "d",
+  "cause": "ambiguous 'which' and 'it'"
+ },
+ {
+  "id": 106214,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 698360,
+  "label": "w",
+  "cause": "roadmap fragment fine"
+ },
+ {
+  "id": 920546,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 616876,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 725998,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 520712,
+  "label": "c",
+  "cause": "gapped clause with hidden relative"
+ },
+ {
+  "id": 606861,
+  "label": "c",
+  "cause": "ambiguous appositive negation"
+ },
+ {
+  "id": 222777,
+  "label": "w",
+  "cause": "simple item list"
+ },
+ {
+  "id": 161211,
+  "label": "c",
+  "cause": "missing comma: 'binds the horizon'"
+ },
+ {
+  "id": 588590,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 943181,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 873784,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 771026,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 163927,
+  "label": "w",
+  "cause": "readable"
+ },
+ {
+  "id": 274542,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 223141,
+  "label": "d",
+  "cause": "terse 'reads run now' phrasing"
+ },
+ {
+  "id": 808335,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 240915,
+  "label": "d",
+  "cause": "misplaced 'in a single install script'"
+ },
+ {
+  "id": 537100,
+  "label": "w",
+  "cause": "feature fragment fine"
+ },
+ {
+  "id": 474422,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 463667,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 640775,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 221614,
+  "label": "d",
+  "cause": "nested quote and parentheses"
+ },
+ {
+  "id": 920225,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 627979,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 348041,
+  "label": "w",
+  "cause": "terse status, readable"
+ },
+ {
+  "id": 292923,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 959648,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 699550,
+  "label": "d",
+  "cause": "very long list with asides"
+ },
+ {
+  "id": 922264,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 617387,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 528335,
+  "label": "c",
+  "cause": "'answer of a prompt'; overloaded"
+ },
+ {
+  "id": 511463,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 404789,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 982403,
+  "label": "c",
+  "cause": "missing articles, garbled"
+ },
+ {
+  "id": 938332,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 860053,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 512717,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 815043,
+  "label": "d",
+  "cause": "whole procedure in one sentence"
+ },
+ {
+  "id": 887013,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 718715,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 477730,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 230402,
+  "label": "w",
+  "cause": "parallel subject, readable"
+ },
+ {
+  "id": 552614,
+  "label": "d",
+  "cause": "keyword-stuffed noun stack"
+ },
+ {
+  "id": 280518,
+  "label": "d",
+  "cause": "cryptic 'the wake owns it'"
+ },
+ {
+  "id": 493073,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 848651,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 689966,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 225377,
+  "label": "w",
+  "cause": "readable list"
+ },
+ {
+  "id": 990399,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 272813,
+  "label": "d",
+  "cause": "missing 'to' later in sentence"
+ },
+ {
+  "id": 196621,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 413772,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 216619,
+  "label": "w",
+  "cause": "clear parallel clauses"
+ },
+ {
+  "id": 185382,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 813045,
+  "label": "d",
+  "cause": "long; 'without it' referent distant"
+ },
+ {
+  "id": 854258,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 626120,
+  "label": "w",
+  "cause": "feature list readable"
+ },
+ {
+  "id": 244534,
+  "label": "w",
+  "cause": "quoted example"
+ },
+ {
+  "id": 970528,
+  "label": "d",
+  "cause": "'it' after 'every camera' mismatch"
+ },
+ {
+  "id": 840841,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 971534,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 336105,
+  "label": "w",
+  "cause": "clear list"
+ },
+ {
+  "id": 503448,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 106362,
+  "label": "d",
+  "cause": "ambiguous 'which'"
+ },
+ {
+  "id": 885550,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 654663,
+  "label": "w",
+  "cause": "standard disclaimer"
+ },
+ {
+  "id": 115880,
+  "label": "d",
+  "cause": "product name reads as phrase"
+ },
+ {
+  "id": 449613,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 311223,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 404734,
+  "label": "c",
+  "cause": "enormous sentence, many nested clauses"
+ },
+ {
+  "id": 446552,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 936793,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 178419,
+  "label": "c",
+  "cause": "giant list with nested explanations"
+ },
+ {
+  "id": 387816,
+  "label": "w",
+  "cause": "domain noun phrase"
+ },
+ {
+  "id": 838247,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 837623,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 101314,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 494539,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 839260,
+  "label": "w",
+  "cause": "clear question"
+ },
+ {
+  "id": 317014,
+  "label": "d",
+  "cause": "unformatted prompt text in sentence"
+ },
+ {
+  "id": 665560,
+  "label": "w",
+  "cause": "long but orderly list"
+ },
+ {
+  "id": 219427,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 154010,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 637595,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 312539,
+  "label": "w",
+  "cause": "standard licence list"
+ },
+ {
+  "id": 877080,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 785706,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 954088,
+  "label": "w",
+  "cause": "clear with examples"
+ },
+ {
+  "id": 742235,
+  "label": "d",
+  "cause": "missing article before name"
+ },
+ {
+  "id": 132576,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 396427,
+  "label": "w",
+  "cause": "simple list"
+ },
+ {
+  "id": 344811,
+  "label": "d",
+  "cause": "long gerund subject"
+ },
+ {
+  "id": 696735,
+  "label": "d",
+  "cause": "fragment; dash link unclear"
+ },
+ {
+  "id": 164428,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 613373,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 803734,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 408090,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 639079,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 576421,
+  "label": "d",
+  "cause": "unclear noun stack"
+ },
+ {
+  "id": 920660,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 158476,
+  "label": "d",
+  "cause": "cryptic nested parenthetical"
+ },
+ {
+  "id": 840459,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 474382,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 216308,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 975795,
+  "label": "w",
+  "cause": "standard legal boilerplate"
+ },
+ {
+  "id": 986672,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 363299,
+  "label": "w",
+  "cause": "readable in context"
+ },
+ {
+  "id": 595792,
+  "label": "d",
+  "cause": "jargon-heavy, terse"
+ },
+ {
+  "id": 565431,
+  "label": "c",
+  "cause": "overlong with nested asides"
+ },
+ {
+  "id": 591557,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 195261,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 549615,
+  "label": "w",
+  "cause": "domain jargon, parallel"
+ },
+ {
+  "id": 752383,
+  "label": "d",
+  "cause": "'Clicking it refuses' odd subject"
+ },
+ {
+  "id": 846315,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 767404,
+  "label": "w",
+  "cause": "structured list"
+ },
+ {
+  "id": 723670,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 619280,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 946346,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 860699,
+  "label": "c",
+  "cause": "convoluted causative with relative"
+ },
+ {
+  "id": 748067,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 278498,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 529990,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 496003,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 334807,
+  "label": "d",
+  "cause": "elliptical 'a secondary'; mixed list"
+ },
+ {
+  "id": 414176,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 851791,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 169446,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 544120,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 727751,
+  "label": "w",
+  "cause": "readable examples"
+ },
+ {
+  "id": 118561,
+  "label": "c",
+  "cause": "comma splice, data crammed in prose"
+ },
+ {
+  "id": 714341,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 334720,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 901833,
+  "label": "c",
+  "cause": "stacked possessive noun phrase"
+ },
+ {
+  "id": 533839,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 318812,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 268660,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 898819,
+  "label": "d",
+  "cause": "dense fragment list"
+ },
+ {
+  "id": 695520,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 762270,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 458265,
+  "label": "w",
+  "cause": "standard disclaimer"
+ },
+ {
+  "id": 978511,
+  "label": "d",
+  "cause": "split relative clause"
+ },
+ {
+  "id": 448393,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 135528,
+  "label": "d",
+  "cause": "long, many stacked details"
+ },
+ {
+  "id": 854588,
+  "label": "d",
+  "cause": "elliptical 'tries' / 'don't'"
+ },
+ {
+  "id": 303224,
+  "label": "d",
+  "cause": "cryptic 'blind and with names'"
+ },
+ {
+  "id": 331429,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 241184,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 530973,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 662031,
+  "label": "d",
+  "cause": "odd 'at a level each'"
+ },
+ {
+  "id": 562765,
+  "label": "w",
+  "cause": "readable"
+ },
+ {
+  "id": 904324,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 930158,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 722309,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 533967,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 311067,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 634013,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 616501,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 732897,
+  "label": "d",
+  "cause": "'spam malicious' missing conjunction"
+ },
+ {
+  "id": 202148,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 976714,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 117986,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 473334,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 554054,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 522108,
+  "label": "w",
+  "cause": "standard disclaimer"
+ },
+ {
+  "id": 901605,
+  "label": "c",
+  "cause": "long noun stack, missing articles"
+ },
+ {
+  "id": 400359,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 159762,
+  "label": "c",
+  "cause": "convoluted instructions in one sentence"
+ },
+ {
+  "id": 898924,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 676489,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 334480,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 506474,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 294364,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 342938,
+  "label": "w",
+  "cause": "checklist list fine"
+ },
+ {
+  "id": 287391,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 316942,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 967266,
+  "label": "d",
+  "cause": "long subject with aside"
+ },
+ {
+  "id": 274367,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 344322,
+  "label": "d",
+  "cause": "unformatted mode names"
+ },
+ {
+  "id": 523755,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 981005,
+  "label": "w",
+  "cause": "list fragment fine"
+ },
+ {
+  "id": 457704,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 211751,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 853484,
+  "label": "w",
+  "cause": "long but clear"
+ },
+ {
+  "id": 213146,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 699581,
+  "label": "c",
+  "cause": "cryptic fragment, nested relatives"
+ },
+ {
+  "id": 895581,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 633278,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 383139,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 712604,
+  "label": "w",
+  "cause": "standard legal phrasing"
+ },
+ {
+  "id": 202931,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 744911,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 466806,
+  "label": "d",
+  "cause": "heading runs into description"
+ },
+ {
+  "id": 530209,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 346740,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 944128,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 932476,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 981714,
+  "label": "d",
+  "cause": "odd 'page offlines'; awkward ending"
+ },
+ {
+  "id": 375763,
+  "label": "c",
+  "cause": "overlong, nested parentheticals"
+ },
+ {
+  "id": 964160,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 551031,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 121934,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 608054,
+  "label": "w",
+  "cause": "domain jargon"
+ },
+ {
+  "id": 515597,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 435003,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 783412,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 750959,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 660039,
+  "label": "d",
+  "cause": "'is high blast radius' jargon"
+ },
+ {
+  "id": 471178,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 210343,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 208688,
+  "label": "d",
+  "cause": "nominal stack list"
+ },
+ {
+  "id": 667264,
+  "label": "w",
+  "cause": "terse but parallel with neighbours"
+ },
+ {
+  "id": 167856,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 822050,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 409151,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 979970,
+  "label": "c",
+  "cause": "overloaded sentence, long asides"
+ },
+ {
+  "id": 566339,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 389079,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 157727,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 787329,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 315556,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 852766,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 359199,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 444467,
+  "label": "d",
+  "cause": "keyword-stuffed tag string"
+ },
+ {
+  "id": 868293,
+  "label": "d",
+  "cause": "long instruction with many options"
+ },
+ {
+  "id": 723480,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 119424,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 526012,
+  "label": "c",
+  "cause": "missing words: 'mapped to'"
+ },
+ {
+  "id": 700153,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 927545,
+  "label": "w",
+  "cause": "terse notes, readable"
+ },
+ {
+  "id": 294840,
+  "label": "w",
+  "cause": "clear parallel verbs"
+ },
+ {
+  "id": 224710,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 447952,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 465376,
+  "label": "d",
+  "cause": "ambiguous coordination"
+ },
+ {
+  "id": 293900,
+  "label": "w",
+  "cause": "readable fragment"
+ },
+ {
+  "id": 449428,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 297086,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 476868,
+  "label": "c",
+  "cause": "huge inline list, duplicate entry"
+ },
+ {
+  "id": 285587,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 962613,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 969803,
+  "label": "d",
+  "cause": "dense modifier stack"
+ },
+ {
+  "id": 302451,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 291199,
+  "label": "d",
+  "cause": "long, trailing 'with' clause"
+ },
+ {
+  "id": 175209,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 513449,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 159872,
+  "label": "w",
+  "cause": "feature fragment fine"
+ },
+ {
+  "id": 943555,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 820166,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 603709,
+  "label": "d",
+  "cause": "odd compound 'upstream-read'"
+ },
+ {
+  "id": 307903,
+  "label": "w",
+  "cause": "button name as subject, formatted"
+ },
+ {
+  "id": 798939,
+  "label": "d",
+  "cause": "vague 'starts with it'"
+ },
+ {
+  "id": 890120,
+  "label": "c",
+  "cause": "very long, chained clauses"
+ },
+ {
+  "id": 705607,
+  "label": "d",
+  "cause": "terse changelog cramming"
+ },
+ {
+  "id": 222352,
+  "label": "w",
+  "cause": "punchy fragment"
+ },
+ {
+  "id": 524266,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 582647,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 528367,
+  "label": "d",
+  "cause": "jargon-dense list"
+ },
+ {
+  "id": 681791,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 753703,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 486287,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 895771,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 881805,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 444925,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 398183,
+  "label": "d",
+  "cause": "misplaced trailing modifier"
+ },
+ {
+  "id": 718588,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 532542,
+  "label": "w",
+  "cause": "clear ellipsis"
+ },
+ {
+  "id": 107162,
+  "label": "d",
+  "cause": "long with nested aside"
+ },
+ {
+  "id": 766617,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 609613,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 934203,
+  "label": "d",
+  "cause": "typo ',,' and odd 'want'"
+ },
+ {
+  "id": 778420,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 288214,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 111668,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 749917,
+  "label": "w",
+  "cause": "standard disclaimer"
+ },
+ {
+  "id": 538622,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 456145,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 620077,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 668494,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 248774,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 797842,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 244233,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 602177,
+  "label": "c",
+  "cause": "confusing subject, unclear meaning"
+ },
+ {
+  "id": 924626,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 465122,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 885705,
+  "label": "c",
+  "cause": "appositive with two 'with's confuses"
+ },
+ {
+  "id": 425700,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 221798,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 419396,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 899946,
+  "label": "w",
+  "cause": "credits fragment fine"
+ },
+ {
+  "id": 279081,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 400904,
+  "label": "d",
+  "cause": "long list with asides"
+ },
+ {
+  "id": 354173,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 904243,
+  "label": "c",
+  "cause": "convoluted nested definitions"
+ },
+ {
+  "id": 686961,
+  "label": "c",
+  "cause": "overloaded single sentence"
+ },
+ {
+  "id": 461781,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 591145,
+  "label": "w",
+  "cause": "clear legend"
+ },
+ {
+  "id": 426990,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 667789,
+  "label": "d",
+  "cause": "long; scope of 'only' unclear"
+ },
+ {
+  "id": 252946,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 802602,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 244974,
+  "label": "w",
+  "cause": "credits list fine"
+ },
+ {
+  "id": 376356,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 641111,
+  "label": "w",
+  "cause": "standard disclaimer"
+ },
+ {
+  "id": 810161,
+  "label": "c",
+  "cause": "enormous sentence, many asides"
+ },
+ {
+  "id": 526460,
+  "label": "c",
+  "cause": "dense, hard-to-parse clauses"
+ },
+ {
+  "id": 520026,
+  "label": "d",
+  "cause": "nested aside with semicolons"
+ },
+ {
+  "id": 189322,
+  "label": "c",
+  "cause": "huge inline command list"
+ },
+ {
+  "id": 996043,
+  "label": "c",
+  "cause": "unformatted section names read as prose"
+ },
+ {
+  "id": 867902,
+  "label": "d",
+  "cause": "noun-pile fragment"
+ },
+ {
+  "id": 279226,
+  "label": "d",
+  "cause": "aside splits subject and verb"
+ },
+ {
+  "id": 976330,
+  "label": "c",
+  "cause": "missing 'of'"
+ },
+ {
+  "id": 601622,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 930211,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 971610,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 639438,
+  "label": "d",
+  "cause": "elliptical numbers"
+ },
+ {
+  "id": 357306,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 597976,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 745908,
+  "label": "d",
+  "cause": "terse notes, chained fragments"
+ },
+ {
+  "id": 153765,
+  "label": "d",
+  "cause": "dense rule specification"
+ },
+ {
+  "id": 104342,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 569826,
+  "label": "d",
+  "cause": "stacked prepositional modifiers"
+ },
+ {
+  "id": 804799,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 531066,
+  "label": "c",
+  "cause": "enormous jargon-packed sentence"
+ },
+ {
+  "id": 902843,
+  "label": "c",
+  "cause": "sentence broken by stray question"
+ },
+ {
+  "id": 322447,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 455090,
+  "label": "d",
+  "cause": "dense mixed-language jargon run"
+ },
+ {
+  "id": 725156,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 356660,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 911428,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 490490,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 320607,
+  "label": "w",
+  "cause": "caption fragment fine"
+ },
+ {
+  "id": 845831,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 493273,
+  "label": "d",
+  "cause": "long ratio subject before verb"
+ },
+ {
+  "id": 790493,
+  "label": "w",
+  "cause": "clear list"
+ },
+ {
+  "id": 829914,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 176869,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 498966,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 688505,
+  "label": "c",
+  "cause": "huge inline list, duplicate entry"
+ },
+ {
+  "id": 842621,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 353441,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 745691,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 677701,
+  "label": "w",
+  "cause": "clear sequence"
+ },
+ {
+  "id": 548716,
+  "label": "w",
+  "cause": "domain term, readable"
+ },
+ {
+  "id": 628514,
+  "label": "d",
+  "cause": "long fronted list, resumptive subject"
+ },
+ {
+  "id": 851437,
+  "label": "c",
+  "cause": "overloaded, cryptic appositives"
+ },
+ {
+  "id": 781053,
+  "label": "w",
+  "cause": "mapping notation fine"
+ },
+ {
+  "id": 375576,
+  "label": "d",
+  "cause": "dense semicolon chain"
+ },
+ {
+  "id": 629415,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 255110,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 768474,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 221641,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 340375,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 838145,
+  "label": "d",
+  "cause": "fragment with crammed parenthetical"
+ },
+ {
+  "id": 498039,
+  "label": "d",
+  "cause": "list repeats an item"
+ },
+ {
+  "id": 213238,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 372853,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 978871,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 184519,
+  "label": "d",
+  "cause": "missing comma after 'From Pages'"
+ },
+ {
+  "id": 266456,
+  "label": "d",
+  "cause": "ambiguous 'they' and 'them'"
+ },
+ {
+  "id": 207023,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 644698,
+  "label": "w",
+  "cause": "clear"
+ },
+ {
+  "id": 138259,
+  "label": "w",
+  "cause": "clear"
+ }
+]
