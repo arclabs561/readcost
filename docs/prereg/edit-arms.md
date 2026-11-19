@@ -407,3 +407,119 @@ change.
    candidates is in it.
 6. The draw walked 784 repositories: 60 paragraphs drawn, 694 with no
    eligible paragraph, 27 with no README, 3 that could not be cloned.
+
+19 November 2026 (UTC), after pull request #102 was opened and before any
+model was called:
+
+7. **Arm D: B's prompt, with the feedback worded as questions.**
+
+   *Why.* Two held-out precision tests in docs/evaluation.md on `main`
+   ("Held-out precision: a wider panel and unprimed raters" and "Precision
+   across formats") found that model raters accept far more findings when
+   they are shown readcost's rule and message than when they see the same
+   sentence alone. An editor model may defer to the feedback in the same way.
+   B's feedback reads as orders ("Rewrite these sentences where the finding
+   holds", "Fix: …"), so it may prompt edits that a finding does not justify.
+   Pull request #102 words `-o agent` as questions and gives held-out
+   precision figures in place of in-sample ones. Arm D tests that wording on
+   the same paragraphs, in the same run, before it ships.
+
+   *The arm.* D uses B's system message and B's user message. Only
+   `{feedback}` differs: it is the feedback as #102 words it. That text is
+   built from the same `Result` as B's feedback (readcost at `a57e19e`,
+   the paragraph checked alone as Markdown, `Config()`). So D names exactly
+   the same findings as B, in the same order, with the same messages and
+   fixes. A function in `scripts/eval_edit_arms.py` builds it. Its strings
+   are copied from `src/readcost/report.py` on branch `feat/agent-questions`
+   at commit `6769c81d10e7e25612a7d6404e199ada0e4fb6ba`: `AGENT_HEAD`,
+   `_measured_note` and the per-finding line "… Is it hard to follow here?
+   <note> If it is, <fix>". The figures in the note come from that commit's
+   `src/readcost/data/rule_precision.json` (held-out, 12 raters). It is
+   copied unchanged to `eval/edit-arms/rule_precision.json`, and the script
+   stops if the copy's SHA-256 differs. readcost stays pinned at `a57e19e`,
+   and the verify step does not change.
+
+   D differs from B in two ways at once: the wording, and held-out figures
+   in place of in-sample ones. So D against B tests #102's feedback as a
+   whole, not its wording alone. #102's other changes are not part of D.
+   For example, it turns inanimate-subject off by default, but D's findings
+   are those at `a57e19e`.
+
+   *Comparisons.* D against B, D against C and D against A. Each judge sees
+   each pair in both orders, in separate calls, with the same prompt as the
+   other pairs. Counting, the paragraph bootstrap and the labels ("better",
+   "no meaningful advantage", "inconclusive") are as for the other pairs.
+   Each of D's edits gets the fact check from all three judges. Length and
+   readcost's findings are counted for D as for B and C. Three paired
+   differences, D minus B, are also reported, each with a paragraph
+   bootstrap interval as above: the share of edits that change content,
+   facts lost per edit (the mean over judges), and length change, which is
+   the absolute value of an edit's words over A's words minus 1.
+
+   *What stays.* The primary outcome is still B against C. Its decision
+   rules and the four claims above do not change. D's comparisons are
+   secondary.
+
+   *How D is read.*
+
+   | Reading | Holds if |
+   | --- | --- |
+   | The question wording should ship | D against B has a lower 95% bound over 0.45, so B has no meaningful advantage over D. In addition, D loses fewer facts than B or changes length less (the upper 95% bound of that D minus B difference is under 0). Finally, D does not lose more facts than B (the lower bound for facts lost is not over 0). |
+   | The question wording should not ship | D against B has an upper 95% bound under 0.50 and a win rate of at most 0.45, so B reads better. Or D loses more facts than B: the lower 95% bound of D minus B, facts lost per edit, is over 0. |
+   | Neither | The report says the run does not speak for or against the wording. |
+
+   Both readings cannot hold together. D against C and D against A are
+   read like B against C and B against A. "An edit with feedback as
+   questions beats a generic instruction" holds if D against C is "D
+   better" and the upper 95% bound of D minus C, the share of edits that
+   change content, is under +0.10. "An edit with feedback as questions
+   beats the original" holds if D against A is "D better" and the upper
+   95% bound of the share of D's edits that change content is under 0.10.
+
+   *Calls and cost.* D adds 180 edits (60 paragraphs and 3 editors), 3,240
+   readability judgements (180 units, 3 pairs, 2 orders, 3 judges) and 540
+   fact checks (180 edits, 3 judges). That is 3,960 calls, and 8,640 in all
+   with the original 4,680. The original estimate of $6 to $57 assumed
+   prompt and reply sizes from the drawn paragraphs, and from 0 to about
+   2,000 reasoning tokens in each reply from every model but Mistral Large.
+   The same assumptions give $4 to $46 for D. Most of it is the judges'
+   reasoning on the 3,240 judgements. D's feedback is longer than B's
+   (1,007 characters on average over the 60 paragraphs, against 648),
+   which adds under $0.10.
+
+   *Caps.* The caps rise by D's planned calls and D's high estimate, to
+   **$106** and **9,160 calls** for the whole run, counted as before over
+   every reply in the cache. The original five phases keep the old caps:
+   the run stops before a call in them that would take it past $60 or
+   5,200 calls. Only D's phases may go past those, up to $106 and 9,160
+   calls. If an original phase stops at its cap, D's phases do not run.
+
+   *Order.* The original five phases run first, in the order above. D's
+   phases follow, in this order:
+
+   1. D's edits;
+   2. D against B;
+   3. D's fact checks;
+   4. D against C;
+   5. D against A.
+
+   B against C is the second phase of the run, so it completes under
+   the old cap, as before; at the high estimate the first two phases cost
+   about $20. D's judge calls are shuffled within each phase with seeds of
+   the same form, `20261119:edit-arms:calls:` followed by DB, DC, DA or
+   facts-D. An edit or judgement that is missing is asked for once more at
+   the end of its phase, as for the others.
+
+   *Report.* It adds:
+
+   - a table for D's three comparisons;
+   - D's rows in the tables of content, length and findings;
+   - the three differences of D minus B;
+   - each reading of D, and whether it holds.
+
+   *What was seen before writing this.* To size D's feedback, the 60
+   paragraphs were fetched at their commits, and B's and D's feedback were
+   computed for each; no model was called. One paragraph's feedback was
+   read in full: `d3e2084cc6df`, which is about one third Chinese
+   characters. readcost's language check did not name another language for
+   it, so it stays in the draw, as the rules above say.
