@@ -1,4 +1,4 @@
-"""Does readcost's feedback make an agent's edit easier to read? Three arms, judged blind.
+"""Does readcost's feedback make an agent's edit easier to read? Four arms, judged blind.
 
     uv run python scripts/eval_edit_arms.py candidates eval/edit-arms          # search GitHub (gh login)
     uv run python scripts/eval_edit_arms.py draw eval/edit-arms                # pointers to 60 paragraphs
@@ -10,7 +10,9 @@
 The plan, prompts, models and decision rules are fixed in
 docs/prereg/edit-arms.md; this script implements them. Arm A is the
 original paragraph, arm B one edit given readcost's `-o agent` feedback,
-arm C one edit given the same instruction without it. Judges from other
+arm C one edit given the same instruction without it, and arm D (added by
+the prereg's amendment 7) one edit given B's prompt with the feedback worded
+as questions, as pull request #102 words it. Judges from other
 model families say which of two versions is easier to read (each pair in
 both orders) and list facts each edit lost, added or changed.
 
@@ -52,8 +54,15 @@ BUDGET_FACTOR = 1.2
 EDITORS = ["anthropic/claude-opus-5.5", "google/gemini-4-argon", "mistralai/mistral-large-4-0"]
 JUDGES = ["moonshotai/kimi-k3.1-pro", "deepseek/deepseek-v4.1-flash", "x-ai/grok-4.7"]
 PAIRS = [("B", "C"), ("B", "A"), ("C", "A")]
-COST_CAP = 60.0
+# Arm D, added by the prereg's amendment 7: B's prompt with the feedback worded as questions.
+D_PAIRS = [("D", "B"), ("D", "C"), ("D", "A")]
+ALL_PAIRS = PAIRS + D_PAIRS
+EDIT_ARMS = ("B", "C", "D")
+D_PHASES = ("editsD", "DB", "factsD", "DC", "DA")
+COST_CAP = 60.0      # the original plan's caps, which still bound its phases
 CALL_CAP = 5200
+D_COST_CAP = 106.0   # the caps for the whole run, arm D included (amendment 7)
+D_CALL_CAP = 9160
 NO_COST = 0.05     # a reply that reports no cost counts as this much
 RESERVE = 0.10     # held back per call in flight, so the cap is not crossed
 SMALLEST = 0.55
@@ -82,6 +91,21 @@ PAIRWISE_SCHEMA = {"type": "object", "properties": {
     "required": ["reason", "easier"], "additionalProperties": False}
 TEXT_SCHEMA = {"type": "object", "properties": {"text": {"type": "string"}}, "required": ["text"],
                "additionalProperties": False}
+
+# Arm D's feedback: `readcost check -o agent` as pull request #102 words it, built from the
+# same Result as arm B's feedback at a57e19e. AGENT_HEAD_102, MEASURED_102 and the line in
+# `questions` are copied from src/readcost/report.py on branch feat/agent-questions at
+# QUESTIONS_COMMIT (AGENT_HEAD, _measured_note and the per-finding line in `agent`). The rule
+# precision figures are that commit's src/readcost/data/rule_precision.json (held-out, 12 raters),
+# copied unchanged to eval/edit-arms/rule_precision.json.
+QUESTIONS_COMMIT = "6769c81d10e7e25612a7d6404e199ada0e4fb6ba"
+PRECISION_FILE = ROOT / "eval" / "edit-arms" / "rule_precision.json"
+PRECISION_SHA256 = "d795bffa934881806debb2f5363c568e1d524b3deabaae42f2013904cc6d3ab6"
+AGENT_HEAD_102 = ("readcost: {n} {what} in {words} words that may be hard to follow. These are questions, not "
+                  "errors: in a held-out test, model raters said an editor would fix few such findings. Change "
+                  "a sentence only if it reads badly to you, keep its meaning and facts, and leave the rest.")
+MEASURED_102 = ("Raters said an editor would fix {correct} of {labelled} such findings, "
+                "and called {optional} more optional.")
 
 DOC_PREFIXES = ("docs/", "doc/", "design/", "rfcs/", "adr/")
 DOC_SKIP = ("readme", "changelog", "license", "contributing", "code_of_conduct", "security")
@@ -416,13 +440,74 @@ def budget(text: str) -> int:
     return math.ceil(BUDGET_FACTOR * len(text.split()))
 
 
+def check(analyzer, text: str):
+    return analyzer.check_text(text, "markdown", "p.md")
+
+
 def feedback(analyzer, text: str) -> str:
+    """Arm B's feedback: `readcost check -o agent` at a57e19e."""
     from readcost import report
-    return report.agent([analyzer.check_text(text, "markdown", "p.md")], feedback_link=False)
+    return report.agent([check(analyzer, text)], feedback_link=False)
+
+
+def heldout_precision(path: Path = PRECISION_FILE) -> dict:
+    """The fixed copy of rule_precision.json from QUESTIONS_COMMIT; stops if it was changed."""
+    raw = path.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != PRECISION_SHA256:
+        raise SystemExit(f"{path} is not the file from {QUESTIONS_COMMIT[:7]}; the pre-registration needs an amendment")
+    return json.loads(raw)
+
+
+def _precision_102(precision: dict, rule: str) -> dict | None:
+    """#102's `_precision`, reading the fixed file: {correct, accepted, labelled} with 5 or more labelled."""
+    row = precision.get("rules", {}).get(rule)
+    if not row or row["labelled"] < 5:
+        return None
+    return {"correct": row.get("correct", 0), "accepted": row["accepted"], "labelled": row["labelled"]}
+
+
+def questions(results: list, precision: dict, max_items: int = 8, max_chars: int = 2500) -> str:
+    """`readcost.report.agent` as #102 words it (without the feedback link), for the given Results.
+
+    The order, the location, the cap on items and on characters are a57e19e's `agent`, which
+    #102 does not change; only the head and the per-finding line differ.
+    """
+    from readcost.report import _worst_first
+    items = _worst_first(results)
+    if not items:
+        return ""
+    max_items, max_chars = max(max_items, 0), max(max_chars, 0)
+    several = len({f.path for f in items}) > 1
+    total = len(items)
+    words = sum(r.words for r in results)
+    lines = [AGENT_HEAD_102.format(n=total, what="sentence" if total == 1 else "sentences", words=words)]
+    for f in items[:max_items]:
+        if several:
+            loc = f"{f.path}:{f.line}" if f.line else f.path + (f"#{f.label}" if f.label else "")
+        else:
+            loc = f"line {f.line}" if f.line else (f.label or f.path)
+        prec = _precision_102(precision, f.feature)
+        note = (" " + MEASURED_102.format(correct=prec["correct"], labelled=prec["labelled"],
+                                          optional=prec["accepted"] - prec["correct"])) if prec else ""
+        fix = f.suggestion[:1].lower() + f.suggestion[1:]
+        lines.append(f"- {loc} [{f.feature}] {f.message}. Is it hard to follow here?{note} If it is, {fix}")
+    if total > max_items:
+        lines.append(f"- ...and {total - max_items} more (run `readcost check` for the full list)")
+    body = "\n".join(lines)
+    if len(body) > max_chars:
+        body = body[:max_chars] if max_chars <= 3 else body[: max_chars - 3] + "..."
+    return body
+
+
+def feedbacks(analyzer, text: str, precision: dict) -> dict:
+    """Arm B's and arm D's feedback, from one Result, so both name exactly the same findings."""
+    from readcost import report
+    result = check(analyzer, text)
+    return {"B": report.agent([result], feedback_link=False), "D": questions([result], precision)}
 
 
 def edit_prompt(arm: str, text: str, fb: str = "") -> str:
-    if arm == "B":
+    if arm in ("B", "D"):
         return ARM_B.format(budget=budget(text), feedback=fb, text=text)
     return ARM_C.format(budget=budget(text), text=text)
 
@@ -488,14 +573,21 @@ class Client:
     The cache is a JSON-lines file of {key, model, data, meta}. Every line
     counts toward the caps, so the caps hold across runs that share it. A
     key whose lines all failed is asked again.
+
+    ``cost_cap`` and ``call_cap`` bound the original plan's phases;
+    ``d_cost_cap`` and ``d_call_cap`` bound arm D's, which run after them
+    (amendment 7). ``use_caps`` picks which pair applies.
     """
 
-    def __init__(self, path: Path, ask=None, cost_cap: float = COST_CAP, call_cap: int = CALL_CAP):
+    def __init__(self, path: Path, ask=None, cost_cap: float = COST_CAP, call_cap: int = CALL_CAP,
+                 d_cost_cap: float = D_COST_CAP, d_call_cap: int = D_CALL_CAP):
         if ask is None:
             import rater_ensemble
             ask = rater_ensemble.ask
         self.ask, self.path = ask, path
         self.cost_cap, self.call_cap = cost_cap, call_cap
+        self.d_cost_cap, self.d_call_cap = max(d_cost_cap, cost_cap), max(d_call_cap, call_cap)
+        self.active = (cost_cap, call_cap)
         self.lock = threading.Lock()
         self.ok: dict[str, dict] = {}
         self.spent, self.calls, self.cached_hits, self.new_calls, self.reserved = 0.0, 0, 0, 0, 0.0
@@ -519,6 +611,10 @@ class Client:
         elif isinstance(meta.get("cost"), (int, float)):
             self.spent += meta["cost"]
 
+    def use_caps(self, d: bool) -> None:
+        """The original plan's caps, or with ``d`` the caps for the whole run."""
+        self.active = (self.d_cost_cap, self.d_call_cap) if d else (self.cost_cap, self.call_cap)
+
     def get(self, model: str, system: str | None, prompt: str) -> dict | None:
         """A cached reply, without asking."""
         row = self.ok.get(self.key(model, system, prompt))
@@ -530,7 +626,8 @@ class Client:
             if k in self.ok:
                 self.cached_hits += 1
                 return self.ok[k]["data"]
-            if self.calls + 1 > self.call_cap or self.spent + self.reserved + RESERVE > self.cost_cap:
+            cost_cap, call_cap = self.active
+            if self.calls + 1 > call_cap or self.spent + self.reserved + RESERVE > cost_cap:
                 raise CapReached(f"cap reached: {self.calls} calls, ${self.spent:.2f}")
             self.calls += 1
             self.reserved += RESERVE
@@ -567,18 +664,25 @@ def _pool(jobs, fn, workers: int) -> bool:
     return not stop.is_set()
 
 
-def run(ref: Path, client: Client, analyzer, editors=EDITORS, judges=JUDGES, workers: int = 8) -> dict:
-    """The five phases in the prereg's order. Returns which phases finished."""
+def all_feedback(analyzer, paras: list[dict], precision: dict | None = None) -> dict:
+    """{paragraph id: {"B": ..., "D": ...}}."""
+    precision = heldout_precision() if precision is None else precision
+    return {p["id"]: feedbacks(analyzer, p["text"], precision) for p in paras}
+
+
+def run(ref: Path, client: Client, analyzer, editors=EDITORS, judges=JUDGES, workers: int = 8,
+        precision: dict | None = None) -> dict:
+    """The prereg's five phases, then arm D's five (amendment 7). Returns which phases finished."""
     paras = [json.loads(x) for x in (ref / "texts.jsonl").read_text().splitlines()]
-    fb = {p["id"]: feedback(analyzer, p["text"]) for p in paras}
+    fb = all_feedback(analyzer, paras, precision)
     status = {}
 
-    def edits_phase():
-        jobs = [(p, ed, arm) for p in paras for ed in editors for arm in ("B", "C")]
+    def edits_phase(arms):
+        jobs = [(p, ed, arm) for p in paras for ed in editors for arm in arms]
 
         def one(job):
             p, ed, arm = job
-            client(ed, SYSTEM, edit_prompt(arm, p["text"], fb[p["id"]]), TEXT_SCHEMA)
+            client(ed, SYSTEM, edit_prompt(arm, p["text"], fb[p["id"]].get(arm, "")), TEXT_SCHEMA)
         ok = _pool(jobs, one, workers)
         missing = [j for j in jobs if not edit_of(client, *j, fb)]
         return ok and _pool(missing, one, workers)  # asked once more at the end
@@ -600,10 +704,10 @@ def run(ref: Path, client: Client, analyzer, editors=EDITORS, judges=JUDGES, wor
         again = [c for c in calls if shown_ok(c) and verdict(client, texts, c, fb) is None]
         return ok and _pool(again, one, workers)
 
-    def facts_phase():
+    def facts_phase(arms, tag):
         texts = {p["id"]: p["text"] for p in paras}
-        jobs = [(p["id"], ed, arm, j) for p in paras for ed in editors for arm in ("B", "C") for j in judges]
-        random.Random(f"{SEED}:calls:facts").shuffle(jobs)
+        jobs = [(p["id"], ed, arm, j) for p in paras for ed in editors for arm in arms for j in judges]
+        random.Random(f"{SEED}:calls:{tag}").shuffle(jobs)
 
         def one(job):
             pid, ed, arm, j = job
@@ -615,9 +719,15 @@ def run(ref: Path, client: Client, analyzer, editors=EDITORS, judges=JUDGES, wor
                  and fact_of(client, texts, *jb, fb) is None]
         return ok and _pool(again, one, workers)
 
-    for name, phase in [("edits", edits_phase), ("BC", lambda: judging([("B", "C")], "BC")),
-                        ("facts", facts_phase), ("BA", lambda: judging([("B", "A")], "BA")),
-                        ("CA", lambda: judging([("C", "A")], "CA"))]:
+    phases = [("edits", lambda: edits_phase(("B", "C"))), ("BC", lambda: judging([("B", "C")], "BC")),
+              ("facts", lambda: facts_phase(("B", "C"), "facts")), ("BA", lambda: judging([("B", "A")], "BA")),
+              ("CA", lambda: judging([("C", "A")], "CA")),
+              # Arm D, after the original plan, under the caps for the whole run.
+              ("editsD", lambda: edits_phase(("D",))), ("DB", lambda: judging([("D", "B")], "DB")),
+              ("factsD", lambda: facts_phase(("D",), "facts-D")), ("DC", lambda: judging([("D", "C")], "DC")),
+              ("DA", lambda: judging([("D", "A")], "DA"))]
+    for name, phase in phases:
+        client.use_caps(name in D_PHASES)
         status[name] = bool(phase())
         print(name, "done" if status[name] else "stopped", f"{client.calls} calls, ${client.spent:.2f}", flush=True)
         if not status[name]:
@@ -628,14 +738,14 @@ def run(ref: Path, client: Client, analyzer, editors=EDITORS, judges=JUDGES, wor
 
 
 def edit_of(client, p: dict, ed: str, arm: str, fb: dict) -> str | None:
-    data = client.get(ed, SYSTEM, edit_prompt(arm, p["text"], fb[p["id"]]))
+    data = client.get(ed, SYSTEM, edit_prompt(arm, p["text"], fb[p["id"]].get(arm, "")))
     text = (data or {}).get("text")
     return text.strip() if isinstance(text, str) and text.strip() else None
 
 
 def arm_texts(client, texts: dict, pid: str, ed: str, fb: dict) -> dict:
     p = {"id": pid, "text": texts[pid]}
-    return {"A": texts[pid], "B": edit_of(client, p, ed, "B", fb), "C": edit_of(client, p, ed, "C", fb)}
+    return {"A": texts[pid], **{arm: edit_of(client, p, ed, arm, fb) for arm in EDIT_ARMS}}
 
 
 def verdict(client, texts: dict, call: dict, fb: dict) -> str | None:
@@ -728,20 +838,51 @@ def claims(bc, ba, ca, diff_bc, share_b, share_c) -> dict:
     }
 
 
-def collect(ref: Path, client: Client, analyzer, editors=EDITORS, judges=JUDGES) -> dict:
+def d_readings(db, lost_db, length_db, dc, share_dc, da, share_d) -> dict:
+    """Amendment 7's readings of arm D, from the estimates (mean, lo, hi) or None.
+
+    ``db`` is D's win rate against B; ``lost_db`` and ``length_db`` are the paired
+    differences D minus B in facts lost per edit and in length change.
+    """
+    def under(e, bound):
+        return e is not None and e[2] < bound
+    more_lost = lost_db is not None and lost_db[1] > 0
+    as_good = db is not None and db[1] > 1 - SMALLEST
+    worse = db is not None and db[2] < 0.5 and db[0] <= 1 - SMALLEST
+    return {
+        "the question wording should ship": (as_good and (under(lost_db, 0) or under(length_db, 0))
+                                             and not more_lost),
+        "the question wording should not ship": worse or more_lost,
+        "an edit with feedback as questions beats a generic instruction": (label(dc) == "better"
+                                                                          and under(share_dc, 0.10)),
+        "an edit with feedback as questions beats the original": label(da) == "better" and under(share_d, 0.10),
+    }
+
+
+# The phases each reading of D needs before it can be decided.
+D_NEEDS = {
+    "the question wording should ship": ("DB", "factsD"),
+    "the question wording should not ship": ("DB", "factsD"),
+    "an edit with feedback as questions beats a generic instruction": ("DC", "factsD"),
+    "an edit with feedback as questions beats the original": ("DA", "factsD"),
+}
+
+
+def collect(ref: Path, client: Client, analyzer, editors=EDITORS, judges=JUDGES,
+            precision: dict | None = None) -> dict:
     paras = [json.loads(x) for x in (ref / "texts.jsonl").read_text().splitlines()]
     texts = {p["id"]: p["text"] for p in paras}
-    fb = {p["id"]: feedback(analyzer, p["text"]) for p in paras}
+    fb = all_feedback(analyzer, paras, precision)
     edits = {(p["id"], ed): arm_texts(client, texts, p["id"], ed, fb) for p in paras for ed in editors}
     picks = {}
     for (pid, ed) in edits:
-        for x, y in PAIRS:
+        for x, y in ALL_PAIRS:
             for j in judges:
                 for o in (0, 1):
                     c = {"id": pid, "editor": ed, "pair": x + y, "judge": j, "order": o}
                     picks[(pid, ed, x + y, j, o)] = verdict(client, texts, c, fb)
     facts = {(pid, ed, arm, j): fact_of(client, texts, pid, ed, arm, j, fb)
-             for (pid, ed) in edits for arm in ("B", "C") for j in judges}
+             for (pid, ed) in edits for arm in EDIT_ARMS for j in judges}
     return {"paras": paras, "edits": edits, "picks": picks, "facts": facts}
 
 
@@ -749,7 +890,7 @@ def analyse(data: dict, analyzer, editors=EDITORS, judges=JUDGES) -> dict:
     edits, picks, facts = data["edits"], data["picks"], data["facts"]
     res: dict = {"pairs": {}, "per_editor": {}, "per_judge": {}}
     outcomes_by_pair = {}
-    for x, y in PAIRS:
+    for x, y in ALL_PAIRS:
         oc = {(pid, ed, j): outcome(picks[(pid, ed, x + y, j, 0)], picks[(pid, ed, x + y, j, 1)], x, y)
               for (pid, ed) in edits for j in judges}
         outcomes_by_pair[x + y] = oc
@@ -765,25 +906,31 @@ def analyse(data: dict, analyzer, editors=EDITORS, judges=JUDGES) -> dict:
             sub = {k: v for k, v in oc.items() if k[2] == j}
             res["per_judge"].setdefault(j, {})[x + y] = {"estimate": cluster_boot(unit_scores(sub)),
                                                         "counts": dict(Counter(o for o in sub.values() if o))}
-    # Agreement between judges: same outcome (split counted as tie) on a unit.
-    agree = {}
-    for a in range(len(judges)):
-        for b in range(a + 1, len(judges)):
-            same = tot = 0
-            for oc in outcomes_by_pair.values():
-                for (pid, ed) in edits:
-                    oa, ob = oc[(pid, ed, judges[a])], oc[(pid, ed, judges[b])]
-                    if oa and ob:
-                        tot += 1
-                        same += (oa if oa != "split" else "tie") == (ob if ob != "split" else "tie")
-            agree[f"{judges[a]} / {judges[b]}"] = round(same / tot, 3) if tot else None
-    res["judge_agreement"] = agree
+    # Agreement between judges: same outcome (split counted as tie) on a unit. The prereg's
+    # figure is over its three pairs; D's pairs get a figure of their own.
+    def agreement(pairs):
+        agree = {}
+        for a in range(len(judges)):
+            for b in range(a + 1, len(judges)):
+                same = tot = 0
+                for x, y in pairs:
+                    oc = outcomes_by_pair[x + y]
+                    for (pid, ed) in edits:
+                        oa, ob = oc[(pid, ed, judges[a])], oc[(pid, ed, judges[b])]
+                        if oa and ob:
+                            tot += 1
+                            same += (oa if oa != "split" else "tie") == (ob if ob != "split" else "tie")
+                agree[f"{judges[a]} / {judges[b]}"] = round(same / tot, 3) if tot else None
+        return agree
+    res["judge_agreement"] = agreement(PAIRS)
+    res["judge_agreement_D"] = agreement(D_PAIRS)
     # Content.
-    change = {arm: {} for arm in ("B", "C")}
-    counts = {arm: Counter() for arm in ("B", "C")}
+    change = {arm: {} for arm in EDIT_ARMS}
+    lost = {arm: {} for arm in EDIT_ARMS}
+    counts = {arm: Counter() for arm in EDIT_ARMS}
     n_checked = Counter()
     for (pid, ed), t in edits.items():
-        for arm in ("B", "C"):
+        for arm in EDIT_ARMS:
             if t[arm] is None:
                 continue
             checks = [facts[(pid, ed, arm, j)] for j in judges]
@@ -791,19 +938,30 @@ def analyse(data: dict, analyzer, editors=EDITORS, judges=JUDGES) -> dict:
             if not got:
                 continue
             change[arm][(pid, ed)] = float(changes_content(checks))
+            lost[arm][(pid, ed)] = sum(len(c["lost"]) for c in got) / len(got)
             n_checked[arm] += 1
             for c in got:
                 for k in ("lost", "added", "changed"):
                     counts[arm][k] += len(c[k]) / len(got)
     res["content"] = {arm: {"share_changing": cluster_boot(change[arm]), "edits_checked": n_checked[arm],
                             **{f"mean_{k}": round(counts[arm][k] / n_checked[arm], 3) if n_checked[arm] else None
-                               for k in ("lost", "added", "changed")}} for arm in ("B", "C")}
-    both = {k: change["B"][k] - change["C"][k] for k in change["B"] if k in change["C"]}
-    res["content"]["B_minus_C"] = cluster_boot(both) if both else None
+                               for k in ("lost", "added", "changed")}} for arm in EDIT_ARMS}
+
+    def paired(a: dict, b: dict):
+        both = {k: a[k] - b[k] for k in a if k in b}
+        return cluster_boot(both) if both else None
+    res["content"]["B_minus_C"] = paired(change["B"], change["C"])
+    res["content"]["D_minus_C"] = paired(change["D"], change["C"])
+    # Arm D against B, paired by unit (amendment 7). Length change is |words in edit / words in A - 1|.
+    length_change = {arm: {k: abs(len(t[arm].split()) / len(t["A"].split()) - 1)
+                           for k, t in edits.items() if t[arm] is not None} for arm in ("B", "D")}
+    res["D_minus_B"] = {"share_changing": paired(change["D"], change["B"]),
+                        "lost": paired(lost["D"], lost["B"]),
+                        "length_change": paired(length_change["D"], length_change["B"])}
     # Length and findings.
     import statistics
     length, finds = {}, {}
-    for arm in ("A", "B", "C"):
+    for arm in ("A", *EDIT_ARMS):
         for ed in editors:
             rows = [(t["A"], t[arm]) for (pid, e), t in edits.items() if e == ed and t[arm] is not None]
             if not rows:
@@ -820,9 +978,14 @@ def analyse(data: dict, analyzer, editors=EDITORS, judges=JUDGES) -> dict:
                 break  # A is the same for every editor
     res["length"], res["findings"] = length, finds
     res["missing_edits"] = sum(t[a] is None for t in edits.values() for a in ("B", "C"))
+    res["missing_edits_D"] = sum(t["D"] is None for t in edits.values())
     res["claims"] = claims(res["pairs"]["BC"]["estimate"], res["pairs"]["BA"]["estimate"],
                            res["pairs"]["CA"]["estimate"], res["content"]["B_minus_C"],
                            res["content"]["B"]["share_changing"], res["content"]["C"]["share_changing"])
+    dmb = res["D_minus_B"]
+    res["d_readings"] = d_readings(res["pairs"]["DB"]["estimate"], dmb["lost"], dmb["length_change"],
+                                   res["pairs"]["DC"]["estimate"], res["content"]["D_minus_C"],
+                                   res["pairs"]["DA"]["estimate"], res["content"]["D"]["share_changing"])
     return res
 
 
@@ -835,23 +998,19 @@ def fmt(est) -> str:
 def render(res: dict, status: dict, client: Client) -> str:
     lines = ["## Edit arms: readcost feedback (B) against a generic instruction (C) and the original (A)", "",
              f"Calls {client.calls} (new this run {client.new_calls}, served from cache {client.cached_hits}), "
-             f"cost ${client.spent:.2f} of ${COST_CAP:.0f}. Phases: "
+             f"cost ${client.spent:.2f}; caps ${client.cost_cap:.0f} and {client.call_cap} calls for the original "
+             f"phases, ${client.d_cost_cap:.0f} and {client.d_call_cap} for the whole run. Phases: "
              + ", ".join(f"{k} {'done' if v else 'stopped'}" for k, v in status.items()), ""]
     if not status.get("BC", False):
         lines += ["B against C is not complete, so no claim is decided.", ""]
-    lines += ["| Pair | Win rate of first [95%] | Label | Win | Tie | Split | Loss | Missing |",
-              "| --- | --- | --- | --- | --- | --- | --- | --- |"]
-    for pair, r in res["pairs"].items():
-        c = r["counts"]
-        lines.append(f"| {pair[0]} against {pair[1]} | {fmt(r['estimate'])} | {r['label']} | {c.get('win', 0)} | "
-                     f"{c.get('tie', 0)} | {c.get('split', 0)} | {c.get('loss', 0)} | {r['missing']} |")
+    lines += pair_table(res, PAIRS, "first")
     lines += ["", "| Claim | Holds |", "| --- | --- |"]
     lines += [f"| {k} | {'yes' if v and status.get('BC') else 'no'} |" for k, v in res["claims"].items()]
     co = res["content"]
     lines += ["", "Content (an edit changes content when 2 of 3 judges list a lost or changed fact):", "",
               "| Arm | Edits checked | Share changing content [95%] | Lost | Added | Changed |",
               "| --- | --- | --- | --- | --- | --- |"]
-    for arm in ("B", "C"):
+    for arm in EDIT_ARMS:
         lines.append(f"| {arm} | {co[arm]['edits_checked']} | {fmt(co[arm]['share_changing'])} | "
                      f"{co[arm]['mean_lost']} | {co[arm]['mean_added']} | {co[arm]['mean_changed']} |")
     lines += ["", f"B minus C, share changing content: {fmt(co['B_minus_C'])}. Missing edits: {res['missing_edits']}.",
@@ -868,9 +1027,49 @@ def render(res: dict, status: dict, client: Client) -> str:
         for who, r in res[kind].items():
             lines.append(f"| {who} | " + " | ".join(fmt(r[p]["estimate"]) for p in ("BC", "BA", "CA")) + " |")
     lines += ["", "Judge agreement (same outcome on a unit): "
-              + "; ".join(f"{k} {v}" for k, v in res["judge_agreement"].items()), "",
-              "Models served: " + "; ".join(f"{m}: {dict(c)}" for m, c in sorted(client.served.items()))]
+              + "; ".join(f"{k} {v}" for k, v in res["judge_agreement"].items()), ""]
+    lines += render_d(res, status)
+    lines += ["", "Models served: " + "; ".join(f"{m}: {dict(c)}" for m, c in sorted(client.served.items()))]
     return "\n".join(lines) + "\n"
+
+
+def render_d(res: dict, status: dict) -> list[str]:
+    """Amendment 7: arm D, B's prompt with the feedback worded as in pull request #102. Secondary."""
+    lines = ["### Arm D: readcost feedback worded as questions (secondary)", "",
+             ("D has B's prompt and B's findings, with the feedback worded as in pull request #102 and its "
+              "held-out rule precision. B against C above stays the primary outcome."), ""]
+    if not all(status.get(k) for k in ("DB", "factsD")):
+        lines += ["D against B or D's fact checks are not complete, so D's main readings are not decided.", ""]
+    lines += pair_table(res, D_PAIRS, "D")
+    dmb = res["D_minus_B"]
+    lines += ["", "| D minus B, paired by unit | Estimate [95%] |", "| --- | --- |",
+              f"| Share of edits changing content | {fmt(dmb['share_changing'])} |",
+              f"| Facts lost per edit | {fmt(dmb['lost'])} |",
+              f"| Length change, abs(words over A - 1) | {fmt(dmb['length_change'])} |",
+              "", (f"D minus C, share changing content: {fmt(res['content']['D_minus_C'])}. "
+                   f"Missing D edits: {res['missing_edits_D']}."), "",
+              "| Reading of D | Holds |", "| --- | --- |"]
+    for k, v in res["d_readings"].items():
+        done = all(status.get(n) for n in D_NEEDS[k])
+        lines.append(f"| {k} | {'yes' if v and done else 'no' if done else 'not decided'} |")
+    lines += ["", "| Who | D against B | D against C | D against A |", "| --- | --- | --- | --- |"]
+    for kind in ("per_editor", "per_judge"):
+        for who, r in res[kind].items():
+            lines.append(f"| {who} | " + " | ".join(fmt(r[p]["estimate"]) for p in ("DB", "DC", "DA")) + " |")
+    lines += ["", "Judge agreement on D's pairs: "
+              + "; ".join(f"{k} {v}" for k, v in res["judge_agreement_D"].items())]
+    return lines
+
+
+def pair_table(res: dict, pairs, of: str) -> list[str]:
+    out = [f"| Pair | Win rate of {of} [95%] | Label | Win | Tie | Split | Loss | Missing |",
+           "| --- | --- | --- | --- | --- | --- | --- | --- |"]
+    for x, y in pairs:
+        r = res["pairs"][x + y]
+        c = r["counts"]
+        out.append(f"| {x} against {y} | {fmt(r['estimate'])} | {r['label']} | {c.get('win', 0)} | "
+                   f"{c.get('tie', 0)} | {c.get('split', 0)} | {c.get('loss', 0)} | {r['missing']} |")
+    return out
 
 
 def draw_counts(pointers: Path | None, ref: Path) -> str:

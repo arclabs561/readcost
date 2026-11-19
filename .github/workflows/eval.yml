@@ -32,6 +32,7 @@ on:
       - scripts/rater_ensemble.py
       - scripts/eval_agent_loop.py
       - eval/edit-arms/paragraphs.jsonl
+      - eval/edit-arms/rule_precision.json
 
 permissions:
   contents: read
@@ -588,9 +589,13 @@ jobs:
   # request for clarity, and than the original? Pre-registered in
   # docs/prereg/edit-arms.md. Needs the repository secret OPENROUTER_API_KEY
   # and runs only by hand or on the branch exp/edit-arms, so that other pull
-  # requests do not pay again outside this branch's reply cache. Capped at $60
-  # and 5,200 calls, counted over every reply in the cache. The paragraphs and
-  # the edits stay in the runner; the artifact holds the report only.
+  # requests do not pay again outside this branch's reply cache. Arm D (the
+  # prereg's amendment 7) words the feedback as questions and runs after the
+  # original phases. Those stay capped at $60 and 5,200 calls; the whole run,
+  # D included, at $106 and 9,160, counted over every reply in the cache. A
+  # run cut off by the time limit resumes from the cache when run again. The
+  # paragraphs and the edits stay in the runner; the artifact holds the report
+  # only.
   edit-arms:
     runs-on: ubuntu-latest
     timeout-minutes: 340

@@ -133,6 +133,67 @@ def test_arm_prompts_differ_only_by_the_feedback_block(analyzer):
     assert c.endswith(PARA) and b.endswith(PARA)
 
 
+def _finding(feature, line, message, suggestion, path="p.md"):
+    from readcost.features import Finding
+    return Finding(feature=feature, severity="warn", message=message, excerpt="x", sentence="x", path=path,
+                   line=line, suggestion=suggestion)
+
+
+def test_questions_reproduce_the_wording_of_pull_request_102():
+    from readcost.engine import Result
+    prec = m.heldout_precision()
+    assert prec["raters"] == 12 and prec["rules"]["stacked-nouns"] == {"labelled": 100, "correct": 0, "accepted": 36}
+    r = Result(path="p.md", words=150, findings=[
+        _finding("stacked-nouns", 3, "3 nouns stacked: 'cache eviction policy'", "Keep at most two nouns together."),
+        _finding("long-dependency", 1, "subject and verb 14 words apart", "Move the verb nearer its subject."),
+        _finding("made-up-rule", 5, "something", "Do it."),
+    ])
+    # As src/readcost/report.py's agent() prints it on feat/agent-questions at 6769c81, given this Result.
+    assert m.questions([r], prec) == (
+        "readcost: 3 sentences in 150 words that may be hard to follow. These are questions, not errors: in a "
+        "held-out test, model raters said an editor would fix few such findings. Change a sentence only if it "
+        "reads badly to you, keep its meaning and facts, and leave the rest.\n"
+        "- line 1 [long-dependency] subject and verb 14 words apart. Is it hard to follow here? Raters said an "
+        "editor would fix 5 of 91 such findings, and called 23 more optional. If it is, move the verb nearer its "
+        "subject.\n"
+        "- line 3 [stacked-nouns] 3 nouns stacked: 'cache eviction policy'. Is it hard to follow here? Raters said "
+        "an editor would fix 0 of 100 such findings, and called 36 more optional. If it is, keep at most two "
+        "nouns together.\n"
+        "- line 5 [made-up-rule] something. Is it hard to follow here? If it is, do it.")
+    one = Result(path="p.md", words=9, findings=r.findings[:1])
+    assert m.questions([one], prec).startswith("readcost: 1 sentence in 9 words that may be hard to follow.")
+    assert m.questions([Result(path="p.md")], prec) == ""
+    capped = m.questions([r], prec, max_items=1, max_chars=400)
+    assert len(capped) == 400 and capped.endswith("...")
+    assert "- ...and 2 more" in m.questions([r], prec, max_items=1)
+    other = Result(path="q.md", words=5, findings=[_finding("stacked-nouns", 2, "m", "S.", path="q.md")])
+    assert "- q.md:2 [stacked-nouns]" in m.questions([r, other], prec)
+    # Rules with fewer than 5 labelled findings get no note.
+    assert m._precision_102({"rules": {"x": {"labelled": 4, "correct": 1, "accepted": 2}}}, "x") is None
+
+
+def test_the_precision_copy_is_checked_against_its_hash(tmp_path):
+    changed = tmp_path / "rule_precision.json"
+    changed.write_bytes(m.PRECISION_FILE.read_bytes().replace(b'"correct": 4', b'"correct": 5', 1))
+    with pytest.raises(SystemExit):
+        m.heldout_precision(changed)
+    assert len(m.QUESTIONS_COMMIT) == 40
+
+
+def test_arm_d_has_bs_prompt_and_bs_findings_with_the_feedback_as_questions(analyzer):
+    fb = m.feedbacks(analyzer, PARA, m.heldout_precision())
+    assert fb["B"] == m.feedback(analyzer, PARA)
+    d, b = m.edit_prompt("D", PARA, fb["D"]), m.edit_prompt("B", PARA, fb["B"])
+    assert d == b.replace(fb["B"], fb["D"])
+    assert "Is it hard to follow here?" in fb["D"] and "Fix:" not in fb["D"]
+    # The same findings, in the same order, at the same lines.
+    import re
+
+    def tags(text):
+        return re.findall(r"^- (line \d+ \[[a-z-]+\])", text, re.MULTILINE)
+    assert tags(fb["D"]) == tags(fb["B"]) and len(tags(fb["B"])) >= 2
+
+
 def test_judge_calls_cover_both_orders_and_are_shuffled_by_seed():
     units = [("p1", "e1"), ("p2", "e1")]
     calls = m.judge_calls(units, [("B", "C")], ["j1", "j2"], "s")
@@ -188,10 +249,11 @@ def test_bootstrap_resamples_paragraphs_and_labels_follow_the_prereg():
 
 
 class FakeAsk:
-    """Edits: B marks the text "Plainly", C only tags it. Judges pick the "Plainly" version, else tie.
+    """Edits: B and D mark the text "Plainly", C only tags it. Judges pick the "Plainly" version, else tie.
 
     Every edit differs by paragraph and editor, so no two judge prompts are the same (the cache would
-    answer a repeated prompt without a call).
+    answer a repeated prompt without a call). Fact checks by judge "j1" list a lost fact in every B
+    edit, so B loses more facts than D without changing content (that needs two judges).
     """
 
     def __init__(self, cost=0.01):
@@ -203,15 +265,23 @@ class FakeAsk:
         if "text" in schema["properties"]:
             assert system == m.SYSTEM
             original = prompt.rsplit("Paragraph:\n", 1)[1]
-            text = f"Plainly ({model}): {original}" if "prose checker" in prompt else f"{original} ({model})"
+            if "Is it hard to follow here?" in prompt:
+                text = f"Plainly, as asked ({model}): {original}"
+            elif "prose checker" in prompt:
+                text = f"Plainly ({model}): {original}"
+            else:
+                text = f"{original} ({model})"
             return {"text": text}, meta
         if "easier" in schema["properties"]:
             assert system is None
             one = prompt.split("Version 1:\n", 1)[1].split("\n\nVersion 2:\n")[0]
             two = prompt.split("Version 2:\n", 1)[1].split("\n\nGive your reason")[0]
-            pick = "1" if one.startswith("Plainly") else "2" if two.startswith("Plainly") else "tie"
+            a, b = one.startswith("Plainly"), two.startswith("Plainly")
+            pick = "tie" if a == b else "1" if a else "2"
             return {"reason": "r", "easier": pick}, meta
-        return {"lost": [], "added": [], "changed": []}, meta
+        revision = prompt.split("Revision:\n", 1)[1]
+        lost = ["a fact"] if model == "j1" and revision.startswith("Plainly (") else []
+        return {"lost": lost, "added": [], "changed": []}, meta
 
 
 def _ref(tmp_path, n=3):
@@ -227,17 +297,32 @@ def test_a_run_judges_every_pair_in_both_orders_and_the_report_decides(tmp_path,
     fake = FakeAsk()
     client = m.Client(ref / "replies.jsonl", ask=fake)
     status = m.run(ref, client, analyzer, editors=["e1", "e2"], judges=["j1", "j2"], workers=2)
-    assert status == {"edits": True, "BC": True, "facts": True, "BA": True, "CA": True}
-    # 3 paragraphs x 2 editors: 12 edits, 3 pairs x 2 orders x 2 judges x 6 units, 2 x 2 x 6 fact checks
-    assert len(fake.calls) == 12 + 72 + 24 == client.calls
+    assert status == {"edits": True, "BC": True, "facts": True, "BA": True, "CA": True,
+                      "editsD": True, "DB": True, "factsD": True, "DC": True, "DA": True}
+    # 3 paragraphs x 2 editors: 12 edits, 3 pairs x 2 orders x 2 judges x 6 units, 2 x 2 x 6 fact checks;
+    # then D: 6 edits, 72 judgements, 12 fact checks.
+    assert len(fake.calls) == 12 + 72 + 24 + 6 + 72 + 12 == client.calls
     res = m.analyse(m.collect(ref, client, analyzer, ["e1", "e2"], ["j1", "j2"]), analyzer,
                     ["e1", "e2"], ["j1", "j2"])
     assert res["pairs"]["BC"]["estimate"][0] == 1.0 and res["pairs"]["BC"]["label"] == "better"
     assert res["pairs"]["CA"]["counts"] == {"tie": 12}     # neither starts with "Plainly"
     assert res["claims"]["readcost feedback beats a generic instruction"]
     assert not res["claims"]["readcost adds nothing over a generic instruction"]
+    # D ties B (both "Plainly"), beats C and A, and loses half a fact less per edit than B.
+    assert res["pairs"]["DB"]["counts"] == {"tie": 12} and res["pairs"]["DB"]["label"] == "no meaningful advantage"
+    assert res["pairs"]["DC"]["estimate"][0] == 1.0 and res["pairs"]["DA"]["label"] == "better"
+    assert res["D_minus_B"]["lost"] == (-0.5, -0.5, -0.5)
+    assert res["content"]["B"]["share_changing"][0] == 0.0 and res["content"]["B"]["mean_lost"] == 0.5
+    assert res["d_readings"] == {"the question wording should ship": True,
+                                 "the question wording should not ship": False,
+                                 "an edit with feedback as questions beats a generic instruction": True,
+                                 "an edit with feedback as questions beats the original": True}
+    assert {k[0] for k in res["length"]} == {"A", "B", "C", "D"}
     text = m.render(res, status, client)
     assert "| B against C | 1.000 [1.000, 1.000] | better |" in text
+    assert text.index("| B against C |") < text.index("### Arm D") < text.index("| D against B | 0.500")
+    assert "| the question wording should ship | yes |" in text
+    assert "| Facts lost per edit | -0.500 [-0.500, -0.500] |" in text
     pointers = tmp_path / "pointers"
     pointers.mkdir()
     (pointers / "walk.jsonl").write_text('{"repo": "o/a", "outcome": "drawn"}\n{"repo": "o/b", "outcome": "no README"}\n')
@@ -250,7 +335,7 @@ def test_a_run_judges_every_pair_in_both_orders_and_the_report_decides(tmp_path,
     again = FakeAsk()
     client2 = m.Client(ref / "replies.jsonl", ask=again)
     m.run(ref, client2, analyzer, editors=["e1", "e2"], judges=["j1", "j2"])
-    assert again.calls == [] and client2.calls == 108
+    assert again.calls == [] and client2.calls == 198
 
 
 def test_caps_stop_the_run_before_crossing_and_count_cached_replies(tmp_path, analyzer):
@@ -268,6 +353,49 @@ def test_caps_stop_the_run_before_crossing_and_count_cached_replies(tmp_path, an
         m.Client(ref / "replies.jsonl", ask=FakeAsk(), call_cap=5)("j1", None, "new prompt", m.PAIRWISE_SCHEMA)
 
 
+def test_arm_d_runs_after_the_original_phases_and_only_d_may_pass_the_old_caps(tmp_path, analyzer):
+    ref = _ref(tmp_path, n=1)
+    fake = FakeAsk(cost=0.5)
+    # One paragraph, one editor, one judge: the original phases make 2 + 2 + 2 + 2 + 2 = 10 calls, $5.
+    client = m.Client(ref / "replies.jsonl", ask=fake, cost_cap=5.2, d_cost_cap=7.05)
+    status = m.run(ref, client, analyzer, editors=["e1"], judges=["j1"], workers=1)
+    assert [k for k, v in status.items() if v] == ["edits", "BC", "facts", "BA", "CA", "editsD", "DB", "factsD"]
+    assert status["DC"] is False and "DA" not in status
+    # D's edit, its two judgements and its fact check fit under $7.05; D against C does not.
+    assert client.spent == pytest.approx(7.0) and len(fake.calls) == 14
+    kinds = ["D" if "Is it hard to follow here?" in pr or "Plainly, as asked" in pr else "-" for _m, _s, pr in fake.calls]
+    assert kinds[:10] == ["-"] * 10 and kinds[10:] == ["D"] * 4
+    # With the old caps stopping an original phase, D never starts.
+    (tmp_path / "x").mkdir()
+    ref2 = _ref(tmp_path / "x", n=1)
+    client2 = m.Client(ref2 / "replies.jsonl", ask=FakeAsk(cost=0.5), cost_cap=1.5, d_cost_cap=100.0)
+    status2 = m.run(ref2, client2, analyzer, editors=["e1"], judges=["j1"], workers=1)
+    assert status2 == {"edits": True, "BC": False}
+    assert m.D_COST_CAP == 106.0 and m.D_CALL_CAP == 9160 and m.COST_CAP == 60.0 and m.CALL_CAP == 5200
+
+
+def test_d_readings_follow_amendment_7():
+    r = m.d_readings
+    tie = (0.50, 0.46, 0.54)
+    assert r(tie, (-0.2, -0.4, -0.01), None, None, None, None, None)["the question wording should ship"]
+    assert r(tie, (0.0, -0.1, 0.1), (-0.05, -0.08, -0.01), None, None, None, None)["the question wording should ship"]
+    # As good on reading, but more facts lost: it should not ship, even with less length change.
+    got = r(tie, (0.2, 0.05, 0.4), (-0.05, -0.08, -0.01), None, None, None, None)
+    assert not got["the question wording should ship"] and got["the question wording should not ship"]
+    # The lower bound must clear 0.45.
+    assert not r((0.50, 0.44, 0.56), (-0.2, -0.4, -0.01), None, None, None, None, None)[
+        "the question wording should ship"]
+    worse = r((0.42, 0.36, 0.49), (0.0, -0.1, 0.1), None, None, None, None, None)
+    assert worse["the question wording should not ship"] and not worse["the question wording should ship"]
+    # Neither: no reading holds.
+    none = r((0.48, 0.42, 0.55), (0.0, -0.1, 0.1), (0.0, -0.1, 0.1), None, None, None, None)
+    assert not none["the question wording should ship"] and not none["the question wording should not ship"]
+    assert not any(r(None, None, None, None, None, None, None).values())
+    beats = r(None, None, None, (0.6, 0.52, 0.68), (0.0, -0.05, 0.05), (0.6, 0.52, 0.68), (0.02, 0.0, 0.05))
+    assert beats["an edit with feedback as questions beats a generic instruction"]
+    assert beats["an edit with feedback as questions beats the original"]
+
+
 def test_a_failed_reply_is_asked_again_and_reported_missing_if_it_fails_twice(tmp_path, analyzer):
     ref = _ref(tmp_path, n=1)
     inner = FakeAsk()
@@ -279,9 +407,9 @@ def test_a_failed_reply_is_asked_again_and_reported_missing_if_it_fails_twice(tm
         return inner(model, prompt, schema, system=system)
     client = m.Client(ref / "replies.jsonl", ask=flaky)
     m.run(ref, client, analyzer, editors=["e1", "bad"], judges=["j1"], workers=1)
-    assert sum(c[0] == "bad" for c in inner.calls) == 4    # two arms, asked twice each
+    assert sum(c[0] == "bad" for c in inner.calls) == 6    # three arms, asked twice each
     res = m.analyse(m.collect(ref, client, analyzer, ["e1", "bad"], ["j1"]), analyzer, ["e1", "bad"], ["j1"])
-    assert res["missing_edits"] == 2
+    assert res["missing_edits"] == 2 and res["missing_edits_D"] == 1
     assert res["pairs"]["BC"]["missing"] == 1               # the "bad" unit, for its one judge
 
 
