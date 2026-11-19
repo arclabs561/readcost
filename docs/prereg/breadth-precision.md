@@ -391,3 +391,36 @@ The scripts are `scripts/breadth_precision.py` (draw and batches, reusing
 added in the commits after this one.
 
 ## Amendments
+
+### 19 November 2026, after the search and before any fetch
+
+Written after the repository search ran and before any repository was
+cloned or any text read. One change to a decision rule, and details that
+`scripts/breadth_precision.py` fixes and the text above leaves open.
+
+- Decision 1's fallback now compares point estimates: when the c shares of
+  findings and near misses are both under 0.10, the test uses accepted
+  shares. As written, with upper bounds, it could not trigger below about
+  35 items even with no "c" at all, so it would never have applied to
+  center-embedding or undefined-acronym (at most 25 near misses each).
+- The walk takes the languages in the order listed, so the owner cap
+  counts repositories already taken for earlier languages.
+- "Chosen with `random.Random(seed)` from the sorted list" means: sort,
+  shuffle with that seed, and take in that order. For each file stratum
+  at most ten files of a repository are read; HTML files that name a
+  generator are skipped and the next one is read. A source file over
+  200 KB still counts toward its stratum's three and is dropped.
+- The shallow clone falls back to `--depth 1` on any failure, not only on
+  "no commit that recent". After the fallback only the head commit can be
+  an eligible commit.
+- A README that is neither Markdown nor reStructuredText (`.txt`, no
+  extension) passes or fails the repository filter but is in no stratum.
+- Pull request bodies have CRLF line endings turned into LF before they
+  are stored and hashed. A commit message is `git log`'s `%B` with
+  trailing newlines cut to one.
+- readcost runs with every line selected (`lines` covering the whole
+  file). That gives the same findings and skips the reading-time model,
+  which no outcome uses; the default run and the five looser runs share
+  one parse of each text.
+- The unprimed raters see `i`, `kind`, `excerpt`, `sentence`, `before` and
+  `after`.

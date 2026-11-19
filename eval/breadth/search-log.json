@@ -1,0 +1,3278 @@
+[
+ {
+  "q": "language:\"Python\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 7969,
+  "incomplete": false,
+  "at": "2026-11-19T11:36:47.502830+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:200..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 7719,
+  "incomplete": false,
+  "at": "2026-11-19T11:36:51.846509+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:200..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 7289,
+  "incomplete": false,
+  "at": "2026-11-19T11:36:56.774603+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 6652,
+  "incomplete": false,
+  "at": "2026-11-19T11:37:01.558399+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:200..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 5725,
+  "incomplete": false,
+  "at": "2026-11-19T11:37:06.052192+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:200..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 4611,
+  "incomplete": false,
+  "at": "2026-11-19T11:37:10.893783+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 3353,
+  "incomplete": false,
+  "at": "2026-11-19T11:37:16.219030+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2190,
+  "incomplete": false,
+  "at": "2026-11-19T11:37:20.516052+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:200..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1294,
+  "incomplete": false,
+  "at": "2026-11-19T11:37:25.544563+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:200..238 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 730,
+  "incomplete": false,
+  "at": "2026-11-19T11:37:29.727720+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:200..238 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 730,
+  "incomplete": false,
+  "at": "2026-11-19T11:37:34.839496+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:200..238 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 730,
+  "incomplete": false,
+  "at": "2026-11-19T11:37:39.924941+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:200..238 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 730,
+  "incomplete": false,
+  "at": "2026-11-19T11:37:45.093409+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:200..238 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 730,
+  "incomplete": false,
+  "at": "2026-11-19T11:37:50.637265+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:200..238 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 730,
+  "incomplete": false,
+  "at": "2026-11-19T11:37:55.818714+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:200..238 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 730,
+  "incomplete": false,
+  "at": "2026-11-19T11:38:00.965302+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:200..238 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 730,
+  "incomplete": false,
+  "at": "2026-11-19T11:38:02.757662+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:239..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 564,
+  "incomplete": false,
+  "at": "2026-11-19T11:38:08.587495+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:239..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 564,
+  "incomplete": false,
+  "at": "2026-11-19T11:38:13.133853+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:239..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 564,
+  "incomplete": false,
+  "at": "2026-11-19T11:38:19.324659+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:239..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 564,
+  "incomplete": false,
+  "at": "2026-11-19T11:38:24.121637+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:239..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 564,
+  "incomplete": false,
+  "at": "2026-11-19T11:38:29.188739+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:239..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 564,
+  "incomplete": false,
+  "at": "2026-11-19T11:38:32.508834+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 896,
+  "incomplete": false,
+  "at": "2026-11-19T11:38:37.521014+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 896,
+  "incomplete": false,
+  "at": "2026-11-19T11:38:42.987265+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 896,
+  "incomplete": false,
+  "at": "2026-11-19T11:38:47.916827+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 896,
+  "incomplete": false,
+  "at": "2026-11-19T11:38:52.863374+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 896,
+  "incomplete": false,
+  "at": "2026-11-19T11:39:00.331325+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 896,
+  "incomplete": false,
+  "at": "2026-11-19T11:39:04.882065+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 896,
+  "incomplete": false,
+  "at": "2026-11-19T11:39:09.901413+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 896,
+  "incomplete": false,
+  "at": "2026-11-19T11:39:14.580084+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 9,
+  "total_count": 896,
+  "incomplete": false,
+  "at": "2026-11-19T11:39:19.700421+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1163,
+  "incomplete": false,
+  "at": "2026-11-19T11:39:27.287259+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 687,
+  "incomplete": false,
+  "at": "2026-11-19T11:39:32.330808+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 687,
+  "incomplete": false,
+  "at": "2026-11-19T11:39:37.677896+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 687,
+  "incomplete": false,
+  "at": "2026-11-19T11:39:44.442461+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 687,
+  "incomplete": false,
+  "at": "2026-11-19T11:39:49.713040+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 687,
+  "incomplete": false,
+  "at": "2026-11-19T11:39:54.604491+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 687,
+  "incomplete": false,
+  "at": "2026-11-19T11:40:00.297799+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 687,
+  "incomplete": false,
+  "at": "2026-11-19T11:40:05.333625+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:433..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 476,
+  "incomplete": false,
+  "at": "2026-11-19T11:40:11.245312+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:433..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 476,
+  "incomplete": false,
+  "at": "2026-11-19T11:40:18.368515+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:433..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 476,
+  "incomplete": false,
+  "at": "2026-11-19T11:40:24.700601+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:433..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 476,
+  "incomplete": false,
+  "at": "2026-11-19T11:40:30.905910+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:433..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 476,
+  "incomplete": false,
+  "at": "2026-11-19T11:40:34.854600+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1258,
+  "incomplete": false,
+  "at": "2026-11-19T11:40:40.517315+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:510..664 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 766,
+  "incomplete": false,
+  "at": "2026-11-19T11:40:46.279379+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:510..664 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 766,
+  "incomplete": false,
+  "at": "2026-11-19T11:40:52.064087+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:510..664 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 766,
+  "incomplete": false,
+  "at": "2026-11-19T11:40:57.244298+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:510..664 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 766,
+  "incomplete": false,
+  "at": "2026-11-19T11:41:03.398754+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:510..664 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 766,
+  "incomplete": false,
+  "at": "2026-11-19T11:41:08.823517+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:510..664 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 766,
+  "incomplete": false,
+  "at": "2026-11-19T11:41:14.771310+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:510..664 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 766,
+  "incomplete": false,
+  "at": "2026-11-19T11:41:40.995364+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:510..664 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 766,
+  "incomplete": false,
+  "at": "2026-11-19T11:41:45.452037+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:665..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 492,
+  "incomplete": false,
+  "at": "2026-11-19T11:41:51.589656+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:665..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 492,
+  "incomplete": false,
+  "at": "2026-11-19T11:41:57.240036+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:665..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 492,
+  "incomplete": false,
+  "at": "2026-11-19T11:42:03.058486+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:665..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 492,
+  "incomplete": false,
+  "at": "2026-11-19T11:42:08.546823+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:665..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 492,
+  "incomplete": false,
+  "at": "2026-11-19T11:42:12.528897+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1114,
+  "incomplete": false,
+  "at": "2026-11-19T11:42:17.545238+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 654,
+  "incomplete": false,
+  "at": "2026-11-19T11:42:22.383224+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 654,
+  "incomplete": false,
+  "at": "2026-11-19T11:42:28.513246+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 654,
+  "incomplete": false,
+  "at": "2026-11-19T11:42:33.783519+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 654,
+  "incomplete": false,
+  "at": "2026-11-19T11:42:39.203675+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 654,
+  "incomplete": false,
+  "at": "2026-11-19T11:42:44.417740+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 654,
+  "incomplete": false,
+  "at": "2026-11-19T11:42:49.327269+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 654,
+  "incomplete": false,
+  "at": "2026-11-19T11:42:52.699365+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:1129..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 460,
+  "incomplete": false,
+  "at": "2026-11-19T11:42:58.094072+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:1129..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 460,
+  "incomplete": false,
+  "at": "2026-11-19T11:43:03.512655+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:1129..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 460,
+  "incomplete": false,
+  "at": "2026-11-19T11:43:09.438803+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:1129..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 460,
+  "incomplete": false,
+  "at": "2026-11-19T11:43:17.696065+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:1129..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 460,
+  "incomplete": false,
+  "at": "2026-11-19T11:43:21.328222+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 927,
+  "incomplete": false,
+  "at": "2026-11-19T11:43:27.768790+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 927,
+  "incomplete": false,
+  "at": "2026-11-19T11:43:34.064002+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 927,
+  "incomplete": false,
+  "at": "2026-11-19T11:43:39.389183+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 927,
+  "incomplete": false,
+  "at": "2026-11-19T11:43:44.799406+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 927,
+  "incomplete": false,
+  "at": "2026-11-19T11:43:52.088649+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 927,
+  "incomplete": false,
+  "at": "2026-11-19T11:43:57.470468+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 927,
+  "incomplete": false,
+  "at": "2026-11-19T11:44:03.292443+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 927,
+  "incomplete": false,
+  "at": "2026-11-19T11:44:07.480693+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 9,
+  "total_count": 927,
+  "incomplete": false,
+  "at": "2026-11-19T11:44:12.817669+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 10,
+  "total_count": 927,
+  "incomplete": false,
+  "at": "2026-11-19T11:44:14.722451+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 637,
+  "incomplete": false,
+  "at": "2026-11-19T11:44:21.655809+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 637,
+  "incomplete": false,
+  "at": "2026-11-19T11:44:27.044828+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 637,
+  "incomplete": false,
+  "at": "2026-11-19T11:44:32.464556+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 637,
+  "incomplete": false,
+  "at": "2026-11-19T11:44:36.884365+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 637,
+  "incomplete": false,
+  "at": "2026-11-19T11:44:41.231926+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 637,
+  "incomplete": false,
+  "at": "2026-11-19T11:44:45.782477+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 637,
+  "incomplete": false,
+  "at": "2026-11-19T11:44:48.006892+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 430,
+  "incomplete": false,
+  "at": "2026-11-19T11:44:52.962434+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 430,
+  "incomplete": false,
+  "at": "2026-11-19T11:44:58.556531+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 430,
+  "incomplete": false,
+  "at": "2026-11-19T11:45:03.363258+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 430,
+  "incomplete": false,
+  "at": "2026-11-19T11:45:08.525037+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 430,
+  "incomplete": false,
+  "at": "2026-11-19T11:45:11.007120+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 250,
+  "incomplete": false,
+  "at": "2026-11-19T11:45:16.156762+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 250,
+  "incomplete": false,
+  "at": "2026-11-19T11:45:21.483041+00:00"
+ },
+ {
+  "q": "language:\"Python\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 250,
+  "incomplete": false,
+  "at": "2026-11-19T11:45:24.215558+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2749,
+  "incomplete": false,
+  "at": "2026-11-19T11:45:29.071360+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:200..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2665,
+  "incomplete": false,
+  "at": "2026-11-19T11:45:33.932486+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:200..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2496,
+  "incomplete": false,
+  "at": "2026-11-19T11:45:39.709992+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2273,
+  "incomplete": false,
+  "at": "2026-11-19T11:45:45.251119+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:200..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1915,
+  "incomplete": false,
+  "at": "2026-11-19T11:45:50.580405+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:200..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1501,
+  "incomplete": false,
+  "at": "2026-11-19T11:45:55.170987+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1079,
+  "incomplete": false,
+  "at": "2026-11-19T11:45:59.967336+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 672,
+  "incomplete": false,
+  "at": "2026-11-19T11:46:05.056559+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 672,
+  "incomplete": false,
+  "at": "2026-11-19T11:46:10.156040+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 672,
+  "incomplete": false,
+  "at": "2026-11-19T11:46:15.838664+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 672,
+  "incomplete": false,
+  "at": "2026-11-19T11:46:21.462123+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 672,
+  "incomplete": false,
+  "at": "2026-11-19T11:46:28.086088+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 672,
+  "incomplete": false,
+  "at": "2026-11-19T11:46:33.587976+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 672,
+  "incomplete": false,
+  "at": "2026-11-19T11:46:37.504476+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 407,
+  "incomplete": false,
+  "at": "2026-11-19T11:46:43.190655+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 407,
+  "incomplete": false,
+  "at": "2026-11-19T11:46:47.806168+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 407,
+  "incomplete": false,
+  "at": "2026-11-19T11:46:52.968288+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 407,
+  "incomplete": false,
+  "at": "2026-11-19T11:46:57.829674+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 407,
+  "incomplete": false,
+  "at": "2026-11-19T11:46:58.847609+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 422,
+  "incomplete": false,
+  "at": "2026-11-19T11:47:04.850629+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 422,
+  "incomplete": false,
+  "at": "2026-11-19T11:47:09.860974+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 422,
+  "incomplete": false,
+  "at": "2026-11-19T11:47:15.456665+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 422,
+  "incomplete": false,
+  "at": "2026-11-19T11:47:20.190237+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 422,
+  "incomplete": false,
+  "at": "2026-11-19T11:47:21.955044+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 414,
+  "incomplete": false,
+  "at": "2026-11-19T11:47:27.717318+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 414,
+  "incomplete": false,
+  "at": "2026-11-19T11:47:32.555531+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 414,
+  "incomplete": false,
+  "at": "2026-11-19T11:47:37.333139+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 414,
+  "incomplete": false,
+  "at": "2026-11-19T11:47:42.339630+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 414,
+  "incomplete": false,
+  "at": "2026-11-19T11:47:43.534290+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 358,
+  "incomplete": false,
+  "at": "2026-11-19T11:47:49.760057+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 358,
+  "incomplete": false,
+  "at": "2026-11-19T11:47:54.378498+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 358,
+  "incomplete": false,
+  "at": "2026-11-19T11:48:00.514762+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 358,
+  "incomplete": false,
+  "at": "2026-11-19T11:48:06.876852+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 223,
+  "incomplete": false,
+  "at": "2026-11-19T11:48:12.246365+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 223,
+  "incomplete": false,
+  "at": "2026-11-19T11:48:17.161085+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 223,
+  "incomplete": false,
+  "at": "2026-11-19T11:48:18.856439+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 169,
+  "incomplete": false,
+  "at": "2026-11-19T11:48:24.376820+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 169,
+  "incomplete": false,
+  "at": "2026-11-19T11:48:28.013342+00:00"
+ },
+ {
+  "q": "language:\"Rust\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 84,
+  "incomplete": false,
+  "at": "2026-11-19T11:48:32.349874+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 3647,
+  "incomplete": false,
+  "at": "2026-11-19T11:48:37.642480+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:200..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 3484,
+  "incomplete": false,
+  "at": "2026-11-19T11:48:43.151805+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:200..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 3201,
+  "incomplete": false,
+  "at": "2026-11-19T11:48:49.021151+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2842,
+  "incomplete": false,
+  "at": "2026-11-19T11:48:54.051531+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:200..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2389,
+  "incomplete": false,
+  "at": "2026-11-19T11:48:59.319787+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:200..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1896,
+  "incomplete": false,
+  "at": "2026-11-19T11:49:05.499434+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1331,
+  "incomplete": false,
+  "at": "2026-11-19T11:49:11.167210+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 856,
+  "incomplete": false,
+  "at": "2026-11-19T11:49:16.269830+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 856,
+  "incomplete": false,
+  "at": "2026-11-19T11:49:21.248728+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 856,
+  "incomplete": false,
+  "at": "2026-11-19T11:49:26.485896+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 856,
+  "incomplete": false,
+  "at": "2026-11-19T11:49:31.301223+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 856,
+  "incomplete": false,
+  "at": "2026-11-19T11:49:35.981710+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 856,
+  "incomplete": false,
+  "at": "2026-11-19T11:49:42.138370+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 856,
+  "incomplete": false,
+  "at": "2026-11-19T11:49:47.362132+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 856,
+  "incomplete": false,
+  "at": "2026-11-19T11:49:52.740434+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 9,
+  "total_count": 856,
+  "incomplete": false,
+  "at": "2026-11-19T11:49:55.831190+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 475,
+  "incomplete": false,
+  "at": "2026-11-19T11:50:00.870553+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 475,
+  "incomplete": false,
+  "at": "2026-11-19T11:50:06.274568+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 475,
+  "incomplete": false,
+  "at": "2026-11-19T11:50:10.942029+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 475,
+  "incomplete": false,
+  "at": "2026-11-19T11:50:16.150634+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 475,
+  "incomplete": false,
+  "at": "2026-11-19T11:50:19.990806+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 565,
+  "incomplete": false,
+  "at": "2026-11-19T11:50:24.786410+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 565,
+  "incomplete": false,
+  "at": "2026-11-19T11:50:29.976511+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 565,
+  "incomplete": false,
+  "at": "2026-11-19T11:50:34.638182+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 565,
+  "incomplete": false,
+  "at": "2026-11-19T11:50:39.988396+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 565,
+  "incomplete": false,
+  "at": "2026-11-19T11:50:44.961265+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 565,
+  "incomplete": false,
+  "at": "2026-11-19T11:50:48.386146+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 493,
+  "incomplete": false,
+  "at": "2026-11-19T11:50:54.629868+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 493,
+  "incomplete": false,
+  "at": "2026-11-19T11:50:59.349331+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 493,
+  "incomplete": false,
+  "at": "2026-11-19T11:51:04.448445+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 493,
+  "incomplete": false,
+  "at": "2026-11-19T11:51:09.092166+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 493,
+  "incomplete": false,
+  "at": "2026-11-19T11:51:15.200904+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 453,
+  "incomplete": false,
+  "at": "2026-11-19T11:51:20.141682+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 453,
+  "incomplete": false,
+  "at": "2026-11-19T11:51:25.370167+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 453,
+  "incomplete": false,
+  "at": "2026-11-19T11:51:30.563986+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 453,
+  "incomplete": false,
+  "at": "2026-11-19T11:51:34.698171+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 453,
+  "incomplete": false,
+  "at": "2026-11-19T11:51:37.621035+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 359,
+  "incomplete": false,
+  "at": "2026-11-19T11:51:42.409002+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 359,
+  "incomplete": false,
+  "at": "2026-11-19T11:51:47.955775+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 359,
+  "incomplete": false,
+  "at": "2026-11-19T11:51:53.447223+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 359,
+  "incomplete": false,
+  "at": "2026-11-19T11:51:57.109438+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 283,
+  "incomplete": false,
+  "at": "2026-11-19T11:52:01.894148+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 283,
+  "incomplete": false,
+  "at": "2026-11-19T11:52:06.722565+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 283,
+  "incomplete": false,
+  "at": "2026-11-19T11:52:11.003077+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 163,
+  "incomplete": false,
+  "at": "2026-11-19T11:52:16.451152+00:00"
+ },
+ {
+  "q": "language:\"Go\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 163,
+  "incomplete": false,
+  "at": "2026-11-19T11:52:19.720171+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 3136,
+  "incomplete": false,
+  "at": "2026-11-19T11:52:25.096538+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:200..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 3005,
+  "incomplete": false,
+  "at": "2026-11-19T11:52:29.355705+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:200..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2838,
+  "incomplete": false,
+  "at": "2026-11-19T11:52:33.606075+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2564,
+  "incomplete": false,
+  "at": "2026-11-19T11:52:38.010732+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:200..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2211,
+  "incomplete": false,
+  "at": "2026-11-19T11:52:43.388815+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:200..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1795,
+  "incomplete": false,
+  "at": "2026-11-19T11:52:48.060385+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1282,
+  "incomplete": false,
+  "at": "2026-11-19T11:52:53.022244+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 806,
+  "incomplete": false,
+  "at": "2026-11-19T11:52:58.095293+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 806,
+  "incomplete": false,
+  "at": "2026-11-19T11:53:02.269660+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 806,
+  "incomplete": false,
+  "at": "2026-11-19T11:53:07.014705+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 806,
+  "incomplete": false,
+  "at": "2026-11-19T11:53:11.668316+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 806,
+  "incomplete": false,
+  "at": "2026-11-19T11:53:16.619120+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 806,
+  "incomplete": false,
+  "at": "2026-11-19T11:53:21.894707+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 806,
+  "incomplete": false,
+  "at": "2026-11-19T11:53:26.674889+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 806,
+  "incomplete": false,
+  "at": "2026-11-19T11:53:31.300610+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 9,
+  "total_count": 806,
+  "incomplete": false,
+  "at": "2026-11-19T11:53:32.116658+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 476,
+  "incomplete": false,
+  "at": "2026-11-19T11:53:37.862910+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 476,
+  "incomplete": false,
+  "at": "2026-11-19T11:53:42.724167+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 476,
+  "incomplete": false,
+  "at": "2026-11-19T11:53:47.046637+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 476,
+  "incomplete": false,
+  "at": "2026-11-19T11:53:50.964000+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 476,
+  "incomplete": false,
+  "at": "2026-11-19T11:53:55.543367+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 514,
+  "incomplete": false,
+  "at": "2026-11-19T11:54:00.271011+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 514,
+  "incomplete": false,
+  "at": "2026-11-19T11:54:05.301100+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 514,
+  "incomplete": false,
+  "at": "2026-11-19T11:54:09.887242+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 514,
+  "incomplete": false,
+  "at": "2026-11-19T11:54:14.310306+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 514,
+  "incomplete": false,
+  "at": "2026-11-19T11:54:18.503242+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 514,
+  "incomplete": false,
+  "at": "2026-11-19T11:54:19.556315+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 416,
+  "incomplete": false,
+  "at": "2026-11-19T11:54:24.685176+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 416,
+  "incomplete": false,
+  "at": "2026-11-19T11:54:29.369700+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 416,
+  "incomplete": false,
+  "at": "2026-11-19T11:54:34.117715+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 416,
+  "incomplete": false,
+  "at": "2026-11-19T11:54:38.970117+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 416,
+  "incomplete": false,
+  "at": "2026-11-19T11:54:40.133457+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 353,
+  "incomplete": false,
+  "at": "2026-11-19T11:54:45.635831+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 353,
+  "incomplete": false,
+  "at": "2026-11-19T11:54:50.679743+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 353,
+  "incomplete": false,
+  "at": "2026-11-19T11:54:55.000973+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 353,
+  "incomplete": false,
+  "at": "2026-11-19T11:54:57.600757+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 274,
+  "incomplete": false,
+  "at": "2026-11-19T11:55:01.948611+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 274,
+  "incomplete": false,
+  "at": "2026-11-19T11:55:07.035420+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 274,
+  "incomplete": false,
+  "at": "2026-11-19T11:55:10.514709+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 167,
+  "incomplete": false,
+  "at": "2026-11-19T11:55:14.801345+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 167,
+  "incomplete": false,
+  "at": "2026-11-19T11:55:17.977696+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 131,
+  "incomplete": false,
+  "at": "2026-11-19T11:55:23.159926+00:00"
+ },
+ {
+  "q": "language:\"JavaScript\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 131,
+  "incomplete": false,
+  "at": "2026-11-19T11:55:24.969113+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 5998,
+  "incomplete": false,
+  "at": "2026-11-19T11:55:30.208387+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 5726,
+  "incomplete": false,
+  "at": "2026-11-19T11:55:35.584873+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 5344,
+  "incomplete": false,
+  "at": "2026-11-19T11:55:40.422415+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 4846,
+  "incomplete": false,
+  "at": "2026-11-19T11:55:44.431881+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 4142,
+  "incomplete": false,
+  "at": "2026-11-19T11:55:48.155042+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 3272,
+  "incomplete": false,
+  "at": "2026-11-19T11:55:52.652503+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2340,
+  "incomplete": false,
+  "at": "2026-11-19T11:55:57.888630+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1519,
+  "incomplete": false,
+  "at": "2026-11-19T11:56:02.116762+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 882,
+  "incomplete": false,
+  "at": "2026-11-19T11:56:07.074055+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 882,
+  "incomplete": false,
+  "at": "2026-11-19T11:56:11.396105+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 882,
+  "incomplete": false,
+  "at": "2026-11-19T11:56:16.301494+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 882,
+  "incomplete": false,
+  "at": "2026-11-19T11:56:20.949820+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 882,
+  "incomplete": false,
+  "at": "2026-11-19T11:56:25.489654+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 882,
+  "incomplete": false,
+  "at": "2026-11-19T11:56:30.374255+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 882,
+  "incomplete": false,
+  "at": "2026-11-19T11:56:35.397386+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 882,
+  "incomplete": false,
+  "at": "2026-11-19T11:56:40.246416+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:200..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 9,
+  "total_count": 882,
+  "incomplete": false,
+  "at": "2026-11-19T11:56:44.508583+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 637,
+  "incomplete": false,
+  "at": "2026-11-19T11:56:49.033091+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 637,
+  "incomplete": false,
+  "at": "2026-11-19T11:56:53.562288+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 637,
+  "incomplete": false,
+  "at": "2026-11-19T11:56:58.966885+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 637,
+  "incomplete": false,
+  "at": "2026-11-19T11:57:03.964990+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 637,
+  "incomplete": false,
+  "at": "2026-11-19T11:57:08.215574+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 637,
+  "incomplete": false,
+  "at": "2026-11-19T11:57:12.555637+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 637,
+  "incomplete": false,
+  "at": "2026-11-19T11:57:14.840928+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 821,
+  "incomplete": false,
+  "at": "2026-11-19T11:57:20.180656+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 821,
+  "incomplete": false,
+  "at": "2026-11-19T11:57:25.038800+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 821,
+  "incomplete": false,
+  "at": "2026-11-19T11:57:29.745090+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 821,
+  "incomplete": false,
+  "at": "2026-11-19T11:57:35.342332+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 821,
+  "incomplete": false,
+  "at": "2026-11-19T11:57:40.442431+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 821,
+  "incomplete": false,
+  "at": "2026-11-19T11:57:45.005029+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 821,
+  "incomplete": false,
+  "at": "2026-11-19T11:57:49.896936+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 821,
+  "incomplete": false,
+  "at": "2026-11-19T11:57:54.498159+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 9,
+  "total_count": 821,
+  "incomplete": false,
+  "at": "2026-11-19T11:57:55.958010+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 932,
+  "incomplete": false,
+  "at": "2026-11-19T11:58:00.977334+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 932,
+  "incomplete": false,
+  "at": "2026-11-19T11:58:05.539414+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 932,
+  "incomplete": false,
+  "at": "2026-11-19T11:58:10.239772+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 932,
+  "incomplete": false,
+  "at": "2026-11-19T11:58:15.277617+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 932,
+  "incomplete": false,
+  "at": "2026-11-19T11:58:20.371496+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 932,
+  "incomplete": false,
+  "at": "2026-11-19T11:58:25.312092+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 932,
+  "incomplete": false,
+  "at": "2026-11-19T11:58:30.363003+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 932,
+  "incomplete": false,
+  "at": "2026-11-19T11:58:34.803667+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 9,
+  "total_count": 932,
+  "incomplete": false,
+  "at": "2026-11-19T11:58:40.076010+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 10,
+  "total_count": 932,
+  "incomplete": false,
+  "at": "2026-11-19T11:58:42.344420+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 870,
+  "incomplete": false,
+  "at": "2026-11-19T11:58:47.572372+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 870,
+  "incomplete": false,
+  "at": "2026-11-19T11:58:52.505149+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 870,
+  "incomplete": false,
+  "at": "2026-11-19T11:58:57.137018+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 870,
+  "incomplete": false,
+  "at": "2026-11-19T11:59:02.036793+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 870,
+  "incomplete": false,
+  "at": "2026-11-19T11:59:06.765947+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 870,
+  "incomplete": false,
+  "at": "2026-11-19T11:59:11.689936+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 870,
+  "incomplete": false,
+  "at": "2026-11-19T11:59:16.333948+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 870,
+  "incomplete": false,
+  "at": "2026-11-19T11:59:21.375571+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 9,
+  "total_count": 870,
+  "incomplete": false,
+  "at": "2026-11-19T11:59:24.714740+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 704,
+  "incomplete": false,
+  "at": "2026-11-19T11:59:29.220652+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 704,
+  "incomplete": false,
+  "at": "2026-11-19T11:59:33.813412+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 704,
+  "incomplete": false,
+  "at": "2026-11-19T11:59:38.163586+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 704,
+  "incomplete": false,
+  "at": "2026-11-19T11:59:42.972111+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 704,
+  "incomplete": false,
+  "at": "2026-11-19T11:59:47.401413+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 704,
+  "incomplete": false,
+  "at": "2026-11-19T11:59:51.690978+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 704,
+  "incomplete": false,
+  "at": "2026-11-19T11:59:57.191786+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 704,
+  "incomplete": false,
+  "at": "2026-11-19T11:59:57.905602+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 498,
+  "incomplete": false,
+  "at": "2026-11-19T12:00:03.797331+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 498,
+  "incomplete": false,
+  "at": "2026-11-19T12:00:08.946648+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 498,
+  "incomplete": false,
+  "at": "2026-11-19T12:00:13.368283+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 498,
+  "incomplete": false,
+  "at": "2026-11-19T12:00:18.612954+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 498,
+  "incomplete": false,
+  "at": "2026-11-19T12:00:24.051652+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 382,
+  "incomplete": false,
+  "at": "2026-11-19T12:00:29.192740+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 382,
+  "incomplete": false,
+  "at": "2026-11-19T12:00:34.149061+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 382,
+  "incomplete": false,
+  "at": "2026-11-19T12:00:39.037044+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 382,
+  "incomplete": false,
+  "at": "2026-11-19T12:00:43.514667+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 272,
+  "incomplete": false,
+  "at": "2026-11-19T12:00:48.251449+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 272,
+  "incomplete": false,
+  "at": "2026-11-19T12:00:53.357027+00:00"
+ },
+ {
+  "q": "language:\"TypeScript\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 272,
+  "incomplete": false,
+  "at": "2026-11-19T12:00:57.318850+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2447,
+  "incomplete": false,
+  "at": "2026-11-19T12:01:02.893700+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:200..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2375,
+  "incomplete": false,
+  "at": "2026-11-19T12:01:07.959706+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:200..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2239,
+  "incomplete": false,
+  "at": "2026-11-19T12:01:13.440640+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2035,
+  "incomplete": false,
+  "at": "2026-11-19T12:01:18.041372+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:200..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1742,
+  "incomplete": false,
+  "at": "2026-11-19T12:01:23.650412+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:200..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1377,
+  "incomplete": false,
+  "at": "2026-11-19T12:01:28.555026+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1010,
+  "incomplete": false,
+  "at": "2026-11-19T12:01:34.146735+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 662,
+  "incomplete": false,
+  "at": "2026-11-19T12:01:39.521027+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 662,
+  "incomplete": false,
+  "at": "2026-11-19T12:01:44.569155+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 662,
+  "incomplete": false,
+  "at": "2026-11-19T12:01:50.011949+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 662,
+  "incomplete": false,
+  "at": "2026-11-19T12:01:55.661123+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 662,
+  "incomplete": false,
+  "at": "2026-11-19T12:02:00.675569+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 662,
+  "incomplete": false,
+  "at": "2026-11-19T12:02:05.715868+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 662,
+  "incomplete": false,
+  "at": "2026-11-19T12:02:09.643382+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 348,
+  "incomplete": false,
+  "at": "2026-11-19T12:02:14.570870+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 348,
+  "incomplete": false,
+  "at": "2026-11-19T12:02:19.658157+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 348,
+  "incomplete": false,
+  "at": "2026-11-19T12:02:25.761358+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 348,
+  "incomplete": false,
+  "at": "2026-11-19T12:02:28.519363+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 367,
+  "incomplete": false,
+  "at": "2026-11-19T12:02:32.784626+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 367,
+  "incomplete": false,
+  "at": "2026-11-19T12:02:38.091922+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 367,
+  "incomplete": false,
+  "at": "2026-11-19T12:02:42.673041+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 367,
+  "incomplete": false,
+  "at": "2026-11-19T12:02:46.234912+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 365,
+  "incomplete": false,
+  "at": "2026-11-19T12:02:51.464839+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 365,
+  "incomplete": false,
+  "at": "2026-11-19T12:02:55.684387+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 365,
+  "incomplete": false,
+  "at": "2026-11-19T12:03:00.945182+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 365,
+  "incomplete": false,
+  "at": "2026-11-19T12:03:04.833492+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 293,
+  "incomplete": false,
+  "at": "2026-11-19T12:03:10.359710+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 293,
+  "incomplete": false,
+  "at": "2026-11-19T12:03:15.191211+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 293,
+  "incomplete": false,
+  "at": "2026-11-19T12:03:19.590930+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 204,
+  "incomplete": false,
+  "at": "2026-11-19T12:03:24.610262+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 204,
+  "incomplete": false,
+  "at": "2026-11-19T12:03:29.341948+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 204,
+  "incomplete": false,
+  "at": "2026-11-19T12:03:30.077765+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 136,
+  "incomplete": false,
+  "at": "2026-11-19T12:03:35.688462+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 136,
+  "incomplete": false,
+  "at": "2026-11-19T12:03:37.673413+00:00"
+ },
+ {
+  "q": "language:\"Java\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 72,
+  "incomplete": false,
+  "at": "2026-11-19T12:03:41.426825+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1132,
+  "incomplete": false,
+  "at": "2026-11-19T12:03:45.535647+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:200..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1104,
+  "incomplete": false,
+  "at": "2026-11-19T12:03:50.124083+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:200..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1047,
+  "incomplete": false,
+  "at": "2026-11-19T12:03:54.017401+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 934,
+  "incomplete": false,
+  "at": "2026-11-19T12:03:58.723325+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 934,
+  "incomplete": false,
+  "at": "2026-11-19T12:04:03.267799+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 934,
+  "incomplete": false,
+  "at": "2026-11-19T12:04:07.986160+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 934,
+  "incomplete": false,
+  "at": "2026-11-19T12:04:12.498835+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 934,
+  "incomplete": false,
+  "at": "2026-11-19T12:04:17.413965+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 934,
+  "incomplete": false,
+  "at": "2026-11-19T12:04:21.592234+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 934,
+  "incomplete": false,
+  "at": "2026-11-19T12:04:25.782755+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 934,
+  "incomplete": false,
+  "at": "2026-11-19T12:04:30.070022+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 9,
+  "total_count": 934,
+  "incomplete": false,
+  "at": "2026-11-19T12:04:34.474500+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 10,
+  "total_count": 934,
+  "incomplete": false,
+  "at": "2026-11-19T12:04:36.163194+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 113,
+  "incomplete": false,
+  "at": "2026-11-19T12:04:40.774644+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 113,
+  "incomplete": false,
+  "at": "2026-11-19T12:04:41.837288+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 57,
+  "incomplete": false,
+  "at": "2026-11-19T12:04:45.277726+00:00"
+ },
+ {
+  "q": "language:\"Kotlin\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 28,
+  "incomplete": false,
+  "at": "2026-11-19T12:04:46.947987+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1862,
+  "incomplete": false,
+  "at": "2026-11-19T12:04:52.394459+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:200..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1803,
+  "incomplete": false,
+  "at": "2026-11-19T12:04:57.200409+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:200..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1700,
+  "incomplete": false,
+  "at": "2026-11-19T12:05:01.410444+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1519,
+  "incomplete": false,
+  "at": "2026-11-19T12:05:05.925641+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:200..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1297,
+  "incomplete": false,
+  "at": "2026-11-19T12:05:10.549675+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:200..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1040,
+  "incomplete": false,
+  "at": "2026-11-19T12:05:15.626195+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 746,
+  "incomplete": false,
+  "at": "2026-11-19T12:05:19.849739+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 746,
+  "incomplete": false,
+  "at": "2026-11-19T12:05:25.180922+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 746,
+  "incomplete": false,
+  "at": "2026-11-19T12:05:30.458596+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 746,
+  "incomplete": false,
+  "at": "2026-11-19T12:05:35.874506+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 746,
+  "incomplete": false,
+  "at": "2026-11-19T12:05:40.598329+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 746,
+  "incomplete": false,
+  "at": "2026-11-19T12:05:44.826892+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 746,
+  "incomplete": false,
+  "at": "2026-11-19T12:05:49.880688+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 746,
+  "incomplete": false,
+  "at": "2026-11-19T12:05:52.490733+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 294,
+  "incomplete": false,
+  "at": "2026-11-19T12:05:56.830052+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 294,
+  "incomplete": false,
+  "at": "2026-11-19T12:06:01.571211+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 294,
+  "incomplete": false,
+  "at": "2026-11-19T12:06:06.204569+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 257,
+  "incomplete": false,
+  "at": "2026-11-19T12:06:10.978923+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 257,
+  "incomplete": false,
+  "at": "2026-11-19T12:06:15.675303+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 257,
+  "incomplete": false,
+  "at": "2026-11-19T12:06:19.044654+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 222,
+  "incomplete": false,
+  "at": "2026-11-19T12:06:24.012735+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 222,
+  "incomplete": false,
+  "at": "2026-11-19T12:06:29.234541+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 222,
+  "incomplete": false,
+  "at": "2026-11-19T12:06:30.727473+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 181,
+  "incomplete": false,
+  "at": "2026-11-19T12:06:36.141764+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 181,
+  "incomplete": false,
+  "at": "2026-11-19T12:06:40.283820+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 103,
+  "incomplete": false,
+  "at": "2026-11-19T12:06:45.352896+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 103,
+  "incomplete": false,
+  "at": "2026-11-19T12:06:46.040679+00:00"
+ },
+ {
+  "q": "language:\"C#\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 59,
+  "incomplete": false,
+  "at": "2026-11-19T12:06:50.245962+00:00"
+ },
+ {
+  "q": "language:\"Swift\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 612,
+  "incomplete": false,
+  "at": "2026-11-19T12:06:54.408948+00:00"
+ },
+ {
+  "q": "language:\"Swift\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 612,
+  "incomplete": false,
+  "at": "2026-11-19T12:06:58.244771+00:00"
+ },
+ {
+  "q": "language:\"Swift\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 612,
+  "incomplete": false,
+  "at": "2026-11-19T12:07:03.182333+00:00"
+ },
+ {
+  "q": "language:\"Swift\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 612,
+  "incomplete": false,
+  "at": "2026-11-19T12:07:08.006786+00:00"
+ },
+ {
+  "q": "language:\"Swift\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 612,
+  "incomplete": false,
+  "at": "2026-11-19T12:07:13.054403+00:00"
+ },
+ {
+  "q": "language:\"Swift\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 612,
+  "incomplete": false,
+  "at": "2026-11-19T12:07:17.855765+00:00"
+ },
+ {
+  "q": "language:\"Swift\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 612,
+  "incomplete": false,
+  "at": "2026-11-19T12:07:18.834198+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2282,
+  "incomplete": false,
+  "at": "2026-11-19T12:07:24.636191+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:200..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2215,
+  "incomplete": false,
+  "at": "2026-11-19T12:07:28.735677+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:200..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2107,
+  "incomplete": false,
+  "at": "2026-11-19T12:07:34.152330+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1898,
+  "incomplete": false,
+  "at": "2026-11-19T12:07:39.053928+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:200..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1598,
+  "incomplete": false,
+  "at": "2026-11-19T12:07:43.613516+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:200..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1255,
+  "incomplete": false,
+  "at": "2026-11-19T12:07:48.324544+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 866,
+  "incomplete": false,
+  "at": "2026-11-19T12:07:53.137851+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 866,
+  "incomplete": false,
+  "at": "2026-11-19T12:07:58.112187+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 866,
+  "incomplete": false,
+  "at": "2026-11-19T12:08:03.323071+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 866,
+  "incomplete": false,
+  "at": "2026-11-19T12:08:08.750820+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 866,
+  "incomplete": false,
+  "at": "2026-11-19T12:08:13.659241+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 866,
+  "incomplete": false,
+  "at": "2026-11-19T12:08:17.917366+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 866,
+  "incomplete": false,
+  "at": "2026-11-19T12:08:22.624319+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 866,
+  "incomplete": false,
+  "at": "2026-11-19T12:08:27.011965+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 9,
+  "total_count": 866,
+  "incomplete": false,
+  "at": "2026-11-19T12:08:30.419567+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 389,
+  "incomplete": false,
+  "at": "2026-11-19T12:08:34.959050+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 389,
+  "incomplete": false,
+  "at": "2026-11-19T12:08:39.640245+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 389,
+  "incomplete": false,
+  "at": "2026-11-19T12:08:44.339175+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 389,
+  "incomplete": false,
+  "at": "2026-11-19T12:08:49.310786+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 343,
+  "incomplete": false,
+  "at": "2026-11-19T12:08:54.817519+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 343,
+  "incomplete": false,
+  "at": "2026-11-19T12:08:59.292765+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 343,
+  "incomplete": false,
+  "at": "2026-11-19T12:09:04.076732+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 343,
+  "incomplete": false,
+  "at": "2026-11-19T12:09:06.859732+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 300,
+  "incomplete": false,
+  "at": "2026-11-19T12:09:11.257842+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 300,
+  "incomplete": false,
+  "at": "2026-11-19T12:09:15.339221+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 300,
+  "incomplete": false,
+  "at": "2026-11-19T12:09:20.909464+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 209,
+  "incomplete": false,
+  "at": "2026-11-19T12:09:25.965154+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 209,
+  "incomplete": false,
+  "at": "2026-11-19T12:09:31.418824+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 209,
+  "incomplete": false,
+  "at": "2026-11-19T12:09:32.415805+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 108,
+  "incomplete": false,
+  "at": "2026-11-19T12:09:37.802647+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 108,
+  "incomplete": false,
+  "at": "2026-11-19T12:09:38.699071+00:00"
+ },
+ {
+  "q": "language:\"C\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 67,
+  "incomplete": false,
+  "at": "2026-11-19T12:09:43.511314+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 3204,
+  "incomplete": false,
+  "at": "2026-11-19T12:09:48.879449+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:200..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 3079,
+  "incomplete": false,
+  "at": "2026-11-19T12:09:53.587446+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:200..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2918,
+  "incomplete": false,
+  "at": "2026-11-19T12:09:58.299120+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2599,
+  "incomplete": false,
+  "at": "2026-11-19T12:10:02.859192+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:200..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 2187,
+  "incomplete": false,
+  "at": "2026-11-19T12:10:08.081276+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:200..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1720,
+  "incomplete": false,
+  "at": "2026-11-19T12:10:12.765648+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1211,
+  "incomplete": false,
+  "at": "2026-11-19T12:10:18.380679+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 782,
+  "incomplete": false,
+  "at": "2026-11-19T12:10:23.315149+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 782,
+  "incomplete": false,
+  "at": "2026-11-19T12:10:28.452184+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 782,
+  "incomplete": false,
+  "at": "2026-11-19T12:10:34.143550+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 782,
+  "incomplete": false,
+  "at": "2026-11-19T12:10:39.189468+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 782,
+  "incomplete": false,
+  "at": "2026-11-19T12:10:44.333606+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 782,
+  "incomplete": false,
+  "at": "2026-11-19T12:10:48.895833+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 782,
+  "incomplete": false,
+  "at": "2026-11-19T12:10:53.870349+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 782,
+  "incomplete": false,
+  "at": "2026-11-19T12:10:58.050963+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 429,
+  "incomplete": false,
+  "at": "2026-11-19T12:11:03.134596+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 429,
+  "incomplete": false,
+  "at": "2026-11-19T12:11:08.419399+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 429,
+  "incomplete": false,
+  "at": "2026-11-19T12:11:13.244787+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 429,
+  "incomplete": false,
+  "at": "2026-11-19T12:11:18.395818+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 429,
+  "incomplete": false,
+  "at": "2026-11-19T12:11:20.427081+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 509,
+  "incomplete": false,
+  "at": "2026-11-19T12:11:25.011204+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 509,
+  "incomplete": false,
+  "at": "2026-11-19T12:11:30.119093+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 509,
+  "incomplete": false,
+  "at": "2026-11-19T12:11:34.326153+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 509,
+  "incomplete": false,
+  "at": "2026-11-19T12:11:38.738458+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 509,
+  "incomplete": false,
+  "at": "2026-11-19T12:11:43.825435+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 509,
+  "incomplete": false,
+  "at": "2026-11-19T12:11:44.733500+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 467,
+  "incomplete": false,
+  "at": "2026-11-19T12:11:50.573964+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 467,
+  "incomplete": false,
+  "at": "2026-11-19T12:11:55.329309+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 467,
+  "incomplete": false,
+  "at": "2026-11-19T12:12:00.649531+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 467,
+  "incomplete": false,
+  "at": "2026-11-19T12:12:06.234087+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 467,
+  "incomplete": false,
+  "at": "2026-11-19T12:12:09.794966+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 412,
+  "incomplete": false,
+  "at": "2026-11-19T12:12:14.769645+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 412,
+  "incomplete": false,
+  "at": "2026-11-19T12:12:20.206656+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 412,
+  "incomplete": false,
+  "at": "2026-11-19T12:12:25.076217+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 412,
+  "incomplete": false,
+  "at": "2026-11-19T12:12:29.270843+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 412,
+  "incomplete": false,
+  "at": "2026-11-19T12:12:30.353042+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 319,
+  "incomplete": false,
+  "at": "2026-11-19T12:12:36.414095+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 319,
+  "incomplete": false,
+  "at": "2026-11-19T12:12:40.538120+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 319,
+  "incomplete": false,
+  "at": "2026-11-19T12:12:45.386443+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 319,
+  "incomplete": false,
+  "at": "2026-11-19T12:12:47.122028+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 161,
+  "incomplete": false,
+  "at": "2026-11-19T12:12:51.962245+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 161,
+  "incomplete": false,
+  "at": "2026-11-19T12:12:55.129210+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 125,
+  "incomplete": false,
+  "at": "2026-11-19T12:12:59.852976+00:00"
+ },
+ {
+  "q": "language:\"C++\" stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 125,
+  "incomplete": false,
+  "at": "2026-11-19T12:13:01.475114+00:00"
+ },
+ {
+  "q": "language:\"Ruby\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 792,
+  "incomplete": false,
+  "at": "2026-11-19T12:13:07.072608+00:00"
+ },
+ {
+  "q": "language:\"Ruby\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 792,
+  "incomplete": false,
+  "at": "2026-11-19T12:13:11.618792+00:00"
+ },
+ {
+  "q": "language:\"Ruby\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 792,
+  "incomplete": false,
+  "at": "2026-11-19T12:13:16.556512+00:00"
+ },
+ {
+  "q": "language:\"Ruby\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 792,
+  "incomplete": false,
+  "at": "2026-11-19T12:13:21.828083+00:00"
+ },
+ {
+  "q": "language:\"Ruby\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 792,
+  "incomplete": false,
+  "at": "2026-11-19T12:13:26.389671+00:00"
+ },
+ {
+  "q": "language:\"Ruby\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 792,
+  "incomplete": false,
+  "at": "2026-11-19T12:13:31.303135+00:00"
+ },
+ {
+  "q": "language:\"Ruby\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 792,
+  "incomplete": false,
+  "at": "2026-11-19T12:13:36.325015+00:00"
+ },
+ {
+  "q": "language:\"Ruby\" stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 792,
+  "incomplete": false,
+  "at": "2026-11-19T12:13:41.751764+00:00"
+ }
+]
