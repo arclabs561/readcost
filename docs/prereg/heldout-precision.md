@@ -350,4 +350,23 @@ The scripts are `scripts/heldout_precision.py` (draw and batches) and
 
 ## Amendments
 
-None yet.
+### 19 November 2026, before the search was run
+
+Details that `scripts/heldout_precision.py` fixes and the text above
+leaves open, written before any search, fetch or check was run:
+
+- The head commit of each repository's default branch comes from
+  GitHub's GraphQL API; the README comes from `repos/{repo}/readme` at
+  that commit.
+- A finding that readcost cannot map to source offsets is not sampled.
+- D-random is drawn before D-long, and a sentence drawn as D-random is
+  not drawn again as D-long. A decoy whose span cannot be mapped to
+  source offsets is skipped, like a sentence with no run.
+- An inline-list decoy's message says "4 items listed in one sentence",
+  the rule's smallest count, whatever the span's length.
+- The 240 characters of context on each side are cut back to whole
+  words, with runs of white space collapsed to one space.
+- A rater sees each item as the fields `i`, `rule`, `message`,
+  `excerpt`, `sentence`, `before` and `after`. The ids are six-digit
+  numbers drawn with `random.Random("20261119:ids")` over the items in
+  key order, so they carry no information about rule or decoy status.
