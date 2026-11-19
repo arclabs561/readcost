@@ -297,3 +297,14 @@ def test_batches_cover_every_item_once():
               [*bp.RATER_SEEDS.values(), *bp.BLIND_SEEDS.values()]}
     assert len(orders) == 15
     random.Random(0)
+
+
+def test_sentence_tokens_find_a_checked_sentence_again():
+    an = bp.analyzer()
+    text = ("# Title\n\nThe service reads the configuration file before it starts the workers.\n\n"
+            "Each worker writes its results to the output folder when it finishes.\n")
+    rec = {"stratum": "md", "repo": "a/b", "commit": "c", "path": "docs/x.md", "blob": "x"}
+    s = next(iter(bp.check_text(an, text * 8, rec)["sentences"]))
+    toks = bp.sentence_tokens(an, text * 8, rec, s["start"], s["end"])
+    assert toks and all((text * 8)[t[3]:t[4]] == t[0] for t in toks if t[3] is not None)
+    assert bp.sentence_tokens(an, text * 8, rec, 0, 3) is None
