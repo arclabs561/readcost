@@ -400,3 +400,40 @@ it, lists the tree, and reads only the files it needs. Three consequences:
   seeded rule; S2 still checks only those of repositories whose README
   was kept.
 - Symbolic links are not followed.
+
+### 19 November 2026, after the first three raters: a wider panel
+
+Written after the first report and before any label below existed. It adds
+raters and changes no outcome or decision already reported; the decisions
+taken on the first three raters (inanimate-subject opt-in, #98) stand
+unless the panel below reverses them by the same rules.
+
+Reasons, from a critique of the first round: the three raters were one
+model (Claude Opus 5.5), so their agreement is partly a model agreeing with
+itself; each item showed readcost's rule name and message, so the raters
+judged readcost's claim rather than the sentence; and "accepted" (correct
+or defensible) is mostly "defensible", while what matters to a user is
+whether an editor would change the text.
+
+- Panel: nine more raters on the same 597 items, each a fresh, independent
+  Claude agent with a new shuffle (seeds 1004 to 1012) and the same rubric:
+  raters 4 to 6 Claude Sonnet 5.5, 7 to 9 Claude Haiku 5.5, 10 to 12
+  Claude Fable 5.2. These are four models of one family, not independent
+  families; no API key for other families is available.
+- Unprimed protocol: three more raters (Opus, Sonnet, Haiku; seeds 2001 to
+  2003) see each item without its rule name or message, with the rubric in
+  `eval/heldout/RUBRIC_BLIND.txt`, and answer whether an editor would change
+  the marked text.
+- Outcomes, all secondary to the first report: per rule, with Wilson 95%
+  intervals, (a) the share accepted by the majority of all twelve primed
+  raters, (b) the same per model (majority of its three), (c) the share
+  labelled "c" by that majority, and (d) for the unprimed raters, the share
+  their majority labels "c" or "d", and "c" alone, beside the decoys'.
+  Agreement: Fleiss' kappa over the twelve, and between model majorities.
+- Decision rules: the same as above, applied to the twelve-rater majority.
+  A rule whose opt-in proposal holds under the first three but not under
+  the twelve is reported as unsettled, not reversed silently. A default
+  rule whose unprimed "c" share does not exceed the decoys' unprimed "c"
+  share is reported as "no better than chance placement without priming".
+- Ties: a model's three cannot tie. Among twelve, six against six counts
+  as not accepted.

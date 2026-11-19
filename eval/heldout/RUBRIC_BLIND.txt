@@ -1,0 +1,31 @@
+Rubric (unprimed protocol)
+
+You are helping an editor of technical writing. Each item is one sentence from a project's
+documentation, with a few marked words ("excerpt") somewhere in it. Judge each item on its own,
+as an experienced technical editor would. You are not told why the words are marked; something
+marked them, and it may or may not have had a good reason.
+
+Question: is there a reading problem at or around the marked words that an editor should fix?
+
+Labels:
+- "c": yes, an editor would change this to make it easier to read.
+- "d": it could be written more clearly, but it is fine as it is; changing it is optional.
+- "w": no, there is no reading problem there.
+
+Give a short "cause" (under 8 words): what the problem is, or why there is none.
+
+Code spans in the sentence may appear as the placeholder word "Xcode"; treat it as a code identifier.
+
+Reply format
+
+Each batch file is a JSON list of items. Each item has "i" (its id), "excerpt" (the marked words),
+"sentence", and "before" and "after" (up to 240 characters of the source on each side of the
+sentence, for context only; judge the sentence).
+
+Reply with one JSON object for the batch, and nothing else:
+
+{"labels": [{"i": 123456, "label": "c", "cause": "short reason"}, ...]}
+
+- one entry per item in the batch, with its "i" unchanged;
+- "label" is "c", "d" or "w";
+- "cause" is a string under 8 words (it may be empty).
