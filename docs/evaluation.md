@@ -2888,6 +2888,49 @@ rounded to the nearest point; the report has the exact counts.
   inline-list in its first 15 batches; its labels are kept (see the plan's
   amendments).
 
+## Re-rating with open models from other families, pre-registered
+
+Every rater above was a Claude model. The plan
+[docs/prereg/open-family-raters.md](prereg/open-family-raters.md),
+committed before any model call, re-rates every item of rounds 1 to 3 with
+four open-weight models from four other families, each pinned to a commit:
+Qwen3.8 27B, Gemma 4 31B, GLM-4.7 Flash and Ministral 3 14B. Each item was
+rated alone, with the round's rubric, three sampled raters per family and
+one greedy sample, on Hugging Face Jobs (one H200, vLLM 0.34.0, run
+`full-20261119`, about 45 minutes and $4). 3,151 of the 3,166 items were
+rebuilt from their pointers; the other 15 come from repositories that have
+since gone or pull requests since edited. Every reply but one parsed. The
+report is `eval/open-raters/report.md`; the label files are in the private
+Hugging Face dataset `arclabs561/readcost-labels`, under
+`runs/full-20261119/`.
+
+- Two of the four families are poor raters by the plan's own checks. GLM
+  accepted 46% of random decoys and agrees with the Claude panel at Cohen's
+  kappa 0.06; Ministral accepted 11% of random decoys, kappa 0.15. Qwen and
+  Gemma accepted 1 to 2% of random decoys and agree with Claude at kappa
+  0.39 and 0.56. The plan counts all four in the open panel's majority, so
+  its answers carry GLM's and Ministral's noise.
+- The priming effect replicates outside Claude: pooled over rules, the open
+  panel accepts findings shown with readcost's message 5 points more often
+  than it sees a problem in them without it (+2 to +8), against 7 points for
+  Claude. It is largest for participial-clause, nominalization,
+  stacked-nouns and hyphen-compound in both panels.
+- No rule's findings beat the longest sentence unprimed with the open panel
+  either. inanimate-subject, participial-clause and nominalization still
+  fail that test, and the composite ranking still does not beat sentence
+  length (+1 point, −9 to +10).
+- center-embedding does not hold up outside Claude. Unprimed, its round 3
+  findings beat the longest sentence by 16 points with an interval of −9 to
+  +30, from 16 findings. Primed, the open families accept few of them:
+  Qwen 32%, Gemma 7%, Ministral 11%, against Claude's 45%. Unprimed, they
+  see a problem in 81% of the same sentences. So the open models find these
+  sentences hard, but mostly do not find the construction readcost names.
+  By the plan's rule this proposes turning center-embedding off by default,
+  reversing #107; the plan changes no default itself, and the proposal goes
+  to its own pull request.
+- inanimate-subject stays opt-in: the open panel accepts 7 of its 142
+  findings primed.
+
 ## Rebuilding the rated items
 
 The repository holds pointers to the items of the three precision rounds,
