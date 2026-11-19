@@ -284,6 +284,22 @@ class FakeAsk:
         return {"lost": lost, "added": [], "changed": []}, meta
 
 
+# Arm B's feedback as readcost prints it at a57e19e, which the run's verify step requires. The
+# tests also run against later readcost (a pull request is tested merged with main), where
+# `-o agent` already words feedback as #102 does, so the run tests stand B's wording in for it.
+B_AT_A57E19E = "readcost: 2 hard-to-read constructions in 150 words. Rewrite these sentences where the finding holds"
+
+
+@pytest.fixture
+def pinned_b(monkeypatch):
+    real = m.feedbacks
+
+    def feedbacks(analyzer, text, precision):
+        fb = real(analyzer, text, precision)
+        return {**fb, "B": f"{B_AT_A57E19E} ({m.sha(text)[:8]})."}
+    monkeypatch.setattr(m, "feedbacks", feedbacks)
+
+
 def _ref(tmp_path, n=3):
     ref = tmp_path / "ref"
     ref.mkdir()
@@ -292,7 +308,7 @@ def _ref(tmp_path, n=3):
     return ref
 
 
-def test_a_run_judges_every_pair_in_both_orders_and_the_report_decides(tmp_path, analyzer):
+def test_a_run_judges_every_pair_in_both_orders_and_the_report_decides(tmp_path, analyzer, pinned_b):
     ref = _ref(tmp_path)
     fake = FakeAsk()
     client = m.Client(ref / "replies.jsonl", ask=fake)
@@ -338,7 +354,7 @@ def test_a_run_judges_every_pair_in_both_orders_and_the_report_decides(tmp_path,
     assert again.calls == [] and client2.calls == 198
 
 
-def test_caps_stop_the_run_before_crossing_and_count_cached_replies(tmp_path, analyzer):
+def test_caps_stop_the_run_before_crossing_and_count_cached_replies(tmp_path, analyzer, pinned_b):
     ref = _ref(tmp_path, n=2)
     fake = FakeAsk(cost=0.5)
     client = m.Client(ref / "replies.jsonl", ask=fake, cost_cap=3.0)
@@ -353,7 +369,7 @@ def test_caps_stop_the_run_before_crossing_and_count_cached_replies(tmp_path, an
         m.Client(ref / "replies.jsonl", ask=FakeAsk(), call_cap=5)("j1", None, "new prompt", m.PAIRWISE_SCHEMA)
 
 
-def test_arm_d_runs_after_the_original_phases_and_only_d_may_pass_the_old_caps(tmp_path, analyzer):
+def test_arm_d_runs_after_the_original_phases_and_only_d_may_pass_the_old_caps(tmp_path, analyzer, pinned_b):
     ref = _ref(tmp_path, n=1)
     fake = FakeAsk(cost=0.5)
     # One paragraph, one editor, one judge: the original phases make 2 + 2 + 2 + 2 + 2 = 10 calls, $5.
@@ -372,6 +388,12 @@ def test_arm_d_runs_after_the_original_phases_and_only_d_may_pass_the_old_caps(t
     status2 = m.run(ref2, client2, analyzer, editors=["e1"], judges=["j1"], workers=1)
     assert status2 == {"edits": True, "BC": False}
     assert m.D_COST_CAP == 106.0 and m.D_CALL_CAP == 9160 and m.COST_CAP == 60.0 and m.CALL_CAP == 5200
+
+
+def test_the_run_stops_if_b_and_d_get_the_same_feedback(tmp_path, analyzer, monkeypatch):
+    monkeypatch.setattr(m, "feedbacks", lambda an, text, prec: {"B": "same", "D": "same"})
+    with pytest.raises(SystemExit, match="readcost is not a57e19e"):
+        m.run(_ref(tmp_path, n=1), m.Client(tmp_path / "r.jsonl", ask=FakeAsk()), analyzer, ["e1"], ["j1"])
 
 
 def test_d_readings_follow_amendment_7():
@@ -396,7 +418,7 @@ def test_d_readings_follow_amendment_7():
     assert beats["an edit with feedback as questions beats the original"]
 
 
-def test_a_failed_reply_is_asked_again_and_reported_missing_if_it_fails_twice(tmp_path, analyzer):
+def test_a_failed_reply_is_asked_again_and_reported_missing_if_it_fails_twice(tmp_path, analyzer, pinned_b):
     ref = _ref(tmp_path, n=1)
     inner = FakeAsk()
 

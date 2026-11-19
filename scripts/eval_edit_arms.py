@@ -667,7 +667,12 @@ def _pool(jobs, fn, workers: int) -> bool:
 def all_feedback(analyzer, paras: list[dict], precision: dict | None = None) -> dict:
     """{paragraph id: {"B": ..., "D": ...}}."""
     precision = heldout_precision() if precision is None else precision
-    return {p["id"]: feedbacks(analyzer, p["text"], precision) for p in paras}
+    out = {p["id"]: feedbacks(analyzer, p["text"], precision) for p in paras}
+    same = [pid for pid, fb in out.items() if fb["B"] and fb["B"] == fb["D"]]
+    if same:
+        # readcost's own `-o agent` already words feedback as questions: this is not a57e19e.
+        raise SystemExit(f"arm B's feedback equals arm D's for {len(same)} paragraphs; readcost is not {PINNED}")
+    return out
 
 
 def run(ref: Path, client: Client, analyzer, editors=EDITORS, judges=JUDGES, workers: int = 8,
