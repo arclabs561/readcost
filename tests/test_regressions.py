@@ -529,3 +529,19 @@ def test_person_name_at_the_start_of_a_sentence_is_not_a_noun_stack():
     # A coined stack that starts a sentence is still reported.
     feats = [f.feature for f in a.check_text("Cache eviction policy tuning takes a week of work.\n", "markdown").findings]
     assert "stacked-nouns" in feats
+
+
+def test_inline_list_is_off_in_doc_comments_unless_asked_for():
+    # docs/evaluation.md, "Precision across formats": 1 of 28 inline-list
+    # findings in doc comments was accepted, against 5 of 16 in Markdown.
+    sentence = "The parser handles tables, footnotes, front matter, math and raw HTML in every document it reads."
+    py = f'def f():\n    """{sentence}"""\n'
+    md = sentence + "\n"
+    def rules(cfg, text, fmt, path):
+        return [f.feature for f in Analyzer(cfg).check_text(text, fmt, path).findings]
+
+    assert "inline-list" in rules(Config(), md, "markdown", "a.md")
+    assert "inline-list" not in rules(Config(), py, None, "a.py")
+    assert "inline-list" in rules(Config(rules={"inline-list": "info"}), py, None, "a.py")
+    assert "inline-list" in rules(Config(overrides=[{"include": ["*.py"], "rules": {"inline-list": "warn"}}]),
+                                  py, None, "a.py")

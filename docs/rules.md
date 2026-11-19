@@ -93,6 +93,11 @@ Four or more coordinated items in one sentence, or items joined by slashes.
 As with long-dependency, a sentence that gives a reason gets a suggestion to
 keep the reason when splitting it.
 
+It is off in doc comments and docstrings. In the test across formats, model
+raters accepted 1 of 28 of its findings there, against 5 of 16 in Markdown
+([evaluation](evaluation.md#precision-across-formats-pre-registered)). A
+level for it in `[readcost.rules]` or an override turns it back on.
+
 ### participial-clause
 
 Opt-in. A present participle clause set off by a comma (", making X faster").
