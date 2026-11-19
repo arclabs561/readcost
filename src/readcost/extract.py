@@ -807,7 +807,7 @@ class CommentSyntax:
     """Comment syntax of one language.
 
     Doc comments are always read, as Markdown. The other comments are read
-    only with ``comments = "all"``. Block patterns are regular expressions
+    only with ``comments = "all"``. Each block entry is a regular expression
     with a ``body`` group.
     """
     doc_lines: tuple[str, ...] = ()
