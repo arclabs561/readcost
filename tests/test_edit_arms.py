@@ -297,3 +297,23 @@ def test_verify_compares_src_with_the_pinned_commit(monkeypatch):
     monkeypatch.setattr(m.subprocess, "run", fake_run)
     assert m.verify() == 0
     assert seen["args"] == ["git", "diff", "--quiet", "a57e19e", "--", "src", "uv.lock"]
+
+
+def test_readme_choice_follows_github_and_files_come_at_the_commit():
+    assert m.pick_readme({"README.md": 1, "readme.txt": 1, "docs/README.md": 1}) == "README.md"
+    assert m.pick_readme({"Readme.rst": 1, "README": 1}) == "Readme.rst"
+    assert m.pick_readme({"src/README.md": 1, ".github/README.md": 1, "docs/readme.md": 1}) == ".github/README.md"
+    assert m.pick_readme({"src/README.md": 1}) is None
+    sizes = {"README.md": 10, "docs/guide.md": 20, "docs/huge.md": 2_000_000}
+    fetched = []
+
+    def get(repo, commit, path):
+        fetched.append((repo, commit, path))
+        return f"text of {path}"
+    commit, files = m.github_files("o/r", get_tree=lambda repo: ("abc", sizes), get=get)
+    assert commit == "abc" and files[0] == ("README.md", "text of README.md")
+    assert {p for p, _ in files} <= {"README.md", "docs/guide.md"}
+    assert all(c == "abc" for _r, c, _p in fetched)
+    assert m.github_files("o/r", get_tree=lambda repo: None) == "repository unavailable"
+    assert m.github_files("o/r", get_tree=lambda repo: ("abc", {"src/x.md": 1})) == "no README"
+    assert m.github_files("o/r", get_tree=lambda repo: ("abc", {"README.md": 2_000_000})) == "README over 1 MB"

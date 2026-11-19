@@ -259,30 +259,62 @@ def get_raw(repo: str, commit: str, path: str) -> str:
         return resp.read().decode("utf-8", errors="replace")
 
 
-def github_files(repo: str):
-    import fetch_github_readmes as fgr
-    try:
-        meta = json.loads(fgr.gh([f"repos/{repo}"]))
-        commit = json.loads(fgr.gh([f"repos/{repo}/commits/{meta['default_branch']}"]))["sha"]
-    except subprocess.CalledProcessError:
+README_ORDER = ("readme.md", "readme.markdown", "readme.mdx", "readme.rst", "readme.txt", "readme")
+
+
+def pick_readme(sizes: dict[str, int]) -> str | None:
+    """The README GitHub would show: in the root, then .github/, then docs/, by extension in README_ORDER."""
+    for folder in ("", ".github/", "docs/"):
+        here = sorted(p for p in sizes if p.lower().startswith(folder) and "/" not in p[len(folder):])
+        for name in README_ORDER:
+            for p in here:
+                if p[len(folder):].lower() == name:
+                    return p
+    return None
+
+
+def tree(repo: str) -> tuple[str, dict[str, int]] | None:
+    """Head commit of the default branch and {path: size} of its files, from a clone without blobs."""
+    import os
+    import tempfile
+    env = {**os.environ, "GIT_TERMINAL_PROMPT": "0"}
+    with tempfile.TemporaryDirectory() as d:
+        g = f"{d}/g"
+        r = subprocess.run(["git", "clone", "-q", "--bare", "--depth", "1", "--filter=blob:none",
+                            f"https://github.com/{repo}", g], capture_output=True, timeout=180, check=False, env=env)
+        if r.returncode != 0:
+            return None
+        commit = subprocess.run(["git", "-C", g, "rev-parse", "HEAD"], capture_output=True, text=True,
+                                check=True).stdout.strip()
+        out = subprocess.run(["git", "-C", g, "ls-tree", "-r", "-l", "-z", "HEAD"], capture_output=True,
+                             text=True, check=True).stdout
+    sizes = {}
+    for entry in out.split("\0"):
+        if not entry:
+            continue
+        info, path = entry.split("\t", 1)
+        _mode, kind, _sha, size = info.split()
+        if kind == "blob" and size != "-":
+            sizes[path] = int(size)
+    return commit, sizes
+
+
+def github_files(repo: str, get_tree=tree, get=None):
+    """(commit, [(path, text)]) for a repository's README and up to two documentation files, or a reason."""
+    get = get or get_raw
+    got = get_tree(repo)
+    if got is None:
         return "repository unavailable"
-    if meta.get("fork") or meta.get("archived"):
-        return "fork or archived"
-    try:
-        readme = json.loads(fgr.gh([f"repos/{repo}/readme?ref={commit}"]))
-    except subprocess.CalledProcessError:
+    commit, sizes = got
+    readme = pick_readme(sizes)
+    if readme is None:
         return "no README"
-    if readme.get("size", 0) > MAX_BYTES:
+    if sizes[readme] > MAX_BYTES:
         return "README over 1 MB"
-    files = [(readme["path"], get_raw(repo, commit, readme["path"]))]
-    try:
-        tree = json.loads(fgr.gh([f"repos/{repo}/git/trees/{commit}?recursive=1"]))["tree"]
-    except subprocess.CalledProcessError:
-        tree = []
-    sizes = {t["path"]: t.get("size", 0) for t in tree if t.get("type") == "blob"}
-    for p in doc_paths(list(sizes), repo):
+    files = [(readme, get(repo, commit, readme))]
+    for p in doc_paths([x for x in sizes if x != readme], repo):
         if sizes[p] <= MAX_BYTES:
-            files.append((p, get_raw(repo, commit, p)))
+            files.append((p, get(repo, commit, p)))
     return commit, files
 
 

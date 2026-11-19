@@ -373,4 +373,28 @@ change.
 
 ## Amendments
 
-None yet.
+19 November 2026, before any model was called:
+
+1. The job runs only when started by hand or on the branch
+   `exp/edit-arms`, and on other pull requests writes one line saying so.
+   A pull request can read only its own cache and the base branch's, so a
+   run there would pay again for replies that are already cached here.
+2. Two calls whose model, system message and prompt are the same get one
+   reply, from the cache. This happens when two edits are the same text,
+   for example when two editors leave a paragraph unchanged. The judgement
+   then counts for each unit that needs it, so the plan's 4,680 calls is an
+   upper bound.
+3. `rater_ensemble.ask` also records the token counts OpenRouter reports.
+   The request it sends is as described above.
+4. The shell that runs the draw can search GitHub but cannot read
+   repositories through its API, so the first attempt at the draw found
+   every repository unavailable and read no file. The draw instead clones
+   each repository's default branch without file contents
+   (`git clone --bare --depth 1 --filter=blob:none`). This gives the head
+   commit and the list of files with their sizes, and the files are read
+   from `raw.githubusercontent.com` at that commit. The README is the file
+   GitHub would show: the first match in the root, then in `.github/`,
+   then in `docs/`, taking names (compared without case) in the order
+   `README.md`, `README.markdown`, `README.mdx`, `README.rst`,
+   `README.txt`, `README`. Forks and archived repositories are known from
+   the search results.
