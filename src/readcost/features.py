@@ -78,7 +78,7 @@ FEATURES: dict[str, Feature] = {f.id: f for f in [
         "The index serves queries. It is built once and rebuilt only on compaction.",
     ),
     Feature(
-        "inanimate-subject", "Thing doing a person's action", "info", True, "paper",
+        "inanimate-subject", "Thing doing a person's action", "info", False, "paper",
         "Verbs such as own, decide, promise, claim, hide or swallow normally take "
         "a person as subject. A file or function as the subject forces a "
         "figurative reading.",

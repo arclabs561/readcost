@@ -9,6 +9,10 @@ configuration.
 
 ### Changed
 
+- inanimate-subject is opt-in. In a pre-registered test on READMEs the rules
+  had not been tuned on, model raters accepted none of its 40 findings and
+  judged the construction present in 9 (docs/evaluation.md, "Held-out
+  precision, pre-registered"). Turn it on with `inanimate-subject = "info"`.
 - The Claude Code and piku hooks report a finding once per session and file
   (`hooks.repeat = "once"`, the default). After an edit, PostToolUse reports
   only new findings and says nothing when all of them were reported before.
