@@ -268,7 +268,9 @@
    "seed": 1007,
    "run": "independent Claude Code subagent, one per rater, given the rubric and its own batch files (about 40 items each, shuffled with its seed), each batch file read in full; one reply per batch in raw/",
    "date": "2026-11-19",
-   "notes": []
+   "notes": [
+    "Wrote its last batch (15, 37 findings) before reading that batch's items, then rewrote the labels from the sentences; reported by the rater itself. Labels kept as it left them (docs/evaluation.md, \"a wider panel\")."
+   ]
   },
   {
    "round": "round1",
