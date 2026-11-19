@@ -166,11 +166,20 @@ class Memory:
         _prune(d)
 
 
+# Only files this module writes: a session key (32 hex digits) or a
+# temporary file left by an interrupted write. Anything else in the directory,
+# which READCOST_HOOK_STATE may point anywhere, is never touched.
+_OURS = re.compile(r"(?:[0-9a-f]{32}|\.tmp-[^/]*)\.json")
+
+
 def _prune(d: Path) -> None:
     cutoff = time.time() - MAX_AGE
     for p in d.iterdir():
+        if not _OURS.fullmatch(p.name):
+            continue
         try:
-            if p.lstat().st_mtime < cutoff:
+            st = p.lstat()
+            if stat.S_ISREG(st.st_mode) and st.st_mtime < cutoff:
                 p.unlink()
         except OSError:
             pass

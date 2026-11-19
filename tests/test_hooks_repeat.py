@@ -237,3 +237,22 @@ def test_repeat_setting_is_checked(tmp_path):
     with pytest.raises(ValueError, match="repeat must be one of once, always"):
         load_config(start=str(bad))
     assert load_config(start=str(good)).hooks.repeat == "once"
+
+
+def test_prune_leaves_files_it_did_not_write(tmp_path, monkeypatch):
+    # READCOST_HOOK_STATE can point at any directory; old files there that
+    # are not session state must survive pruning.
+    import os
+    import time
+
+    from readcost.hooks import repeats
+
+    monkeypatch.setenv("READCOST_HOOK_STATE", str(tmp_path))
+    old = time.time() - 2 * repeats.MAX_AGE
+    stale = tmp_path / ("a" * 32 + ".json")
+    other = tmp_path / "notes.json"
+    for p in (stale, other):
+        p.write_text("{}")
+        os.utime(p, (old, old))
+    repeats._prune(tmp_path)
+    assert not stale.exists() and other.exists()
