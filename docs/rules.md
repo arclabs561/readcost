@@ -297,7 +297,11 @@ The README lists the main limits. This is the full list.
   lenient raters: 75 to 77%). Agreement between raters is modest (Fleiss' kappa 0.40
   over the eight). The rules were revised after the first rater's labels on
   this sample were read, and the two lenient raters were set aside after
-  theirs were seen, so 23% is an in-sample estimate. `readcost explain RULE`
+  theirs were seen, so 23% is an in-sample estimate. In a pre-registered test
+  on new READMEs, three blind model raters accepted 30% (23 to 38%), nearly
+  all of it as "defensible", and none of inanimate-subject's findings
+  ([evaluation](evaluation.md#held-out-precision-pre-registered)).
+  `readcost explain RULE`
   shows the count for each rule. See [evaluation](evaluation.md).
 - Every label behind these numbers comes from a model rater. No person has
   labelled a finding, and agreement among model raters is not a measured
