@@ -545,3 +545,144 @@ sets a required reviewer on it, so each run waits for approval before it
 gets the key. The job runs only by hand or for this branch of this
 repository; a fork's branch of the same name does not qualify. Nothing about
 the arms, models, prompts, outcomes or caps changes.
+
+### 19 November 2026, before any model call: open-weight models on Hugging Face Jobs
+
+The owner approved this change before any model was called. No reply,
+edit or judgement exists.
+
+*Why.* The run will not use OpenRouter. GitHub Models, the other way to
+call models without a key, was retired on 30 July 2026. The models below
+have open weights. They run with vLLM inside Hugging Face Jobs, one H200
+GPU per job, billed by the minute at $5 an hour, from the owner's
+account. Weights pinned to a revision give the same model on every run,
+and none of the six families is Anthropic.
+
+*What stays.* The 60 paragraphs and the four arms. The system message, the
+three prompts, temperature 0 and the reply schemas. The pairwise judgements
+in both orders, the fact check, the counting and the bootstrap. The primary
+outcome (B against C), the secondary comparisons of D, the decision rules,
+the claims and amendment 7's readings. The call caps (5,200 for the
+original phases, 9,160 in all) also stay.
+
+**Editors.** Three instruction models from three families:
+
+| Family | Repository | Revision | Licence |
+| --- | --- | --- | --- |
+| Qwen (Alibaba) | `Qwen/Qwen3.8-27B` | `37561816e66b5b9153b1b64c10968c18c1e6f4a0` | Apache-2.0 |
+| Gemma (Google) | `google/gemma-4-31B-it` | `842da3794eaa0b77d5f08bae87a17459d91ff475` | Apache-2.0 |
+| Mistral | `mistralai/Mistral-Small-4-119B-2603` | `a11f36bebf709121056b1dbcc943d1c6afbe494d` | Apache-2.0 |
+
+**Judges.** Three more, from three other families:
+
+| Family | Repository | Revision | Licence |
+| --- | --- | --- | --- |
+| OpenAI | `openai/gpt-oss-120b` | `b5c939de8f754692c1647ca79fbf85e8c1e70f8a` | Apache-2.0 |
+| GLM (Zhipu AI) | `zai-org/GLM-4.7-Flash` | `7dd20894a642a0aa287e9827cb1a1f7f91386b67` | MIT |
+| OLMo (Ai2) | `allenai/Olmo-3.1-32B-Instruct` | `ac0587e4a7744a551c059d8cd17ba220bc940dae` | Apache-2.0 |
+
+No judge shares a family with an editor, as before. The repositories,
+revisions, licences and gating were read from the Hugging Face Hub on
+19 November 2026; none is gated. Each fits one H200 (141 GB). The weights
+take 56 to 64 GB for all models but two: gpt-oss-120b, about 65 GB in
+MXFP4, and Mistral Small 4, about 121 GB in FP8, which leaves the least
+room. If Mistral Small 4 cannot be served on one H200 in the pilot below,
+`mistralai/Ministral-3-14B-Instruct-2512` at revision
+`29439f81c2be264d8d393273f99e7db9c0961120` (Apache-2.0) replaces it, and
+the report says so. Any other model that fails in the pilot stops the plan
+until a further amendment.
+
+A pre-registration on branch `exp/open-family-raters` will re-rate the
+precision rounds with four open families. It was not pushed when this
+was written, so its families could not be read. The judges above are
+chosen for it to reuse: three families, none of them an editor's here. If
+that plan, once pushed and before any job here starts, names other
+families, a dated amendment may replace judges with them, keeping the rule
+that no judge shares a family with an editor.
+
+**Serving.** vLLM 0.34.0, the image
+`vllm/vllm-openai:v0.34.0@sha256:20fdb089454afbb324efa4110a2c025ff7b27cc1a086e07aa580b18df8ad1ce1`,
+OpenAI-compatible chat completions on the job's own machine. Each request
+keeps the system message, prompt, temperature 0 and strict JSON schema
+that the client sent to OpenRouter, with at most 2,048 tokens in the
+reply. Thinking is off where a model can turn it off: `reasoning_effort`
+"none", and `enable_thinking` false for Qwen, Gemma and GLM. gpt-oss-120b
+cannot turn it off and runs at `reasoning_effort` "low". OLMo 3.1 Instruct
+has no thinking mode. The original plan expected up to 2,000 reasoning
+tokens from most models, so these judges reason less before answering.
+Batched GPU inference at temperature 0 is close to repeatable but not
+exact, so a rerun may differ in a few replies.
+
+**Order.** The job loads one model at a time, runs that model's calls, and
+stops it before loading the next:
+
+1. each editor in turn: its edits for arms B and C, then for arm D, all
+   60 paragraphs;
+2. each judge in turn: B against C;
+3. each judge in turn: the fact checks of B and C, B against A, C against
+   A, D against B, D's fact checks, D against C, D against A.
+
+D's edits move forward into the first pass, because each editor is loaded
+once. Each judge is loaded twice, so that B against C is complete for all
+three judges before any other comparison starts. Within a pass, calls are
+shuffled with the seeds above, and a missing reply is asked for once more
+before the model stops.
+
+**GPU-hour caps.** The dollar caps no longer apply. A job on a GPU is
+billed for its time, not for tokens. The test may use at most **6 GPU hours ($30)** in all, as
+Hugging Face bills them:
+
+- a **pilot** on the first 5 paragraphs of `eval/edit-arms/paragraphs.jsonl`,
+  with a job timeout of **1.5 hours ($7.50)**. It loads every model once
+  and runs all its phases in one pass. It checks that each model loads and
+  returns parseable replies, and how long the steps take. Its report gives
+  counts, failures and timings only, not win rates, and its replies are not
+  reused;
+- the **full run**, from an empty reply cache, with a job timeout of
+  **4 hours ($20)**.
+
+That is 5.5 hours ($27.50). The job's own clock stops new calls 15 minutes
+before its timeout, writes the report from what is done, and uploads it.
+No other job runs for this test without a further amendment. If the full
+run stops before B against C is complete for every judge, no claim is
+decided, as before.
+
+The estimate for the full run is 1.0 to 1.7 GPU hours ($5 to $8.50). Most
+of it is starting models: pulling the image, downloading about 430 GB of
+weights, loading and compiling nine times. The 8,640 planned calls are
+short: 540 edits and 8,100 judgements and fact checks, under a million
+generated tokens in all, about 15 to 30 minutes on one H200. The pilot is
+estimated at 0.6 to 1.1 hours.
+
+**Outputs.** The job uploads its outputs to the private dataset
+`arclabs561/readcost-labels` under `edit-arms/<run id>/`, after each model
+and at the end. They are every reply with the model and revision that gave
+it, the phase status, a run log with timings per model, vLLM's log for each
+model, and the report. The upload
+stops if that dataset is not private. The paragraphs themselves are not
+uploaded; the job fetches them from GitHub at their commits, as before.
+The job checks that readcost's `src/` and `uv.lock` are those of `a57e19e`
+by a SHA-256 over their files, since the job has the source without git
+history.
+
+*What this costs in validity.* The editors are open models of 27B to
+119B parameters, weaker writers than the Claude, Gemini and Mistral Large
+models planned, and none is from Anthropic, whose models many agents that
+would read readcost's feedback use. A result about these editors may not
+hold for stronger ones: feedback may help a weaker editor more, or
+mislead it more. The judges are weaker too, and reason less or not at all
+before they answer. Weaker judges make noisier and more position-biased
+choices, so expect more ties and splits and wider intervals than the
+0.05 to 0.09 half-width estimated above. They may also lean more toward
+longer or more model-like text. B against C still compares two edits by
+the same editor, so that lean should still mostly cancel there.
+
+*What it gains.* No key to hold or approve. Six families, independent of
+each other and of Anthropic. Weights pinned by revision, so anyone with a
+GPU can rerun the same models with the same prompts. And decoding that
+the job controls, with no provider routing between requests.
+
+The GitHub Actions job `edit-arms` stays in `.github/workflows/eval.yml` as
+a fallback for the OpenRouter models above. It now runs only when started
+by hand, and only after the `openrouter` environment approves it. This plan
+does not use it; using it would need a further amendment.
