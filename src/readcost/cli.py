@@ -186,7 +186,7 @@ def _cmd_compare(args) -> int:
     results = []
     for path in (args.old, args.new):
         text = sys.stdin.read() if path == "-" else _read_rev_or_file(path)
-        fmt = args.format or ("markdown" if path == "-" else detect_format(path.split(":", 1)[-1]))
+        fmt = args.format or ("markdown" if path == "-" else detect_format(path.split(":", 1)[-1], text))
         results.append(analyzer.check_text(text, fmt, path))
     old, new = results
     if args.output == "json":
@@ -326,7 +326,7 @@ def _check_one(analyzer, opts: tuple, text: str, path: str, name: str) -> list:
     from .extract import detect_format
 
     fmt_opt, per_record, field_path, last, lines = opts
-    fmt = fmt_opt or ("markdown" if path == "-" else detect_format(path))
+    fmt = fmt_opt or ("markdown" if path == "-" else detect_format(path, text))
     if per_record:
         out = analyzer.check_records(text, fmt, name, field_path=field_path)
     else:

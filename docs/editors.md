@@ -19,7 +19,9 @@ readcost setup
   diagnostics. The globs are matched against the path relative to the config
   file's directory.
 - It picks the format from the file name, as `readcost check` does: Markdown
-  for `.md`, doc comments for source files, and so on.
+  for `.md`, doc comments for source files, and so on
+  ([formats](configuration.md#formats)). Notebooks are read only when
+  `include` lists `*.ipynb`.
 - Each diagnostic covers the flagged words exactly, over several lines when
   the sentence is wrapped. The code is the feature id, such as `stacked-nouns`,
   and links to the README's [What it flags](../README.md#what-it-flags) table.

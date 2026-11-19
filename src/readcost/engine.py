@@ -234,6 +234,8 @@ class Analyzer:
                 for feature, sev, msg, toks in found:
                     if feature in seg.skip:
                         continue
+                    if seg.kind == "inline-comment":
+                        sev = "info"  # a level set in config still wins, below
                     finding = self._finding(ctx, seg, sent, text, path, line, feature, sev, msg, toks)
                     if _first_use(finding, seen_terms) and selected:
                         result.findings.append(finding)
@@ -338,11 +340,13 @@ class Analyzer:
 
     def check_text(self, text: str, fmt: str | None = "markdown", path: str = "<text>", *,
                    lines=None, field_path=None, last_only=False) -> Result:
+        notes: list[str] = []
         segments = extract(text, path, fmt, field_path=field_path, last_only=last_only,
-                           comments=self.cfg.comments)
+                           comments=self.cfg.comments, notes=notes)
         kind = fmt or detect_format(path, text)
         context = kind if kind in ("commit", "source") else "prose"
         result = self.analyze(segments, path, lines, context=context)
+        result.notes[:0] = notes
         result.source = text
         locate(result.findings, text)
         return result

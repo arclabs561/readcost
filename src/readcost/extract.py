@@ -27,9 +27,11 @@ from mdit_py_plugins.front_matter import front_matter_plugin
 CODE = "Xcode"  # stands in for inline code; parsed as a proper noun
 
 FORMATS = (
-    "markdown", "text", "rst", "html", "source", "commit",
+    "markdown", "text", "rst", "html", "source", "notebook", "commit",
     "transcript", "messages", "jsonl",
 )
+# detect_format also returns "code": a file that looks like code readcost
+# has no comment syntax for. extract reads nothing from it and adds a note.
 
 
 @dataclass
@@ -41,6 +43,9 @@ class Segment:
     codes: dict[int, str] = field(default_factory=dict)  # CODE offset -> original text
     in_list: bool = False  # a Markdown list item, not running prose
     skip: frozenset[str] = frozenset()  # rules a readcost directive turned off here
+    # "inline-comment" for a comment that only ``comments = "all"`` reads;
+    # its findings are reported at info unless a config sets the rule's level.
+    kind: str = ""
     # For each character of ``text``, where it starts and ends in the source
     # file, in characters; -1 where that is not known (a space that stands
     # for a line break, text taken out of a JSON string). All five
@@ -768,8 +773,79 @@ LANG_BY_EXT = {
     ".h": "c", ".cc": "c", ".cpp": "c", ".hpp": "c", ".java": "c", ".kt": "c",
     ".swift": "c", ".scala": "c", ".cs": "c", ".sh": "hash", ".bash": "hash",
     ".rb": "hash", ".toml": "hash", ".yaml": "hash", ".yml": "hash",
+    ".cxx": "c", ".hxx": "c", ".hh": "c", ".kts": "c", ".groovy": "c", ".gradle": "c",
+    ".proto": "c", ".cu": "c", ".cuh": "c",
+    ".zsh": "hash", ".ksh": "hash", ".fish": "hash",
+    ".php": "php", ".lua": "lua", ".hs": "haskell", ".ex": "elixir", ".exs": "elixir",
+    ".jl": "julia", ".r": "r", ".dart": "dart", ".zig": "zig",
+    ".pl": "perl", ".pm": "perl", ".pod": "perl",
 }
+# Files known by name, whose # comments are their only prose.
+LANG_BY_NAME = {name: "hash" for name in (
+    "Makefile", "GNUmakefile", "Dockerfile", "Containerfile", "Gemfile", "Rakefile")}
+# The interpreter on a #! line, for a script with no extension.
+LANG_BY_INTERPRETER = {
+    "python": "python", "sh": "hash", "bash": "hash", "zsh": "hash", "dash": "hash",
+    "ksh": "hash", "fish": "hash", "ruby": "hash", "node": "c", "deno": "c", "bun": "c",
+    "perl": "perl", "php": "php", "lua": "lua", "luajit": "lua", "rscript": "r",
+    "julia": "julia", "elixir": "elixir", "runghc": "haskell", "runhaskell": "haskell",
+}
+# Code that readcost has no comment syntax for. Read as prose, its code would
+# be checked as sentences, so it is not read at all.
+CODE_EXTS = frozenset("""
+    .m .mm .ml .mli .fs .fsi .fsx .erl .hrl .clj .cljs .cljc .el .lisp .scm .rkt
+    .elm .purs .nim .cr .d .v .sv .svh .vhd .vhdl .adb .ads .pas .f .f90 .f95
+    .cob .cbl .asm .s .tcl .awk .sol .glsl .hlsl .wgsl .metal .ps1 .psm1 .bat .cmd
+    .sql .tf .hcl .cmake .vue .svelte .css .scss .sass .less .vim .nix .gleam .odin
+    .hx .vala .pyx .pxd .coffee .lean .agda .idr .wat .ll
+""".split())
 CODEISH = re.compile(r"[;{}]\s*$|^\s*(let|fn|def|return|import|use|if|for|while|pub|var|const)\b|=>|::|\(\)\s*$")
+
+
+@dataclass(frozen=True)
+class CommentSyntax:
+    """Comment syntax of one language.
+
+    Doc comments are always read, as Markdown. The other comments are read
+    only with ``comments = "all"``. Each block entry is a regular expression
+    with a ``body`` group.
+    """
+    doc_lines: tuple[str, ...] = ()
+    lines: tuple[str, ...] = ()
+    doc_blocks: tuple[str, ...] = ()
+    blocks: tuple[str, ...] = ()
+    not_comment: tuple[str, ...] = ()  # line starts that are code, such as PHP's #[ attributes
+    continues: str = ""  # a comment line after a doc line continues it (Haddock, LDoc)
+    strings: str = ""    # doc strings with their own reader: "elixir", "julia" or "pod"
+
+
+C_DOC_BLOCK = r"/\*\*(?![*/])(?P<body>.*?)\*/"
+C_BLOCK = r"/\*(?!\*)(?P<body>.*?)\*/"
+COMMENT_SYNTAX: dict[str, CommentSyntax] = {
+    # PHPDoc /** */; // and # comments; #[...] is an attribute.
+    "php": CommentSyntax(lines=("//", "#"), doc_blocks=(C_DOC_BLOCK,), blocks=(C_BLOCK,),
+                         not_comment=("#[",)),
+    # LDoc and EmmyLua: a comment that starts with --- is a doc comment.
+    "lua": CommentSyntax(doc_lines=("---",), lines=("--",), continues="--",
+                         blocks=(r"--\[(?P<eq>=*)\[(?P<body>.*?)\](?P=eq)\]",)),
+    # Haddock: -- | and -- ^ start a doc comment, {-| -} is one; {-# #-} is a pragma.
+    "haskell": CommentSyntax(doc_lines=("-- |", "-- ^"), lines=("--",), continues="--",
+                             doc_blocks=(r"\{-[|^](?P<body>.*?)-\}",),
+                             blocks=(r"\{-(?![#|^])(?P<body>.*?)-\}",)),
+    # @moduledoc, @doc and @typedoc strings.
+    "elixir": CommentSyntax(lines=("#",), strings="elixir"),
+    # Triple-quoted docstrings before a definition; #= =# block comments.
+    "julia": CommentSyntax(lines=("#",), blocks=(r"#=(?P<body>.*?)=#",), not_comment=("#=",),
+                           strings="julia"),
+    # roxygen2: #' lines.
+    "r": CommentSyntax(doc_lines=("#'",), lines=("#",)),
+    "dart": CommentSyntax(doc_lines=("///",), lines=("//",), doc_blocks=(C_DOC_BLOCK,),
+                          blocks=(C_BLOCK,)),
+    # Zig has line comments only: /// and //! are doc comments.
+    "zig": CommentSyntax(doc_lines=("///", "//!"), lines=("//",)),
+    # POD between =head1 (or any command) and =cut.
+    "perl": CommentSyntax(lines=("#",), strings="pod"),
+}
 
 
 def _comment_blocks(lines: list[str], prefixes: tuple[str, ...],
@@ -826,17 +902,199 @@ def _docstring_lines(doc: list[str], start: int, lines: list[str], first: list[i
     return out
 
 
+def _line_no(first: list[int], offset: int) -> int:
+    """1-based line of ``offset``; ``first`` is ``line_starts(text, keepends_split=True)``."""
+    return bisect.bisect_right(first, offset)
+
+
+def _body_lines(text: str, start: int, end: int, first: list[int], strip) -> list[tuple]:
+    """(text, line number, offset) for each line of ``text[start:end]``; ``strip(line)`` is how much to cut."""
+    out, pos = [], start
+    for whole in text[start:end].splitlines(keepends=True):
+        line = whole.rstrip("\r\n")
+        cut = strip(line)
+        out.append((line[cut:], _line_no(first, pos), pos + cut))
+        pos += len(whole)
+    return out
+
+
+def _covered(first: list[int], start: int, end: int) -> range:
+    """0-based indexes of the lines that ``text[start:end]`` touches."""
+    return range(_line_no(first, start) - 1, _line_no(first, max(end - 1, start)))
+
+
+def _regex_blocks(text: str, pattern: str, first: list[int], covered: set[int]) -> list[list[tuple]]:
+    star = pattern.startswith("/")  # a leading * on each line of a C-style block is decoration
+    out = []
+    for m in re.finditer(pattern, text, re.S):
+        if _line_no(first, m.start()) - 1 in covered:
+            continue  # inside a block found already, such as a doc block
+        covered.update(_covered(first, m.start(), m.end()))
+        out.append(_body_lines(text, m.start("body"), m.end("body"), first,
+                               (lambda l: len(l) - len(re.sub(r"^\s*\*\s?", "", l))) if star else (lambda l: 0)))
+    return out
+
+
+ELIXIR_HEREDOC = re.compile(
+    r'^[ \t]*@(?:moduledoc|doc|typedoc)[ \t]+(?:~[sS])?(?P<q>"""|\'\'\')[ \t]*\r?\n'
+    r"(?P<body>.*?)^(?P<indent>[ \t]*)(?P=q)", re.S | re.M)
+ELIXIR_DOC_LINE = re.compile(r'^[ \t]*@(?:moduledoc|doc|typedoc)[ \t]+(?:~[sS])?"(?P<body>[^"\\\n]*)"', re.M)
+JULIA_DOCSTRING = re.compile(
+    r'^[ \t]*(?:@doc[ \t]+(?:raw)?)?"""[ \t]*\r?\n(?P<body>.*?)^(?P<indent>[ \t]*)"""[ \t]*$', re.S | re.M)
+POD_BLOCK = re.compile(r"^=[a-zA-Z]\w*.*?(?:^=cut\b[^\n]*|\Z)", re.S | re.M)
+POD_DOUBLE_CODE = re.compile(r"C<{2,}\s+(.+?)\s+>{2,}")
+POD_CODE = re.compile(r"C<([^<>]*)>")
+POD_LINK = re.compile(r"L<(?:([^|<>]*)\|)?([^<>]*)>")
+POD_TEXT = re.compile(r"[BIFS]<([^<>]*)>")
+POD_DROP = re.compile(r"[XZ]<[^<>]*>")
+POD_ESCAPE = re.compile(r"E<(\w+)>")
+POD_ESCAPES = {"lt": "<", "gt": ">", "verbar": "|", "sol": "/"}
+
+
+def _dedent(indent: int):
+    return lambda line: min(indent, len(line) - len(line.lstrip(" \t")))
+
+
+def _string_docs(text: str, kind: str, first: list[int], covered: set[int]) -> list[list[tuple]]:
+    """Doc strings that are not comments: Elixir @doc, Julia docstrings, Perl POD."""
+    out: list[list[tuple]] = []
+    if kind == "elixir":
+        for m in ELIXIR_HEREDOC.finditer(text):
+            covered.update(_covered(first, m.start(), m.end()))
+            out.append(_body_lines(text, m.start("body"), m.end("body"), first, _dedent(len(m.group("indent")))))
+        for m in ELIXIR_DOC_LINE.finditer(text):
+            if _line_no(first, m.start()) - 1 not in covered:
+                out.append([(m.group("body"), _line_no(first, m.start()), m.start("body"))])
+    elif kind == "julia":
+        for m in JULIA_DOCSTRING.finditer(text):
+            covered.update(_covered(first, m.start(), m.end()))
+            body = text[m.start("body"):m.end("body")]
+            # Julia removes the indent the lines and the closing quotes share.
+            indents = [len(l) - len(l.lstrip(" \t")) for l in body.splitlines() if l.strip()]
+            margin = min([len(m.group("indent")), *indents])
+            out.append(_body_lines(text, m.start("body"), m.end("body"), first, _dedent(margin)))
+    elif kind == "pod":
+        for m in POD_BLOCK.finditer(text):
+            covered.update(_covered(first, m.start(), m.end()))
+            out.append(_pod_lines(text, m.start(), m.end(), first))
+    return out
+
+
+def _pod_lines(text: str, start: int, end: int, first: list[int]) -> list[tuple]:
+    """Prose lines of a POD block: commands, verbatim paragraphs and =begin blocks become breaks."""
+    out: list[tuple] = []
+    skip_until = ""  # "=end" inside =begin, or "" (a blank line) after =for
+    verbatim = False
+    for body, n, offset in _body_lines(text, start, end, first, lambda l: 0):
+        if skip_until:
+            if (body.startswith(skip_until) if skip_until != "blank" else not body.strip()):
+                skip_until = ""
+            out.append(("", n))
+            continue
+        if body.startswith("="):
+            skip_until = "=end" if body.startswith("=begin") else "blank" if body.startswith("=for") else ""
+            out.append(("", n))
+            continue
+        if not body.strip():
+            verbatim = False
+        elif body[0] in " \t" or verbatim:
+            verbatim = True  # a verbatim paragraph: code
+            out.append(("", n))
+            continue
+        where = [(offset + c, offset + c + 1) for c in range(len(body))]
+        body, where = _sub_spans(POD_DOUBLE_CODE, body, where, lambda m: (_code_span(m.group(1)), None))
+        for _ in range(3):  # B<C<x>>: innermost first
+            body, where = _sub_spans(POD_CODE, body, where, lambda m: (_code_span(m.group(1)), None))
+            body, where = _sub_spans(POD_LINK, body, where,
+                                     lambda m: (m.group(1), 1) if m.group(1) else (_code_span(m.group(2)), None))
+            body, where = _sub_spans(POD_TEXT, body, where, lambda m: (m.group(1), 1))
+            body, where = _sub_spans(POD_DROP, body, where, lambda m: ("", None))
+            body, where = _sub_spans(POD_ESCAPE, body, where, lambda m: (POD_ESCAPES.get(m.group(1), ""), None))
+        out.append((body, n, where[:len(body)]))
+    return out
+
+
+def _syntax_comments(text: str, lines: list[str], first: list[int], syn: CommentSyntax,
+                     comments: str) -> tuple[list[list[tuple]], list[list[tuple]]]:
+    """(doc comment blocks, other comment blocks) for a language in COMMENT_SYNTAX."""
+    covered: set[int] = set()
+    docs = _string_docs(text, syn.strings, first, covered)
+    for pattern in syn.doc_blocks:
+        docs.extend(_regex_blocks(text, pattern, first, covered))
+    plain: list[list[tuple]] = []
+    for pattern in syn.blocks:
+        found = _regex_blocks(text, pattern, first, covered)
+        if comments == "all":
+            plain.extend(found)
+    block: list[tuple] = []
+    kind = ""
+    for i, line in enumerate(lines):
+        s = line.strip()
+        prefix, now = None, ""
+        if i not in covered and not (syn.not_comment and s.startswith(syn.not_comment)):
+            prefix = next((p for p in syn.doc_lines if s.startswith(p)), None)
+            now = "doc" if prefix else ""
+            if prefix is None and kind == "doc" and syn.continues and s.startswith(syn.continues):
+                prefix, now = syn.continues, "doc"
+            if prefix is None:
+                prefix = next((p for p in syn.lines if s.startswith(p)), None)
+                now = "plain" if prefix else ""
+        if block and (now != kind or prefix is None):
+            (docs if kind == "doc" else plain).append(block)
+            block = []
+        kind = now
+        if prefix is None or (now == "plain" and comments != "all"):
+            continue
+        body = s[len(prefix):]
+        body = body[1:] if body.startswith(" ") else body
+        col = len(line) - len(line.lstrip()) + len(s) - len(body)
+        block.append((body, i + 1, first[i] + col))
+    if block:
+        (docs if kind == "doc" else plain).append(block)
+    docs.sort(key=lambda b: b[0][1] if b else 0)
+    plain.sort(key=lambda b: b[0][1] if b else 0)
+    return docs, plain
+
+
+def _shebang_lang(text: str | None) -> str | None:
+    """The language a script's #! line names, or None."""
+    if not text or not text.startswith("#!"):
+        return None
+    words = text[2:].split("\n", 1)[0].split()
+    if words and words[0].endswith("/env"):
+        words = [w for w in words[1:] if not w.startswith("-") and "=" not in w]
+    if not words:
+        return None
+    name = re.match(r"[a-z]*", words[0].rsplit("/", 1)[-1].lower()).group()
+    return LANG_BY_INTERPRETER.get(name)
+
+
+def source_language(path: str, text: str | None = None) -> str:
+    """The comment syntax to read ``path`` with: from its extension, its name or its #! line."""
+    p = Path(path)
+    return (LANG_BY_EXT.get(p.suffix.lower()) or LANG_BY_NAME.get(p.name)
+            or _shebang_lang(text) or "c")
+
+
 def extract_source(text: str, path: str, label: str = "", comments: str = "doc") -> list[Segment]:
     """Prose from comments. ``comments`` is "doc" (doc comments only) or "all"."""
-    lang = LANG_BY_EXT.get(Path(path).suffix.lower(), "c")
+    return _source_segments(text, path, label, comments, source_language(path, text))
+
+
+def _source_segments(text: str, path: str, label: str, comments: str, lang: str) -> list[Segment]:
     lines = text.splitlines()
+    if text.startswith("#!"):
+        lines[0] = ""  # the interpreter line is not a comment
     first = line_starts(text, keepends_split=True)
     # Doc comments are Markdown: code in them sits in fences, which
     # markdown_lines skips. Plain comments often hold commented-out code, so
     # only they get the line-level CODEISH filter.
     blocks: list[list[tuple]] = []
-    plain: list[list[tuple]] = []
-    if lang == "python":
+    plain: list[list[tuple]] = []   # read in either mode
+    extra: list[list[tuple]] = []   # read only with comments = "all"
+    if lang in COMMENT_SYNTAX:
+        blocks, extra = _syntax_comments(text, lines, first, COMMENT_SYNTAX[lang], comments)
+    elif lang == "python":
         try:
             tree = ast.parse(text)
             for node in ast.walk(tree):
@@ -856,11 +1114,11 @@ def extract_source(text: str, path: str, label: str = "", comments: str = "doc")
         except SyntaxError:
             pass
         if comments == "all":
-            plain.extend(_comment_blocks(lines, ("#",), first))
+            extra.extend(_comment_blocks(lines, ("#",), first))
     elif lang == "rust":
         blocks.extend(_comment_blocks(lines, ("///", "//!"), first))
         if comments == "all":
-            plain.extend(_comment_blocks(lines, ("//",), first))
+            extra.extend(_comment_blocks(lines, ("//",), first))
     elif lang == "hash":
         plain.extend(_comment_blocks(lines, ("#",), first))
     else:
@@ -869,9 +1127,185 @@ def extract_source(text: str, path: str, label: str = "", comments: str = "doc")
     segments: list[Segment] = []
     for block in blocks:
         segments.extend(markdown_lines(block, path, label))
-    for block in plain:
-        prose = [line for line in block if not CODEISH.search(line[0]) and not line[0].strip().startswith("#!")]
-        segments.extend(markdown_lines(prose, path, label))
+    for group, kind in ((plain, ""), (extra, "inline-comment")):
+        for block in group:
+            prose = [line for line in block if not CODEISH.search(line[0])]
+            for seg in markdown_lines(prose, path, label):
+                seg.kind = kind
+                segments.append(seg)
+    return segments
+
+
+# --------------------------------------------------------------- Jupyter notebooks
+
+class _Str(str):
+    """A JSON string that remembers the offset of its opening quote."""
+    at = -1
+
+
+_WS = re.compile(r"[ \t\n\r]*")
+_SCALAR = json.JSONDecoder()
+
+
+def _json_at(text: str, i: int):
+    """Parse the JSON value at ``text[i]``; strings come back as ``_Str``. Returns (value, end)."""
+    if text.startswith('"', i):
+        value, end = json.decoder.scanstring(text, i + 1)
+        out = _Str(value)
+        out.at = i
+        return out, end
+    if text.startswith("{", i) or text.startswith("[", i):
+        is_obj = text[i] == "{"
+        close = "}" if is_obj else "]"
+        items: dict | list = {} if is_obj else []
+        i = _WS.match(text, i + 1).end()
+        if text.startswith(close, i):
+            return items, i + 1
+        while True:
+            if is_obj:
+                if not text.startswith('"', i):
+                    raise ValueError(f"expected a key at offset {i}")
+                key, i = json.decoder.scanstring(text, i + 1)
+                i = _WS.match(text, i).end()
+                if not text.startswith(":", i):
+                    raise ValueError(f"expected ':' at offset {i}")
+                i = _WS.match(text, i + 1).end()
+            value, i = _json_at(text, i)
+            if is_obj:
+                items[key] = value
+            else:
+                items.append(value)
+            i = _WS.match(text, i).end()
+            if text.startswith(",", i):
+                i = _WS.match(text, i + 1).end()
+            elif text.startswith(close, i):
+                return items, i + 1
+            else:
+                raise ValueError(f"expected ',' or {close!r} at offset {i}")
+    return _SCALAR.raw_decode(text, i)  # a number, true, false or null
+
+
+def _json_positions(text: str):
+    start = _WS.match(text, 1 if text.startswith("﻿") else 0).end()
+    value, end = _json_at(text, start)
+    if _WS.match(text, end).end() != len(text):
+        raise ValueError(f"extra data at offset {end}")
+    return value
+
+
+def _string_spans(raw: str, at: int) -> list[Span]:
+    """The file span of each character of the JSON string literal whose opening quote is at ``at``."""
+    spans, i, n = [], at + 1, len(raw)
+    while i < n and raw[i] != '"':
+        if raw[i] != "\\":
+            spans.append((i, i + 1))
+            i += 1
+        elif raw.startswith("u", i + 1):
+            j = i + 6
+            if 0xD800 <= int(raw[i + 2:i + 6], 16) <= 0xDBFF and raw.startswith("\\u", j) \
+                    and 0xDC00 <= int(raw[j + 2:j + 6], 16) <= 0xDFFF:
+                j += 6  # a surrogate pair is one character
+            spans.append((i, j))
+            i = j
+        else:
+            spans.append((i, i + 2))
+            i += 2
+    return spans
+
+
+def _cell_text(raw: str, source) -> tuple[str, list[Span]]:
+    """A cell's source, a string or a list of strings, and the file span of each character."""
+    parts = source if isinstance(source, list) else [source]
+    body, spans = [], []
+    for s in parts:
+        if not isinstance(s, str):
+            continue
+        where = _string_spans(raw, s.at) if isinstance(s, _Str) and s.at >= 0 else []
+        body.append(str(s))
+        spans.extend(where if len(where) == len(s) else [UNKNOWN] * len(s))
+    return "".join(body), spans
+
+
+def _remap(segments: list[Segment], cell_starts: list[int], spans: list[Span],
+           file_starts: list[int]) -> None:
+    """Move segments read from a cell's text to offsets and lines in the notebook file."""
+    def file_line(line: int) -> int:
+        k = min(max(line - 1, 0), len(cell_starts) - 1)
+        for p in range(cell_starts[k], len(spans)):
+            if spans[p][0] >= 0:
+                return bisect.bisect_right(file_starts, spans[p][0])
+        return 0
+
+    for seg in segments:
+        seg.anchors = [(offset, file_line(line)) for offset, line in seg.anchors]
+        starts, ends = [], []
+        for a, b in zip(seg.starts, seg.ends):
+            if 0 <= a < b <= len(spans) and spans[a][0] >= 0 and spans[b - 1][1] >= 0:
+                starts.append(spans[a][0])
+                ends.append(spans[b - 1][1])
+            else:
+                starts.append(-1)
+                ends.append(-1)
+        seg.starts, seg.ends = starts, ends
+
+
+# Kernel language (metadata.kernelspec.language or language_info.name) to comment syntax.
+NOTEBOOK_LANGS = {
+    "python": "python", "ipython": "python", "r": "r", "julia": "julia", "rust": "rust",
+    "scala": "c", "java": "c", "kotlin": "c", "c": "c", "c++": "c", "cpp": "c", "go": "c",
+    "javascript": "c", "typescript": "c", "csharp": "c", "c#": "c", "swift": "c",
+    "bash": "hash", "sh": "hash", "shell": "hash", "ruby": "hash", "perl": "perl",
+    "php": "php", "lua": "lua", "haskell": "haskell", "elixir": "elixir", "dart": "dart",
+    "zig": "zig",
+}
+
+
+def extract_notebook(text: str, path: str, label: str = "", comments: str = "doc",
+                     notes: list[str] | None = None) -> list[Segment]:
+    """Prose from a Jupyter notebook's Markdown cells, and with ``comments = "all"``
+    from the comments in its code cells. Offsets and lines point into the .ipynb file."""
+    notes = notes if notes is not None else []
+    try:
+        nb = _json_positions(text)
+    except (ValueError, IndexError, RecursionError) as exc:
+        notes.append(f"not a readable Jupyter notebook ({exc}); nothing was checked")
+        return []
+    cells = nb.get("cells") if isinstance(nb, dict) else None
+    if cells is None and isinstance(nb, dict) and isinstance(nb.get("worksheets"), list):  # nbformat 3
+        cells = [c for ws in nb["worksheets"] if isinstance(ws, dict)
+                 for c in ws.get("cells") or [] if isinstance(ws.get("cells"), list)]
+    if not isinstance(cells, list):
+        notes.append("not a Jupyter notebook: no list of cells; nothing was checked")
+        return []
+    meta = nb.get("metadata") if isinstance(nb.get("metadata"), dict) else {}
+    name = _get_path(meta, "kernelspec.language") or _get_path(meta, "language_info.name") \
+        or meta.get("language") or ""
+    name = str(name).strip().lower() if isinstance(name, str) else ""
+    lang = NOTEBOOK_LANGS.get(name) or NOTEBOOK_LANGS.get(re.sub(r"[\d.]+$", "", name))
+    file_starts = line_starts(text)
+    segments: list[Segment] = []
+    unread_code = False
+    for cell in cells:
+        if not isinstance(cell, dict):
+            continue
+        kind = cell.get("cell_type")
+        if kind == "markdown":
+            body, spans = _cell_text(text, cell.get("source"))
+            segs, cell_starts = extract_markdown(body, path, label), line_starts(body)
+        elif kind == "code" and comments == "all":
+            if lang is None:
+                unread_code = True
+                continue
+            body, spans = _cell_text(text, cell.get("source", cell.get("input")))
+            segs = _source_segments(body, path, label, "all", lang)
+            cell_starts = line_starts(body, keepends_split=True)
+        else:
+            continue  # raw cells, and outputs, are not prose
+        _remap(segs, cell_starts, spans, file_starts)
+        segments.extend(segs)
+    if unread_code:
+        notes.append(f"code cells not read: readcost has no comment syntax for the notebook's "
+                     f"language {name or '(none given)'!r}")
     return segments
 
 
@@ -1011,14 +1445,29 @@ def detect_format(path: str, text: str | None = None) -> str:
         return "transcript"
     if suffix == ".json":
         return "messages"
-    if suffix in LANG_BY_EXT:
+    if suffix == ".ipynb":
+        return "notebook"
+    if suffix in LANG_BY_EXT or name in LANG_BY_NAME:
         return "source"  # config files too: only their # comments are prose
+    if suffix in CODE_EXTS:
+        return "code"
+    if text and text.startswith("#!") and suffix not in (".txt", ".text"):
+        return "source" if _shebang_lang(text) else "code"  # a script without an extension
     return "text"
 
 
 def extract(text: str, path: str, fmt: str | None = None, *, field_path: str | None = None,
-            last_only: bool = False, comments: str = "doc") -> list[Segment]:
+            last_only: bool = False, comments: str = "doc",
+            notes: list[str] | None = None) -> list[Segment]:
+    """Prose segments of ``text``. Notes for the reader, such as why nothing was read, go in ``notes``."""
     fmt = fmt or detect_format(path, text)
+    notes = notes if notes is not None else []
+    if fmt == "code":
+        notes.append("this looks like code in a language readcost has no comment syntax for, "
+                     "so nothing was checked; --format text reads it as prose")
+        return []
+    if fmt == "notebook":
+        return extract_notebook(text, path, comments=comments, notes=notes)
     if fmt == "markdown":
         return extract_markdown(text, path)
     if fmt == "text":
