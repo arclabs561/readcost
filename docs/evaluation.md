@@ -2741,6 +2741,74 @@ On READMEs (S1), majority of twelve:
 - One Haiku rater wrote its last batch before reading the items and then
   rewrote it from the sentences; its labels are kept as it left them.
 
+## Precision across formats, pre-registered
+
+The plan is [docs/prereg/breadth-precision.md](prereg/breadth-precision.md),
+committed before any text was fetched. It extends the held-out test to every
+format readcost reads, from 608 established public repositories (at least
+200 stars) that no development corpus holds, with text written after 1
+November 2026 where the format allows it. There are 875 items: 655 findings
+across Markdown docs, reStructuredText, HTML, doc comments in seven
+languages, commit messages and pull request descriptions; 195 near misses,
+constructions one step under a rule's threshold that readcost does not
+report, shown in the rule's own message format; and 25 random decoys. The
+same fifteen raters as the panel above labelled every item: twelve primed
+(three each of Claude Opus 5.5, Sonnet 5.5, Haiku 5.5 and Fable 5.2) and
+three unprimed. The primary outcome is the share that at least 7 of the 12
+call correct, that is, a reading cost an editor would fix. Labels and the
+full report are in `eval/breadth/`.
+
+Pooled over formats, majority of twelve:
+
+| Rule | Correct | Accepted | Near misses accepted |
+| --- | --- | --- | --- |
+| stacked-nouns | 0 of 100 | 36 of 100 | 0 of 50 |
+| long-dependency | 5 of 91 | 28 of 91 | 15 of 46 |
+| reduced-object-relative | 4 of 85 | 43 of 85 | no threshold |
+| hyphen-compound | 0 of 87 | 42 of 87 | no threshold |
+| inline-list | 5 of 100 | 21 of 100 | 6 of 50 |
+| inanimate-subject (opt-in) | 0 of 42 | 0 of 42 | no threshold |
+| participial-clause (opt-in) | 0 of 50 | 16 of 50 | no threshold |
+| nominalization (opt-in) | 2 of 19 | 13 of 19 | no threshold |
+| center-embedding (opt-in) | 4 of 30 | 13 of 30 | 2 of 25 |
+| undefined-acronym (opt-in) | 0 of 50 | 4 of 50 | 2 of 25 |
+
+- A finding that an editor would fix is rare in every format: no rule's correct
+  share exceeds 13%, and the default rules' shares are 0 to 6%. "Correct" is
+  too rare for the primary comparison with near misses to decide anything,
+  so the plan's fallback compares accepted shares.
+- The thresholds. stacked-nouns' earns its place: no near miss (a two-noun
+  stack) was accepted, against 36% of findings (difference +36 points, +25
+  to +46). long-dependency's does not: a gap two words shorter is accepted
+  as often as one readcost reports (33% against 31%). inline-list's and
+  undefined-acronym's are not supported either.
+- Without priming, the pre-registered test reports every rule as no better
+  than chance placement. That test is weak: the 25 random decoys give an
+  upper bound of 13%, wider than most rules' unprimed shares.
+  center-embedding is the one rule clearly above the decoys unprimed (+27
+  points, +8 to +44), and above its near misses primed (43% against 8%).
+- inanimate-subject has none of 42 accepted across formats, as on READMEs.
+- Per format, two pre-registered decisions apply. inline-list is proposed
+  off in doc comments: 1 of 28 accepted, against 5 of 16 in Markdown
+  (difference −28 points, −52 to −6). long-dependency has a detection
+  problem in reStructuredText (the construction is present in 1 of 12
+  findings) and in doc comments (6 of 28), so those findings should go to
+  the second parser.
+- Commit messages and pull request descriptions do not differ much from
+  Markdown docs. reduced-object-relative is accepted in 14 of 16 commit
+  findings, against 8 of 16 in Markdown, from small cells.
+- The models differ in leniency as before: pooled, Sonnet and Fable accept
+  two thirds of stacked-nouns findings, Opus 22% and Haiku 12%. No model's
+  majority calls more than 12% of any default rule's findings correct.
+- One finding was drawn twice; every rater gave both copies the same label,
+  and the report counts it once (an amendment records this).
+
+Across both held-out tests, then: readcost points at constructions that
+model raters, told what the rule is, often call optional, and rarely call a
+cost worth fixing; without that telling, they find a problem there little
+more often than elsewhere. center-embedding, which is opt-in, is the
+exception the data support.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News
