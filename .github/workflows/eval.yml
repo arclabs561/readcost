@@ -597,6 +597,16 @@ jobs:
   # paragraphs and the edits stay in the runner; the artifact holds the report
   # only.
   edit-arms:
+    # Only by hand, or on this branch of this repository (a fork can name its
+    # branch the same). Elsewhere the job is skipped before it asks for the
+    # environment, so other pull requests never wait for an approval.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.head_ref == 'exp/edit-arms' &&
+       github.event.pull_request.head.repo.full_name == github.repository)
+    # The key lives in this environment, whose required reviewer approves each
+    # run before the key is handed to it.
+    environment: openrouter
     runs-on: ubuntu-latest
     timeout-minutes: 340
     steps:
@@ -608,7 +618,7 @@ jobs:
           HEAD_REF: ${{ github.head_ref }}
         run: |
           if [ -z "$KEY" ]; then
-            echo "edit-arms: skipped, the repository secret OPENROUTER_API_KEY is not set." >> "$GITHUB_STEP_SUMMARY"
+            echo "edit-arms: skipped, the secret OPENROUTER_API_KEY is not set in the environment openrouter." >> "$GITHUB_STEP_SUMMARY"
             echo "run=false" >> "$GITHUB_OUTPUT"
           elif [ "$EVENT" != "workflow_dispatch" ] && [ "$HEAD_REF" != "exp/edit-arms" ]; then
             echo "edit-arms: skipped, it runs by hand or on the branch exp/edit-arms." >> "$GITHUB_STEP_SUMMARY"

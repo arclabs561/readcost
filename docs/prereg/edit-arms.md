@@ -536,3 +536,12 @@ model was called:
    follows. "The question wording should ship" means it should stay on
    `main`. "It should not ship" means `main` should go back to B's wording,
    or try another one, and docs/agents.md should say why.
+
+### 19 November 2026, before any model call: where the key lives
+
+The key is an environment secret, in the GitHub environment `openrouter`,
+not a repository secret, and the job asks for that environment. The owner
+sets a required reviewer on it, so each run waits for approval before it
+gets the key. The job runs only by hand or for this branch of this
+repository; a fork's branch of the same name does not qualify. Nothing about
+the arms, models, prompts, outcomes or caps changes.
