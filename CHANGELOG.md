@@ -7,6 +7,31 @@ configuration.
 
 ## [Unreleased]
 
+### Added
+
+- Jupyter notebooks (`.ipynb`, `--format notebook`): readcost reads the
+  Markdown cells, and with `comments = "all"` the comments in code cells, in
+  the kernel's language. Lines and columns point into the `.ipynb` file.
+  Before, a notebook was read as plain text, JSON keys and all. The default
+  `include` globs still leave notebooks out.
+- Comment syntax for PHP, Lua, Haskell, Elixir, Julia, R, Dart, Zig and
+  Perl, with their doc-comment conventions (PHPDoc, LDoc, Haddock, `@doc`,
+  docstrings, roxygen, `///`, POD), and for `.zsh`, `.fish`, `.ksh`, `.kts`,
+  `.groovy`, `.gradle`, `.proto`, `.cu`, `.cxx`, `.hh`, `Makefile` and
+  `Dockerfile`. A script with no extension is read by its `#!` line.
+
+### Fixed
+
+- A file whose extension names a programming language readcost has no
+  comment syntax for, such as `.lisp` or `.sql`, was read as prose, code
+  included. It is now not read, and its result has a note.
+- The `#!` line of a shell script was read as a comment.
+- Findings in comments that only `comments = "all"` reads are reported at
+  info, as docs/research.md said they were; a stacked-nouns finding in a
+  Python `#` comment was a warning. A level set in config or a flag still
+  wins. docs/research.md no longer says that `@param` lines in doc comments
+  are skipped: they never were.
+
 ### Changed
 
 - `-o agent`, and the hooks that use it, put each finding as a question

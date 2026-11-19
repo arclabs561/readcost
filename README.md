@@ -94,7 +94,9 @@ the model installed as a package.
 ## Use
 
 readcost reads documentation and commit messages. It also reads doc comments
-in source files, and a model's answers on stdin or in a transcript.
+in source files, the Markdown cells of Jupyter
+notebooks, and a model's answers on stdin or in a transcript
+([formats](https://github.com/arclabs561/readcost/blob/main/docs/configuration.md#formats)).
 
 ```sh
 readcost check README.md docs/
