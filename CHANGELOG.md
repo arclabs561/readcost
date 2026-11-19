@@ -7,7 +7,22 @@ configuration.
 
 ## [Unreleased]
 
+### Added
+
+- The GitHub Action checks the pull request title and description with
+  `check-pr-text: "true"`, or only them with `"only"`, on `pull_request` and
+  `pull_request_target` events. The text is read from the event file, never
+  through the shell; the description is read as Markdown, without code or
+  HTML comments, and skipped under `pr-text-min-words` (default 30).
+  Findings go in the comment and the annotations as "pull request
+  description, line N". They do not fail the job unless `pr-text-fail-on`
+  is set. The command line has the same as `readcost check --pr-text
+  EVENT_FILE`, `--pr-text-fail-on` and `--pr-text-min-words`.
+
 ### Changed
+
+- The Action edits its summary comment only when `github-actions[bot]`
+  posted it, not any comment that starts with the marker.
 
 - `-o agent`, and the hooks that use it, put each finding as a question
   ("Is it hard to follow here?") and tell the model to change a sentence
