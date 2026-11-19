@@ -14,6 +14,10 @@ from urllib.parse import quote
 
 from .engine import LineIndex, Result
 from .features import FEATURES
+from .prtext import BODY as PR_BODY
+from .prtext import PATHS as PR_TEXT
+from .prtext import TITLE as PR_TITLE
+from .prtext import where as _where
 
 OUTPUTS = ("full", "concise", "json", "sarif", "github", "agent", "pr-comment")
 REPO_URL = "https://github.com/arclabs561/readcost"
@@ -351,15 +355,19 @@ def github(results: list[Result], **_) -> str:
     lines = []
     for r in results:
         for f in r.findings:
-            props = (f"file={_gh_property(f.path)},line={max(f.line, 1)},"
-                     f"title={_gh_property(f'readcost {f.feature}')}")
+            if f.path in PR_TEXT:
+                # Not a file: the annotation names the text and the line within it.
+                props = f"title={_gh_property(f'readcost {f.feature} in the {_where(f.path, f.line)}')}"
+            else:
+                props = (f"file={_gh_property(f.path)},line={max(f.line, 1)},"
+                         f"title={_gh_property(f'readcost {f.feature}')}")
             lines.append(f"::{level[f.severity]} {props}::{_gh_data(f'{f.message}. {f.suggestion}')}")
     return "\n".join(lines)
 
 
 def _artifact_location(path: str) -> dict:
     """A SARIF artifactLocation: a valid URI reference, relative to %SRCROOT% when relative."""
-    if path.startswith("<") and path.endswith(">"):  # <stdin>, <text>: not a file
+    if path in PR_TEXT or (path.startswith("<") and path.endswith(">")):  # <stdin>, <text>: not a file
         return {"uri": quote(path, safe="")}
     if Path(path).is_absolute():
         return {"uri": Path(path).as_uri()}
@@ -484,9 +492,13 @@ def pr_comment(results: list[Result], max_items: int = 8, **_) -> str:
     else:
         verdicts = {v: sum(r.verdict == v for r in results) for v in ("block", "advise", "pass")}
         counts = ", ".join(f"{n} {v}" for v, n in verdicts.items() if n)
-        files = f"{len(results)} file{'s' if len(results) != 1 else ''}"
+        n_files = sum(r.path not in PR_TEXT for r in results)
+        what = [f"{n_files} file{'s' if n_files != 1 else ''}"] if n_files else []
+        what += [p for p in (PR_TITLE, PR_BODY) if any(r.path == p for r in results)]
+        checked = " and ".join(what) if len(what) < 3 else ", ".join(what[:-1]) + " and " + what[-1]
         items = _worst_first(results)
-        lines.append(f"{files} checked: {counts}. {len(items) or 'No'} finding{'s' if len(items) != 1 else ''}.")
+        lines.append(f"{checked[:1].upper()}{checked[1:]} checked: {counts}. "
+                     f"{len(items) or 'No'} finding{'s' if len(items) != 1 else ''}.")
         timed = [r for r in results if r.reading_seconds is not None]
         if timed:
             words = sum(r.words for r in timed)
@@ -497,8 +509,7 @@ def pr_comment(results: list[Result], max_items: int = 8, **_) -> str:
             shown = items[: max(max_items, 0)]
             lines += ["", "| Where | Rule | Message |", "| --- | --- | --- |"]
             for f in shown:
-                where = f"{f.path}:{f.line}" if f.line else f.path
-                lines.append(f"| {_cell(where)} | {_cell(f.feature)} | {_cell(f.message)} |")
+                lines.append(f"| {_cell(_where(f.path, f.line))} | {_cell(f.feature)} | {_cell(f.message)} |")
             if len(items) > len(shown):
                 lines += ["", f"...and {len(items) - len(shown)} more; the job's annotations list them all."]
     lines += ["", f"readcost is advisory and can be wrong. [Report a false positive]({FEEDBACK_URL})."]

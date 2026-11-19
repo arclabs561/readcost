@@ -190,7 +190,7 @@ covers the other keys, the command-line flags, and the opt-in second parser.
 - Hooks and the GitHub Action:
   [docs/hooks.md](https://github.com/arclabs561/readcost/blob/main/docs/hooks.md).
   The hooks cover Claude Code, piku and git; a JSON protocol covers anything
-  else.
+  else. The Action can also check pull request descriptions, as advice.
 - Editors, through `readcost lsp`:
   [docs/editors.md](https://github.com/arclabs561/readcost/blob/main/docs/editors.md).
 - Coding agents that check and rewrite their own prose:

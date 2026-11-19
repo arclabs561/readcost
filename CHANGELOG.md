@@ -19,20 +19,20 @@ configuration.
   docstrings, roxygen, `///`, POD), and for `.zsh`, `.fish`, `.ksh`, `.kts`,
   `.groovy`, `.gradle`, `.proto`, `.cu`, `.cxx`, `.hh`, `Makefile` and
   `Dockerfile`. A script with no extension is read by its `#!` line.
-
-### Fixed
-
-- A file whose extension names a programming language readcost has no
-  comment syntax for, such as `.lisp` or `.sql`, was read as prose, code
-  included. It is now not read, and its result has a note.
-- The `#!` line of a shell script was read as a comment.
-- Findings in comments that only `comments = "all"` reads are reported at
-  info, as docs/research.md said they were; a stacked-nouns finding in a
-  Python `#` comment was a warning. A level set in config or a flag still
-  wins. docs/research.md no longer says that `@param` lines in doc comments
-  are skipped: they never were.
+- The GitHub Action checks the pull request title and description with
+  `check-pr-text: "true"`, or only them with `"only"`, on `pull_request` and
+  `pull_request_target` events. The text is read from the event file, never
+  through the shell; the description is read as Markdown, without code or
+  HTML comments, and skipped under `pr-text-min-words` (default 30).
+  Findings go in the comment and the annotations as "pull request
+  description, line N". They do not fail the job unless `pr-text-fail-on`
+  is set. The command line has the same as `readcost check --pr-text
+  EVENT_FILE`, `--pr-text-fail-on` and `--pr-text-min-words`.
 
 ### Changed
+
+- The Action edits its summary comment only when `github-actions[bot]`
+  posted it, not any comment that starts with the marker.
 
 - `-o agent`, and the hooks that use it, put each finding as a question
   ("Is it hard to follow here?") and tell the model to change a sentence
@@ -61,6 +61,18 @@ configuration.
 - Editor diagnostics and SARIF rules link to the rule's own section in
   docs/rules.md, not to the README's rule table. long-sentence, which has no
   section, still links to the table.
+
+### Fixed
+
+- A file whose extension names a programming language readcost has no
+  comment syntax for, such as `.lisp` or `.sql`, was read as prose, code
+  included. It is now not read, and its result has a note.
+- The `#!` line of a shell script was read as a comment.
+- Findings in comments that only `comments = "all"` reads are reported at
+  info, as docs/research.md said they were; a stacked-nouns finding in a
+  Python `#` comment was a warning. A level set in config or a flag still
+  wins. docs/research.md no longer says that `@param` lines in doc comments
+  are skipped: they never were.
 
 ## [0.3.0] - 2026-11-18
 

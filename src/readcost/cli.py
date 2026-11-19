@@ -115,7 +115,10 @@ def _cmd_check(args) -> int:
         cfg.min_severity = args.min_severity
     if args.baseline:
         cfg.baseline = args.baseline
-    results, failed = _collect(args, cfg, Analyzer(cfg))
+    analyzer = Analyzer(cfg)
+    results, failed = _collect(args, cfg, analyzer) if args.paths or not args.pr_text else ([], False)
+    pr_results = _pr_text(args, analyzer) if args.pr_text else []
+    results += pr_results
     color = use_color(sys.stdout, args.color)
     out = render(results, args.output, max_items=cfg.hooks.max_items, max_chars=cfg.hooks.max_chars,
                  feedback_link=cfg.feedback_link, color=color)
@@ -129,9 +132,36 @@ def _cmd_check(args) -> int:
             print("\n" + spots)
     if failed:
         return EXIT_USAGE
-    worst = max((VERDICT_RANK[r.verdict] for r in results), default=0)
-    threshold = {"never": 99, "advise": 1, "block": 2}["never" if args.exit_zero else args.fail_on]
-    return EXIT_FINDINGS if worst >= threshold else EXIT_OK
+    rank = {"never": 99, "advise": 1, "block": 2}
+    files = results[:len(results) - len(pr_results)]
+    worst = max((VERDICT_RANK[r.verdict] for r in files), default=0)
+    worst_pr = max((VERDICT_RANK[r.verdict] for r in pr_results), default=0)
+    threshold = rank["never" if args.exit_zero else args.fail_on]
+    pr_threshold = rank["never" if args.exit_zero else args.pr_text_fail_on]
+    return EXIT_FINDINGS if worst >= threshold or worst_pr >= pr_threshold else EXIT_OK
+
+
+def _pr_text(args, analyzer) -> list:
+    """Results for the pull request title and description in ``args.pr_text``, or none.
+
+    None when the event has no pull request or its text is shorter than
+    --pr-text-min-words; a note on stderr says which.
+    """
+    from . import prtext
+
+    pr = prtext.read_event(args.pr_text)
+    if pr is None:
+        print(f"readcost: {args.pr_text}: no pull request in this event; its text is not checked",
+              file=sys.stderr)
+        return []
+    results = prtext.check_pull_request(analyzer, pr)
+    words = sum(r.words for r in results)
+    least = prtext.MIN_WORDS if args.pr_text_min_words is None else args.pr_text_min_words
+    if words < least:
+        print(f"readcost: the pull request text has {words} words of prose, under {least}; not checked",
+              file=sys.stderr)
+        return []
+    return results
 
 
 def _read_rev_or_file(path: str) -> str:
@@ -669,6 +699,13 @@ def build_parser() -> argparse.ArgumentParser:
     c.add_argument("--lines", help="only report sentences touching these lines, e.g. 10-24,40")
     c.add_argument("--last", action="store_true", help="for transcripts: only the last assistant message")
     c.add_argument("--baseline", help="baseline JSON from `readcost baseline`; only findings not in it count")
+    c.add_argument("--pr-text", metavar="EVENT",
+                   help="also check the pull request title and description in this GitHub event file; "
+                        "with no paths, check only them")
+    c.add_argument("--pr-text-fail-on", choices=("never", "advise", "block"), default="never",
+                   help="exit 1 when the pull request text reaches this verdict (default: never)")
+    c.add_argument("--pr-text-min-words", type=int, default=None, metavar="N",
+                   help="skip pull request text with fewer words of prose than this (default: 30)")
     c.set_defaults(func=_cmd_check)
 
     st = sub.add_parser("style", help="compare rule rates, sentence length and reading time with a reference style")
