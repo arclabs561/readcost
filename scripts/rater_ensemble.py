@@ -35,10 +35,16 @@ MODELS = [
 URL = "https://openrouter.ai/api/v1/chat/completions"
 
 
-def ask(model: str, prompt: str, schema: dict) -> tuple[dict | None, dict]:
+def ask(model: str, prompt: str, schema: dict, system: str | None = None) -> tuple[dict | None, dict]:
+    """One reply as parsed JSON, with what OpenRouter reported (served model, cost, tokens).
+
+    ``system``, when given, goes first as a system message.
+    """
+    messages = [{"role": "system", "content": system}] if system else []
+    messages.append({"role": "user", "content": prompt + "\n\nReturn only the JSON object, no prose."})
     body = {
         "model": model,
-        "messages": [{"role": "user", "content": prompt + "\n\nReturn only the JSON object, no prose."}],
+        "messages": messages,
         "temperature": 0,
         "response_format": {"type": "json_schema", "json_schema": {"name": "out", "strict": True, "schema": schema}},
         "usage": {"include": True},
@@ -73,7 +79,9 @@ def ask(model: str, prompt: str, schema: dict) -> tuple[dict | None, dict]:
         return None, meta
     meta.pop("error", None)
     meta["served"] = data.get("model")
-    meta["cost"] = (data.get("usage") or {}).get("cost")
+    usage = data.get("usage") or {}
+    meta["cost"] = usage.get("cost")
+    meta["tokens"] = [usage.get("prompt_tokens"), usage.get("completion_tokens")]
     text = (data.get("choices") or [{}])[0].get("message", {}).get("content") or ""
     m = re.search(r"\{.*\}", text, re.DOTALL)
     try:
