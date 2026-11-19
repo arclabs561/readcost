@@ -564,3 +564,19 @@ any text read. Counts from the searches, and details that
 - Ids are drawn over all items, ranked ones included. Primed batches hold
   findings, near misses and random decoys; unprimed batches hold those and
   the ranked items.
+
+### 19 November 2026, after the draw and before any label
+
+- The fetch cloned 1,086 of 1,091 repositories; 5 drafts repositories
+  failed because the search record named a default branch that does not
+  exist. Only 39 of the 75 drafts repositories cloned hold a `draft-*.md`
+  file.
+- Three texts (two in code-ordinary, one in reference) are dropped as
+  "check error": readcost 0.3.0 raises a `TypeError` in its Markdown
+  extraction (`_markdown`, a token without a line map), so readcost
+  cannot check those files. The code is frozen for this test; the error is
+  a bug to fix after it.
+- The sample holds 1,694 items: 1,153 for the primed raters (809 findings,
+  168 near misses, 176 random decoys) and 541 ranked sentences from 212
+  documents for the unprimed raters only. No key and no rule with
+  normalized sentence occurs twice.
