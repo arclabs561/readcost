@@ -1,0 +1,30 @@
+[
+  {
+    "case": "A",
+    "pr": 101,
+    "base": "83901dbaaa5199a37de8b3ae70efb58d88a3732a",
+    "head": "663e0cc16d86f5fdf0e019eb27d147708e51538b",
+    "diff_sha256": "ff632f3b0c946084c2bc074b328a5d407f28deab76f0ab0fa697389288b0c49c",
+    "source": "Follows the test across formats in #100, whose decision rules were fixed before the data. In doc comments and docstrings, the twelve-rater majority accepted 1 of 28 inline-list findings, against 5 of 16 in Markdown (difference −28 points, −52 to −6), which meets the pre-registered rule for turning a rule off in one format.\n\nThe default sits under every user setting: a level for inline-list in `[readcost.rules]`, an override or a flag turns it back on. Markdown, commit messages and the other formats are unchanged. A test covers all four cases.\n\nUncertain: the cells are small (28 and 16 findings), and the raters are one model family.",
+    "feedback": "readcost: 1 sentence in 102 words that may be hard to follow. These are questions, not errors: in a held-out test, model raters said an editor would fix few such findings. Change a sentence only if it reads badly to you, keep its meaning and facts, and leave the rest.\n- line 1 [hyphen-compound] coined compound modifier: 'inline-list findings'. Is it hard to follow here? Raters said an editor would fix 0 of 87 such findings, and called 42 more optional. If it is, write the relationship out.\nreadcost: a finding is wrong? Report it at https://github.com/arclabs561/readcost/issues/new/choose",
+    "question": "An existing project has a Python docstring and a Markdown page with the same inline list. Which one changes under the new defaults? Can an explicit inline-list setting turn the rule on in the affected format?",
+    "key": [
+      "Only the source docstring changes to ignored by default. The Markdown rule stays active.",
+      "Yes. An explicit enabled level, matching override or enabling flag can restore it. One valid route suffices."
+    ]
+  },
+  {
+    "case": "B",
+    "pr": 106,
+    "base": "67e47abe4901b3f86036338166b42cd449b9ca04",
+    "head": "44bc26cdbdfde0e4543f70ed21db5c6ddea4c1ce",
+    "diff_sha256": "997535c9b8c9c0070abc4b350d386979c24946c9e0c5021cc825f55439f1ea76",
+    "source": "readcost raised a TypeError in `_markdown` on any inline footnote, `^[text]`. markdown-it's footnote plugin builds the footnote's paragraph at the end of the token stream with no line map. A regex such as `^[a-z]` in a doc comment or a Markdown file parses as one. This dropped three files from the draw for the kinds precision test (#103): a Python docstring, a TypeScript doc comment and a Markdown file.\n\nFix: before reading, a token without a map gets one. The footnote's paragraph takes the line of its `^[` in the paragraph that holds it; any other token without a map takes the map of the nearest enclosing token that has one. The words after an inline footnote also had wrong offsets, because the reference was skipped by searching for `[^`; that is fixed, and the offsets fuzz test now includes inline footnotes.\n\nGuard: an extraction error on one file becomes a note on that file's result, and any other error on one file is reported for that file. The other files are still checked. The exit status stays 2, as `test_crash_exits_2_not_the_findings_code` requires, so a file that was not checked does not pass.\n\nTested: the three dropped files (same blobs as the draw records) crash on main and check cleanly on this branch. The regression tests use made-up fixtures with the same shapes, and all of them fail on main. The full suite passes locally.\n\nNot changed: GitHub does not render `^[...]` as a footnote, so in a README a regex like `^[a-z]` loses those characters from its sentence. Turning inline footnotes off (`footnote_plugin(inline=False)`) would change what readcost reads, so it is left for a measured change.",
+    "feedback": "readcost: 1 sentence in 277 words that may be hard to follow. These are questions, not errors: in a held-out test, model raters said an editor would fix few such findings. Change a sentence only if it reads badly to you, keep its meaning and facts, and leave the rest.\n- line 1 [stacked-nouns] 3 nouns stacked: 'kinds precision test'. Is it hard to follow here? Raters said an editor would fix 0 of 100 such findings, and called 36 more optional. If it is, keep at most two nouns together. Unpack the rest with a preposition or a relative clause, if the result reads naturally; leave an established term as it is.\nreadcost: a finding is wrong? Report it at https://github.com/arclabs561/readcost/issues/new/choose",
+    "question": "A batch contains two files. An unexpected internal extraction error occurs in the first. What happens to the second file, and which process exit code should CI receive?",
+    "key": [
+      "The batch still checks the second file.",
+      "CI receives exit status 2. A findings-level failure or a successful run is incorrect."
+    ]
+  }
+]
