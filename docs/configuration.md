@@ -36,6 +36,10 @@ useful ones:
   this severity; `off` turns that rule off.
 - `profile`: a relative path is read from the config file's directory.
 - `hooks.mode`: `off`, `advise` or `block`.
+- `hooks.repeat`: `"once"` (the default) makes the Claude Code and piku hooks
+  report a finding once per session and file, and block or deny on it once;
+  `"always"` reports every finding after every edit. See
+  [hooks](hooks.md#shared-rules).
 - `feedback_link`: `false` drops the line that text and agent output end
   with, which points to the false-positive form.
 - `language_check`: `false` checks text that looks like another language

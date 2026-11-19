@@ -1721,7 +1721,10 @@ hyphenated CSS class name written without backticks, which readcost reads
 as a coined compound (114 and 118 words, six rounds). An agent or hook that
 loops on readcost's feedback should stop when the text stops changing or
 when the same findings come back, and treat what remains as findings to
-judge, not to chase.
+judge, not to chase. The Claude Code and piku hooks now report each finding
+once per session and file, and block on it once (`hooks.repeat`, see
+[hooks](hooks.md#shared-rules)). The loop above was not rerun with that
+change, so its effect on these outcomes is not measured.
 
 Each loop was judged once by one model; the fact counts are small and only
 indicative. The paragraphs had two or more findings to start with, so

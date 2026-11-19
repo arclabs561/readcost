@@ -8,6 +8,7 @@ worktree can be another branch's editable install, so a stale copy can pass.
 
 import os
 import sys
+import tempfile
 import time
 from pathlib import Path
 
@@ -29,6 +30,9 @@ for _name in list(os.environ):
             "XDG_CONFIG_HOME"):
         del os.environ[_name]
 os.environ["GIT_CONFIG_GLOBAL"] = os.devnull
+# The hooks remember reported findings under the user's cache directory; keep
+# a test run out of it (tests of that memory point it at their own tmp_path).
+os.environ["READCOST_HOOK_STATE"] = tempfile.mkdtemp(prefix="readcost-hook-state-")
 os.environ["GIT_CONFIG_NOSYSTEM"] = "1"
 
 
