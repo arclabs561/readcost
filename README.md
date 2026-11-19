@@ -209,6 +209,9 @@ covers the other keys, the command-line flags, and the opt-in second parser.
   two lenient raters were in that majority. On READMEs the rules had not
   been tuned on, three model raters accepted 30% (23 to 38%). They called
   about 2% a cost that an editor would fix; the rest were optional at best.
+  Shown the same sentences without readcost's message, raters saw a problem
+  far less often, and no rule picked out sentences that need work better
+  than taking the longest sentence of each README.
 - Against hand-corrected parses, 81 to 84% of stacked-nouns findings, 60% of
   reduced-object-relative findings and 61 to 67% of long-dependency findings
   name a construction that is there. The rest are parser errors.

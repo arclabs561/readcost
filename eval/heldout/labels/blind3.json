@@ -1,0 +1,2987 @@
+[
+ {
+  "id": 409151,
+  "label": "d",
+  "cause": "long subject with parenthetical before verb"
+ },
+ {
+  "id": 278963,
+  "label": "w",
+  "cause": "list of button names, readable"
+ },
+ {
+  "id": 583015,
+  "label": "w",
+  "cause": "notation definitions clear"
+ },
+ {
+  "id": 899946,
+  "label": "w",
+  "cause": "relative clause reads fine"
+ },
+ {
+  "id": 426990,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 326731,
+  "label": "w",
+  "cause": "standard liability wording, clear"
+ },
+ {
+  "id": 877080,
+  "label": "w",
+  "cause": "plain statement"
+ },
+ {
+  "id": 813045,
+  "label": "d",
+  "cause": "long sentence with nested clauses and which"
+ },
+ {
+  "id": 933799,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 210343,
+  "label": "d",
+  "cause": "awkward restarting with phrasing, ambiguous"
+ },
+ {
+  "id": 288645,
+  "label": "c",
+  "cause": "garbled phrase: and the from the"
+ },
+ {
+  "id": 414176,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 845831,
+  "label": "w",
+  "cause": "clear marketing phrasing"
+ },
+ {
+  "id": 826692,
+  "label": "w",
+  "cause": "clear statement of responsibility"
+ },
+ {
+  "id": 699581,
+  "label": "d",
+  "cause": "dense address-list parenthetical, hard to follow"
+ },
+ {
+  "id": 346740,
+  "label": "w",
+  "cause": "clear feature bullet"
+ },
+ {
+  "id": 189322,
+  "label": "d",
+  "cause": "very long command list run-on"
+ },
+ {
+  "id": 466806,
+  "label": "d",
+  "cause": "heading run into description without separator"
+ },
+ {
+  "id": 444467,
+  "label": "d",
+  "cause": "keyword list, not a sentence"
+ },
+ {
+  "id": 372853,
+  "label": "w",
+  "cause": "clear list of written values"
+ },
+ {
+  "id": 444925,
+  "label": "w",
+  "cause": "clear privacy statement"
+ },
+ {
+  "id": 493273,
+  "label": "d",
+  "cause": "ratio phrasing hard to parse"
+ },
+ {
+  "id": 839933,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 767404,
+  "label": "w",
+  "cause": "dense but parseable trigger list"
+ },
+ {
+  "id": 749475,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 279081,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 591145,
+  "label": "w",
+  "cause": "clear colour legend"
+ },
+ {
+  "id": 221641,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 892013,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 325214,
+  "label": "d",
+  "cause": "dense hex-address notation, hard to scan"
+ },
+ {
+  "id": 400359,
+  "label": "w",
+  "cause": "clear status list"
+ },
+ {
+  "id": 617387,
+  "label": "w",
+  "cause": "clear licence restriction"
+ },
+ {
+  "id": 329773,
+  "label": "w",
+  "cause": "clear compatibility statement"
+ },
+ {
+  "id": 978602,
+  "label": "w",
+  "cause": "clear usage guidance"
+ },
+ {
+  "id": 582647,
+  "label": "w",
+  "cause": "clear verification statement"
+ },
+ {
+  "id": 196621,
+  "label": "w",
+  "cause": "clear licence scope statement"
+ },
+ {
+  "id": 223141,
+  "label": "w",
+  "cause": "terse but clear state description"
+ },
+ {
+  "id": 626120,
+  "label": "w",
+  "cause": "clear control list"
+ },
+ {
+  "id": 916765,
+  "label": "w",
+  "cause": "clear command description"
+ },
+ {
+  "id": 216619,
+  "label": "w",
+  "cause": "clear architecture statement"
+ },
+ {
+  "id": 936793,
+  "label": "w",
+  "cause": "clear descriptive sentence"
+ },
+ {
+  "id": 292923,
+  "label": "w",
+  "cause": "clear build instruction"
+ },
+ {
+  "id": 449674,
+  "label": "d",
+  "cause": "unclear what draws with teardown"
+ },
+ {
+  "id": 840459,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 641111,
+  "label": "w",
+  "cause": "long but clear responsibility statement"
+ },
+ {
+  "id": 699965,
+  "label": "c",
+  "cause": "overlong nested parentheticals, should split"
+ },
+ {
+  "id": 868293,
+  "label": "d",
+  "cause": "parenthetical spans the sentence break"
+ },
+ {
+  "id": 849394,
+  "label": "d",
+  "cause": "truncated sentence, object reference unclear"
+ },
+ {
+  "id": 688505,
+  "label": "d",
+  "cause": "long device list with duplicated entries"
+ },
+ {
+  "id": 679738,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 745691,
+  "label": "w",
+  "cause": "clear, referent is clear"
+ },
+ {
+  "id": 986672,
+  "label": "w",
+  "cause": "clear security statement"
+ },
+ {
+  "id": 183712,
+  "label": "c",
+  "cause": "garbled: dangling Skipping, unclear first cut"
+ },
+ {
+  "id": 138259,
+  "label": "w",
+  "cause": "clear retention statement"
+ },
+ {
+  "id": 538622,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 867106,
+  "label": "w",
+  "cause": "clear advice"
+ },
+ {
+  "id": 532542,
+  "label": "w",
+  "cause": "technical but clear"
+ },
+ {
+  "id": 804026,
+  "label": "w",
+  "cause": "clear pointer to guide"
+ },
+ {
+  "id": 279226,
+  "label": "d",
+  "cause": "parenthetical inside subject, slow to parse"
+ },
+ {
+  "id": 667789,
+  "label": "d",
+  "cause": "long clause chain with embedded parenthetical"
+ },
+ {
+  "id": 317014,
+  "label": "w",
+  "cause": "clear UI prompt description"
+ },
+ {
+  "id": 566339,
+  "label": "w",
+  "cause": "clear list of keys"
+ },
+ {
+  "id": 163927,
+  "label": "w",
+  "cause": "clear disclosure"
+ },
+ {
+  "id": 372602,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 699228,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 768474,
+  "label": "w",
+  "cause": "clear trademark statement"
+ },
+ {
+  "id": 282651,
+  "label": "d",
+  "cause": "deeply nested relative clauses"
+ },
+ {
+  "id": 785706,
+  "label": "w",
+  "cause": "clear capacity statement"
+ },
+ {
+  "id": 867902,
+  "label": "w",
+  "cause": "clear feature list fragment"
+ },
+ {
+  "id": 104342,
+  "label": "d",
+  "cause": "terse; what works is unclear"
+ },
+ {
+  "id": 248774,
+  "label": "d",
+  "cause": "awkward points the open at"
+ },
+ {
+  "id": 732897,
+  "label": "d",
+  "cause": "stacked noun modifiers, unclear phrase"
+ },
+ {
+  "id": 914268,
+  "label": "d",
+  "cause": "dense technical phrasing, missing word"
+ },
+ {
+  "id": 459857,
+  "label": "w",
+  "cause": "clear tagline"
+ },
+ {
+  "id": 695195,
+  "label": "w",
+  "cause": "clear benchmark statement"
+ },
+ {
+  "id": 686961,
+  "label": "d",
+  "cause": "very long sentence with many clauses"
+ },
+ {
+  "id": 457704,
+  "label": "w",
+  "cause": "clear feature statement"
+ },
+ {
+  "id": 881177,
+  "label": "w",
+  "cause": "clear claim contrast"
+ },
+ {
+  "id": 981714,
+  "label": "w",
+  "cause": "clear, parenthetical manageable"
+ },
+ {
+  "id": 195261,
+  "label": "w",
+  "cause": "clear animation description"
+ },
+ {
+  "id": 928150,
+  "label": "d",
+  "cause": "awkward exclusive listeners, stacked hints"
+ },
+ {
+  "id": 518277,
+  "label": "d",
+  "cause": "awkward no reliance on wording"
+ },
+ {
+  "id": 331429,
+  "label": "w",
+  "cause": "clear requirement"
+ },
+ {
+  "id": 176869,
+  "label": "w",
+  "cause": "clear interface description"
+ },
+ {
+  "id": 878418,
+  "label": "d",
+  "cause": "dense parameter fragment, no clear verb"
+ },
+ {
+  "id": 376356,
+  "label": "d",
+  "cause": "vague allows adjustment of enforcement"
+ },
+ {
+  "id": 516659,
+  "label": "w",
+  "cause": "long but clear licence statement"
+ },
+ {
+  "id": 810161,
+  "label": "d",
+  "cause": "very long sentence with embedded appositive"
+ },
+ {
+  "id": 408871,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 387816,
+  "label": "w",
+  "cause": "clear spike goal"
+ },
+ {
+  "id": 385526,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 344322,
+  "label": "w",
+  "cause": "clear parenthetical, split word readable"
+ },
+ {
+  "id": 756744,
+  "label": "w",
+  "cause": "clear validation rule"
+ },
+ {
+  "id": 676489,
+  "label": "w",
+  "cause": "clear technical description"
+ },
+ {
+  "id": 230133,
+  "label": "w",
+  "cause": "clear arrow-chain flow"
+ },
+ {
+  "id": 700153,
+  "label": "w",
+  "cause": "clear licence summary"
+ },
+ {
+  "id": 447952,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 169446,
+  "label": "w",
+  "cause": "clear fix description"
+ },
+ {
+  "id": 698360,
+  "label": "w",
+  "cause": "clear roadmap item"
+ },
+ {
+  "id": 901605,
+  "label": "c",
+  "cause": "garbled noun list, no clear verb"
+ },
+ {
+  "id": 511198,
+  "label": "d",
+  "cause": "long status list with semicolons"
+ },
+ {
+  "id": 111668,
+  "label": "w",
+  "cause": "clear integration statement"
+ },
+ {
+  "id": 404734,
+  "label": "c",
+  "cause": "overlong sentence with many nested clauses"
+ },
+ {
+  "id": 456145,
+  "label": "w",
+  "cause": "clear advice"
+ },
+ {
+  "id": 533967,
+  "label": "w",
+  "cause": "clear hosting option"
+ },
+ {
+  "id": 946537,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 549615,
+  "label": "w",
+  "cause": "clear technical description"
+ },
+ {
+  "id": 301611,
+  "label": "w",
+  "cause": "clear feature list"
+ },
+ {
+  "id": 164428,
+  "label": "w",
+  "cause": "clear test result"
+ },
+ {
+  "id": 762270,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 883634,
+  "label": "w",
+  "cause": "clear answer"
+ },
+ {
+  "id": 115880,
+  "label": "w",
+  "cause": "clear, referents resolvable"
+ },
+ {
+  "id": 640775,
+  "label": "w",
+  "cause": "clear fix description"
+ },
+ {
+  "id": 370508,
+  "label": "w",
+  "cause": "clear rule scope"
+ },
+ {
+  "id": 244463,
+  "label": "w",
+  "cause": "clear process description"
+ },
+ {
+  "id": 789966,
+  "label": "w",
+  "cause": "clear technical statement"
+ },
+ {
+  "id": 783412,
+  "label": "w",
+  "cause": "clear changelog item"
+ },
+ {
+  "id": 438492,
+  "label": "w",
+  "cause": "clear conversion statement"
+ },
+ {
+  "id": 400904,
+  "label": "d",
+  "cause": "long list with nested parentheticals"
+ },
+ {
+  "id": 438387,
+  "label": "w",
+  "cause": "clear pointer"
+ },
+ {
+  "id": 470209,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 597652,
+  "label": "w",
+  "cause": "clear benchmark sentence"
+ },
+ {
+  "id": 729058,
+  "label": "w",
+  "cause": "clear permission statement"
+ },
+ {
+  "id": 727646,
+  "label": "w",
+  "cause": "clear FAQ intro"
+ },
+ {
+  "id": 778420,
+  "label": "w",
+  "cause": "clear negation"
+ },
+ {
+  "id": 280566,
+  "label": "w",
+  "cause": "clear list of fields"
+ },
+ {
+  "id": 473334,
+  "label": "w",
+  "cause": "clear licence obligation"
+ },
+ {
+  "id": 946346,
+  "label": "w",
+  "cause": "clear, bullet fragment readable"
+ },
+ {
+  "id": 532638,
+  "label": "w",
+  "cause": "long list but parseable"
+ },
+ {
+  "id": 213146,
+  "label": "w",
+  "cause": "clear accessibility advice"
+ },
+ {
+  "id": 665560,
+  "label": "w",
+  "cause": "clear list of contents"
+ },
+ {
+  "id": 784647,
+  "label": "c",
+  "cause": "stacked jargon, unreadable without definitions"
+ },
+ {
+  "id": 990399,
+  "label": "w",
+  "cause": "clear condition statement"
+ },
+ {
+  "id": 303224,
+  "label": "w",
+  "cause": "clear announcement"
+ },
+ {
+  "id": 298691,
+  "label": "w",
+  "cause": "clear tagline"
+ },
+ {
+  "id": 842621,
+  "label": "w",
+  "cause": "clear look description"
+ },
+ {
+  "id": 477730,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 718588,
+  "label": "w",
+  "cause": "clear caption"
+ },
+ {
+  "id": 398183,
+  "label": "w",
+  "cause": "clear UI description"
+ },
+ {
+  "id": 252946,
+  "label": "w",
+  "cause": "clear feature statement"
+ },
+ {
+  "id": 863670,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 167856,
+  "label": "w",
+  "cause": "clear closing line"
+ },
+ {
+  "id": 921454,
+  "label": "d",
+  "cause": "noun phrase with no verb until late"
+ },
+ {
+  "id": 930211,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 242809,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 934203,
+  "label": "d",
+  "cause": "double comma typo in list"
+ },
+ {
+  "id": 324813,
+  "label": "w",
+  "cause": "clear licence restriction"
+ },
+ {
+  "id": 285587,
+  "label": "w",
+  "cause": "clear disclaimer statement"
+ },
+ {
+  "id": 288214,
+  "label": "w",
+  "cause": "clear network statement"
+ },
+ {
+  "id": 597976,
+  "label": "w",
+  "cause": "clear, slightly repetitive"
+ },
+ {
+  "id": 449613,
+  "label": "w",
+  "cause": "clear state description"
+ },
+ {
+  "id": 577190,
+  "label": "w",
+  "cause": "terse but clear"
+ },
+ {
+  "id": 118561,
+  "label": "d",
+  "cause": "dense benchmark numbers, hard to scan"
+ },
+ {
+  "id": 637595,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 496743,
+  "label": "w",
+  "cause": "clear metric definitions"
+ },
+ {
+  "id": 202148,
+  "label": "w",
+  "cause": "clear scope statement"
+ },
+ {
+  "id": 611094,
+  "label": "w",
+  "cause": "participle attachment acceptable"
+ },
+ {
+  "id": 551031,
+  "label": "w",
+  "cause": "clear list item"
+ },
+ {
+  "id": 280518,
+  "label": "w",
+  "cause": "clear, wake is jargon but contextual"
+ },
+ {
+  "id": 178419,
+  "label": "c",
+  "cause": "overlong list with nested clauses, should split"
+ },
+ {
+  "id": 771026,
+  "label": "w",
+  "cause": "clear list of report contents"
+ },
+ {
+  "id": 106362,
+  "label": "w",
+  "cause": "clear results statement"
+ },
+ {
+  "id": 351514,
+  "label": "w",
+  "cause": "clear feature statement"
+ },
+ {
+  "id": 971534,
+  "label": "d",
+  "cause": "tool category mismatch, awkward name"
+ },
+ {
+  "id": 135528,
+  "label": "w",
+  "cause": "clear provenance statement"
+ },
+ {
+  "id": 348041,
+  "label": "d",
+  "cause": "elliptical; sites refused unclear"
+ },
+ {
+  "id": 848651,
+  "label": "w",
+  "cause": "clear referral"
+ },
+ {
+  "id": 866800,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 712604,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 493073,
+  "label": "w",
+  "cause": "clear plugin description"
+ },
+ {
+  "id": 498039,
+  "label": "d",
+  "cause": "list repeats LoCoMo chunking item"
+ },
+ {
+  "id": 433852,
+  "label": "w",
+  "cause": "clear fragment"
+ },
+ {
+  "id": 408662,
+  "label": "w",
+  "cause": "clear tip"
+ },
+ {
+  "id": 274367,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 107162,
+  "label": "w",
+  "cause": "long but clear privacy statement"
+ },
+ {
+  "id": 216308,
+  "label": "w",
+  "cause": "clear configuration statement"
+ },
+ {
+  "id": 213238,
+  "label": "w",
+  "cause": "clear advice"
+ },
+ {
+  "id": 538399,
+  "label": "w",
+  "cause": "dense technical but parseable"
+ },
+ {
+  "id": 851063,
+  "label": "w",
+  "cause": "clear feature bullet"
+ },
+ {
+  "id": 976714,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 153765,
+  "label": "w",
+  "cause": "long but clear rule"
+ },
+ {
+  "id": 597418,
+  "label": "w",
+  "cause": "clear behaviour description"
+ },
+ {
+  "id": 311581,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 315556,
+  "label": "w",
+  "cause": "clear technical description"
+ },
+ {
+  "id": 483567,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 296254,
+  "label": "c",
+  "cause": "rectangle and polygon read as verb"
+ },
+ {
+  "id": 159762,
+  "label": "c",
+  "cause": "stacked dangling clauses, hard to follow"
+ },
+ {
+  "id": 294840,
+  "label": "w",
+  "cause": "clear list of actions"
+ },
+ {
+  "id": 121934,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 815043,
+  "label": "d",
+  "cause": "long run-on list of steps"
+ },
+ {
+  "id": 465122,
+  "label": "w",
+  "cause": "clear principle"
+ },
+ {
+  "id": 357306,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 396427,
+  "label": "w",
+  "cause": "clear feature list"
+ },
+ {
+  "id": 928995,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 449428,
+  "label": "w",
+  "cause": "clear result statement"
+ },
+ {
+  "id": 841014,
+  "label": "w",
+  "cause": "clear feature list"
+ },
+ {
+  "id": 383139,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 959648,
+  "label": "w",
+  "cause": "clear workflow statement"
+ },
+ {
+  "id": 613373,
+  "label": "w",
+  "cause": "clear feature bullet"
+ },
+ {
+  "id": 119424,
+  "label": "w",
+  "cause": "clear cause statement"
+ },
+ {
+  "id": 266456,
+  "label": "w",
+  "cause": "clear consequence statement"
+ },
+ {
+  "id": 544056,
+  "label": "w",
+  "cause": "clear conditional instruction"
+ },
+ {
+  "id": 312539,
+  "label": "w",
+  "cause": "clear licence summary"
+ },
+ {
+  "id": 639079,
+  "label": "w",
+  "cause": "clear feature list item"
+ },
+ {
+  "id": 792803,
+  "label": "w",
+  "cause": "clear warning"
+ },
+ {
+  "id": 954088,
+  "label": "w",
+  "cause": "clear failure behaviour"
+ },
+ {
+  "id": 311067,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 184519,
+  "label": "w",
+  "cause": "clear test instruction"
+ },
+ {
+  "id": 837623,
+  "label": "w",
+  "cause": "clear CI statement"
+ },
+ {
+  "id": 591557,
+  "label": "w",
+  "cause": "clear provider list"
+ },
+ {
+  "id": 255110,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 202931,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 159872,
+  "label": "w",
+  "cause": "clear feature bullet"
+ },
+ {
+  "id": 318812,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 334807,
+  "label": "d",
+  "cause": "verbless noun-phrase list in covers clause"
+ },
+ {
+  "id": 803734,
+  "label": "w",
+  "cause": "clear example list"
+ },
+ {
+  "id": 569826,
+  "label": "w",
+  "cause": "dense but parseable technical description"
+ },
+ {
+  "id": 975795,
+  "label": "w",
+  "cause": "standard liability wording"
+ },
+ {
+  "id": 375763,
+  "label": "d",
+  "cause": "long nested parentheticals, hard to follow"
+ },
+ {
+  "id": 207023,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 425700,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 359199,
+  "label": "w",
+  "cause": "clear acknowledgement"
+ },
+ {
+  "id": 856187,
+  "label": "w",
+  "cause": "clear feature bullet"
+ },
+ {
+  "id": 882044,
+  "label": "w",
+  "cause": "clear acceptance statement"
+ },
+ {
+  "id": 616501,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 435003,
+  "label": "w",
+  "cause": "clear status statement"
+ },
+ {
+  "id": 487453,
+  "label": "w",
+  "cause": "clear, trailing or nothing acceptable"
+ },
+ {
+  "id": 904324,
+  "label": "w",
+  "cause": "clear status statement"
+ },
+ {
+  "id": 478927,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 471178,
+  "label": "w",
+  "cause": "clear permission statement"
+ },
+ {
+  "id": 526460,
+  "label": "d",
+  "cause": "dense specialist terms in long chain"
+ },
+ {
+  "id": 695941,
+  "label": "w",
+  "cause": "clear ecological list"
+ },
+ {
+  "id": 196039,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 964160,
+  "label": "w",
+  "cause": "clear usage instruction"
+ },
+ {
+  "id": 644698,
+  "label": "w",
+  "cause": "clear comparison result"
+ },
+ {
+  "id": 852766,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 219427,
+  "label": "w",
+  "cause": "clear build instruction"
+ },
+ {
+  "id": 530209,
+  "label": "w",
+  "cause": "clear, reasonably scoped"
+ },
+ {
+  "id": 750037,
+  "label": "w",
+  "cause": "clear attribution statement"
+ },
+ {
+  "id": 544683,
+  "label": "w",
+  "cause": "clear warning"
+ },
+ {
+  "id": 347785,
+  "label": "w",
+  "cause": "clear friendly statement"
+ },
+ {
+  "id": 689966,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 515597,
+  "label": "w",
+  "cause": "clear test description"
+ },
+ {
+  "id": 842705,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 307903,
+  "label": "w",
+  "cause": "clear advice"
+ },
+ {
+  "id": 595792,
+  "label": "d",
+  "cause": "compressed phrasing, unclear window reference"
+ },
+ {
+  "id": 334720,
+  "label": "w",
+  "cause": "clear capability statement"
+ },
+ {
+  "id": 356660,
+  "label": "w",
+  "cause": "clear benchmark results"
+ },
+ {
+  "id": 865069,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 230402,
+  "label": "w",
+  "cause": "long but clear versioning rule"
+ },
+ {
+  "id": 461781,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 928059,
+  "label": "w",
+  "cause": "clear diagnostic list"
+ },
+ {
+  "id": 997910,
+  "label": "c",
+  "cause": "enormous parenthetical lists, unreadable as one sentence"
+ },
+ {
+  "id": 838247,
+  "label": "w",
+  "cause": "clear size statement"
+ },
+ {
+  "id": 523755,
+  "label": "w",
+  "cause": "clear feature list item"
+ },
+ {
+  "id": 997283,
+  "label": "w",
+  "cause": "clear caveat"
+ },
+ {
+  "id": 291199,
+  "label": "w",
+  "cause": "long but parseable feature description"
+ },
+ {
+  "id": 920660,
+  "label": "w",
+  "cause": "fragment, clear in context"
+ },
+ {
+  "id": 278498,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 985199,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 954207,
+  "label": "w",
+  "cause": "clear precedence rule"
+ },
+ {
+  "id": 548716,
+  "label": "w",
+  "cause": "clear terrain description"
+ },
+ {
+  "id": 603709,
+  "label": "w",
+  "cause": "clear mapping rule"
+ },
+ {
+  "id": 920546,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 240915,
+  "label": "w",
+  "cause": "clear, referent is clear"
+ },
+ {
+  "id": 375576,
+  "label": "d",
+  "cause": "semicolon chain, odd verb use dispatches"
+ },
+ {
+  "id": 895771,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 851437,
+  "label": "d",
+  "cause": "dense numbers in one long clause"
+ },
+ {
+  "id": 723480,
+  "label": "w",
+  "cause": "clear dependency statement"
+ },
+ {
+  "id": 336105,
+  "label": "w",
+  "cause": "clear list of unchanged items"
+ },
+ {
+  "id": 971610,
+  "label": "w",
+  "cause": "clear documentation pointer"
+ },
+ {
+  "id": 234382,
+  "label": "w",
+  "cause": "clear, deliberate design statement"
+ },
+ {
+  "id": 639438,
+  "label": "d",
+  "cause": "units missing in memory figures"
+ },
+ {
+  "id": 419396,
+  "label": "w",
+  "cause": "clear feature statement"
+ },
+ {
+  "id": 605269,
+  "label": "w",
+  "cause": "clear requirement statement"
+ },
+ {
+  "id": 213842,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 562765,
+  "label": "w",
+  "cause": "clear inference statement"
+ },
+ {
+  "id": 569475,
+  "label": "w",
+  "cause": "clear scope and disclaimer"
+ },
+ {
+  "id": 496003,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 924626,
+  "label": "w",
+  "cause": "clear responsibility statement"
+ },
+ {
+  "id": 389079,
+  "label": "w",
+  "cause": "clear install instruction"
+ },
+ {
+  "id": 208688,
+  "label": "w",
+  "cause": "clear instruction, list reads fine"
+ },
+ {
+  "id": 334207,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 920225,
+  "label": "w",
+  "cause": "clear cause statement"
+ },
+ {
+  "id": 742235,
+  "label": "w",
+  "cause": "clear, slightly stiff"
+ },
+ {
+  "id": 190162,
+  "label": "d",
+  "cause": "vague referent for these notes"
+ },
+ {
+  "id": 287391,
+  "label": "w",
+  "cause": "clear verification step"
+ },
+ {
+  "id": 854588,
+  "label": "w",
+  "cause": "clear parenthetical"
+ },
+ {
+  "id": 751424,
+  "label": "w",
+  "cause": "clear Chinese sentence"
+ },
+ {
+  "id": 509152,
+  "label": "d",
+  "cause": "same filename given two roles"
+ },
+ {
+  "id": 533839,
+  "label": "w",
+  "cause": "clear pointer"
+ },
+ {
+  "id": 537100,
+  "label": "w",
+  "cause": "clear scope list"
+ },
+ {
+  "id": 798939,
+  "label": "w",
+  "cause": "clear storage statement"
+ },
+ {
+  "id": 494539,
+  "label": "w",
+  "cause": "clear packaging statement"
+ },
+ {
+  "id": 860053,
+  "label": "w",
+  "cause": "clear requirement"
+ },
+ {
+  "id": 664719,
+  "label": "w",
+  "cause": "clear configuration ownership"
+ },
+ {
+  "id": 996043,
+  "label": "d",
+  "cause": "Commands listed ambiguously as a noun"
+ },
+ {
+  "id": 297086,
+  "label": "w",
+  "cause": "clear capability statement"
+ },
+ {
+  "id": 750959,
+  "label": "w",
+  "cause": "clear licence statement"
+ },
+ {
+  "id": 293900,
+  "label": "w",
+  "cause": "clear licence split"
+ },
+ {
+  "id": 394330,
+  "label": "d",
+  "cause": "terse, Every collection is the same unclear"
+ },
+ {
+  "id": 476868,
+  "label": "d",
+  "cause": "long list with duplicated entries"
+ },
+ {
+  "id": 272813,
+  "label": "c",
+  "cause": "garbled clause, missing word make"
+ },
+ {
+  "id": 620077,
+  "label": "w",
+  "cause": "clear implementation statement"
+ },
+ {
+  "id": 755910,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 616876,
+  "label": "w",
+  "cause": "clear data list"
+ },
+ {
+  "id": 555674,
+  "label": "d",
+  "cause": "wordy hedging, could be plainer"
+ },
+ {
+  "id": 491715,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 644179,
+  "label": "w",
+  "cause": "clear feature statement"
+ },
+ {
+  "id": 451960,
+  "label": "w",
+  "cause": "clear update statement"
+ },
+ {
+  "id": 106214,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 522108,
+  "label": "w",
+  "cause": "clear licence and liability"
+ },
+ {
+  "id": 978871,
+  "label": "w",
+  "cause": "clear, excerpt empty"
+ },
+ {
+  "id": 722309,
+  "label": "w",
+  "cause": "clear feature statement"
+ },
+ {
+  "id": 695271,
+  "label": "w",
+  "cause": "clear pointer to FAQ"
+ },
+ {
+  "id": 881805,
+  "label": "w",
+  "cause": "clear deployment statement"
+ },
+ {
+  "id": 839260,
+  "label": "w",
+  "cause": "clear question"
+ },
+ {
+  "id": 768847,
+  "label": "d",
+  "cause": "terse; prioritizes percentage for CLI unclear"
+ },
+ {
+  "id": 572770,
+  "label": "w",
+  "cause": "clear checklist item"
+ },
+ {
+  "id": 267688,
+  "label": "w",
+  "cause": "clear disclaimer"
+ },
+ {
+  "id": 530973,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 151336,
+  "label": "w",
+  "cause": "clear licence and responsibility statement"
+ },
+ {
+  "id": 597002,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 677701,
+  "label": "w",
+  "cause": "clear build steps"
+ },
+ {
+  "id": 320607,
+  "label": "w",
+  "cause": "clear caption"
+ },
+ {
+  "id": 790493,
+  "label": "d",
+  "cause": "undefined acronym BSS"
+ },
+ {
+  "id": 486287,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 333944,
+  "label": "d",
+  "cause": "long parenthetical inside clause"
+ },
+ {
+  "id": 344811,
+  "label": "w",
+  "cause": "clear test result"
+ },
+ {
+  "id": 161211,
+  "label": "d",
+  "cause": "dense with ambiguous it and that floor"
+ },
+ {
+  "id": 413772,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 512717,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 504060,
+  "label": "w",
+  "cause": "clear benefit statement"
+ },
+ {
+  "id": 602177,
+  "label": "d",
+  "cause": "unclear what is or is not reported"
+ },
+ {
+  "id": 692024,
+  "label": "w",
+  "cause": "clear advice"
+ },
+ {
+  "id": 710374,
+  "label": "w",
+  "cause": "clear, technical"
+ },
+ {
+  "id": 522326,
+  "label": "w",
+  "cause": "clear, slightly repetitive"
+ },
+ {
+  "id": 446552,
+  "label": "w",
+  "cause": "clear default behaviour"
+ },
+ {
+  "id": 885705,
+  "label": "d",
+  "cause": "dense technical clause chain"
+ },
+ {
+  "id": 554054,
+  "label": "w",
+  "cause": "clear closing line"
+ },
+ {
+  "id": 844924,
+  "label": "w",
+  "cause": "clear feature bullet"
+ },
+ {
+  "id": 552614,
+  "label": "w",
+  "cause": "clear, keyword-heavy but readable"
+ },
+ {
+  "id": 951446,
+  "label": "w",
+  "cause": "clear privacy statement"
+ },
+ {
+  "id": 946697,
+  "label": "w",
+  "cause": "clear limitation"
+ },
+ {
+  "id": 528367,
+  "label": "d",
+  "cause": "long list with tangled participial clauses"
+ },
+ {
+  "id": 681791,
+  "label": "w",
+  "cause": "clear product description"
+ },
+ {
+  "id": 681158,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 353441,
+  "label": "w",
+  "cause": "clear release caveat"
+ },
+ {
+  "id": 466381,
+  "label": "w",
+  "cause": "clear cause statement"
+ },
+ {
+  "id": 961467,
+  "label": "w",
+  "cause": "clear architecture statement"
+ },
+ {
+  "id": 430610,
+  "label": "w",
+  "cause": "clear architecture statement"
+ },
+ {
+  "id": 532297,
+  "label": "w",
+  "cause": "clear control list"
+ },
+ {
+  "id": 526012,
+  "label": "c",
+  "cause": "missing word: mapped to a corrective action"
+ },
+ {
+  "id": 605328,
+  "label": "w",
+  "cause": "clear hedged statement"
+ },
+ {
+  "id": 729449,
+  "label": "w",
+  "cause": "clear feature statement"
+ },
+ {
+  "id": 608054,
+  "label": "w",
+  "cause": "clear requirement"
+ },
+ {
+  "id": 718715,
+  "label": "w",
+  "cause": "clear revision note"
+ },
+ {
+  "id": 455090,
+  "label": "d",
+  "cause": "dense bare identifiers, hard to scan"
+ },
+ {
+  "id": 453062,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 576421,
+  "label": "w",
+  "cause": "clear terse statement"
+ },
+ {
+  "id": 898819,
+  "label": "w",
+  "cause": "dense perf list, readable"
+ },
+ {
+  "id": 340375,
+  "label": "w",
+  "cause": "clear feature bullet"
+ },
+ {
+  "id": 981005,
+  "label": "d",
+  "cause": "fragment list reads like a question"
+ },
+ {
+  "id": 609063,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 873784,
+  "label": "w",
+  "cause": "clear deployment options"
+ },
+ {
+  "id": 137950,
+  "label": "d",
+  "cause": "wordy relative clauses, could be plainer"
+ },
+ {
+  "id": 766617,
+  "label": "w",
+  "cause": "clear purpose statement"
+ },
+ {
+  "id": 829914,
+  "label": "w",
+  "cause": "clear requirement"
+ },
+ {
+  "id": 284608,
+  "label": "c",
+  "cause": "overlong nested rule references, split needed"
+ },
+ {
+  "id": 218796,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 957895,
+  "label": "w",
+  "cause": "clear limitation"
+ },
+ {
+  "id": 520712,
+  "label": "w",
+  "cause": "dense timings but parseable"
+ },
+ {
+  "id": 984258,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 477095,
+  "label": "w",
+  "cause": "clear, OSC jargon acceptable"
+ },
+ {
+  "id": 580776,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 616520,
+  "label": "w",
+  "cause": "clear pointer"
+ },
+ {
+  "id": 802602,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 526311,
+  "label": "w",
+  "cause": "specialist terms, clear to readers"
+ },
+ {
+  "id": 244233,
+  "label": "w",
+  "cause": "clear cause statement"
+ },
+ {
+  "id": 668494,
+  "label": "w",
+  "cause": "clear marketing statement"
+ },
+ {
+  "id": 384280,
+  "label": "w",
+  "cause": "clear list of inputs"
+ },
+ {
+  "id": 860699,
+  "label": "d",
+  "cause": "nested clauses, pools list hard to track"
+ },
+ {
+  "id": 498966,
+  "label": "w",
+  "cause": "clear dry-run statement"
+ },
+ {
+  "id": 335883,
+  "label": "c",
+  "cause": "garbled text, no clear meaning"
+ },
+ {
+  "id": 531066,
+  "label": "c",
+  "cause": "enormous parenthetical list, split needed"
+ },
+ {
+  "id": 463667,
+  "label": "w",
+  "cause": "clear prohibition"
+ },
+ {
+  "id": 522079,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 927545,
+  "label": "w",
+  "cause": "clear technical sequence"
+ },
+ {
+  "id": 298903,
+  "label": "w",
+  "cause": "clear feature statement"
+ },
+ {
+  "id": 999589,
+  "label": "w",
+  "cause": "clear caveat"
+ },
+ {
+  "id": 104189,
+  "label": "w",
+  "cause": "clear chain of events"
+ },
+ {
+  "id": 672238,
+  "label": "w",
+  "cause": "clear scope statement"
+ },
+ {
+  "id": 609613,
+  "label": "w",
+  "cause": "clear reason"
+ },
+ {
+  "id": 132576,
+  "label": "w",
+  "cause": "clear capability statement"
+ },
+ {
+  "id": 565431,
+  "label": "c",
+  "cause": "overlong sentence, split needed"
+ },
+ {
+  "id": 311223,
+  "label": "w",
+  "cause": "clear goal statement"
+ },
+ {
+  "id": 221798,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 294364,
+  "label": "w",
+  "cause": "clear bug statement"
+ },
+ {
+  "id": 725156,
+  "label": "w",
+  "cause": "clear feature bullet"
+ },
+ {
+  "id": 448393,
+  "label": "w",
+  "cause": "clear Turkish sentence"
+ },
+ {
+  "id": 646368,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 911428,
+  "label": "w",
+  "cause": "clear feature bullet"
+ },
+ {
+  "id": 461961,
+  "label": "w",
+  "cause": "clear rendering statement"
+ },
+ {
+  "id": 962613,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 781053,
+  "label": "w",
+  "cause": "clear mapping list"
+ },
+ {
+  "id": 588590,
+  "label": "w",
+  "cause": "clear finding"
+ },
+ {
+  "id": 619115,
+  "label": "d",
+  "cause": "terse, keep up unclear"
+ },
+ {
+  "id": 316942,
+  "label": "w",
+  "cause": "clear FAQ question"
+ },
+ {
+  "id": 158476,
+  "label": "w",
+  "cause": "dense spec note, readable"
+ },
+ {
+  "id": 667207,
+  "label": "w",
+  "cause": "clear metric definition"
+ },
+ {
+  "id": 520575,
+  "label": "w",
+  "cause": "clear timing note"
+ },
+ {
+  "id": 748067,
+  "label": "w",
+  "cause": "clear purpose statement"
+ },
+ {
+  "id": 930158,
+  "label": "w",
+  "cause": "clear feature statement"
+ },
+ {
+  "id": 963114,
+  "label": "w",
+  "cause": "clear, slightly compressed"
+ },
+ {
+  "id": 820166,
+  "label": "w",
+  "cause": "clear feature statement"
+ },
+ {
+  "id": 511463,
+  "label": "w",
+  "cause": "clear finding"
+ },
+ {
+  "id": 704851,
+  "label": "c",
+  "cause": "overlong clause chain, clumsy budget wording"
+ },
+ {
+  "id": 117356,
+  "label": "w",
+  "cause": "clear bullet"
+ },
+ {
+  "id": 408090,
+  "label": "w",
+  "cause": "clear request"
+ },
+ {
+  "id": 704065,
+  "label": "c",
+  "cause": "missing words in two places"
+ },
+ {
+  "id": 380173,
+  "label": "w",
+  "cause": "clear feature statement"
+ },
+ {
+  "id": 366995,
+  "label": "w",
+  "cause": "clear technical limit"
+ },
+ {
+  "id": 299937,
+  "label": "w",
+  "cause": "clear cause statement"
+ },
+ {
+  "id": 824755,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 744911,
+  "label": "w",
+  "cause": "clear workflow statement"
+ },
+ {
+  "id": 244974,
+  "label": "w",
+  "cause": "clear credits list"
+ },
+ {
+  "id": 504419,
+  "label": "w",
+  "cause": "clear consequence statement"
+ },
+ {
+  "id": 135464,
+  "label": "d",
+  "cause": "awkward used by at most construction"
+ },
+ {
+  "id": 979970,
+  "label": "d",
+  "cause": "dense, long lookup rule"
+ },
+ {
+  "id": 976330,
+  "label": "c",
+  "cause": "missing word: keep backups of your work"
+ },
+ {
+  "id": 854258,
+  "label": "w",
+  "cause": "clear licence note"
+ },
+ {
+  "id": 116913,
+  "label": "w",
+  "cause": "spec note, readable"
+ },
+ {
+  "id": 459516,
+  "label": "w",
+  "cause": "clear feature list"
+ },
+ {
+  "id": 503448,
+  "label": "w",
+  "cause": "clear compatibility statement"
+ },
+ {
+  "id": 312327,
+  "label": "w",
+  "cause": "clear scope statement"
+ },
+ {
+  "id": 591090,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 560629,
+  "label": "w",
+  "cause": "clear, ship on is idiomatic"
+ },
+ {
+  "id": 978511,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 901833,
+  "label": "d",
+  "cause": "awkward possessive chain"
+ },
+ {
+  "id": 938332,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 634013,
+  "label": "w",
+  "cause": "clear test statement"
+ },
+ {
+  "id": 852724,
+  "label": "w",
+  "cause": "clear list of examples"
+ },
+ {
+  "id": 969803,
+  "label": "w",
+  "cause": "dense, readable requirement"
+ },
+ {
+  "id": 488009,
+  "label": "w",
+  "cause": "clear mechanism statement"
+ },
+ {
+  "id": 274542,
+  "label": "w",
+  "cause": "clear changelog item"
+ },
+ {
+  "id": 241184,
+  "label": "w",
+  "cause": "clear reversal statement"
+ },
+ {
+  "id": 596157,
+  "label": "w",
+  "cause": "clear distinction"
+ },
+ {
+  "id": 490450,
+  "label": "w",
+  "cause": "clear default statement"
+ },
+ {
+  "id": 334480,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 438200,
+  "label": "w",
+  "cause": "clear licence statement"
+ },
+ {
+  "id": 787329,
+  "label": "w",
+  "cause": "clear list of pages"
+ },
+ {
+  "id": 697485,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 503600,
+  "label": "w",
+  "cause": "clear compression list"
+ },
+ {
+  "id": 890120,
+  "label": "d",
+  "cause": "long technical clauses with semicolon"
+ },
+ {
+  "id": 221614,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 544120,
+  "label": "w",
+  "cause": "clear loading rule"
+ },
+ {
+  "id": 135405,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 223366,
+  "label": "w",
+  "cause": "clear cause statement"
+ },
+ {
+  "id": 936383,
+  "label": "w",
+  "cause": "clear pin statement"
+ },
+ {
+  "id": 537636,
+  "label": "w",
+  "cause": "clear layout description"
+ },
+ {
+  "id": 474382,
+  "label": "w",
+  "cause": "clear build rule"
+ },
+ {
+  "id": 982403,
+  "label": "c",
+  "cause": "garbled grammar: for become, reason any"
+ },
+ {
+  "id": 500729,
+  "label": "c",
+  "cause": "overlong nested parenthetical inside list"
+ },
+ {
+  "id": 303960,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 101314,
+  "label": "w",
+  "cause": "clear licence restriction"
+ },
+ {
+  "id": 922264,
+  "label": "w",
+  "cause": "clear error behaviour"
+ },
+ {
+  "id": 793256,
+  "label": "w",
+  "cause": "clear column definition"
+ },
+ {
+  "id": 797842,
+  "label": "w",
+  "cause": "clear project summary"
+ },
+ {
+  "id": 851018,
+  "label": "w",
+  "cause": "clear privacy statement"
+ },
+ {
+  "id": 851791,
+  "label": "w",
+  "cause": "clear, honeypot claim stated plainly"
+ },
+ {
+  "id": 813635,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 699550,
+  "label": "d",
+  "cause": "long list with nested parentheticals"
+ },
+ {
+  "id": 318750,
+  "label": "w",
+  "cause": "clear race explanation"
+ },
+ {
+  "id": 727751,
+  "label": "w",
+  "cause": "clear retry rule"
+ },
+ {
+  "id": 749917,
+  "label": "w",
+  "cause": "clear disclaimer"
+ },
+ {
+  "id": 654663,
+  "label": "w",
+  "cause": "clear disclaimer"
+ },
+ {
+  "id": 117986,
+  "label": "w",
+  "cause": "clear first-run statement"
+ },
+ {
+  "id": 943181,
+  "label": "w",
+  "cause": "clear licence statement"
+ },
+ {
+  "id": 340672,
+  "label": "d",
+  "cause": "dense nested parenthetical, many terms"
+ },
+ {
+  "id": 943555,
+  "label": "w",
+  "cause": "clear stability statement"
+ },
+ {
+  "id": 840841,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 844598,
+  "label": "w",
+  "cause": "clear privacy list"
+ },
+ {
+  "id": 423840,
+  "label": "w",
+  "cause": "clear tool list"
+ },
+ {
+  "id": 895581,
+  "label": "w",
+  "cause": "clear feature statement"
+ },
+ {
+  "id": 808335,
+  "label": "w",
+  "cause": "clear setting statement"
+ },
+ {
+  "id": 851503,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 307642,
+  "label": "d",
+  "cause": "menu label inside parentheses reads awkwardly"
+ },
+ {
+  "id": 628514,
+  "label": "d",
+  "cause": "long dashed appositive before verb"
+ },
+ {
+  "id": 997364,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 322447,
+  "label": "w",
+  "cause": "clear criteria statement"
+ },
+ {
+  "id": 745908,
+  "label": "d",
+  "cause": "unclear referent he, ambiguous comparison"
+ },
+ {
+  "id": 244534,
+  "label": "w",
+  "cause": "clear example"
+ },
+ {
+  "id": 838145,
+  "label": "w",
+  "cause": "clear flag statement"
+ },
+ {
+  "id": 311131,
+  "label": "w",
+  "cause": "clear UI description"
+ },
+ {
+  "id": 902843,
+  "label": "c",
+  "cause": "stray question mark breaks the sentence"
+ },
+ {
+  "id": 465376,
+  "label": "w",
+  "cause": "clear list of checks"
+ },
+ {
+  "id": 970528,
+  "label": "w",
+  "cause": "clear cause statement"
+ },
+ {
+  "id": 404789,
+  "label": "w",
+  "cause": "clear field definition"
+ },
+ {
+  "id": 793510,
+  "label": "d",
+  "cause": "awkward touches and replaces once"
+ },
+ {
+  "id": 240193,
+  "label": "w",
+  "cause": "clear feature statement"
+ },
+ {
+  "id": 696735,
+  "label": "d",
+  "cause": "fragment reads as list heading"
+ },
+ {
+  "id": 822050,
+  "label": "w",
+  "cause": "clear responsibility statement"
+ },
+ {
+  "id": 614544,
+  "label": "d",
+  "cause": "dense crop logic, bit-for-bit phrasing"
+ },
+ {
+  "id": 390490,
+  "label": "w",
+  "cause": "clear advice"
+ },
+ {
+  "id": 211751,
+  "label": "w",
+  "cause": "clear support statement"
+ },
+ {
+  "id": 520026,
+  "label": "d",
+  "cause": "parenthetical with stops it ambiguous"
+ },
+ {
+  "id": 154010,
+  "label": "w",
+  "cause": "clear data statement"
+ },
+ {
+  "id": 490490,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 282595,
+  "label": "w",
+  "cause": "clear security reasoning"
+ },
+ {
+  "id": 567806,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 518460,
+  "label": "w",
+  "cause": "clear limitation"
+ },
+ {
+  "id": 513449,
+  "label": "w",
+  "cause": "clear pinning statement"
+ },
+ {
+  "id": 474422,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 629415,
+  "label": "w",
+  "cause": "clear distribution statement"
+ },
+ {
+  "id": 690323,
+  "label": "c",
+  "cause": "overlong list with nested parentheticals"
+ },
+ {
+  "id": 753703,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 932476,
+  "label": "w",
+  "cause": "clear disclaimer"
+ },
+ {
+  "id": 397019,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 156812,
+  "label": "d",
+  "cause": "dense parenthetical with ambiguous none while"
+ },
+ {
+  "id": 988028,
+  "label": "w",
+  "cause": "clear list of inputs"
+ },
+ {
+  "id": 440724,
+  "label": "w",
+  "cause": "clear compatibility statement"
+ },
+ {
+  "id": 338760,
+  "label": "w",
+  "cause": "clear planning statement"
+ },
+ {
+  "id": 378352,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 354173,
+  "label": "w",
+  "cause": "clear safeguard statement"
+ },
+ {
+  "id": 404601,
+  "label": "w",
+  "cause": "clear licence note"
+ },
+ {
+  "id": 132445,
+  "label": "w",
+  "cause": "clear caveat"
+ },
+ {
+  "id": 662031,
+  "label": "w",
+  "cause": "clear mechanic description"
+ },
+ {
+  "id": 458265,
+  "label": "w",
+  "cause": "clear disclaimer"
+ },
+ {
+  "id": 667264,
+  "label": "w",
+  "cause": "terse but clear list"
+ },
+ {
+  "id": 335277,
+  "label": "w",
+  "cause": "clear memory statement"
+ },
+ {
+  "id": 528335,
+  "label": "d",
+  "cause": "long nested self-check description"
+ },
+ {
+  "id": 695972,
+  "label": "d",
+  "cause": "awkward so only forward clause"
+ },
+ {
+  "id": 157727,
+  "label": "w",
+  "cause": "clear cost note"
+ },
+ {
+  "id": 268660,
+  "label": "w",
+  "cause": "clear list of actions"
+ },
+ {
+  "id": 153949,
+  "label": "w",
+  "cause": "clear undo description"
+ },
+ {
+  "id": 194384,
+  "label": "w",
+  "cause": "clear test description"
+ },
+ {
+  "id": 627979,
+  "label": "w",
+  "cause": "clear question"
+ },
+ {
+  "id": 271379,
+  "label": "w",
+  "cause": "clear community statement"
+ },
+ {
+  "id": 723670,
+  "label": "w",
+  "cause": "clear staleness rule"
+ },
+ {
+  "id": 633278,
+  "label": "w",
+  "cause": "clear trade-off statement"
+ },
+ {
+  "id": 846315,
+  "label": "w",
+  "cause": "clear style rule"
+ },
+ {
+  "id": 944128,
+  "label": "w",
+  "cause": "clear configuration statement"
+ },
+ {
+  "id": 288698,
+  "label": "w",
+  "cause": "clear dependency statement"
+ },
+ {
+  "id": 725998,
+  "label": "w",
+  "cause": "clear rule"
+ },
+ {
+  "id": 942930,
+  "label": "w",
+  "cause": "clear sequence statement"
+ },
+ {
+  "id": 175209,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 222777,
+  "label": "w",
+  "cause": "clear feature list, minor repeat"
+ },
+ {
+  "id": 804799,
+  "label": "w",
+  "cause": "clear test statement"
+ },
+ {
+  "id": 516414,
+  "label": "w",
+  "cause": "clear pointer"
+ },
+ {
+  "id": 173271,
+  "label": "c",
+  "cause": "garbled possessive, its games play times unclear"
+ },
+ {
+  "id": 436414,
+  "label": "w",
+  "cause": "clear API statement"
+ },
+ {
+  "id": 904243,
+  "label": "d",
+  "cause": "very long with nested parentheticals"
+ },
+ {
+  "id": 123770,
+  "label": "w",
+  "cause": "clear credits list"
+ },
+ {
+  "id": 887993,
+  "label": "c",
+  "cause": "overlong sentence, split needed"
+ },
+ {
+  "id": 875055,
+  "label": "w",
+  "cause": "clear feature list"
+ },
+ {
+  "id": 488807,
+  "label": "w",
+  "cause": "clear feature label"
+ },
+ {
+  "id": 546753,
+  "label": "w",
+  "cause": "clear FAQ question"
+ },
+ {
+  "id": 302451,
+  "label": "w",
+  "cause": "clear requirement"
+ },
+ {
+  "id": 342938,
+  "label": "d",
+  "cause": "dense checklist with nested parentheticals"
+ },
+ {
+  "id": 284877,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 185382,
+  "label": "w",
+  "cause": "clear product description"
+ },
+ {
+  "id": 853484,
+  "label": "w",
+  "cause": "clear test report"
+ },
+ {
+  "id": 506474,
+  "label": "w",
+  "cause": "clear behaviour statement"
+ },
+ {
+  "id": 588584,
+  "label": "w",
+  "cause": "clear restore rule"
+ },
+ {
+  "id": 249634,
+  "label": "w",
+  "cause": "clear usage guidance"
+ },
+ {
+  "id": 105167,
+  "label": "d",
+  "cause": "dense parenthetical with several effects"
+ },
+ {
+  "id": 945042,
+  "label": "w",
+  "cause": "clear support statement"
+ },
+ {
+  "id": 763460,
+  "label": "d",
+  "cause": "nested parentheticals, hard to follow"
+ },
+ {
+  "id": 971398,
+  "label": "w",
+  "cause": "clear exclusion list"
+ },
+ {
+  "id": 885550,
+  "label": "w",
+  "cause": "clear status statement"
+ },
+ {
+  "id": 225377,
+  "label": "w",
+  "cause": "clear pointer"
+ },
+ {
+  "id": 898924,
+  "label": "w",
+  "cause": "clear feature statement"
+ },
+ {
+  "id": 752383,
+  "label": "w",
+  "cause": "clear update behaviour"
+ },
+ {
+  "id": 524266,
+  "label": "w",
+  "cause": "clear instrument description"
+ },
+ {
+  "id": 606861,
+  "label": "d",
+  "cause": "appositive could attach to wrong noun"
+ },
+ {
+  "id": 829169,
+  "label": "d",
+  "cause": "dense benchmark list in one sentence"
+ },
+ {
+  "id": 660039,
+  "label": "w",
+  "cause": "clear risk statement"
+ },
+ {
+  "id": 157644,
+  "label": "w",
+  "cause": "clear remark"
+ },
+ {
+  "id": 222352,
+  "label": "d",
+  "cause": "terse fragment, it ambiguous"
+ },
+ {
+  "id": 619280,
+  "label": "w",
+  "cause": "clear verification statement"
+ },
+ {
+  "id": 840313,
+  "label": "w",
+  "cause": "clear structure statement"
+ },
+ {
+  "id": 714341,
+  "label": "w",
+  "cause": "clear feature bullet"
+ },
+ {
+  "id": 887013,
+  "label": "w",
+  "cause": "clear testing and signing statement"
+ },
+ {
+  "id": 352385,
+  "label": "w",
+  "cause": "clear example"
+ },
+ {
+  "id": 695520,
+  "label": "w",
+  "cause": "clear, long list of banks"
+ },
+ {
+  "id": 601622,
+  "label": "w",
+  "cause": "clear requirements"
+ },
+ {
+  "id": 224710,
+  "label": "w",
+  "cause": "clear feature list"
+ },
+ {
+  "id": 536231,
+  "label": "w",
+  "cause": "clear purpose statement"
+ },
+ {
+  "id": 608015,
+  "label": "w",
+  "cause": "clear plan list"
+ },
+ {
+  "id": 363299,
+  "label": "d",
+  "cause": "which could attach to the Mac"
+ },
+ {
+  "id": 281647,
+  "label": "w",
+  "cause": "clear promise"
+ },
+ {
+  "id": 705607,
+  "label": "d",
+  "cause": "long run-on with split parenthetical"
+ },
+ {
+  "id": 559064,
+  "label": "w",
+  "cause": "clear licence statement"
+ },
+ {
+  "id": 529990,
+  "label": "w",
+  "cause": "clear call to action"
+ },
+ {
+  "id": 458054,
+  "label": "w",
+  "cause": "clear pointer"
+ },
+ {
+  "id": 967266,
+  "label": "d",
+  "cause": "long subject split from verb by parenthetical"
+ },
+ {
+  "id": 294564,
+  "label": "w",
+  "cause": "clear feature bullet"
+ }
+]
