@@ -2,6 +2,7 @@
 
 import importlib.util
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -468,3 +469,281 @@ def test_readme_choice_follows_github_and_files_come_at_the_commit():
     assert m.github_files("o/r", get_tree=lambda repo: ("abc", ["src/x.md"])) == "no README"
     assert m.github_files("o/r", get_tree=lambda repo: ("abc", ["README.md"]),
                           get=lambda *a: "x" * 2_000_000) == "README over 1 MB"
+
+
+# ---- open-weight models in a Hugging Face Job (the amendment of 19 November 2026) ----
+
+class FakeResponse:
+    def __init__(self, body):
+        self.body = json.dumps(body).encode()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+    def read(self):
+        return self.body
+
+
+def test_openai_ask_sends_the_openrouter_request_with_the_model_extras():
+    sent = []
+
+    def urlopen(req, timeout):
+        sent.append((req.full_url, json.loads(req.data), dict(req.headers)))
+        return FakeResponse({"model": "Qwen/Qwen3.8-27B", "usage": {"prompt_tokens": 9, "completion_tokens": 3},
+                             "choices": [{"finish_reason": "stop",
+                                          "message": {"content": 'Sure: {"text": "edited"} done'}}]})
+    ask = m.openai_ask("http://127.0.0.1:8000/v1/", {"Qwen/Qwen3.8-27B": m.NO_THINKING}, urlopen=urlopen)
+    data, meta = ask("Qwen/Qwen3.8-27B", "Revise this.", m.TEXT_SCHEMA, system=m.SYSTEM)
+    assert data == {"text": "edited"}
+    assert meta["served"] == "Qwen/Qwen3.8-27B" and meta["tokens"] == [9, 3] and meta["finish"] == "stop"
+    assert meta["revision"] == m.OPEN_MODELS["Qwen/Qwen3.8-27B"]["revision"] and "error" not in meta
+    url, body, headers = sent[0]
+    assert url == "http://127.0.0.1:8000/v1/chat/completions" and "Authorization" not in headers
+    assert body["messages"] == [{"role": "system", "content": m.SYSTEM},
+                                {"role": "user", "content": "Revise this.\n\nReturn only the JSON object, no prose."}]
+    assert body["temperature"] == 0 and body["max_tokens"] == 2048
+    assert body["response_format"] == {"type": "json_schema",
+                                       "json_schema": {"name": "out", "strict": True, "schema": m.TEXT_SCHEMA}}
+    assert body["reasoning_effort"] == "none" and body["chat_template_kwargs"] == {"enable_thinking": False}
+
+    def down(req, timeout):
+        raise OSError("connection refused")
+    data, meta = m.openai_ask("http://x/v1", urlopen=down, retry_wait=0)("m", "p", m.TEXT_SCHEMA)
+    assert data is None and meta["error"] == "connection refused"
+
+    def prose(req, timeout):
+        return FakeResponse({"choices": [{"message": {"content": "no json here"}}]})
+    data, meta = m.openai_ask("http://x/v1", urlopen=prose)("m", "p", m.TEXT_SCHEMA)
+    assert data is None and meta["error"] == "no JSON object"
+
+
+class FakeOutput:
+    def __init__(self, text):
+        self.prompt_token_ids, self.outputs = [1, 2], [type("O", (), {"text": text, "token_ids": [3],
+                                                                     "finish_reason": "stop"})()]
+
+
+class FakeLLM:
+    def __init__(self, fail=False):
+        self.batches, self.kwargs, self.fail = [], [], fail
+
+    def chat(self, messages, params, chat_template_kwargs=None, use_tqdm=True):
+        if self.fail:
+            raise RuntimeError("CUDA out of memory")
+        self.batches.append(len(messages))
+        self.kwargs.append(chat_template_kwargs)
+        assert len(params) == len(messages) and params[0]["max_tokens"] == 2048
+        return [FakeOutput(json.dumps({"text": msgs[-1]["content"].split("\n")[0].upper()})) for msgs in messages]
+
+
+def test_offline_batcher_answers_many_threads_in_few_batches():
+    from concurrent.futures import ThreadPoolExecutor
+    llm = FakeLLM()
+    ask = m.OfflineBatcher(llm, "zai-org/GLM-4.7-Flash", m.NO_THINKING, wait=0.2,
+                           params=lambda schema, n: {"schema": schema, "max_tokens": n})
+    with ThreadPoolExecutor(16) as ex:
+        got = list(ex.map(lambda i: ask("zai-org/GLM-4.7-Flash", f"prompt {i}", m.TEXT_SCHEMA), range(40)))
+    ask.close()
+    assert [d["text"] for d, _meta in got] == [f"PROMPT {i}" for i in range(40)]
+    assert sum(llm.batches) == 40 and len(llm.batches) < 40
+    assert llm.kwargs[0] == {"enable_thinking": False, "reasoning_effort": "none"}
+    assert got[0][1]["revision"] == m.OPEN_MODELS["zai-org/GLM-4.7-Flash"]["revision"]
+    broken = m.OfflineBatcher(FakeLLM(fail=True), "x", params=lambda s, n: {"max_tokens": n})
+    data, meta = broken("x", "p", m.TEXT_SCHEMA)
+    broken.close()
+    assert data is None and "out of memory" in meta["error"]
+
+
+def test_the_open_models_follow_the_amendment():
+    editors, judges = m.open_models()
+    fams = {x: m.OPEN_MODELS[x]["family"] for x in editors + judges}
+    assert len(set(fams[e] for e in editors)) == 3 and len(set(fams[j] for j in judges)) == 3
+    assert not {fams[e] for e in editors} & {fams[j] for j in judges}
+    assert not any("anthropic" in x.lower() or "claude" in x.lower() for x in fams)
+    assert all(re.fullmatch(r"[0-9a-f]{40}", c["revision"]) for c in m.OPEN_MODELS.values())
+    assert all(c["licence"] in ("Apache-2.0", "MIT") for c in m.OPEN_MODELS.values())
+    assert m.open_models(fallback=True)[0][2] == "mistralai/Ministral-3-14B-Instruct-2512"
+    args = m.serve_args("mistralai/Mistral-Small-4-119B-2603")
+    rev = m.OPEN_MODELS["mistralai/Mistral-Small-4-119B-2603"]["revision"]
+    assert args[:5] == ["mistralai/Mistral-Small-4-119B-2603", "--revision", rev, "--tokenizer-revision", rev]
+    assert "--language-model-only" in args and args[args.index("--gpu-memory-utilization") + 1] == "0.95"
+    assert "--language-model-only" not in m.serve_args("openai/gpt-oss-120b")
+
+
+def test_without_cost_caps_only_calls_and_the_clock_stop_the_run(tmp_path):
+    now = [100.0]
+    client = m.Client(tmp_path / "r.jsonl", ask=FakeAsk(cost=None), cost_cap=0.01, count_cost=False,
+                      deadline=105.0, clock=lambda: now[0])
+    for i in range(3):
+        client("j1", None, m.pair_prompt(f"a {i}", "b"), m.PAIRWISE_SCHEMA)   # each counts $0.05, over $0.01
+    assert client.calls == 3
+    now[0] = 105.0
+    with pytest.raises(m.CapReached, match="time limit"):
+        client("j1", None, m.pair_prompt("a 9", "b"), m.PAIRWISE_SCHEMA)
+    assert client("j1", None, m.pair_prompt("a 1", "b"), m.PAIRWISE_SCHEMA) is not None   # cached still answers
+
+
+def test_a_run_can_ask_only_the_model_that_is_loaded(tmp_path, analyzer, pinned_b):
+    ref = _ref(tmp_path, n=2)
+    fake = FakeAsk()
+    client = m.Client(ref / "replies.jsonl", ask=fake)
+    for ed in ("e1", "e2"):
+        st = m.run(ref, client, analyzer, ["e1", "e2"], ["j1", "j2"], workers=2, call_editors=[ed],
+                   call_judges=[], phases=["edits", "editsD"])
+        assert st == {"edits": True, "editsD": True}
+    assert {c[0] for c in fake.calls} == {"e1", "e2"} and len(fake.calls) == 12
+    fake.calls.clear()
+    st = m.run(ref, client, analyzer, ["e1", "e2"], ["j1", "j2"], workers=2, call_editors=[],
+               call_judges=["j2"], phases=["BC"])
+    assert st == {"BC": True} and {c[0] for c in fake.calls} == {"j2"} and len(fake.calls) == 2 * 2 * 2
+
+
+def test_without_git_verify_compares_a_digest_of_src_and_the_lock(tmp_path, monkeypatch):
+    (tmp_path / "src" / "pkg").mkdir(parents=True)
+    (tmp_path / "src" / "pkg" / "a.py").write_text("x = 1\n")
+    (tmp_path / "uv.lock").write_text("lock\n")
+    first = m.tree_digest(tmp_path)
+    (tmp_path / "src" / "pkg" / "__pycache__").mkdir()
+    (tmp_path / "src" / "pkg" / "__pycache__" / "a.cpython-312.pyc").write_bytes(b"\0")
+    (tmp_path / "src" / "pkg.egg-info").mkdir()
+    (tmp_path / "src" / "pkg.egg-info" / "PKG-INFO").write_text("built")
+    assert m.tree_digest(tmp_path) == first        # build output does not count
+    monkeypatch.setattr(m, "PINNED_DIGEST", first)
+    assert m.verify(tmp_path) == 0
+    (tmp_path / "uv.lock").write_text("other\n")
+    assert m.verify(tmp_path) == 1
+    assert re.fullmatch(r"[0-9a-f]{64}", m.PINNED_DIGEST)
+
+
+# ---- the job entry point ----
+
+def _job(monkeypatch):
+    spec = importlib.util.spec_from_file_location("edit_arms_job", ROOT / "scripts" / "edit_arms_job.py")
+    job = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(job)
+    real = job.ea.feedbacks   # the job imports its own copy of eval_edit_arms: pin B's wording there too
+    monkeypatch.setattr(job.ea, "feedbacks", lambda an, text, prec: {
+        **real(an, text, prec), "B": f"{B_AT_A57E19E} ({m.sha(text)[:8]})."})
+    return job
+
+
+class FakeBackends:
+    def __init__(self, broken=()):
+        self.loaded, self.stopped, self.broken, self.asks = [], [], set(broken), FakeAsk()
+
+    def __call__(self, model, logs):
+        if model in self.broken:
+            raise RuntimeError("CUDA out of memory")
+        self.loaded.append(model)
+        outer = self
+
+        class B:
+            ask = outer.asks
+
+            def stop(self):
+                outer.stopped.append(model)
+        return B()
+
+
+def _job_args(tmp_path, n=7):
+    ptr = tmp_path / "pointers"
+    ptr.mkdir(exist_ok=True)
+    rows = [{"id": f"p{i}", "text": PARA.replace("release", f"release {i}")} for i in range(n)]
+
+    def fetch(pointers, ref):
+        ref.mkdir(parents=True, exist_ok=True)
+        (ref / "texts.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows))
+        (ref / "missing.json").write_text("[]")
+    return ptr, fetch
+
+
+def test_the_job_loads_each_model_in_turn_judges_bc_first_and_uploads(tmp_path, analyzer, monkeypatch):
+    job = _job(monkeypatch)
+    ptr, fetch = _job_args(tmp_path, n=3)
+    backends, uploads = FakeBackends(), []
+    ref = tmp_path / "ref"
+    rc = job.main(["--run-id", "main-1", "--hours", "4", "--ref", str(ref), "--pointers", str(ptr),
+                   "--workers", "4"], backends={"server": backends},
+                  uploader=lambda r, run_id, token: uploads.append((r, run_id)), fetch=fetch,
+                  verify=lambda: 0, analyzer=analyzer, env={})
+    assert rc == 0
+    editors, judges = job.ea.open_models()
+    assert backends.loaded == editors + judges + judges == backends.stopped
+    # Every B against C judgement comes before any other judgement.
+    kinds = [("edit" if s == job.ea.SYSTEM else "judge") for _mo, s, _p in backends.asks.calls]
+    assert kinds[:27] == ["edit"] * 27 and set(kinds[27:]) == {"judge"}
+    bc_calls = 3 * 3 * 3 * 2
+    assert all(c[0] in judges for c in backends.asks.calls[27:27 + bc_calls])
+    log = json.loads((ref / "run.json").read_text())
+    assert [s["phases"] for s in log["steps"]][3:6] == [["BC"]] * 3 and len(log["steps"]) == 9
+    assert log["models"]["openai/gpt-oss-120b"]["licence"] == "Apache-2.0" and log["stopped"] is None
+    status = json.loads((ref / "status.json").read_text())
+    assert status["final"] and all(status["phases"].values()) and len(status["phases"]) == 10
+    assert "| B against C |" in (ref / "edit-arms.md").read_text() and (ref / "edit-arms.json").exists()
+    assert len(uploads) == 10 and {u[1] for u in uploads} == {"main-1"}
+
+
+def test_the_pilot_takes_five_paragraphs_loads_each_model_once_and_reports_no_win_rates(
+        tmp_path, analyzer, monkeypatch):
+    job = _job(monkeypatch)
+    ptr, fetch = _job_args(tmp_path, n=7)
+    backends = FakeBackends(broken={"allenai/Olmo-3.1-32B-Instruct"})
+    ref = tmp_path / "ref"
+    job.main(["--run-id", "pilot-1", "--pilot", "--hours", "1.5", "--ref", str(ref), "--pointers", str(ptr),
+              "--no-upload", "--workers", "4"], backends={"server": backends}, fetch=fetch,
+             verify=lambda: 0, analyzer=analyzer, env={})
+    assert len((ref / "texts.jsonl").read_text().splitlines()) == 5
+    editors, judges = job.ea.open_models()
+    assert backends.loaded == editors + judges[:2]
+    pilot = json.loads((ref / "pilot.json").read_text())
+    olmo = [s for s in pilot["steps"] if s["model"] == "allenai/Olmo-3.1-32B-Instruct"][0]
+    assert "out of memory" in olmo["error"] and pilot["status"]["BC"] is False
+    assert pilot["replies"]["openai/gpt-oss-120b"]["failed"] == 0
+    assert not (ref / "edit-arms.md").exists()
+
+
+def test_the_job_stops_new_models_at_its_own_deadline_and_refuses_another_src(tmp_path, analyzer, monkeypatch):
+    job = _job(monkeypatch)
+    ptr, fetch = _job_args(tmp_path, n=2)
+    backends, now = FakeBackends(), [0.0]
+
+    def clock():
+        now[0] += 400.0            # each look at the clock moves it on
+        return now[0]
+    job.main(["--run-id", "x", "--hours", "0.5", "--ref", str(tmp_path / "ref"), "--pointers", str(ptr),
+              "--no-upload"], backends={"server": backends}, fetch=fetch, verify=lambda: 0,
+             analyzer=analyzer, clock=clock, env={})
+    log = json.loads((tmp_path / "ref" / "run.json").read_text())
+    assert log["stopped"] == "time limit reached" and len(backends.loaded) < 9
+    rc = job.main(["--run-id", "y", "--hours", "1", "--ref", str(tmp_path / "ref2"), "--pointers", str(ptr),
+                   "--no-upload"], backends={"server": FakeBackends()}, fetch=fetch, verify=lambda: 1, env={})
+    assert rc == 1 and "not a57e19e" in json.loads((tmp_path / "ref2" / "run.json").read_text())["stopped"]
+
+
+def test_upload_goes_to_a_private_dataset_without_the_paragraphs(tmp_path, monkeypatch):
+    job = _job(monkeypatch)
+    calls = []
+
+    class Api:
+        def __init__(self, private):
+            self.private = private
+
+        def create_repo(self, repo_id, **kw):
+            calls.append(("create", repo_id, kw))
+
+        def repo_info(self, repo_id, **kw):
+            return type("Info", (), {"private": self.private})()
+
+        def upload_folder(self, **kw):
+            calls.append(("upload", kw))
+    job.upload(tmp_path, "main-1", "tok", api=Api(private=True))
+    assert calls[0] == ("create", "arclabs561/readcost-labels",
+                        {"repo_type": "dataset", "private": True, "exist_ok": True})
+    up = calls[1][1]
+    assert up["path_in_repo"] == "edit-arms/main-1" and up["repo_type"] == "dataset"
+    assert up["ignore_patterns"] == ["texts.jsonl"]
+    with pytest.raises(SystemExit, match="not private"):
+        job.upload(tmp_path, "main-1", "tok", api=Api(private=False))

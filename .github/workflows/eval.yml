@@ -587,23 +587,21 @@ jobs:
 
   # Does readcost's feedback make an agent's edit easier to read than a plain
   # request for clarity, and than the original? Pre-registered in
-  # docs/prereg/edit-arms.md. Needs the repository secret OPENROUTER_API_KEY
-  # and runs only by hand or on the branch exp/edit-arms, so that other pull
-  # requests do not pay again outside this branch's reply cache. Arm D (the
-  # prereg's amendment 7) words the feedback as questions and runs after the
-  # original phases. Those stay capped at $60 and 5,200 calls; the whole run,
-  # D included, at $106 and 9,160, counted over every reply in the cache. A
-  # run cut off by the time limit resumes from the cache when run again. The
-  # paragraphs and the edits stay in the runner; the artifact holds the report
-  # only.
+  # docs/prereg/edit-arms.md. Since the amendment of 19 November 2026 the run
+  # uses open-weight models in a Hugging Face Job (scripts/edit_arms_job.py),
+  # not this job. This job stays as a fallback for the original plan's
+  # OpenRouter models and runs only when started by hand; using it would need
+  # a further amendment. It needs the secret OPENROUTER_API_KEY in the
+  # environment openrouter. Arm D (the prereg's amendment 7) words the
+  # feedback as questions and runs after the original phases. Those stay
+  # capped at $60 and 5,200 calls; the whole run, D included, at $106 and
+  # 9,160, counted over every reply in the cache. A run cut off by the time
+  # limit resumes from the cache when run again. The paragraphs and the edits
+  # stay in the runner; the artifact holds the report only.
   edit-arms:
-    # Only by hand, or on this branch of this repository (a fork can name its
-    # branch the same). Elsewhere the job is skipped before it asks for the
-    # environment, so other pull requests never wait for an approval.
-    if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (github.head_ref == 'exp/edit-arms' &&
-       github.event.pull_request.head.repo.full_name == github.repository)
+    # Only by hand. On pull requests the job is skipped before it asks for
+    # the environment, so no pull request waits for an approval.
+    if: github.event_name == 'workflow_dispatch'
     # The key lives in this environment, whose required reviewer approves each
     # run before the key is handed to it.
     environment: openrouter
@@ -614,14 +612,9 @@ jobs:
         id: gate
         env:
           KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          EVENT: ${{ github.event_name }}
-          HEAD_REF: ${{ github.head_ref }}
         run: |
           if [ -z "$KEY" ]; then
             echo "edit-arms: skipped, the secret OPENROUTER_API_KEY is not set in the environment openrouter." >> "$GITHUB_STEP_SUMMARY"
-            echo "run=false" >> "$GITHUB_OUTPUT"
-          elif [ "$EVENT" != "workflow_dispatch" ] && [ "$HEAD_REF" != "exp/edit-arms" ]; then
-            echo "edit-arms: skipped, it runs by hand or on the branch exp/edit-arms." >> "$GITHUB_STEP_SUMMARY"
             echo "run=false" >> "$GITHUB_OUTPUT"
           else
             echo "run=true" >> "$GITHUB_OUTPUT"

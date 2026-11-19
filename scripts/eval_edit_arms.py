@@ -7,6 +7,13 @@
     EVAL_OPENROUTER_API_KEY=... uv run python scripts/eval_edit_arms.py run ref/edit-arms
     uv run python scripts/eval_edit_arms.py report ref/edit-arms --json report.json
 
+The prereg's amendment of 19 November 2026 moves the run to open-weight
+models served with vLLM in a Hugging Face Job; scripts/edit_arms_job.py is
+that job's entry point. Here, `run --backend openai --base-url URL --model
+REPO` sends one open model's calls to an OpenAI-compatible server, and
+`--backend offline` runs them in this process with vLLM's `LLM`. The default
+backend is still OpenRouter, with the models of the original plan.
+
 The plan, prompts, models and decision rules are fixed in
 docs/prereg/edit-arms.md; this script implements them. Arm A is the
 original paragraph, arm B one edit given readcost's `-o agent` feedback,
@@ -18,8 +25,9 @@ both orders) and list facts each edit lost, added or changed.
 
 Only pointers (repository, commit, path, offsets, SHA-256) are committed,
 under eval/edit-arms/. The text is fetched at run time and stays under
-ref/, with the cache of model replies. The model client is
-`rater_ensemble.ask`.
+ref/, with the cache of model replies. The OpenRouter client is
+`rater_ensemble.ask`; `openai_ask` and `OfflineBatcher` take its place for
+the open models.
 """
 
 from __future__ import annotations
@@ -32,11 +40,14 @@ import random
 import re
 import subprocess
 import sys
+import queue
 import threading
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from collections import Counter, defaultdict
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import Future, ThreadPoolExecutor
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -67,6 +78,60 @@ NO_COST = 0.05     # a reply that reports no cost counts as this much
 RESERVE = 0.10     # held back per call in flight, so the cap is not crossed
 SMALLEST = 0.55
 BOOT = 10_000
+
+# ---- open-weight models (the prereg's amendment of 19 November 2026) ----------
+# Revisions, licences and gating as the Hugging Face Hub gave them that day. `extra` goes into
+# each chat request; `engine` holds the model's own vLLM engine arguments, which `serve_args`
+# turns into `vllm serve` flags.
+VLLM_IMAGE = ("vllm/vllm-openai:v0.34.0@sha256:"
+              "20fdb089454afbb324efa4110a2c025ff7b27cc1a086e07aa580b18df8ad1ce1")
+NO_THINKING = {"reasoning_effort": "none", "chat_template_kwargs": {"enable_thinking": False}}
+TEXT_ONLY = {"language_model_only": True}     # text in, text out: no vision encoder
+OPEN_MODELS = {
+    "Qwen/Qwen3.8-27B": {
+        "revision": "37561816e66b5b9153b1b64c10968c18c1e6f4a0", "family": "Qwen (Alibaba)",
+        "licence": "Apache-2.0", "extra": NO_THINKING, "engine": TEXT_ONLY},
+    "google/gemma-4-31B-it": {
+        "revision": "842da3794eaa0b77d5f08bae87a17459d91ff475", "family": "Gemma (Google)",
+        "licence": "Apache-2.0", "extra": NO_THINKING, "engine": TEXT_ONLY},
+    "mistralai/Mistral-Small-4-119B-2603": {
+        "revision": "a11f36bebf709121056b1dbcc943d1c6afbe494d", "family": "Mistral",
+        "licence": "Apache-2.0", "extra": {"reasoning_effort": "none"},
+        "engine": {**TEXT_ONLY, "gpu_memory_utilization": 0.95}},
+    "openai/gpt-oss-120b": {
+        "revision": "b5c939de8f754692c1647ca79fbf85e8c1e70f8a", "family": "OpenAI",
+        "licence": "Apache-2.0", "extra": {"reasoning_effort": "low"}, "engine": {}},
+    "zai-org/GLM-4.7-Flash": {
+        "revision": "7dd20894a642a0aa287e9827cb1a1f7f91386b67", "family": "GLM (Zhipu AI)",
+        "licence": "MIT", "extra": NO_THINKING, "engine": {}},
+    "allenai/Olmo-3.1-32B-Instruct": {
+        "revision": "ac0587e4a7744a551c059d8cd17ba220bc940dae", "family": "OLMo (Ai2)",
+        "licence": "Apache-2.0", "extra": {}, "engine": {}},
+    # Replaces Mistral Small 4 only if that cannot be served on one H200 in the pilot.
+    "mistralai/Ministral-3-14B-Instruct-2512": {
+        "revision": "29439f81c2be264d8d393273f99e7db9c0961120", "family": "Mistral",
+        "licence": "Apache-2.0", "extra": {}, "engine": TEXT_ONLY},
+}
+OPEN_EDITORS = ["Qwen/Qwen3.8-27B", "google/gemma-4-31B-it", "mistralai/Mistral-Small-4-119B-2603"]
+OPEN_JUDGES = ["openai/gpt-oss-120b", "zai-org/GLM-4.7-Flash", "allenai/Olmo-3.1-32B-Instruct"]
+MISTRAL_FALLBACK = ("mistralai/Mistral-Small-4-119B-2603", "mistralai/Ministral-3-14B-Instruct-2512")
+MAX_TOKENS = 2048        # reply tokens per call on the open models
+MAX_MODEL_LEN = 8192
+
+
+def serve_args(model: str) -> list[str]:
+    """`vllm serve` arguments for one open model, pinned to its revision, served under its repository id."""
+    cfg = OPEN_MODELS[model]
+    args = [model, "--revision", cfg["revision"], "--tokenizer-revision", cfg["revision"],
+            "--served-model-name", model, "--max-model-len", str(MAX_MODEL_LEN),
+            "--generation-config", "vllm", "--seed", "0"]
+    for k, v in cfg["engine"].items():
+        flag = "--" + k.replace("_", "-")
+        if isinstance(v, bool):
+            args.append(flag if v else "--no-" + flag[2:])
+        else:
+            args += [flag, json.dumps(v) if isinstance(v, dict) else str(v)]
+    return args
 
 SYSTEM = ("You edit technical documentation. You will get one paragraph from the README or the "
           "documentation of a software project. Return the whole revised paragraph. Keep its "
@@ -425,9 +490,33 @@ def fetch(pointers: Path, ref: Path, get=get_raw) -> list[dict]:
     return out
 
 
-def verify() -> int:
-    r = subprocess.run(["git", "diff", "--quiet", PINNED, "--", "src", "uv.lock"], cwd=ROOT, check=False)
-    if r.returncode != 0:
+# tree_digest() of src/ and uv.lock at a57e19e, from `git archive a57e19e src uv.lock`. A job that
+# has the source without git history checks this in place of `git diff`.
+PINNED_DIGEST = "75091d7965f559a82af555410ad74df54a7f357c0ef0615c6cf5065e941fa323"
+
+
+def tree_digest(root: Path = ROOT) -> str:
+    """SHA-256 over the path and SHA-256 of each file in src/ and of uv.lock, in path order.
+
+    Build output (``__pycache__``, ``*.egg-info``, ``*.pyc``) is left out.
+    """
+    files = [p for p in (root / "src").rglob("*") if p.is_file()
+             and not any(part == "__pycache__" or part.endswith(".egg-info") for part in p.parts)
+             and p.suffix != ".pyc"]
+    h = hashlib.sha256()
+    for p in sorted(files + [root / "uv.lock"], key=lambda p: p.relative_to(root).as_posix()):
+        h.update(f"{p.relative_to(root).as_posix()}\0{hashlib.sha256(p.read_bytes()).hexdigest()}\n".encode())
+    return h.hexdigest()
+
+
+def verify(root: Path = ROOT) -> int:
+    """0 if src/ and uv.lock are a57e19e's: by `git diff` in a clone, by digest without git."""
+    if (root / ".git").exists():
+        r = subprocess.run(["git", "diff", "--quiet", PINNED, "--", "src", "uv.lock"], cwd=root, check=False)
+        same = r.returncode == 0
+    else:
+        same = tree_digest(root) == PINNED_DIGEST
+    if not same:
         print(f"src/ or uv.lock differs from {PINNED}; the pre-registration needs an amendment", file=sys.stderr)
         return 1
     print(f"src/ and uv.lock match {PINNED}")
@@ -577,14 +666,21 @@ class Client:
     ``cost_cap`` and ``call_cap`` bound the original plan's phases;
     ``d_cost_cap`` and ``d_call_cap`` bound arm D's, which run after them
     (amendment 7). ``use_caps`` picks which pair applies.
+
+    On the open models (the amendment of 19 November 2026) a job is billed
+    for GPU time, not per reply: ``count_cost=False`` drops the cost caps
+    and keeps the call caps, and ``deadline`` (a time from ``clock``) stops
+    new calls once it has passed.
     """
 
     def __init__(self, path: Path, ask=None, cost_cap: float = COST_CAP, call_cap: int = CALL_CAP,
-                 d_cost_cap: float = D_COST_CAP, d_call_cap: int = D_CALL_CAP):
+                 d_cost_cap: float = D_COST_CAP, d_call_cap: int = D_CALL_CAP, count_cost: bool = True,
+                 deadline: float | None = None, clock=time.time):
         if ask is None:
             import rater_ensemble
             ask = rater_ensemble.ask
         self.ask, self.path = ask, path
+        self.count_cost, self.deadline, self.clock = count_cost, deadline, clock
         self.cost_cap, self.call_cap = cost_cap, call_cap
         self.d_cost_cap, self.d_call_cap = max(d_cost_cap, cost_cap), max(d_call_cap, call_cap)
         self.active = (cost_cap, call_cap)
@@ -627,7 +723,10 @@ class Client:
                 self.cached_hits += 1
                 return self.ok[k]["data"]
             cost_cap, call_cap = self.active
-            if self.calls + 1 > call_cap or self.spent + self.reserved + RESERVE > cost_cap:
+            if self.deadline is not None and self.clock() >= self.deadline:
+                raise CapReached(f"time limit reached: {self.calls} calls")
+            over_cost = self.count_cost and self.spent + self.reserved + RESERVE > cost_cap
+            if self.calls + 1 > call_cap or over_cost:
                 raise CapReached(f"cap reached: {self.calls} calls, ${self.spent:.2f}")
             self.calls += 1
             self.reserved += RESERVE
@@ -644,6 +743,144 @@ class Client:
             with self.path.open("a") as fh:
                 fh.write(json.dumps(row) + "\n")
         return data
+
+
+def parse_reply(text: str) -> tuple[dict | None, str | None]:
+    """The JSON object in a reply, as `rater_ensemble.ask` finds it, and an error or None."""
+    m = re.search(r"\{.*\}", text or "", re.DOTALL)
+    if not m:
+        return None, "no JSON object"
+    try:
+        return json.loads(m.group(0)), None
+    except json.JSONDecodeError:
+        return None, "unparseable JSON"
+
+
+def messages_for(prompt: str, system: str | None) -> list[dict]:
+    """The messages `rater_ensemble.ask` sends: optional system message, then the prompt and its JSON line."""
+    msgs = [{"role": "system", "content": system}] if system else []
+    msgs.append({"role": "user", "content": prompt + "\n\nReturn only the JSON object, no prose."})
+    return msgs
+
+
+def openai_ask(base_url: str, extras: dict | None = None, max_tokens: int = MAX_TOKENS, timeout: int = 900,
+               urlopen=urllib.request.urlopen, retry_wait: float = 5.0):
+    """An ``ask`` for an OpenAI-compatible server such as vLLM's, with `rater_ensemble.ask`'s request.
+
+    Same messages, temperature 0 and strict JSON schema; no key. ``extras[model]`` is added to the
+    request (for example ``reasoning_effort``). One retry on failure.
+    """
+    extras = extras or {}
+    url = base_url.rstrip("/") + "/chat/completions"
+
+    def ask(model: str, prompt: str, schema: dict, system: str | None = None) -> tuple[dict | None, dict]:
+        body = {"model": model, "messages": messages_for(prompt, system), "temperature": 0,
+                "max_tokens": max_tokens,
+                "response_format": {"type": "json_schema",
+                                    "json_schema": {"name": "out", "strict": True, "schema": schema}},
+                **extras.get(model, {})}
+        req = urllib.request.Request(url, data=json.dumps(body).encode(),
+                                     headers={"Content-Type": "application/json"})
+        meta: dict = {"requested": model}
+        rev = OPEN_MODELS.get(model, {}).get("revision")
+        if rev:
+            meta["revision"] = rev
+        for attempt in range(2):
+            try:
+                with urlopen(req, timeout=timeout) as resp:
+                    data = json.loads(resp.read())
+                break
+            except urllib.error.HTTPError as exc:
+                meta["error"] = f"HTTP {exc.code}"
+            except (OSError, json.JSONDecodeError) as exc:
+                meta["error"] = str(exc)[:300]
+            if attempt == 1:
+                return None, meta
+            time.sleep(retry_wait)
+        meta.pop("error", None)
+        meta["served"] = data.get("model")
+        usage = data.get("usage") or {}
+        meta["tokens"] = [usage.get("prompt_tokens"), usage.get("completion_tokens")]
+        choice = (data.get("choices") or [{}])[0]
+        meta["finish"] = choice.get("finish_reason")
+        parsed, err = parse_reply(choice.get("message", {}).get("content") or "")
+        if err:
+            meta["error"] = err
+        return parsed, meta
+    return ask
+
+
+def _vllm_params(schema: dict, max_tokens: int):
+    from vllm import SamplingParams
+    from vllm.sampling_params import StructuredOutputsParams
+    return SamplingParams(temperature=0, max_tokens=max_tokens, structured_outputs=StructuredOutputsParams(json=schema))
+
+
+class OfflineBatcher:
+    """An ``ask`` over vLLM's offline ``LLM`` for one model, batching the calls of many threads.
+
+    Each call waits in a queue; a worker thread gathers what arrives within ``wait`` seconds (at
+    most ``max_batch``) and sends it to ``llm.chat`` in one batch. ``extra`` is the model's request
+    extras: ``chat_template_kwargs``, and ``reasoning_effort``, which goes into them as vLLM's
+    server would put it.
+    """
+
+    def __init__(self, llm, model: str, extra: dict | None = None, max_tokens: int = MAX_TOKENS,
+                 wait: float = 0.5, max_batch: int = 1024, params=_vllm_params):
+        extra = extra or {}
+        self.llm, self.model, self.max_tokens, self.wait, self.max_batch = llm, model, max_tokens, wait, max_batch
+        self.kwargs = dict(extra.get("chat_template_kwargs") or {})
+        if "reasoning_effort" in extra:
+            self.kwargs["reasoning_effort"] = extra["reasoning_effort"]
+        self.params = params
+        self.q: queue.Queue = queue.Queue()
+        self.thread = threading.Thread(target=self._loop, daemon=True)
+        self.thread.start()
+
+    def __call__(self, model: str, prompt: str, schema: dict, system: str | None = None):
+        fut: Future = Future()
+        self.q.put((messages_for(prompt, system), schema, fut))
+        return fut.result()
+
+    def close(self) -> None:
+        self.q.put(None)
+        self.thread.join(timeout=60)
+
+    def _loop(self) -> None:
+        while True:
+            item = self.q.get()
+            if item is None:
+                return
+            batch = [item]
+            until = time.monotonic() + self.wait
+            while len(batch) < self.max_batch:
+                try:
+                    nxt = self.q.get(timeout=max(0.0, until - time.monotonic()))
+                except queue.Empty:
+                    break
+                if nxt is None:
+                    self.q.put(None)
+                    break
+                batch.append(nxt)
+            try:
+                outs = self.llm.chat([b[0] for b in batch], [self.params(b[1], self.max_tokens) for b in batch],
+                                     chat_template_kwargs=self.kwargs or None, use_tqdm=False)
+                for (_m, _s, fut), out in zip(batch, outs):
+                    meta = {"requested": self.model, "served": self.model}
+                    rev = OPEN_MODELS.get(self.model, {}).get("revision")
+                    if rev:
+                        meta["revision"] = rev
+                    o = out.outputs[0]
+                    meta["tokens"] = [len(out.prompt_token_ids or []), len(o.token_ids or [])]
+                    meta["finish"] = o.finish_reason
+                    parsed, err = parse_reply(o.text)
+                    if err:
+                        meta["error"] = err
+                    fut.set_result((parsed, meta))
+            except Exception as exc:  # one failed batch fails its calls, which are asked again later
+                for _m, _s, fut in batch:
+                    if not fut.done():
+                        fut.set_result((None, {"requested": self.model, "error": str(exc)[:300]}))
 
 
 def _pool(jobs, fn, workers: int) -> bool:
@@ -676,14 +913,22 @@ def all_feedback(analyzer, paras: list[dict], precision: dict | None = None) -> 
 
 
 def run(ref: Path, client: Client, analyzer, editors=EDITORS, judges=JUDGES, workers: int = 8,
-        precision: dict | None = None) -> dict:
-    """The prereg's five phases, then arm D's five (amendment 7). Returns which phases finished."""
+        precision: dict | None = None, call_editors=None, call_judges=None, phases=None) -> dict:
+    """The prereg's five phases, then arm D's five (amendment 7). Returns which phases finished.
+
+    ``editors`` and ``judges`` are the models of the whole run, so a unit's texts are known.
+    ``call_editors`` and ``call_judges`` (default: all) are the models that this call may ask,
+    and ``phases`` (default: all, in order) the phases to run: a job with one model loaded at a
+    time runs that model's part.
+    """
     paras = [json.loads(x) for x in (ref / "texts.jsonl").read_text().splitlines()]
     fb = all_feedback(analyzer, paras, precision)
     status = {}
+    ask_editors = editors if call_editors is None else call_editors
+    ask_judges = judges if call_judges is None else call_judges
 
     def edits_phase(arms):
-        jobs = [(p, ed, arm) for p in paras for ed in editors for arm in arms]
+        jobs = [(p, ed, arm) for p in paras for ed in ask_editors for arm in arms]
 
         def one(job):
             p, ed, arm = job
@@ -695,7 +940,7 @@ def run(ref: Path, client: Client, analyzer, editors=EDITORS, judges=JUDGES, wor
     def judging(pairs, tag):
         units = [(p["id"], ed) for p in paras for ed in editors]
         texts = {p["id"]: p["text"] for p in paras}
-        calls = judge_calls(units, pairs, judges, f"{SEED}:calls:{tag}")
+        calls = judge_calls(units, pairs, ask_judges, f"{SEED}:calls:{tag}")
 
         def one(c):
             a, b = (arm_texts(client, texts, c["id"], c["editor"], fb)[s] for s in shown(c))
@@ -711,7 +956,7 @@ def run(ref: Path, client: Client, analyzer, editors=EDITORS, judges=JUDGES, wor
 
     def facts_phase(arms, tag):
         texts = {p["id"]: p["text"] for p in paras}
-        jobs = [(p["id"], ed, arm, j) for p in paras for ed in editors for arm in arms for j in judges]
+        jobs = [(p["id"], ed, arm, j) for p in paras for ed in editors for arm in arms for j in ask_judges]
         random.Random(f"{SEED}:calls:{tag}").shuffle(jobs)
 
         def one(job):
@@ -724,17 +969,20 @@ def run(ref: Path, client: Client, analyzer, editors=EDITORS, judges=JUDGES, wor
                  and fact_of(client, texts, *jb, fb) is None]
         return ok and _pool(again, one, workers)
 
-    phases = [("edits", lambda: edits_phase(("B", "C"))), ("BC", lambda: judging([("B", "C")], "BC")),
+    plan = [("edits", lambda: edits_phase(("B", "C"))), ("BC", lambda: judging([("B", "C")], "BC")),
               ("facts", lambda: facts_phase(("B", "C"), "facts")), ("BA", lambda: judging([("B", "A")], "BA")),
               ("CA", lambda: judging([("C", "A")], "CA")),
               # Arm D, after the original plan, under the caps for the whole run.
               ("editsD", lambda: edits_phase(("D",))), ("DB", lambda: judging([("D", "B")], "DB")),
               ("factsD", lambda: facts_phase(("D",), "facts-D")), ("DC", lambda: judging([("D", "C")], "DC")),
               ("DA", lambda: judging([("D", "A")], "DA"))]
-    for name, phase in phases:
+    for name, phase in plan:
+        if phases is not None and name not in phases:
+            continue
         client.use_caps(name in D_PHASES)
         status[name] = bool(phase())
-        print(name, "done" if status[name] else "stopped", f"{client.calls} calls, ${client.spent:.2f}", flush=True)
+        spent = f", ${client.spent:.2f}" if client.count_cost else ""
+        print(name, "done" if status[name] else "stopped", f"{client.calls} calls{spent}", flush=True)
         if not status[name]:
             break
     (ref / "status.json").write_text(json.dumps({"phases": status, "calls": client.calls,
@@ -1003,9 +1251,12 @@ def fmt(est) -> str:
 def render(res: dict, status: dict, client: Client) -> str:
     lines = ["## Edit arms: readcost feedback (B) against a generic instruction (C) and the original (A)", "",
              f"Calls {client.calls} (new this run {client.new_calls}, served from cache {client.cached_hits}), "
-             f"cost ${client.spent:.2f}; caps ${client.cost_cap:.0f} and {client.call_cap} calls for the original "
-             f"phases, ${client.d_cost_cap:.0f} and {client.d_call_cap} for the whole run. Phases: "
-             + ", ".join(f"{k} {'done' if v else 'stopped'}" for k, v in status.items()), ""]
+             + (f"cost ${client.spent:.2f}; caps ${client.cost_cap:.0f} and {client.call_cap} calls for the original "
+                f"phases, ${client.d_cost_cap:.0f} and {client.d_call_cap} for the whole run. "
+                if client.count_cost else
+                f"on GPUs billed by time (see run.json); call caps {client.call_cap} for the original phases and "
+                f"{client.d_call_cap} for the whole run. ")
+             + "Phases: " + ", ".join(f"{k} {'done' if v else 'stopped'}" for k, v in status.items()), ""]
     if not status.get("BC", False):
         lines += ["B against C is not complete, so no claim is decided.", ""]
     lines += pair_table(res, PAIRS, "first")
@@ -1093,10 +1344,10 @@ def draw_counts(pointers: Path | None, ref: Path) -> str:
 
 
 def report(ref: Path, json_out: Path | None, client: Client | None = None, analyzer=None,
-           pointers: Path | None = None, editors=EDITORS, judges=JUDGES) -> str:
+           pointers: Path | None = None, editors=EDITORS, judges=JUDGES, count_cost: bool = True) -> str:
     from readcost import Analyzer, Config
     analyzer = analyzer or Analyzer(Config())
-    client = client or Client(ref / "replies.jsonl", ask=lambda *a, **k: (None, {}))
+    client = client or Client(ref / "replies.jsonl", ask=lambda *a, **k: (None, {}), count_cost=count_cost)
     status = json.loads((ref / "status.json").read_text())["phases"] if (ref / "status.json").exists() else {}
     res = analyse(collect(ref, client, analyzer, editors, judges), analyzer, editors, judges)
     text = render(res, status, client) + "\n" + draw_counts(pointers, ref)
@@ -1113,8 +1364,14 @@ def main(argv: list[str]) -> int:
     sub.add_parser("verify")
     f = sub.add_parser("fetch"); f.add_argument("pointers", type=Path); f.add_argument("ref", type=Path)
     r = sub.add_parser("run"); r.add_argument("ref", type=Path); r.add_argument("--workers", type=int, default=8)
+    r.add_argument("--backend", choices=("openrouter", "openai", "offline"), default="openrouter",
+                   help="openrouter: the original plan's models; openai or offline: one open model, --model")
+    r.add_argument("--base-url", default="http://127.0.0.1:8000/v1", help="the OpenAI-compatible server")
+    r.add_argument("--model", choices=sorted(OPEN_MODELS), help="the open model to ask (openai, offline)")
+    r.add_argument("--phases", help="comma-separated phases to run (default: all)")
     p = sub.add_parser("report"); p.add_argument("ref", type=Path); p.add_argument("--json", type=Path)
     p.add_argument("--pointers", type=Path, help="eval/edit-arms, for the draw's counts")
+    p.add_argument("--open", action="store_true", help="the open models of the amendment of 19 November 2026")
     a = ap.parse_args(argv)
     if a.cmd == "candidates":
         candidates(a.out)
@@ -1126,10 +1383,43 @@ def main(argv: list[str]) -> int:
         fetch(a.pointers, a.ref)
     elif a.cmd == "run":
         from readcost import Analyzer, Config
-        run(a.ref, Client(a.ref / "replies.jsonl"), Analyzer(Config()), workers=a.workers)
+        phases = a.phases.split(",") if a.phases else None
+        if a.backend == "openrouter":
+            run(a.ref, Client(a.ref / "replies.jsonl"), Analyzer(Config()), workers=a.workers, phases=phases)
+            return 0
+        if not a.model:
+            ap.error("--model is needed with --backend openai or offline")
+        editors, judges = open_models(fallback=a.model == MISTRAL_FALLBACK[1])
+        ask = open_backend(a.backend, a.model, a.base_url)
+        try:
+            run(a.ref, Client(a.ref / "replies.jsonl", ask=ask, count_cost=False), Analyzer(Config()),
+                editors, judges, workers=a.workers, phases=phases,
+                call_editors=[a.model] if a.model in editors else [],
+                call_judges=[a.model] if a.model in judges else [])
+        finally:
+            getattr(ask, "close", lambda: None)()
     else:
-        print(report(a.ref, a.json, pointers=a.pointers), end="")
+        editors, judges = open_models() if a.open else (EDITORS, JUDGES)
+        print(report(a.ref, a.json, pointers=a.pointers, editors=editors, judges=judges,
+                     count_cost=not a.open), end="")
     return 0
+
+
+def open_models(fallback: bool = False) -> tuple[list[str], list[str]]:
+    """The open editors and judges; with ``fallback``, Ministral 3 14B in place of Mistral Small 4."""
+    editors = [MISTRAL_FALLBACK[1] if fallback and e == MISTRAL_FALLBACK[0] else e for e in OPEN_EDITORS]
+    return editors, list(OPEN_JUDGES)
+
+
+def open_backend(kind: str, model: str, base_url: str = "http://127.0.0.1:8000/v1"):
+    """An ``ask`` for one open model: over HTTP to a server already serving it, or vLLM in this process."""
+    cfg = OPEN_MODELS[model]
+    if kind == "openai":
+        return openai_ask(base_url, {model: cfg["extra"]})
+    from vllm import LLM
+    llm = LLM(model=model, revision=cfg["revision"], tokenizer_revision=cfg["revision"],
+              max_model_len=MAX_MODEL_LEN, generation_config="vllm", seed=0, **cfg["engine"])
+    return OfflineBatcher(llm, model, cfg["extra"])
 
 
 if __name__ == "__main__":
