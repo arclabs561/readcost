@@ -523,3 +523,16 @@ model was called:
    read in full: `d3e2084cc6df`, which is about one third Chinese
    characters. readcost's language check did not name another language for
    it, so it stays in the draw, as the rules above say.
+
+19 November 2026 (UTC), before any model was called:
+
+8. Pull request #102 was merged into `main` at 14:34 UTC as `5631de4`,
+   four minutes before amendment 7 was committed. Amendment 7 was written
+   as if it were still open. On `main` at `5631de4`, the wording of
+   `-o agent` is the same as at `6769c81`, and `rule_precision.json` has
+   the same SHA-256 as the copy in `eval/edit-arms/`. So D's feedback is
+   what readcost on `main` prints for `a57e19e`'s findings, and B's is what
+   it printed before. Amendment 7's readings apply unchanged, read as
+   follows. "The question wording should ship" means it should stay on
+   `main`. "It should not ship" means `main` should go back to B's wording,
+   or try another one, and docs/agents.md should say why.
