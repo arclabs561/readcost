@@ -1,13 +1,15 @@
 """Draw the held-out precision sample of docs/prereg/heldout-precision.md.
 
     uv run python scripts/heldout_precision.py search    # eval/heldout/candidates.jsonl (needs gh)
-    uv run python scripts/heldout_precision.py fetch     # ref/heldout/files/, ref/heldout/files.jsonl (needs gh)
-    uv run python scripts/heldout_precision.py check     # ref/heldout/checked.jsonl
+    uv run python scripts/heldout_precision.py fetch     # ref/heldout/files/, ref/heldout/fetch-state.json (needs git)
+    uv run python scripts/heldout_precision.py check                 # S1, READMEs: ref/heldout/checked.jsonl
+    uv run python scripts/heldout_precision.py check --stratum S2    # S2, docs of the kept repositories
     uv run python scripts/heldout_precision.py sample    # ref/heldout/sample.jsonl, eval/heldout/sample.jsonl
     uv run python scripts/heldout_precision.py batches   # rater batches and RUBRIC.txt under --batches
 
-Each step reads the output of the one before. `search` and `fetch` use the
-`gh` CLI; the rest run offline. The fetched text and everything quoting it
+Each step reads the output of the one before. `search` uses the `gh` CLI;
+`fetch` makes a shallow clone of each repository without file contents and
+reads only the README and the chosen docs files; the rest run offline. The fetched text and everything quoting it
 stay under ref/heldout/, outside the repository (it belongs to the
 repositories' authors). The repository gets pointers only: the candidate
 list and, per sampled item, repository, commit, path, blob SHA, rule and
@@ -20,11 +22,11 @@ pre-registration froze.
 from __future__ import annotations
 
 import argparse
-import base64
 import hashlib
 import json
 import random
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -346,13 +348,35 @@ def cmd_search(args) -> None:
     print(len(seen), "candidates ->", out)
 
 
-def head_commit(repo: str, branch: str) -> str | None:
-    """SHA of the head commit of branch (REST; GraphQL is not reachable from this shell)."""
-    try:
-        sha = gh(["-H", "Accept: application/vnd.github.sha", f"repos/{repo}/commits/{branch}"]).strip()
-    except FileNotFoundError:
-        return None
-    return sha if re.fullmatch(r"[0-9a-f]{40}", sha) else None
+README_DIRS = ("", ".github/", "docs/")
+README_EXT = (".md", ".markdown", ".mdx", ".rst", ".txt", "")
+
+
+def pick_readme(paths: list[str]) -> str | None:
+    """The README GitHub's readme endpoint would show, approximated from the tree.
+
+    The first of the root, .github/ and docs/ that has a file named README or
+    README.<ext> (any case); there, the first by extension in README_EXT order,
+    then by name.
+    """
+    for d in README_DIRS:
+        here = [p for p in paths if p.lower().startswith(d) and "/" not in p[len(d):]
+                and re.fullmatch(r"readme(\.[a-z0-9]+)?", p[len(d):].lower())]
+        if here:
+            def rank(p, d=d):
+                ext = p[len(d) + 6:].lower()
+                return (README_EXT.index(ext) if ext in README_EXT else len(README_EXT), p)
+            return min(here, key=rank)
+    return None
+
+
+def git(args: list[str], cwd: Path | None = None, binary: bool = False, timeout: int = 300):
+    p = subprocess.run(["git", *args], cwd=cwd, capture_output=True, timeout=timeout, check=False,
+                       env={"GIT_TERMINAL_PROMPT": "0", "PATH": "/usr/bin:/bin:/usr/local/bin",
+                            "HOME": str(Path.home())})
+    if p.returncode != 0:
+        raise RuntimeError(p.stderr.decode("utf-8", "replace").strip()[:300])
+    return p.stdout if binary else p.stdout.decode("utf-8", "replace")
 
 
 def _store(ref: Path, repo: str, path: str, data: bytes) -> str:
@@ -362,32 +386,45 @@ def _store(ref: Path, repo: str, path: str, data: bytes) -> str:
     return str(local.relative_to(ref))
 
 
-def fetch_readme(ref: Path, repo: str, commit: str) -> dict:
+def fetch_repo(ref: Path, repo: str, branch: str) -> dict:
+    """Clone without blobs, pin the head commit, read the README and the chosen docs files."""
+    work = ref / "git" / repo.replace("/", "__")
+    if work.exists():
+        shutil.rmtree(work)
+    work.parent.mkdir(parents=True, exist_ok=True)
     try:
-        meta = json.loads(gh([f"repos/{repo}/readme?ref={commit}"]))
-    except FileNotFoundError:
-        return {"drop": "no README"}
-    if meta.get("size", 0) > MAX_BYTES or meta.get("encoding") != "base64":
-        return {"drop": "README over 1 MB"}
-    data = base64.b64decode(meta["content"])
-    return {"path": meta["path"], "blob": meta["sha"], "bytes": len(data), "local": _store(ref, repo, meta["path"], data)}
-
-
-def fetch_docs(ref: Path, repo: str, commit: str) -> list[dict]:
-    try:
-        tree = json.loads(gh([f"repos/{repo}/git/trees/{commit}?recursive=1"]))
-    except FileNotFoundError:
-        return []
-    blobs = {t["path"]: t for t in tree.get("tree", []) if t["type"] == "blob"}
-    out = []
-    for path in pick_docs(repo, list(blobs)):
-        t = blobs[path]
-        if t.get("size", 0) > MAX_BYTES:
-            out.append({"path": path, "blob": t["sha"], "drop": "over 1 MB"})
-            continue
-        data = base64.b64decode(json.loads(gh([f"repos/{repo}/git/blobs/{t['sha']}"]))["content"])
-        out.append({"path": path, "blob": t["sha"], "bytes": len(data), "local": _store(ref, repo, path, data)})
-    return out
+        git(["clone", "--quiet", "--depth", "1", "--filter=blob:none", "--no-checkout", "--single-branch",
+             "--branch", branch, f"https://github.com/{repo}.git", str(work)])
+        commit = git(["rev-parse", "HEAD"], cwd=work).strip()
+        tree = {}
+        for line in git(["ls-tree", "-r", "-l", "-z", "HEAD"], cwd=work).split("\0"):
+            if not line:
+                continue
+            meta, path = line.split("\t", 1)
+            mode, kind, sha, size = meta.split()
+            if kind == "blob" and not mode.startswith("12"):  # skip symlinks
+                tree[path] = (sha, int(size) if size.isdigit() else 0)
+        st: dict = {"commit": commit}
+        readme = pick_readme(list(tree))
+        if readme is None:
+            st["drop"] = "no README"
+        elif tree[readme][1] > MAX_BYTES:
+            st.update(path=readme, blob=tree[readme][0], drop="README over 1 MB")
+        else:
+            data = git(["cat-file", "blob", tree[readme][0]], cwd=work, binary=True)
+            st.update(path=readme, blob=tree[readme][0], bytes=len(data), local=_store(ref, repo, readme, data))
+        docs = []
+        for path in pick_docs(repo, list(tree)):
+            sha, size = tree[path]
+            if size > MAX_BYTES:
+                docs.append({"path": path, "blob": sha, "drop": "over 1 MB"})
+                continue
+            data = git(["cat-file", "blob", sha], cwd=work, binary=True)
+            docs.append({"path": path, "blob": sha, "bytes": len(data), "local": _store(ref, repo, path, data)})
+        st["docs"] = docs
+        return st
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
 
 
 def cmd_fetch(args) -> None:
@@ -395,6 +432,7 @@ def cmd_fetch(args) -> None:
     names = excluded_repos()
     state_path = args.ref / "fetch-state.json"
     state = json.loads(state_path.read_text()) if state_path.exists() else {}
+    branch = {c["repo"]: c["default_branch"] for c in cands}
     todo = []
     for c in cands:
         r = c["repo"]
@@ -405,56 +443,21 @@ def cmd_fetch(args) -> None:
             state[r] = {"drop": why}
         else:
             todo.append(r)
-    branch = {c["repo"]: c["default_branch"] for c in cands}
 
     def one(r):
         try:
-            return fetch(r)
-        except RuntimeError as exc:
-            state[r] = {"drop": "fetch error", "error": str(exc)[:200]}
-            return r
-
-    def fetch(r):
-        st = state[r]
-        if "commit" not in st:
-            st["commit"] = head_commit(r, branch[r])
-            if not st["commit"]:
-                state[r] = {"drop": "no default branch"}
-                return r
-        st.update(fetch_readme(args.ref, r, st["commit"]))
-        st.pop("pending", None)
+            state[r] = fetch_repo(args.ref, r, branch[r])
+        except (RuntimeError, subprocess.TimeoutExpired) as exc:
+            state[r] = {"drop": "fetch error", "error": str(exc)[:300]}
         return r
 
-    for r in todo:
-        state[r] = {"pending": True}
-    pending = [r for r, st in state.items() if st.get("pending")]
     with ThreadPoolExecutor(args.workers) as ex:
-        for n, _ in enumerate(ex.map(one, pending), 1):
-            if n % 200 == 0:
+        for n, _ in enumerate(ex.map(one, todo), 1):
+            if n % 100 == 0:
                 state_path.write_text(json.dumps(state))
-                print(f"{n}/{len(pending)} READMEs", flush=True)
+                print(f"{n}/{len(todo)} repositories", flush=True)
     state_path.write_text(json.dumps(state))
-    print("READMEs done", Counter(st.get("drop", "kept") for st in state.values()))
-
-
-def cmd_fetch_docs(args) -> None:
-    """S2: docs files from the repositories whose README passed every filter (after `check`)."""
-    state = json.loads((args.ref / "fetch-state.json").read_text())
-    kept = [json.loads(x) for x in (args.ref / "checked.jsonl").read_text().splitlines()]
-    repos = sorted({k["repo"] for k in kept if k["stratum"] == "S1" and not k.get("drop")})
-
-    def one(r):
-        if "docs" not in state[r]:
-            state[r]["docs"] = fetch_docs(args.ref, r, state[r]["commit"])
-        return r
-
-    with ThreadPoolExecutor(args.workers) as ex:
-        for n, _ in enumerate(ex.map(one, repos), 1):
-            if n % 200 == 0:
-                (args.ref / "fetch-state.json").write_text(json.dumps(state))
-                print(f"{n}/{len(repos)} repos' docs", flush=True)
-    (args.ref / "fetch-state.json").write_text(json.dumps(state))
-    print(sum(len(state[r]["docs"]) for r in repos), "docs files")
+    print("fetched", Counter(st.get("drop", "kept") for st in state.values()))
 
 
 # --- readcost ---
@@ -548,17 +551,20 @@ def cmd_check(args) -> None:
     import readcost
     state = json.loads((args.ref / "fetch-state.json").read_text())
     stratum = args.stratum
+    out_path = args.ref / "checked.jsonl"
+    prior = [json.loads(x) for x in out_path.read_text().splitlines()] if out_path.exists() else []
+    s1_kept = {x["repo"] for x in prior if x["stratum"] == "S1" and not x.get("drop")}
+    if stratum == "S2" and not s1_kept:
+        sys.exit("check S1 first: S2 takes docs only from repositories whose README was kept")
     files = []
     for r, st in sorted(state.items(), key=lambda kv: kv[0].lower()):
         if stratum == "S1" and st.get("local"):
             files.append((r, st["commit"], st["path"], st["blob"], st["local"]))
-        if stratum == "S2":
+        if stratum == "S2" and r in s1_kept:
             for d in st.get("docs", []):
                 if d.get("local"):
                     files.append((r, st["commit"], d["path"], d["blob"], d["local"]))
-    out_path = args.ref / "checked.jsonl"
-    old = [json.loads(x) for x in out_path.read_text().splitlines()] if out_path.exists() else []
-    old = [o for o in old if o["stratum"] != stratum]
+    old = [o for o in prior if o["stratum"] != stratum]
     an = analyzer()
     seen_blobs: set[str] = set()
     rows = []
@@ -704,14 +710,14 @@ def cmd_batches(args) -> None:
 
 def main(argv=None) -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("step", choices=["search", "fetch", "check", "docs", "sample", "batches"])
+    ap.add_argument("step", choices=["search", "fetch", "check", "sample", "batches"])
     ap.add_argument("--ref", type=Path, default=ROOT / "ref/heldout")
     ap.add_argument("--batches", type=Path, default=Path("/home/claude/heldout-batches"))
     ap.add_argument("--stratum", choices=["S1", "S2"], default="S1")
     ap.add_argument("--workers", type=int, default=6)
     args = ap.parse_args(argv)
     args.ref.mkdir(parents=True, exist_ok=True)
-    {"search": cmd_search, "fetch": cmd_fetch, "check": cmd_check, "docs": cmd_fetch_docs,
+    {"search": cmd_search, "fetch": cmd_fetch, "check": cmd_check,
      "sample": cmd_sample, "batches": cmd_batches}[args.step](args)
 
 

@@ -381,3 +381,22 @@ branch that the search returned, and the fork and archived flags come from
 the search results only. A repository whose commit or README request fails
 for another reason (an empty repository, for example) is dropped as a
 fetch error.
+
+### 19 November 2026, after a second failed fetch
+
+The REST API also refuses per-repository requests from this shell; only
+the search and git itself reach these repositories. The second fetch read
+no README either, and was discarded. The fetch now makes a shallow clone
+of each repository's default branch without file contents (`git clone
+--depth 1 --filter=blob:none --no-checkout`), takes the head commit from
+it, lists the tree, and reads only the files it needs. Three consequences:
+
+- The README is no longer the one that `repos/{repo}/readme` returns but
+  an approximation from the tree: the first of the root, `.github/` and
+  `docs/` that holds a file named README or README.ext (any case), and
+  there the first by extension in the order `.md`, `.markdown`, `.mdx`,
+  `.rst`, `.txt`, none, then by name.
+- Docs files are chosen for every repository at fetch time, by the same
+  seeded rule; S2 still checks only those of repositories whose README
+  was kept.
+- Symbolic links are not followed.

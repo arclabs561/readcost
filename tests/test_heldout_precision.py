@@ -239,3 +239,11 @@ def test_check_one_on_a_made_up_readme(tmp_path):
     short = tmp_path / "short.md"
     short.write_text("A short README that says little about the tool here.\n")
     assert hp.check_one(an, short, "own/tool", "c", "short.md", "b", "S1")["drop"] == "under 300 words"
+
+
+def test_pick_readme_prefers_root_then_markdown():
+    assert hp.pick_readme(["src/a.rs", "README.rst", "readme.md", "docs/README.md"]) == "readme.md"
+    assert hp.pick_readme(["README", "README.txt"]) == "README.txt"
+    assert hp.pick_readme(["a.md", ".github/README.md", "docs/README.md"]) == ".github/README.md"
+    assert hp.pick_readme(["docs/readme.markdown", "pkg/README.md"]) == "docs/readme.markdown"
+    assert hp.pick_readme(["READMEFIRST.md", "src/README.md"]) is None
