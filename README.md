@@ -206,7 +206,9 @@ covers the other keys, the command-line flags, and the opt-in second parser.
   documentation, a majority of model raters judged 15 (23%) correct or
   defensible. The rules were revised after some of those labels were read,
   so 23% is an in-sample estimate, and the record does not say whether the
-  two lenient raters were in that majority.
+  two lenient raters were in that majority. On READMEs the rules had not
+  been tuned on, three model raters accepted 30% (23 to 38%). They called
+  about 2% a cost that an editor would fix; the rest were optional at best.
 - Against hand-corrected parses, 81 to 84% of stacked-nouns findings, 60% of
   reduced-object-relative findings and 61 to 67% of long-dependency findings
   name a construction that is there. The rest are parser errors.
