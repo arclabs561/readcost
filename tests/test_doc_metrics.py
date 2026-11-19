@@ -1,4 +1,4 @@
-"""Document metrics (metrics.py) and the opt-in center-embedding and undefined-acronym rules."""
+"""Document metrics (metrics.py), the center-embedding rule and the opt-in undefined-acronym rule."""
 
 import pytest
 
@@ -87,8 +87,8 @@ def test_sentence_profile_bands_use_the_cut_points(plain):
     assert profile["low"] == pytest.approx(9 / 49, abs=0.001)
 
 
-def test_new_rules_are_off_by_default(plain):
-    assert rules(plain, DOUBLE, "center-embedding") == []
+def test_center_embedding_is_on_and_undefined_acronym_off_by_default(plain):
+    assert len(rules(plain, DOUBLE, "center-embedding")) == 1
     assert rules(plain, "Every write goes to the WAL before the table changes.", "undefined-acronym") == []
 
 

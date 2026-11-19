@@ -20,7 +20,12 @@ this script reads (``--bench``):
   essays); the text itself is not kept in the repository;
 - ``labelled_by``: ``raters`` when the label is the majority of the strict
   model raters in docs/evaluation.md (``votes`` gives the count),
-  ``self`` when one maintainer labelled it, with the reasoning in ``reason``.
+  ``self`` when one maintainer labelled it, with the reasoning in ``reason``;
+- ``kind``, optional, on items drawn from the held-out rounds
+  (eval/breadth/, eval/kinds/): ``accepted finding``, ``near miss`` (a
+  sentence the rule reports only with a looser threshold, so it is silent
+  on it by construction) or ``rejected finding`` (a sentence the rule
+  reports and the raters rejected, which tests false positives).
 
 Each item is checked alone with readcost's default settings. For each rule
 the script counts true positives (expected fire, fires), false negatives,

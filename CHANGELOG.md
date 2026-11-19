@@ -31,6 +31,11 @@ configuration.
 
 ### Changed
 
+- center-embedding is on by default, at info. In the pre-registered test by
+  kind of document, model raters saw a problem in its findings more often
+  than in its near misses and in random decoys, in every round
+  (docs/evaluation.md, "Precision by kind of document"). Turn it off with
+  `center-embedding = "ignore"`.
 - The Action edits its summary comment only when `github-actions[bot]`
   posted it, not any comment that starts with the marker.
 

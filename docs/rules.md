@@ -24,7 +24,7 @@ its rule.
 | inline-list | "`durability` provides filesystem and in-memory directories, atomic writes, WALs, record logs, checkpoint files, CRC validation, and sync helpers." | a bulleted list |
 | participial-clause (opt-in) | "The page updates automatically when the file changes on disk, highlighting what changed." | "The page updates automatically when the file changes on disk and highlights what changed." |
 | nominalization (opt-in, constructed) | "The tool performs validation of the input." | "The tool validates the input." |
-| center-embedding (opt-in, constructed) | "The job that the script that the team maintains starts fails when the disk is full." | "The team maintains a script that starts the job, and the job fails when the disk is full." |
+| center-embedding (constructed) | "The job that the script that the team maintains starts fails when the disk is full." | "The team maintains a script that starts the job, and the job fails when the disk is full." |
 | undefined-acronym (opt-in, constructed) | "Each shard writes its changes to the WAL before it updates the index." | "Each shard writes its changes to the write-ahead log (WAL) before it updates the index." |
 
 Turn any opt-in rule on with a level, such as `--info nominalization` or
@@ -113,9 +113,10 @@ share a sentence. Language models use it more often than people
 
 ### center-embedding
 
-Opt-in. A clause nested two deep inside clauses that continue after it, which
-people judge hard in constructed sentences unless the innermost subject is I,
-you or we (Gibson 1998, 2000).
+A clause nested two deep inside clauses that continue after it, which people
+judge hard in constructed sentences unless the innermost subject is I, you or
+we (Gibson 1998, 2000). It is on by default since the held-out tests
+([evaluation](evaluation.md#precision-by-kind-of-document-pre-registered)).
 
 ### undefined-acronym
 
