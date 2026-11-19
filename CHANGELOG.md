@@ -7,6 +7,12 @@ configuration.
 
 ## [Unreleased]
 
+### Changed
+
+- Editor diagnostics and SARIF rules link to the rule's own section in
+  docs/rules.md, not to the README's rule table. long-sentence, which has no
+  section, still links to the table.
+
 ## [0.3.0] - 2026-11-18
 
 ### Added

@@ -11,7 +11,7 @@ from readcost.features import Finding
 types = pytest.importorskip("lsprotocol.types")
 LanguageClient = pytest.importorskip("pygls.lsp.client").LanguageClient
 lsp = pytest.importorskip("readcost.lsp")
-DOCS_URL, DOCUMENTED, Checker = lsp.DOCS_URL, lsp.DOCUMENTED, lsp.Checker
+DOCUMENTED, Checker = lsp.DOCUMENTED, lsp.Checker
 config_for, to_diagnostic = lsp.config_for, lsp.to_diagnostic
 
 DENSE = ("We tune the shard compaction retry budget by hand. "
@@ -31,7 +31,7 @@ def test_diagnostic_fields_follow_the_finding():
     d = to_diagnostic(finding(), lines)
     assert d.source == "readcost" and d.code == "stacked-nouns"
     assert d.message == "3 nouns stacked: 'retry budget cost'. Keep at most two nouns together."
-    assert d.code_description.href == DOCS_URL
+    assert d.code_description.href == "https://github.com/arclabs561/readcost/blob/main/docs/rules.md#stacked-nouns"
     # The excerpt's span on line 2 (0-based line 1), not the whole line.
     assert (d.range.start.line, d.range.start.character) == (1, 11)
     assert (d.range.end.line, d.range.end.character) == (1, 11 + len("retry budget cost"))
