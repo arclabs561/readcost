@@ -398,4 +398,17 @@ marked as deciding nothing.
 
 ## Amendments
 
-None yet.
+### 19 November 2026, while writing the job script, before any model call
+
+- Images are turned off with vLLM's `language_model_only=True` and not
+  with `limit_mm_per_prompt={"image": 0}`. vLLM documents the option as
+  the same as a limit of 0 for every modality, so it also covers Qwen's
+  video input.
+- Round 2 holds one item twice (id 768685). It counts once in every
+  panel's round 2 tables, as part B of kinds-precision.md counts it.
+- The GPU job does not rebuild the item texts. Rebuilding runs readcost
+  at three commits over hundreds of repositories. On the GPU, that time is
+  billed at the GPU's rate. The items are put in the private dataset at
+  `items/` first, by `scripts/rebuild_items.py` in a CPU job or from the
+  label store, and the GPU job reads them from there. The job records
+  their SHA-256, so the two sources can be compared.
