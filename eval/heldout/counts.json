@@ -1,0 +1,117 @@
+{
+ "findings": {
+  "S1": {
+   "stacked-nouns": 9394,
+   "inline-list": 14126,
+   "inanimate-subject": 2215,
+   "reduced-object-relative": 1655,
+   "hyphen-compound": 1682,
+   "long-dependency": 998,
+   "participial-clause": 3439,
+   "undefined-acronym": 8927,
+   "nominalization": 104,
+   "center-embedding": 37
+  },
+  "S2": {
+   "reduced-object-relative": 1471,
+   "stacked-nouns": 2781,
+   "undefined-acronym": 4923,
+   "inline-list": 3503,
+   "inanimate-subject": 1268,
+   "hyphen-compound": 1279,
+   "long-dependency": 573,
+   "nominalization": 8,
+   "participial-clause": 403,
+   "center-embedding": 58
+  }
+ },
+ "deduped": {
+  "S1": {
+   "hyphen-compound": 1619,
+   "inline-list": 13398,
+   "inanimate-subject": 2121,
+   "undefined-acronym": 6801,
+   "participial-clause": 3187,
+   "stacked-nouns": 8301,
+   "reduced-object-relative": 1594,
+   "nominalization": 104,
+   "center-embedding": 37,
+   "long-dependency": 991
+  },
+  "S2": {
+   "stacked-nouns": 2561,
+   "inline-list": 3437,
+   "undefined-acronym": 3761,
+   "participial-clause": 390,
+   "hyphen-compound": 1214,
+   "long-dependency": 564,
+   "reduced-object-relative": 1380,
+   "inanimate-subject": 1226,
+   "center-embedding": 57,
+   "nominalization": 8
+  }
+ },
+ "sampled": {
+  "S1": {
+   "stacked-nouns": 40,
+   "long-dependency": 40,
+   "inanimate-subject": 40,
+   "reduced-object-relative": 40,
+   "hyphen-compound": 40,
+   "inline-list": 40,
+   "participial-clause": 20,
+   "nominalization": 20,
+   "center-embedding": 20,
+   "undefined-acronym": 20
+  },
+  "S2": {
+   "stacked-nouns": 20,
+   "long-dependency": 20,
+   "inanimate-subject": 20,
+   "reduced-object-relative": 20,
+   "hyphen-compound": 20,
+   "inline-list": 20,
+   "participial-clause": 10,
+   "nominalization": 7,
+   "center-embedding": 10,
+   "undefined-acronym": 10
+  }
+ },
+ "decoy_pool": {
+  "S1": {
+   "random": 121348,
+   "long": 1829
+  },
+  "S2": {
+   "random": 50992,
+   "long": 670
+  }
+ },
+ "decoys": {
+  "S1": {
+   "random": 40,
+   "long": 40
+  },
+  "S2": {
+   "random": 20,
+   "long": 20
+  }
+ },
+ "files": {
+  "S1: duplicate file": 748,
+  "S1: kept": 1845,
+  "S1: mostly code": 54,
+  "S1: not English": 387,
+  "S1: under 300 words": 403,
+  "S2: duplicate file": 1,
+  "S2: kept": 670,
+  "S2: mostly code": 27,
+  "S2: not English": 111,
+  "S2: under 300 words": 221
+ },
+ "fetch": {
+  "fetched": 3437,
+  "no README": 11,
+  "fetch error": 1
+ }
+}

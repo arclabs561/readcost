@@ -397,30 +397,32 @@ def fetch_repo(ref: Path, repo: str, branch: str) -> dict:
              "--branch", branch, f"https://github.com/{repo}.git", str(work)])
         commit = git(["rev-parse", "HEAD"], cwd=work).strip()
         tree = {}
-        for line in git(["ls-tree", "-r", "-l", "-z", "HEAD"], cwd=work).split("\0"):
+        # No -l: sizes would make git fetch every blob. Sizes are checked on the files read.
+        for line in git(["ls-tree", "-r", "-z", "HEAD"], cwd=work).split("\0"):
             if not line:
                 continue
             meta, path = line.split("\t", 1)
-            mode, kind, sha, size = meta.split()
+            mode, kind, sha = meta.split()
             if kind == "blob" and not mode.startswith("12"):  # skip symlinks
-                tree[path] = (sha, int(size) if size.isdigit() else 0)
+                tree[path] = sha
         st: dict = {"commit": commit}
         readme = pick_readme(list(tree))
         if readme is None:
             st["drop"] = "no README"
-        elif tree[readme][1] > MAX_BYTES:
-            st.update(path=readme, blob=tree[readme][0], drop="README over 1 MB")
         else:
-            data = git(["cat-file", "blob", tree[readme][0]], cwd=work, binary=True)
-            st.update(path=readme, blob=tree[readme][0], bytes=len(data), local=_store(ref, repo, readme, data))
+            data = git(["cat-file", "blob", tree[readme]], cwd=work, binary=True)
+            st.update(path=readme, blob=tree[readme], bytes=len(data))
+            if len(data) > MAX_BYTES:
+                st["drop"] = "README over 1 MB"
+            else:
+                st["local"] = _store(ref, repo, readme, data)
         docs = []
         for path in pick_docs(repo, list(tree)):
-            sha, size = tree[path]
-            if size > MAX_BYTES:
-                docs.append({"path": path, "blob": sha, "drop": "over 1 MB"})
+            data = git(["cat-file", "blob", tree[path]], cwd=work, binary=True)
+            if len(data) > MAX_BYTES:
+                docs.append({"path": path, "blob": tree[path], "drop": "over 1 MB"})
                 continue
-            data = git(["cat-file", "blob", sha], cwd=work, binary=True)
-            docs.append({"path": path, "blob": sha, "bytes": len(data), "local": _store(ref, repo, path, data)})
+            docs.append({"path": path, "blob": tree[path], "bytes": len(data), "local": _store(ref, repo, path, data)})
         st["docs"] = docs
         return st
     finally:
