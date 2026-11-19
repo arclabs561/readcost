@@ -2615,6 +2615,73 @@ Limits: Stack Exchange votes judge content and timing as much as prose,
 and ELLIPSE raters score proficiency. No dataset here rates the clarity
 of human-written technical prose at scale.
 
+## Held-out precision, pre-registered
+
+The plan is [docs/prereg/heldout-precision.md](prereg/heldout-precision.md),
+committed before any README was fetched. The rules are frozen at 0.3.0
+(`a57e19e`), with verify_model off. Findings come from READMEs (S1, primary)
+and docs files (S2) of public GitHub repositories created after 1 November
+2026 that no development corpus holds. The sample is 40 findings per default
+rule and 20 per opt-in rule in S1, half that in S2, plus 120 decoys: made-up
+findings with a random span and rule name, on sentences with no finding.
+Three independent, blind Claude instances labelled all 597 items with the
+rubric of `scripts/second_rater.py`. They saw only the rubric and their own
+shuffled batches, and none was told that decoys existed. Labels, pointers
+and the full report are in `eval/heldout/`.
+
+S1, majority of three, with Wilson 95% intervals:
+
+| Rule | Accepted (c or d) | Construction present |
+| --- | --- | --- |
+| stacked-nouns | 22 of 40 (55%; 40 to 69%) | 29 of 40 (72%) |
+| long-dependency | 15 of 40 (38%; 24 to 53%) | 16 of 40 (40%) |
+| inanimate-subject | 0 of 40 (0%; 0 to 9%) | 9 of 40 (22%) |
+| reduced-object-relative | 8 of 40 (20%; 10 to 35%) | 25 of 40 (62%) |
+| hyphen-compound | 14 of 40 (35%; 22 to 50%) | 34 of 40 (85%) |
+| inline-list | 8 of 40 (20%; 10 to 35%) | 24 of 40 (60%) |
+| participial-clause (opt-in) | 15 of 20 (75%; 53 to 89%) | 19 of 20 (95%) |
+| nominalization (opt-in) | 16 of 20 (80%; 58 to 92%) | 20 of 20 (100%) |
+| center-embedding (opt-in) | 2 of 20 (10%; 3 to 30%) | 2 of 20 (10%) |
+| undefined-acronym (opt-in) | 2 of 20 (10%; 3 to 30%) | 19 of 20 (95%) |
+| decoys | 0 of 80 (0%; 0 to 5%) | 1 of 80 (1%) |
+
+- The default rules together, weighted by their share of findings, are 30%
+  accepted on READMEs (bootstrap 95%: 23 to 38%) and 49% on docs files (39
+  to 59%). In-sample, a majority of eight raters on essays and docs gave
+  23%. The two figures use different raters and different text, so neither
+  is a revision of the other.
+- Accepted means almost always defensible, not correct. Each rater called 5
+  or 6 of the 240 findings of default rules in S1 correct, that is, a
+  reading cost that an editor would fix: about 2%.
+- inanimate-subject fails on every count. No finding was accepted, the
+  construction is present in 22%, and it does no better than the decoys.
+  By the pre-registered rules it is proposed for opt-in, and its detector,
+  not only its claim of cost, is the problem. S2 agrees: 1 of 20 accepted.
+- center-embedding (opt-in) is a detection problem: the construction is
+  present in 2 of 20. In S2 it is accepted in 8 of 10, so the proposal may
+  hold for READMEs only, and the counts are small.
+- participial-clause and nominalization meet the rule for "candidate for
+  more testing as a default". For participial-clause this rests on two
+  raters against one (Fleiss' kappa −0.03 for that rule). In S2,
+  nominalization is accepted in 1 of 7. Neither result shows a reading
+  cost.
+- long-dependency's construction is present in 16 of 40 (upper bound 55%),
+  just above the detection floor.
+- Agreement over all S1 findings is Fleiss' kappa 0.55 (accepted against
+  wrong) with 80% pairwise agreement, above the pre-registered guard. One
+  rater was much more lenient on `reduced-object-relative`, `hyphen-compound`
+  and `inline-list`; the majority vote does not show that.
+- The decoy check was too easy. All 120 decoys were rejected, probably
+  because a random 2 to 4 word span with a made-up message is plainly wrong,
+  as the plan warned. So every rule except inanimate-subject passes
+  "accepted over decoys", which shows only that the raters do not accept at
+  random. Decoys closer to real findings would be a stronger baseline.
+
+The raters are one model family, the same family as rater 1 of the in-sample
+labels; no person labelled anything. Against rater 1 in-sample, the held-out
+raters accept inanimate-subject less and differ on the other rules only when
+the lenient rater is counted.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News
