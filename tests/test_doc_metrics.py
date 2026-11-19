@@ -87,8 +87,10 @@ def test_sentence_profile_bands_use_the_cut_points(plain):
     assert profile["low"] == pytest.approx(9 / 49, abs=0.001)
 
 
-def test_center_embedding_is_on_and_undefined_acronym_off_by_default(plain):
-    assert len(rules(plain, DOUBLE, "center-embedding")) == 1
+def test_center_embedding_and_undefined_acronym_are_off_by_default(plain):
+    # center-embedding was default from #107 until the re-rating with open
+    # models (docs/evaluation.md) found it does not hold up outside Claude.
+    assert rules(plain, DOUBLE, "center-embedding") == []
     assert rules(plain, "Every write goes to the WAL before the table changes.", "undefined-acronym") == []
 
 

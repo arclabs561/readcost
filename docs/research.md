@@ -36,8 +36,9 @@ Panthaplackel et al. 2021).
   the human rate in Reinhart et al. 2025, over general genres). Repetition
   of sentence frames is measured across many texts by `readcost corpus`
   (Shaib et al. 2024), not per document.
-- Two rules with weaker evidence; center-embedding is on by default since
-  the held-out tests, undefined-acronym is opt-in. center-embedding flags a clause
+- Two rules with weaker evidence, both opt-in; center-embedding was briefly
+  on by default after the held-out tests, until open models re-rating them
+  disagreed. center-embedding flags a clause
   nested two deep inside clauses that continue after it. Gibson (1998, 2000)
   argues from acceptability judgements of constructed sentences that such
   nesting is hard, except when the innermost subject is I or you (readcost
