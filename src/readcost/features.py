@@ -141,7 +141,7 @@ FEATURES: dict[str, Feature] = {f.id: f for f in [
         "The parser caches every token, so lookups are faster.",
     ),
     Feature(
-        "center-embedding", "Clause nested inside a nested clause", "info", False, "opt-in",
+        "center-embedding", "Clause nested inside a nested clause", "info", True, "paper",
         "A clause inside a clause that is itself inside the middle of another "
         "clause makes the reader hold several unfinished subjects at once. One "
         "nested clause is ordinary; people judge two hard in constructed "
