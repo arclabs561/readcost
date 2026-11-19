@@ -686,3 +686,49 @@ The GitHub Actions job `edit-arms` stays in `.github/workflows/eval.yml` as
 a fallback for the OpenRouter models above. It now runs only when started
 by hand, and only after the `openrouter` environment approves it. This plan
 does not use it; using it would need a further amendment.
+
+### 19 November 2026, before any model call: judges shared with the open-raters plan
+
+The plan on branch `exp/open-family-raters` (pull request #110) was pushed
+after the amendment above, and before any job here. It rates with Qwen
+3.8 27B, Gemma 4 31B, GLM-4.7-Flash and Ministral 3 14B, with OLMo 3.1 32B
+as its substitute, at the revisions above. As that amendment allows, the
+judges here become three of its four families, at the same repositories
+and revisions. So the same three families judge here and rate there, on
+purpose, and a family's leanings can be compared across the two tests.
+No judge may share a family with an editor, so the editors move to three
+families that do not judge:
+
+| Role | Family | Repository | Revision | Licence |
+| --- | --- | --- | --- | --- |
+| Editor | OpenAI | `openai/gpt-oss-120b` | `b5c939de8f754692c1647ca79fbf85e8c1e70f8a` | Apache-2.0 |
+| Editor | Mistral | `mistralai/Mistral-Small-4-119B-2603` | `a11f36bebf709121056b1dbcc943d1c6afbe494d` | Apache-2.0 |
+| Editor | OLMo (Ai2) | `allenai/Olmo-3.1-32B-Instruct` | `ac0587e4a7744a551c059d8cd17ba220bc940dae` | Apache-2.0 |
+| Judge | Qwen (Alibaba) | `Qwen/Qwen3.8-27B` | `37561816e66b5b9153b1b64c10968c18c1e6f4a0` | Apache-2.0 |
+| Judge | Gemma (Google) | `google/gemma-4-31B-it` | `842da3794eaa0b77d5f08bae87a17459d91ff475` | Apache-2.0 |
+| Judge | GLM (Zhipu AI) | `zai-org/GLM-4.7-Flash` | `7dd20894a642a0aa287e9827cb1a1f7f91386b67` | MIT |
+
+These tables replace the two above. The open-raters plan does not use
+the editors' families as raters, except Mistral, whose smaller model it
+rates with. Everything else in the amendment above stands: serving,
+thinking settings, order, caps, outputs, and the fallback to
+`mistralai/Ministral-3-14B-Instruct-2512` if Mistral Small 4 cannot be
+served on one H200.
+
+Two of the open-raters plan's reasons not to rate with a model bear on the
+editors here. It rejects gpt-oss-120b because it answers only after a
+reasoning channel. Agents often reason briefly before they edit, so here
+gpt-oss-120b edits at `reasoning_effort` "low". It also
+finds that Mistral Small 4 (121 GB in FP8) does not fit one H200 with a
+cache, since its card serves it on two GPUs. That card serves 262,144
+tokens of context; this run needs 8,192, and the model's attention stores
+a small cache per token. Whether it fits is what the pilot finds out, and
+the fallback above covers the case where it does not.
+
+What this changes in validity: the editors are now gpt-oss-120b (August
+2025), Mistral Small 4 and OLMo 3.1 32B. They are probably weaker writers
+than Qwen and Gemma, and OLMo probably the weakest of the six; no
+benchmark of editing prose was checked. The judges are now the three
+newest models. That should make the judgements less noisy, and it narrows
+further what the result can say about strong editors. The primary
+comparison, B against C, still holds the editor fixed within each pair.
