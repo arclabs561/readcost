@@ -12,7 +12,9 @@ Policy shared by every adapter (see docs/hooks.md):
 - Cheap when irrelevant. Path filtering happens before spaCy is imported.
 - Advisory by default. ``hooks.mode = "block"`` is needed before an adapter
   denies or blocks anything, and only a "block" verdict does so.
-- Bounded loops. Stop-time revision runs at most once per turn.
+- Bounded loops. Stop-time revision runs at most once per turn. With
+  ``hooks.repeat = "once"``, an agent hook reports a finding once per session
+  and file, and blocks or denies on it at most once (repeats.py).
 """
 
 from __future__ import annotations

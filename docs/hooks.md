@@ -57,7 +57,39 @@ lookups are precomputed into the package, so they cost nothing at run time.
 
 **Bounded loops.** The Stop hook asks Claude to revise at most once per turn: it
 does nothing when `stop_hook_active` is true. Claude Code also overrides a Stop
-hook after eight consecutive continuations.
+hook after eight consecutive continuations. Each turn's answer is new text, so
+the Stop hook keeps no memory between turns.
+
+**Each finding once.** Agents given the same findings after every edit tend to
+fix them in one round or get stuck: they leave a finding they judge wrong while
+the hook repeats it, or they alternate between two wordings around it (see
+[Agents editing in a loop](evaluation.md#agents-editing-in-a-loop)). So by
+default (`hooks.repeat = "once"`) the Claude Code and piku hooks remember, per
+session and file, which findings they have reported:
+
+- After a Write or Edit, Claude Code's PostToolUse reports only findings it
+  has not reported for that file in this session, with one line saying how
+  many older ones it left out. When every finding was reported before, it says
+  nothing.
+- In block mode, a hook blocks or denies on a finding at most once. Claude
+  Code's PostToolUse then adds one line instead of blocking again, saying the
+  findings were reported before and to leave the text where a finding does not
+  hold. PreToolUse lets the same edit through on the next attempt, and its
+  deny reason says so. piku's PreToolUse allows the write and adds the same
+  line.
+
+A finding is known by its rule and its flagged words, lowercased and without
+punctuation. Moving it to another line or rewording the text around it keeps
+it the same finding; changing the flagged words makes a new one. The same
+words flagged by the same rule twice in one file count once.
+
+The session is the harness's `session_id` (Claude Code's `transcript_path`
+when that is missing), and a Claude Code subagent (`agent_id`) has its own
+memory, since it never saw its parent's feedback. A payload with neither field
+gets no memory: the hook reports every time, as with `hooks.repeat =
+"always"`, rather than hide findings from a session it cannot tell apart from
+another. git hooks and `readcost hook generic` keep no memory; a harness that
+loops on the generic protocol should stop when the same findings come back.
 
 **Short feedback.** A model gets at most 8 findings and 2,500 characters, worst
 first, each with its fix (`hooks.max_items`, `hooks.max_chars`). Claude Code
@@ -67,7 +99,14 @@ caps `additionalContext` at 10,000 characters.
 message that it is assembling in `$CLAUDE_PLUGIN_DATA/readcost-display/` (or
 under `$XDG_STATE_HOME` or `~/.local/state`, owner-only) and deletes it after
 the final batch. State left by an interrupted message is deleted after a day. The piku
-PostToolUse hook appends to `.piku/readcost.jsonl` in the project.
+PostToolUse hook appends to `.piku/readcost.jsonl` in the project. The memory
+of reported findings is one JSON file per session in
+`$XDG_CACHE_HOME/readcost/hooks/` (`~/.cache/readcost/hooks/`, owner-only;
+`READCOST_HOOK_STATE` names another directory). It holds hashes, not text or
+paths. A file untouched for a day is ignored and deleted, and each write
+replaces the file whole. If the file cannot be read or written, the hook
+carries on without memory; two hooks that run at once can lose each other's
+update, which means a finding is reported again.
 
 ## Event map
 
@@ -93,7 +132,8 @@ PostToolUse hook appends to `.piku/readcost.jsonl` in the project.
 - **A repository with a style bar.** Add `hooks.mode = "block"`. PreToolUse
   then denies writes whose new text would be blocked, and Claude retries with
   the reason in hand. Expect some retries; raise `block_cost_index` if they
-  are too frequent.
+  are too frequent. A finding denies a write once per session; Claude can
+  make the same edit again where it judges the finding wrong.
 - **Long answers in chat.** `hooks.stop = "report"` shows you a warning line
   and lets the turn end. `"revise"` asks Claude once to restate the answer,
   which costs a second message.
