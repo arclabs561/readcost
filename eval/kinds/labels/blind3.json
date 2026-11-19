@@ -1,0 +1,8472 @@
+[
+ {
+  "id": 960703,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 715031,
+  "label": "d",
+  "cause": "'it' referent loosely placed"
+ },
+ {
+  "id": 783757,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 725905,
+  "label": "d",
+  "cause": "long subject with embedded cross-reference"
+ },
+ {
+  "id": 217872,
+  "label": "w",
+  "cause": "clear config description"
+ },
+ {
+  "id": 345047,
+  "label": "w",
+  "cause": "clear normative statement"
+ },
+ {
+  "id": 158158,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 953198,
+  "label": "c",
+  "cause": "missing word 'with' after 'we'"
+ },
+ {
+  "id": 772931,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 729685,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 443890,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 410729,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 250736,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 454801,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 753907,
+  "label": "c",
+  "cause": "overlong nested sentence with stacked parentheticals"
+ },
+ {
+  "id": 462215,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 704633,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 593872,
+  "label": "d",
+  "cause": "vague passive 'tried and exposed'"
+ },
+ {
+  "id": 771330,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 316987,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 135650,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 342952,
+  "label": "d",
+  "cause": "long conditional sentence, trailing clause"
+ },
+ {
+  "id": 163701,
+  "label": "d",
+  "cause": "comment run-on, heading merged into sentence"
+ },
+ {
+  "id": 752277,
+  "label": "d",
+  "cause": "awkward 'variables like' phrasing"
+ },
+ {
+  "id": 261329,
+  "label": "d",
+  "cause": "fragment list item, unclear parse"
+ },
+ {
+  "id": 668109,
+  "label": "d",
+  "cause": "stacked noun modifiers"
+ },
+ {
+  "id": 700015,
+  "label": "d",
+  "cause": "jargon phrase, unclear meaning"
+ },
+ {
+  "id": 323700,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 693487,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 579230,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 355849,
+  "label": "w",
+  "cause": "clear list"
+ },
+ {
+  "id": 253618,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 860008,
+  "label": "c",
+  "cause": "arrow shorthand; unclear subject of sentence"
+ },
+ {
+  "id": 636609,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 559698,
+  "label": "c",
+  "cause": "deeply nested conditional, hard to parse"
+ },
+ {
+  "id": 184963,
+  "label": "d",
+  "cause": "awkward 'Source open text files' list"
+ },
+ {
+  "id": 981104,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 564204,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 638308,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 665409,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 278516,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 418904,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 394544,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 873651,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 198222,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 892229,
+  "label": "w",
+  "cause": "clear legal statement"
+ },
+ {
+  "id": 842729,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 410737,
+  "label": "d",
+  "cause": "long clause, ambiguous 'it' referent"
+ },
+ {
+  "id": 742567,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 650566,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 696714,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 598900,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 846049,
+  "label": "d",
+  "cause": "stacked nouns in 'assurance of verification'"
+ },
+ {
+  "id": 285598,
+  "label": "c",
+  "cause": "overlong semicolon chain, hard to follow"
+ },
+ {
+  "id": 775198,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 661988,
+  "label": "d",
+  "cause": "if-clause over four imperatives, ambiguous scope"
+ },
+ {
+  "id": 786268,
+  "label": "w",
+  "cause": "clear structured entry"
+ },
+ {
+  "id": 616927,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 819837,
+  "label": "d",
+  "cause": "long conditional sentence with stacked subjects"
+ },
+ {
+  "id": 344064,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 244593,
+  "label": "c",
+  "cause": "'there is not guarantee' should read 'no guarantee'"
+ },
+ {
+  "id": 369758,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 875619,
+  "label": "c",
+  "cause": "subject-verb error: 'multiplication ... become'"
+ },
+ {
+  "id": 840995,
+  "label": "w",
+  "cause": "clear changelog bullet"
+ },
+ {
+  "id": 214879,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 495003,
+  "label": "w",
+  "cause": "clear list in comment"
+ },
+ {
+  "id": 808446,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 177672,
+  "label": "d",
+  "cause": "'forgoes' used oddly for 'no longer produces'"
+ },
+ {
+  "id": 308742,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 602896,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 144810,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 894805,
+  "label": "w",
+  "cause": "clear legal statement"
+ },
+ {
+  "id": 483742,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 178038,
+  "label": "d",
+  "cause": "long sentence with parenthetical and four participles"
+ },
+ {
+  "id": 228913,
+  "label": "c",
+  "cause": "dangling 'environment' garbles the definition"
+ },
+ {
+  "id": 167822,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 672872,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 565871,
+  "label": "d",
+  "cause": "'iff' jargon in a long comment"
+ },
+ {
+  "id": 359277,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 532777,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 102988,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 806172,
+  "label": "d",
+  "cause": "list fragment without a main verb"
+ },
+ {
+  "id": 890717,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 456353,
+  "label": "d",
+  "cause": "vague 'when they say none'"
+ },
+ {
+  "id": 456536,
+  "label": "d",
+  "cause": "long subject with tangled 'etc, which' tail"
+ },
+ {
+  "id": 574185,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 628592,
+  "label": "d",
+  "cause": "'them' points back two sentences"
+ },
+ {
+  "id": 143710,
+  "label": "d",
+  "cause": "dense clause, awkward 'the form its place takes'"
+ },
+ {
+  "id": 823847,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 113181,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 544429,
+  "label": "w",
+  "cause": "clear legal statement"
+ },
+ {
+  "id": 336326,
+  "label": "c",
+  "cause": "missing colon; garden-path subject"
+ },
+ {
+  "id": 304864,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 494680,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 297935,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 535861,
+  "label": "d",
+  "cause": "'Declaration' note; vague 'core domain concepts'"
+ },
+ {
+  "id": 447436,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 128317,
+  "label": "w",
+  "cause": "clear list item"
+ },
+ {
+  "id": 146699,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 747001,
+  "label": "w",
+  "cause": "clear requirement list"
+ },
+ {
+  "id": 329490,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 822388,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 711945,
+  "label": "d",
+  "cause": "cryptic 'non-RTP on RTP-flow ID' list item"
+ },
+ {
+  "id": 833605,
+  "label": "w",
+  "cause": "link definitions, no prose problem"
+ },
+ {
+  "id": 937511,
+  "label": "w",
+  "cause": "clear Javadoc tags"
+ },
+ {
+  "id": 844675,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 482880,
+  "label": "d",
+  "cause": "missing article; vague 'it' referent"
+ },
+ {
+  "id": 103646,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 715611,
+  "label": "w",
+  "cause": "standard all-caps legal text"
+ },
+ {
+  "id": 812374,
+  "label": "w",
+  "cause": "clear legal statement"
+ },
+ {
+  "id": 777632,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 116955,
+  "label": "d",
+  "cause": "dense dashes and semicolons in ADR bullet"
+ },
+ {
+  "id": 321323,
+  "label": "d",
+  "cause": "'similar to' dangles across a long list"
+ },
+ {
+  "id": 706337,
+  "label": "c",
+  "cause": "overlong colon-chained list, metaphor-heavy subjects"
+ },
+ {
+  "id": 800750,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 921048,
+  "label": "c",
+  "cause": "overlong parenthetical-laden changelog sentence"
+ },
+ {
+  "id": 593227,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 916450,
+  "label": "d",
+  "cause": "awkward 'should not swallow' metaphor"
+ },
+ {
+  "id": 861951,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 993559,
+  "label": "w",
+  "cause": "clear fragment, readable"
+ },
+ {
+  "id": 857735,
+  "label": "c",
+  "cause": "ungrammatical 'does not have number of replicas'"
+ },
+ {
+  "id": 344175,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 257182,
+  "label": "d",
+  "cause": "ambiguous 'received and unpaid' attachment, long"
+ },
+ {
+  "id": 318722,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 646266,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 333127,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 397242,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 231286,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 122104,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 192827,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 745247,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 450323,
+  "label": "d",
+  "cause": "long parallel clauses, dangling 'incurring'"
+ },
+ {
+  "id": 673076,
+  "label": "c",
+  "cause": "misspelling: 'referer' should be 'refer'"
+ },
+ {
+  "id": 656812,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 726497,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 684264,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 973121,
+  "label": "d",
+  "cause": "dense semicolon chain of abstract 'when' clauses"
+ },
+ {
+  "id": 129451,
+  "label": "d",
+  "cause": "long conditional example sentence"
+ },
+ {
+  "id": 455550,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 551648,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 621247,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 796581,
+  "label": "w",
+  "cause": "clear list item"
+ },
+ {
+  "id": 154845,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 492860,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 864444,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 950808,
+  "label": "d",
+  "cause": "vague 'it' referent in dense clause"
+ },
+ {
+  "id": 478359,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 971233,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 446433,
+  "label": "d",
+  "cause": "'ie:' for 'i.e.'; awkward 'packet write out'"
+ },
+ {
+  "id": 456840,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 935394,
+  "label": "d",
+  "cause": "long subject split by appositive lists"
+ },
+ {
+  "id": 263243,
+  "label": "d",
+  "cause": "terse shell comment fragment, 'on them' vague"
+ },
+ {
+  "id": 584993,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 538872,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 830040,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 648748,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 926153,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 502108,
+  "label": "d",
+  "cause": "stacked 'or' and double 'like' lists"
+ },
+ {
+  "id": 681961,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 487300,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 319629,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 147096,
+  "label": "d",
+  "cause": "fronted participle, long dense sentence"
+ },
+ {
+  "id": 266145,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 557520,
+  "label": "d",
+  "cause": "heavy nominalized subject"
+ },
+ {
+  "id": 347693,
+  "label": "w",
+  "cause": "clear imperatives"
+ },
+ {
+  "id": 187539,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 712449,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 807515,
+  "label": "w",
+  "cause": "raw reference metadata, not prose"
+ },
+ {
+  "id": 676312,
+  "label": "c",
+  "cause": "garden-path subject split by e.g. clause"
+ },
+ {
+  "id": 638601,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 367612,
+  "label": "w",
+  "cause": "placeholder text"
+ },
+ {
+  "id": 152584,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 258049,
+  "label": "d",
+  "cause": "reduced relative clause hard to parse"
+ },
+ {
+  "id": 140145,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 834330,
+  "label": "w",
+  "cause": "clear definition"
+ },
+ {
+  "id": 524755,
+  "label": "d",
+  "cause": "'goes wherever it is' unclear, dense parenthetical"
+ },
+ {
+  "id": 411177,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 442732,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 833341,
+  "label": "d",
+  "cause": "dense docstring, 'gave no success' vague"
+ },
+ {
+  "id": 293204,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 297188,
+  "label": "d",
+  "cause": "long dashed sentence, ambiguous 'they'"
+ },
+ {
+  "id": 609926,
+  "label": "c",
+  "cause": "faulty parallelism: noun list then verb 'search'"
+ },
+ {
+  "id": 678445,
+  "label": "w",
+  "cause": "clear table entry"
+ },
+ {
+  "id": 282976,
+  "label": "w",
+  "cause": "clear legal statement"
+ },
+ {
+  "id": 436984,
+  "label": "w",
+  "cause": "readable reduced relative"
+ },
+ {
+  "id": 282645,
+  "label": "d",
+  "cause": "jargon 'page-fit topologies' in imperative list"
+ },
+ {
+  "id": 707088,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 986582,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 907119,
+  "label": "d",
+  "cause": "'a canvas a menu bar shorter' hard to parse"
+ },
+ {
+  "id": 665554,
+  "label": "d",
+  "cause": "missing article before project name"
+ },
+ {
+  "id": 270649,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 148119,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 964320,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 181401,
+  "label": "d",
+  "cause": "repeated 'implementation', clunky phrasing"
+ },
+ {
+  "id": 932967,
+  "label": "d",
+  "cause": "fragment continuation, 'one' unclear"
+ },
+ {
+  "id": 896437,
+  "label": "w",
+  "cause": "clear acknowledgements list"
+ },
+ {
+  "id": 770079,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 212251,
+  "label": "d",
+  "cause": "terse comment fragment"
+ },
+ {
+  "id": 561696,
+  "label": "w",
+  "cause": "clear legal list item"
+ },
+ {
+  "id": 631407,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 588520,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 911140,
+  "label": "w",
+  "cause": "clear normative sentence"
+ },
+ {
+  "id": 963249,
+  "label": "d",
+  "cause": "awkward reduced relative 'the search ... can perform'"
+ },
+ {
+  "id": 366535,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 386272,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 860847,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 946333,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 925142,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 678453,
+  "label": "w",
+  "cause": "placeholder text"
+ },
+ {
+  "id": 813095,
+  "label": "w",
+  "cause": "standard license notice"
+ },
+ {
+  "id": 684481,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 556645,
+  "label": "d",
+  "cause": "'This' referent loose after prior sentence"
+ },
+ {
+  "id": 224021,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 953345,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 653805,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 758891,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 790183,
+  "label": "d",
+  "cause": "elliptical dash clause, unclear subject of 'couples'"
+ },
+ {
+  "id": 216506,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 168700,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 275523,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 439867,
+  "label": "w",
+  "cause": "clear link title"
+ },
+ {
+  "id": 362655,
+  "label": "d",
+  "cause": "dense cryptographic reasoning, jargon"
+ },
+ {
+  "id": 987490,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 763396,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 227413,
+  "label": "w",
+  "cause": "clear question"
+ },
+ {
+  "id": 537425,
+  "label": "w",
+  "cause": "standard legal list"
+ },
+ {
+  "id": 870232,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 532747,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 556439,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 662182,
+  "label": "c",
+  "cause": "overloaded opening clause, broken 'Preconditions:.' ending"
+ },
+ {
+  "id": 267580,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 893727,
+  "label": "d",
+  "cause": "long opening clause before main verb"
+ },
+ {
+  "id": 805308,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 451749,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 380192,
+  "label": "d",
+  "cause": "mixed-kind list inside long conditional sentence"
+ },
+ {
+  "id": 916595,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 867458,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 575060,
+  "label": "w",
+  "cause": "clear legal definition"
+ },
+ {
+  "id": 815458,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 640959,
+  "label": "d",
+  "cause": "vague 'it' referent in 'not CI-equivalent'"
+ },
+ {
+  "id": 451452,
+  "label": "d",
+  "cause": "clunky 'bring into context to make comparison'"
+ },
+ {
+  "id": 609672,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 255492,
+  "label": "c",
+  "cause": "'support' has no object; reads truncated"
+ },
+ {
+  "id": 600214,
+  "label": "d",
+  "cause": "long subject with jargon 'rose tree'"
+ },
+ {
+  "id": 260511,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 451727,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 446118,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 864249,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 540163,
+  "label": "w",
+  "cause": "raw reference metadata, not prose"
+ },
+ {
+  "id": 129843,
+  "label": "c",
+  "cause": "stray comma splits subject from verb"
+ },
+ {
+  "id": 540624,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 465645,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 789522,
+  "label": "c",
+  "cause": "garbled run-on comment, typo '18sample'"
+ },
+ {
+  "id": 922341,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 837065,
+  "label": "d",
+  "cause": "dash-set fragment in changelog bullet"
+ },
+ {
+  "id": 474887,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 878177,
+  "label": "w",
+  "cause": "clear parameter doc"
+ },
+ {
+  "id": 283223,
+  "label": "w",
+  "cause": "placeholder text"
+ },
+ {
+  "id": 962156,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 858927,
+  "label": "d",
+  "cause": "bare comment fragment, ambiguous heading"
+ },
+ {
+  "id": 999425,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 743794,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 488474,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 832141,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 464524,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 769187,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 116480,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 404466,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 464218,
+  "label": "d",
+  "cause": "dense sentence, 'only if' placed awkwardly"
+ },
+ {
+  "id": 412562,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 274467,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 129497,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 341162,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 718092,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 506378,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 639178,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 734520,
+  "label": "w",
+  "cause": "clear survey heading"
+ },
+ {
+  "id": 881635,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 410560,
+  "label": "d",
+  "cause": "nested parentheticals in long list"
+ },
+ {
+  "id": 923232,
+  "label": "w",
+  "cause": "clear citation sentence"
+ },
+ {
+  "id": 114021,
+  "label": "d",
+  "cause": "dense parenthetical, 'often requiring' dangles"
+ },
+ {
+  "id": 272836,
+  "label": "d",
+  "cause": "long em-dash sentence, many coordinated verbs"
+ },
+ {
+  "id": 201449,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 794449,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 258812,
+  "label": "d",
+  "cause": "dense conditional, jargon 'read clean'"
+ },
+ {
+  "id": 631039,
+  "label": "d",
+  "cause": "subject with long embedded relative clause"
+ },
+ {
+  "id": 511795,
+  "label": "w",
+  "cause": "clear generated comment"
+ },
+ {
+  "id": 120849,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 697150,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 788559,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 706476,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 995921,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 660362,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 197748,
+  "label": "d",
+  "cause": "'phone and email links' scope ambiguous"
+ },
+ {
+  "id": 584269,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 914277,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 714378,
+  "label": "c",
+  "cause": "garbled: 'low bits result it is 64 bit'"
+ },
+ {
+  "id": 734354,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 610508,
+  "label": "w",
+  "cause": "clear terse comment"
+ },
+ {
+  "id": 433918,
+  "label": "d",
+  "cause": "terse doc line, missing article"
+ },
+ {
+  "id": 741444,
+  "label": "d",
+  "cause": "'release2' missing space, changelog stray"
+ },
+ {
+  "id": 213231,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 496366,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 965314,
+  "label": "w",
+  "cause": "clear lead-in to list"
+ },
+ {
+  "id": 412576,
+  "label": "d",
+  "cause": "dense shell comment, 'would double to'"
+ },
+ {
+  "id": 435826,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 418876,
+  "label": "w",
+  "cause": "clear, 'both' refers back"
+ },
+ {
+  "id": 368642,
+  "label": "c",
+  "cause": "list breaks parallelism; stray 'and' in item (3)"
+ },
+ {
+  "id": 994044,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 134971,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 937090,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 247767,
+  "label": "w",
+  "cause": "clear normative statement"
+ },
+ {
+  "id": 495277,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 609530,
+  "label": "w",
+  "cause": "clear lead-in"
+ },
+ {
+  "id": 872634,
+  "label": "d",
+  "cause": "clumsy 'to handle to the ... list'"
+ },
+ {
+  "id": 829095,
+  "label": "w",
+  "cause": "clear legal definition"
+ },
+ {
+  "id": 561822,
+  "label": "w",
+  "cause": "clear doc heading"
+ },
+ {
+  "id": 300766,
+  "label": "d",
+  "cause": "jargon 'creation modality state' unclear"
+ },
+ {
+  "id": 138049,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 534487,
+  "label": "w",
+  "cause": "clear list item"
+ },
+ {
+  "id": 594031,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 562581,
+  "label": "d",
+  "cause": "dense relative clause, odd 'host's person'"
+ },
+ {
+  "id": 363608,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 707008,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 323896,
+  "label": "d",
+  "cause": "list of tasks garbled by 'to Markdown and GitHub'"
+ },
+ {
+  "id": 568173,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 406407,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 165378,
+  "label": "d",
+  "cause": "long step chain in one sentence"
+ },
+ {
+  "id": 655530,
+  "label": "d",
+  "cause": "long clause-stacked sentence, dense referents"
+ },
+ {
+  "id": 543038,
+  "label": "c",
+  "cause": "garbled: 'listed in of the QVariant'"
+ },
+ {
+  "id": 363121,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 411717,
+  "label": "w",
+  "cause": "standard indemnity text"
+ },
+ {
+  "id": 470482,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 419781,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 634475,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 203003,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 485697,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 926119,
+  "label": "d",
+  "cause": "dense docstring, 'gave no success' vague"
+ },
+ {
+  "id": 522770,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 546254,
+  "label": "d",
+  "cause": "terse comment, 'validates alike' unclear"
+ },
+ {
+  "id": 311956,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 108268,
+  "label": "c",
+  "cause": "garbled: 'an email that part of the IETF team'"
+ },
+ {
+  "id": 733003,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 930227,
+  "label": "d",
+  "cause": "dense inline markup in doc comment"
+ },
+ {
+  "id": 551763,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 797842,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 142768,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 171055,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 646182,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 990055,
+  "label": "c",
+  "cause": "typo 'form' for 'from'; garbled 'help telling it'"
+ },
+ {
+  "id": 380397,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 285961,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 996261,
+  "label": "w",
+  "cause": "standard liability text"
+ },
+ {
+  "id": 384803,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 293607,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 905116,
+  "label": "d",
+  "cause": "dense checklist item with stacked parentheticals"
+ },
+ {
+  "id": 220635,
+  "label": "d",
+  "cause": "missing punctuation after comment heading"
+ },
+ {
+  "id": 822082,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 887690,
+  "label": "d",
+  "cause": "long subject split by participial phrase"
+ },
+ {
+  "id": 726143,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 840705,
+  "label": "d",
+  "cause": "dense changelog line with long relative clauses"
+ },
+ {
+  "id": 908318,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 618448,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 530668,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 153125,
+  "label": "d",
+  "cause": "long clause-stacked sentence with dense referents"
+ },
+ {
+  "id": 754357,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 696971,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 967950,
+  "label": "c",
+  "cause": "missing word: 'as long it' should be 'as long as it'"
+ },
+ {
+  "id": 613055,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 859370,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 266518,
+  "label": "c",
+  "cause": "singular subject 'notice' with plural verb 'explain'"
+ },
+ {
+  "id": 733977,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 827134,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 543732,
+  "label": "c",
+  "cause": "reduced relative 'stairs and elevators own' hard to parse"
+ },
+ {
+  "id": 640210,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 534261,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 941485,
+  "label": "d",
+  "cause": "dense design rationale, pronoun-heavy"
+ },
+ {
+  "id": 405122,
+  "label": "d",
+  "cause": "long changelog sentence with stacked clauses"
+ },
+ {
+  "id": 173012,
+  "label": "w",
+  "cause": "standard legal list"
+ },
+ {
+  "id": 869302,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 876475,
+  "label": "w",
+  "cause": "clear code comment"
+ },
+ {
+  "id": 499763,
+  "label": "d",
+  "cause": "awkward lead-in 'as the associated vulnerabilities'"
+ },
+ {
+  "id": 344897,
+  "label": "w",
+  "cause": "clear legal statement"
+ },
+ {
+  "id": 222944,
+  "label": "c",
+  "cause": "run-on comment: missing punctuation, garbled clause"
+ },
+ {
+  "id": 136261,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 508290,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 813753,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 812823,
+  "label": "d",
+  "cause": "long 'where' clause in definition"
+ },
+ {
+  "id": 447686,
+  "label": "c",
+  "cause": "missing 'and' between two named items"
+ },
+ {
+  "id": 931563,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 381641,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 891053,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 342172,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 451449,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 552602,
+  "label": "c",
+  "cause": "sentence truncated: ends 'follow examples above to'"
+ },
+ {
+  "id": 437993,
+  "label": "w",
+  "cause": "clear prompt template"
+ },
+ {
+  "id": 224088,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 223733,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 269279,
+  "label": "c",
+  "cause": "overlong chained clauses, hard to follow"
+ },
+ {
+  "id": 164692,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 271024,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 268846,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 334595,
+  "label": "d",
+  "cause": "conditional clause placed awkwardly"
+ },
+ {
+  "id": 296957,
+  "label": "d",
+  "cause": "comma-spliced clauses, 'client you like' garden path"
+ },
+ {
+  "id": 860409,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 918573,
+  "label": "d",
+  "cause": "dense layout note with stacked clauses"
+ },
+ {
+  "id": 900103,
+  "label": "d",
+  "cause": "'reimbursed for' lacks object; informal 'folx'"
+ },
+ {
+  "id": 471207,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 264503,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 491761,
+  "label": "d",
+  "cause": "stacked 'of' chain in one noun phrase"
+ },
+ {
+  "id": 560418,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 536592,
+  "label": "d",
+  "cause": "long doc comment, dense relative clauses"
+ },
+ {
+  "id": 101314,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 668828,
+  "label": "c",
+  "cause": "agreement error 'a workflow that delete'; overlong list"
+ },
+ {
+  "id": 409572,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 521731,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 484419,
+  "label": "d",
+  "cause": "long infinitive chain, dense"
+ },
+ {
+  "id": 952758,
+  "label": "c",
+  "cause": "typo: 'a expected' should be 'an expected'"
+ },
+ {
+  "id": 577029,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 103947,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 544400,
+  "label": "w",
+  "cause": "clear lead-in"
+ },
+ {
+  "id": 448552,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 715082,
+  "label": "c",
+  "cause": "overlong sentence with nested parentheticals"
+ },
+ {
+  "id": 815039,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 658348,
+  "label": "d",
+  "cause": "'reducing' dangles, vague subject"
+ },
+ {
+  "id": 182773,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 541049,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 642834,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 998494,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 980785,
+  "label": "d",
+  "cause": "long opening clause before main verb"
+ },
+ {
+  "id": 831918,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 669091,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 766042,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 681783,
+  "label": "w",
+  "cause": "standard legal statement"
+ },
+ {
+  "id": 539951,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 100965,
+  "label": "d",
+  "cause": "stacked nouns in comment"
+ },
+ {
+  "id": 606894,
+  "label": "c",
+  "cause": "missing verb; 'server saved' reads as verb"
+ },
+ {
+  "id": 124943,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 304869,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 226892,
+  "label": "w",
+  "cause": "clear legal definition"
+ },
+ {
+  "id": 257414,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 633348,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 672428,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 124127,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 545848,
+  "label": "w",
+  "cause": "clear normative statement"
+ },
+ {
+  "id": 851964,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 832411,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 483518,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 500819,
+  "label": "d",
+  "cause": "changelog fragment, 'Right click' unclear"
+ },
+ {
+  "id": 527644,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 342980,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 595855,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 927419,
+  "label": "d",
+  "cause": "doc first line reads as odd fragment"
+ },
+ {
+  "id": 108136,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 652373,
+  "label": "w",
+  "cause": "clear legal statement"
+ },
+ {
+  "id": 819178,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 915859,
+  "label": "d",
+  "cause": "'for example' placed awkwardly mid-clause"
+ },
+ {
+  "id": 608811,
+  "label": "c",
+  "cause": "tense shift and garbled subject: 'we told ... we help'"
+ },
+ {
+  "id": 111862,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 978874,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 352477,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 858379,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 236356,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 415009,
+  "label": "d",
+  "cause": "long shell comment, dense clause chain"
+ },
+ {
+  "id": 810970,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 694475,
+  "label": "w",
+  "cause": "clear quoted speech"
+ },
+ {
+  "id": 781194,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 115483,
+  "label": "d",
+  "cause": "dense colon-chained clause, parenthetical list"
+ },
+ {
+  "id": 824541,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 549357,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 704966,
+  "label": "d",
+  "cause": "missing period, run-on comment"
+ },
+ {
+  "id": 405753,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 672175,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 140682,
+  "label": "w",
+  "cause": "clear docstring parameters"
+ },
+ {
+  "id": 365098,
+  "label": "w",
+  "cause": "clear lead-in"
+ },
+ {
+  "id": 106922,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 283221,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 535201,
+  "label": "w",
+  "cause": "clear heading"
+ },
+ {
+  "id": 941556,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 687022,
+  "label": "d",
+  "cause": "missing punctuation after comment heading"
+ },
+ {
+  "id": 887247,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 111646,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 572629,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 701423,
+  "label": "d",
+  "cause": "wordy lead-in, 'in person' unhyphenated"
+ },
+ {
+  "id": 914955,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 252626,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 590926,
+  "label": "d",
+  "cause": "garden-path 'the new base the commit was rebased onto'"
+ },
+ {
+  "id": 843529,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 414661,
+  "label": "d",
+  "cause": "long dash-set legal sentence"
+ },
+ {
+  "id": 212555,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 535002,
+  "label": "d",
+  "cause": "very long clause chain with nested 'whose'"
+ },
+ {
+  "id": 933483,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 443839,
+  "label": "d",
+  "cause": "'which' attachment ambiguous in list sentence"
+ },
+ {
+  "id": 536135,
+  "label": "d",
+  "cause": "'pull request ... builds it' unclear referent"
+ },
+ {
+  "id": 738074,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 809816,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 365870,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 196636,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 263478,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 139533,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 768033,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 287556,
+  "label": "d",
+  "cause": "long sentence with two asides before main clause"
+ },
+ {
+  "id": 346853,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 867211,
+  "label": "w",
+  "cause": "clear cross-reference line"
+ },
+ {
+  "id": 232610,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 563783,
+  "label": "d",
+  "cause": "tangled 'unless ... when' conditions"
+ },
+ {
+  "id": 979019,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 360440,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 614074,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 232976,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 893875,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 649887,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 115287,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 867975,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 653687,
+  "label": "w",
+  "cause": "clear Javadoc tag"
+ },
+ {
+  "id": 663174,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 848393,
+  "label": "w",
+  "cause": "clear legal item"
+ },
+ {
+  "id": 547293,
+  "label": "c",
+  "cause": "run-on comment, capitalized 'Do not move' mid-sentence"
+ },
+ {
+  "id": 904052,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 474763,
+  "label": "d",
+  "cause": "long LaTeX-heavy doc sentence"
+ },
+ {
+  "id": 957530,
+  "label": "w",
+  "cause": "clear abstract sentence"
+ },
+ {
+  "id": 343997,
+  "label": "d",
+  "cause": "long numeric-range changelog sentence"
+ },
+ {
+  "id": 952824,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 927780,
+  "label": "w",
+  "cause": "clear template description"
+ },
+ {
+  "id": 157128,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 997742,
+  "label": "d",
+  "cause": "dense sentence with long 'instead of' opener"
+ },
+ {
+  "id": 591860,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 348269,
+  "label": "w",
+  "cause": "clear changelog title"
+ },
+ {
+  "id": 455871,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 587491,
+  "label": "c",
+  "cause": "overlong changelog sentence, nested parentheticals"
+ },
+ {
+  "id": 623890,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 368230,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 286208,
+  "label": "w",
+  "cause": "clear list in docstring"
+ },
+ {
+  "id": 165173,
+  "label": "d",
+  "cause": "'fetch and preprocess, support' missing semicolon"
+ },
+ {
+  "id": 827708,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 578298,
+  "label": "w",
+  "cause": "clear doc line"
+ },
+ {
+  "id": 458108,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 320681,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 645263,
+  "label": "d",
+  "cause": "terse checklist fragment, unclear referent"
+ },
+ {
+  "id": 846678,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 120437,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 312486,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 211239,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 799619,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 324776,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 567225,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 634174,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 438782,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 683160,
+  "label": "c",
+  "cause": "'these information' agreement errors"
+ },
+ {
+  "id": 529816,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 360096,
+  "label": "d",
+  "cause": "comma splice in list-heavy sentence"
+ },
+ {
+  "id": 590417,
+  "label": "c",
+  "cause": "subject-verb error: 'order ... are'"
+ },
+ {
+  "id": 770880,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 899139,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 524758,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 471391,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 609062,
+  "label": "w",
+  "cause": "clear enough with reference to earlier list"
+ },
+ {
+  "id": 701439,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 334900,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 762335,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 700224,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 450785,
+  "label": "w",
+  "cause": "clear changelog bullet"
+ },
+ {
+  "id": 919009,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 835736,
+  "label": "d",
+  "cause": "long subject with embedded clause before verb"
+ },
+ {
+  "id": 524663,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 162520,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 793592,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 415526,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 161070,
+  "label": "d",
+  "cause": "vague 'associated with' relation"
+ },
+ {
+  "id": 450112,
+  "label": "d",
+  "cause": "dense design rule with dashes and nested clauses"
+ },
+ {
+  "id": 657254,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 298318,
+  "label": "c",
+  "cause": "overlong sentence, many nested where/while clauses"
+ },
+ {
+  "id": 825153,
+  "label": "c",
+  "cause": "repeated issue references, garbled changelog"
+ },
+ {
+  "id": 302724,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 797688,
+  "label": "w",
+  "cause": "clear legal statement"
+ },
+ {
+  "id": 487172,
+  "label": "d",
+  "cause": "'its copy' referent unclear in doc comment"
+ },
+ {
+  "id": 845281,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 917263,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 843406,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 349287,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 954293,
+  "label": "c",
+  "cause": "'with doesn't match' should be 'which'; garbled"
+ },
+ {
+  "id": 962230,
+  "label": "d",
+  "cause": "parallel list with mismatched singular/plural"
+ },
+ {
+  "id": 577700,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 546466,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 348253,
+  "label": "c",
+  "cause": "subject-verb error 'mode_map ... have'; garbled"
+ },
+ {
+  "id": 511388,
+  "label": "d",
+  "cause": "long legal list, missing 'that' in clause (iii)"
+ },
+ {
+  "id": 439522,
+  "label": "d",
+  "cause": "reduced relative 'connection a child opens' garden path"
+ },
+ {
+  "id": 555470,
+  "label": "c",
+  "cause": "several sentences joined by colons in one item"
+ },
+ {
+  "id": 309784,
+  "label": "w",
+  "cause": "clear with placeholder"
+ },
+ {
+  "id": 630040,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 903782,
+  "label": "c",
+  "cause": "parameter list run together, no separators"
+ },
+ {
+  "id": 759264,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 303813,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 747859,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 153633,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 503214,
+  "label": "d",
+  "cause": "long conditional sentence with stacked clauses"
+ },
+ {
+  "id": 615672,
+  "label": "w",
+  "cause": "raw reference metadata, not prose"
+ },
+ {
+  "id": 272084,
+  "label": "d",
+  "cause": "long parenthetical in comparative sentence"
+ },
+ {
+  "id": 677134,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 413949,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 317373,
+  "label": "d",
+  "cause": "dense jargon, 'stays immutable as ... backing'"
+ },
+ {
+  "id": 544579,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 930542,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 670268,
+  "label": "w",
+  "cause": "clear code comment"
+ },
+ {
+  "id": 130926,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 902760,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 936744,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 942030,
+  "label": "w",
+  "cause": "clear legal statement"
+ },
+ {
+  "id": 452381,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 516058,
+  "label": "d",
+  "cause": "misplaced comma after 'Even though'"
+ },
+ {
+  "id": 267926,
+  "label": "w",
+  "cause": "clear doc line"
+ },
+ {
+  "id": 921265,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 218676,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 518749,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 916485,
+  "label": "c",
+  "cause": "garbled comment fragment 'inactive stops here'"
+ },
+ {
+  "id": 952720,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 799466,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 566547,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 574025,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 471469,
+  "label": "d",
+  "cause": "changelog fragment with bare ticket refs"
+ },
+ {
+  "id": 430917,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 497684,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 831239,
+  "label": "d",
+  "cause": "long appositive before main verb"
+ },
+ {
+  "id": 348583,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 351094,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 470793,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 968512,
+  "label": "c",
+  "cause": "ungrammatical 'do always required' and garbled clauses"
+ },
+ {
+  "id": 870366,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 805288,
+  "label": "w",
+  "cause": "clear terse list"
+ },
+ {
+  "id": 339908,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 142183,
+  "label": "d",
+  "cause": "dash-separated function list with no punctuation"
+ },
+ {
+  "id": 422177,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 538171,
+  "label": "c",
+  "cause": "list breaks parallelism: 'To', 'maintaining', 'for complying'"
+ },
+ {
+  "id": 213782,
+  "label": "d",
+  "cause": "missing article 'a speech recognition engine'"
+ },
+ {
+  "id": 515511,
+  "label": "w",
+  "cause": "clear doc line"
+ },
+ {
+  "id": 428147,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 903471,
+  "label": "d",
+  "cause": "'available' misapplied across mixed list"
+ },
+ {
+  "id": 445069,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 930322,
+  "label": "w",
+  "cause": "clear question"
+ },
+ {
+  "id": 856840,
+  "label": "c",
+  "cause": "unbalanced parentheses; run-on parenthetical"
+ },
+ {
+  "id": 476246,
+  "label": "w",
+  "cause": "clear semicolon list"
+ },
+ {
+  "id": 275960,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 955110,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 843055,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 181292,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 151242,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 792070,
+  "label": "d",
+  "cause": "'available' misapplied across mixed list"
+ },
+ {
+  "id": 677321,
+  "label": "w",
+  "cause": "code fragment, no prose problem"
+ },
+ {
+  "id": 366715,
+  "label": "c",
+  "cause": "comma splice; overlong run-on sentence"
+ },
+ {
+  "id": 193935,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 270158,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 116174,
+  "label": "d",
+  "cause": "dense relation sentence, 'the theorem' vague"
+ },
+ {
+  "id": 801153,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 658733,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 286966,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 719756,
+  "label": "w",
+  "cause": "clear reference definition"
+ },
+ {
+  "id": 874475,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 557483,
+  "label": "d",
+  "cause": "'and other as well' awkward ellipsis"
+ },
+ {
+  "id": 781453,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 191893,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 112478,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 368548,
+  "label": "w",
+  "cause": "clear docstring line"
+ },
+ {
+  "id": 279367,
+  "label": "w",
+  "cause": "clear parameter doc"
+ },
+ {
+  "id": 768360,
+  "label": "d",
+  "cause": "dash aside, 'one out of the target' awkward"
+ },
+ {
+  "id": 706985,
+  "label": "d",
+  "cause": "heading run into sentence without punctuation"
+ },
+ {
+  "id": 241964,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 397900,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 531591,
+  "label": "d",
+  "cause": "dash-set appositive splits subject from verb"
+ },
+ {
+  "id": 787156,
+  "label": "d",
+  "cause": "article error 'a Arc'; dense relative clause"
+ },
+ {
+  "id": 277924,
+  "label": "c",
+  "cause": "overlong semicolon chain; 'hosts before what they host' unclear"
+ },
+ {
+  "id": 847915,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 549033,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 532809,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 520733,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 625840,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 425492,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 990479,
+  "label": "w",
+  "cause": "clear doc line"
+ },
+ {
+  "id": 918130,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 251929,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 728293,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 132310,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 518542,
+  "label": "w",
+  "cause": "clear lead-in to list"
+ },
+ {
+  "id": 688041,
+  "label": "d",
+  "cause": "long legal sentence with repeated DPF terms"
+ },
+ {
+  "id": 144967,
+  "label": "w",
+  "cause": "clear legal statement"
+ },
+ {
+  "id": 509855,
+  "label": "w",
+  "cause": "clear doc line"
+ },
+ {
+  "id": 643107,
+  "label": "d",
+  "cause": "long conditional sentence with quoted statement"
+ },
+ {
+  "id": 137748,
+  "label": "d",
+  "cause": "long colon list; 'membership poll' phrasing awkward"
+ },
+ {
+  "id": 931751,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 276879,
+  "label": "w",
+  "cause": "clear thanks line"
+ },
+ {
+  "id": 764745,
+  "label": "c",
+  "cause": "'answer' wrong verb for choices"
+ },
+ {
+  "id": 370665,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 496958,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 176894,
+  "label": "d",
+  "cause": "'it' ambiguous: support or plugin"
+ },
+ {
+  "id": 864727,
+  "label": "w",
+  "cause": "code fragment, no prose problem"
+ },
+ {
+  "id": 563353,
+  "label": "w",
+  "cause": "clear, jargon but readable"
+ },
+ {
+  "id": 830629,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 401223,
+  "label": "w",
+  "cause": "clear legal list"
+ },
+ {
+  "id": 153471,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 149879,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 727817,
+  "label": "d",
+  "cause": "missing article 'to own package'"
+ },
+ {
+  "id": 809719,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 111291,
+  "label": "d",
+  "cause": "'for each' phrase attaches ambiguously"
+ },
+ {
+  "id": 923907,
+  "label": "w",
+  "cause": "clear parallel list"
+ },
+ {
+  "id": 962202,
+  "label": "d",
+  "cause": "missing comma after conditional clause"
+ },
+ {
+  "id": 903970,
+  "label": "d",
+  "cause": "compound subject with many 'or's"
+ },
+ {
+  "id": 638272,
+  "label": "d",
+  "cause": "heavy passive, nested modifiers"
+ },
+ {
+  "id": 368590,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 948921,
+  "label": "d",
+  "cause": "list tangled in subject; 'etc' mid-sentence"
+ },
+ {
+  "id": 443754,
+  "label": "d",
+  "cause": "inconsistent capitalisation; 'filtered to' vague"
+ },
+ {
+  "id": 982807,
+  "label": "d",
+  "cause": "'it' referent unclear"
+ },
+ {
+  "id": 617035,
+  "label": "w",
+  "cause": "markup line, readable"
+ },
+ {
+  "id": 175218,
+  "label": "d",
+  "cause": "long clause chain; 'it' referent heavy"
+ },
+ {
+  "id": 757590,
+  "label": "d",
+  "cause": "'default malloc zone' repeated; referent heavy"
+ },
+ {
+  "id": 430819,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 646260,
+  "label": "d",
+  "cause": "mismatched list items after 'information to add'"
+ },
+ {
+  "id": 722617,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 328562,
+  "label": "w",
+  "cause": "clear, semicolon chain readable"
+ },
+ {
+  "id": 172703,
+  "label": "c",
+  "cause": "overlong status run-on, many appositives"
+ },
+ {
+  "id": 703112,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 348014,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 409699,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 114667,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 101531,
+  "label": "c",
+  "cause": "overlong changelog sentence, nested parentheses"
+ },
+ {
+  "id": 903660,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 741668,
+  "label": "d",
+  "cause": "'where this is not possible' vague referent"
+ },
+ {
+  "id": 608072,
+  "label": "d",
+  "cause": "'which' referent ambiguous"
+ },
+ {
+  "id": 956935,
+  "label": "w",
+  "cause": "clear doc comment line"
+ },
+ {
+  "id": 838503,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 896554,
+  "label": "w",
+  "cause": "clear comment fragment"
+ },
+ {
+  "id": 841738,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 702966,
+  "label": "w",
+  "cause": "clear docstring line"
+ },
+ {
+  "id": 204249,
+  "label": "w",
+  "cause": "clear parallel subjects"
+ },
+ {
+  "id": 279816,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 921458,
+  "label": "w",
+  "cause": "clear docstring line"
+ },
+ {
+  "id": 262646,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 537948,
+  "label": "d",
+  "cause": "repeated 'field' and 'receiver received'"
+ },
+ {
+  "id": 922068,
+  "label": "w",
+  "cause": "clear blog sentence"
+ },
+ {
+  "id": 226307,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 461117,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 958677,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 239928,
+  "label": "c",
+  "cause": "overlong status line; dense symbols"
+ },
+ {
+  "id": 660412,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 385851,
+  "label": "d",
+  "cause": "'it' referent unclear; colon-chained clauses"
+ },
+ {
+  "id": 536113,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 893314,
+  "label": "d",
+  "cause": "subject-verb error 'users that sends'"
+ },
+ {
+  "id": 301646,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 621803,
+  "label": "c",
+  "cause": "overlong docstring; nested parenthetical list"
+ },
+ {
+  "id": 534646,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 915343,
+  "label": "w",
+  "cause": "clear blog sentence"
+ },
+ {
+  "id": 687772,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 278557,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 632755,
+  "label": "d",
+  "cause": "ambiguous comma list of categories"
+ },
+ {
+  "id": 310162,
+  "label": "c",
+  "cause": "garbled comment; 'that frame' wrong word"
+ },
+ {
+  "id": 373571,
+  "label": "c",
+  "cause": "overlong dense semicolon sentence"
+ },
+ {
+  "id": 597122,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 714159,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 581770,
+  "label": "d",
+  "cause": "terse parenthetical; unclear wording"
+ },
+ {
+  "id": 841232,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 667942,
+  "label": "d",
+  "cause": "'which' clause lacks commas or 'that'"
+ },
+ {
+  "id": 170507,
+  "label": "d",
+  "cause": "long comment with nested parenthetical"
+ },
+ {
+  "id": 319361,
+  "label": "d",
+  "cause": "fragment detached from its subject"
+ },
+ {
+  "id": 467659,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 665964,
+  "label": "w",
+  "cause": "clear cross-reference fragment"
+ },
+ {
+  "id": 349298,
+  "label": "d",
+  "cause": "nested appositives around subject"
+ },
+ {
+  "id": 724716,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 716170,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 549269,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 511735,
+  "label": "w",
+  "cause": "clear list entry"
+ },
+ {
+  "id": 517585,
+  "label": "d",
+  "cause": "bibliography dump split mid-entry"
+ },
+ {
+  "id": 274678,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 535401,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 594343,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 726646,
+  "label": "w",
+  "cause": "clear changelog list item"
+ },
+ {
+  "id": 428250,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 880428,
+  "label": "d",
+  "cause": "'allows to perform' grammar error"
+ },
+ {
+  "id": 676133,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 757755,
+  "label": "w",
+  "cause": "long but clear as written"
+ },
+ {
+  "id": 277963,
+  "label": "d",
+  "cause": "vague 'contain'; passive lacks agent"
+ },
+ {
+  "id": 328558,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 660704,
+  "label": "c",
+  "cause": "dangling 'asked'; overlong nested sentence"
+ },
+ {
+  "id": 893820,
+  "label": "d",
+  "cause": "fragment detached from its subject"
+ },
+ {
+  "id": 990591,
+  "label": "w",
+  "cause": "clear, jargon readable"
+ },
+ {
+  "id": 382143,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 491888,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 671861,
+  "label": "c",
+  "cause": "garbled slashes; subject-verb mismatch in list"
+ },
+ {
+  "id": 505391,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 164955,
+  "label": "d",
+  "cause": "typo 'funciton' and stray slash"
+ },
+ {
+  "id": 291081,
+  "label": "d",
+  "cause": "'status of nodes and for recent events' awkward"
+ },
+ {
+  "id": 771346,
+  "label": "w",
+  "cause": "clear test comment"
+ },
+ {
+  "id": 350664,
+  "label": "c",
+  "cause": "missing article; broken 'both ... or' pairing"
+ },
+ {
+  "id": 521881,
+  "label": "c",
+  "cause": "'SP' inconsistent with MP and SE"
+ },
+ {
+  "id": 984042,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 928507,
+  "label": "w",
+  "cause": "clear changelog bullet"
+ },
+ {
+  "id": 804755,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 791136,
+  "label": "d",
+  "cause": "'they' referent unclear; singular antecedent"
+ },
+ {
+  "id": 286536,
+  "label": "w",
+  "cause": "clear doc comment continuation"
+ },
+ {
+  "id": 208022,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 425621,
+  "label": "w",
+  "cause": "clear, jargon readable"
+ },
+ {
+  "id": 341768,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 823360,
+  "label": "c",
+  "cause": "run-on comment, missing punctuation"
+ },
+ {
+  "id": 223153,
+  "label": "d",
+  "cause": "inconsistent capitalisation in formula"
+ },
+ {
+  "id": 571453,
+  "label": "w",
+  "cause": "clear list item"
+ },
+ {
+  "id": 588932,
+  "label": "d",
+  "cause": "'their' referents; dense clause"
+ },
+ {
+  "id": 659757,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 991371,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 834788,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 755599,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 644960,
+  "label": "w",
+  "cause": "clear docstring line"
+ },
+ {
+  "id": 733553,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 160266,
+  "label": "c",
+  "cause": "garbled list; duplicate 'and bubbles'; stray parentheses"
+ },
+ {
+  "id": 935348,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 169359,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 381743,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 911151,
+  "label": "c",
+  "cause": "run-on comment; 'which binds' misattaches clauses"
+ },
+ {
+  "id": 772786,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 435331,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 713630,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 764197,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 221006,
+  "label": "d",
+  "cause": "nominal chain; 'security of the protection' wordy"
+ },
+ {
+  "id": 956522,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 824083,
+  "label": "w",
+  "cause": "clear, dense but readable"
+ },
+ {
+  "id": 175750,
+  "label": "d",
+  "cause": "wordy; repeats 'implementation' within clause"
+ },
+ {
+  "id": 937000,
+  "label": "c",
+  "cause": "overlong changelog run-on; nested parentheses"
+ },
+ {
+  "id": 454065,
+  "label": "w",
+  "cause": "clear docstring line"
+ },
+ {
+  "id": 833876,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 435377,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 934746,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 724205,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 932713,
+  "label": "w",
+  "cause": "clear, dash join acceptable"
+ },
+ {
+  "id": 939035,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 459197,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 631922,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 298974,
+  "label": "d",
+  "cause": "'rest and drest function type' ambiguous noun phrase"
+ },
+ {
+  "id": 308669,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 960579,
+  "label": "w",
+  "cause": "long but clear as written"
+ },
+ {
+  "id": 267893,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 414136,
+  "label": "w",
+  "cause": "code identifier, no prose problem"
+ },
+ {
+  "id": 715849,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 714473,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 202065,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 896436,
+  "label": "d",
+  "cause": "dangling 'it' after identifier; unclear"
+ },
+ {
+  "id": 997750,
+  "label": "w",
+  "cause": "clear list lead-in"
+ },
+ {
+  "id": 451602,
+  "label": "c",
+  "cause": "missing 'and'; stray comma; broken list punctuation"
+ },
+ {
+  "id": 168790,
+  "label": "c",
+  "cause": "overlong; missing 'that'; repeated 'to determine'"
+ },
+ {
+  "id": 628565,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 226761,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 394992,
+  "label": "c",
+  "cause": "overlong; nested parenthetical; 'which' referent unclear"
+ },
+ {
+  "id": 315542,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 273791,
+  "label": "c",
+  "cause": "overlong nested list of conversion rules"
+ },
+ {
+  "id": 662644,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 367847,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 222461,
+  "label": "w",
+  "cause": "code fragment, no prose problem"
+ },
+ {
+  "id": 370970,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 759782,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 134911,
+  "label": "d",
+  "cause": "stray asterisks before heading; spacing"
+ },
+ {
+  "id": 515559,
+  "label": "w",
+  "cause": "clear, terse as written"
+ },
+ {
+  "id": 800312,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 919789,
+  "label": "w",
+  "cause": "clear reference line"
+ },
+ {
+  "id": 381502,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 517547,
+  "label": "d",
+  "cause": "missing article 'for human'"
+ },
+ {
+  "id": 734190,
+  "label": "d",
+  "cause": "'language supports updated' ungrammatical"
+ },
+ {
+  "id": 488273,
+  "label": "w",
+  "cause": "long list, parallel and readable"
+ },
+ {
+  "id": 882854,
+  "label": "w",
+  "cause": "clear comment fragment"
+ },
+ {
+  "id": 217292,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 690641,
+  "label": "w",
+  "cause": "clear, jargon readable"
+ },
+ {
+  "id": 482417,
+  "label": "c",
+  "cause": "garbled word 'teor' breaks sentence"
+ },
+ {
+  "id": 574716,
+  "label": "d",
+  "cause": "long noun-phrase subject; wordy"
+ },
+ {
+  "id": 682275,
+  "label": "c",
+  "cause": "comma splice; overlong causal chain"
+ },
+ {
+  "id": 693550,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 587190,
+  "label": "d",
+  "cause": "double relative 'which ... that'; fragment"
+ },
+ {
+  "id": 209403,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 789917,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 317108,
+  "label": "d",
+  "cause": "'breaking' dangles; referent unclear"
+ },
+ {
+  "id": 257184,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 703508,
+  "label": "c",
+  "cause": "overlong changelog sentence; nested parentheses"
+ },
+ {
+  "id": 143769,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 593646,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 929057,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 670248,
+  "label": "w",
+  "cause": "long but clear as written"
+ },
+ {
+  "id": 492247,
+  "label": "d",
+  "cause": "dense clauses joined by semicolon"
+ },
+ {
+  "id": 977577,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 616042,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 204755,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 303794,
+  "label": "c",
+  "cause": "garbled logic; 'or' and predicate misattached"
+ },
+ {
+  "id": 586107,
+  "label": "d",
+  "cause": "long clause with nested parenthetical"
+ },
+ {
+  "id": 719293,
+  "label": "d",
+  "cause": "'since' reads as time, not cause"
+ },
+ {
+  "id": 530942,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 945029,
+  "label": "d",
+  "cause": "missing article; dangling 'defaults to' parenthetical"
+ },
+ {
+  "id": 156044,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 469989,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 163436,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 407038,
+  "label": "d",
+  "cause": "'register' misread as verb; unclear subject"
+ },
+ {
+  "id": 556120,
+  "label": "d",
+  "cause": "subject-verb error 'modules augments'"
+ },
+ {
+  "id": 775699,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 185206,
+  "label": "w",
+  "cause": "clear definition"
+ },
+ {
+  "id": 526045,
+  "label": "d",
+  "cause": "vague 'this'; stacked 'where' clauses"
+ },
+ {
+  "id": 986147,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 944668,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 629807,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 796031,
+  "label": "d",
+  "cause": "'purpose for' idiom; wordy"
+ },
+ {
+  "id": 210490,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 281521,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 168331,
+  "label": "d",
+  "cause": "'it' referent unclear in relative clause"
+ },
+ {
+  "id": 605147,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 676560,
+  "label": "w",
+  "cause": "clear heading"
+ },
+ {
+  "id": 557632,
+  "label": "d",
+  "cause": "raw include tags and link definitions in prose"
+ },
+ {
+  "id": 454711,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 321856,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 340779,
+  "label": "d",
+  "cause": "mixed Chinese colon; fragmentary list"
+ },
+ {
+  "id": 688290,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 947824,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 721102,
+  "label": "d",
+  "cause": "'ackId build up' awkward; 'both' misplaced"
+ },
+ {
+  "id": 840148,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 541059,
+  "label": "d",
+  "cause": "missing punctuation between fields"
+ },
+ {
+  "id": 179936,
+  "label": "d",
+  "cause": "dense arrows and nested parentheses"
+ },
+ {
+  "id": 281851,
+  "label": "d",
+  "cause": "'in contrast to intuition' idiom error"
+ },
+ {
+  "id": 433900,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 714642,
+  "label": "c",
+  "cause": "docstring run-on; missing breaks and punctuation"
+ },
+ {
+  "id": 406797,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 841068,
+  "label": "w",
+  "cause": "long but parallel and readable"
+ },
+ {
+  "id": 971555,
+  "label": "d",
+  "cause": "'more e' unclear abbreviation"
+ },
+ {
+  "id": 973488,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 513012,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 161482,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 378026,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 179382,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 106331,
+  "label": "c",
+  "cause": "overlong instruction; nested parentheses"
+ },
+ {
+  "id": 642886,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 234423,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 897953,
+  "label": "w",
+  "cause": "clear docstring line"
+ },
+ {
+  "id": 436916,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 299658,
+  "label": "c",
+  "cause": "overlong; clumsy opener; stacked etc. list"
+ },
+ {
+  "id": 178800,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 561620,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 256607,
+  "label": "c",
+  "cause": "fragment with no subject; dangling 'given'"
+ },
+ {
+  "id": 568778,
+  "label": "d",
+  "cause": "'maintainers fill' unclear; 'BLUF Church' jargon"
+ },
+ {
+  "id": 871453,
+  "label": "c",
+  "cause": "broken parallel list in doc comment"
+ },
+ {
+  "id": 201522,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 178315,
+  "label": "d",
+  "cause": "long nested clauses; examples hard to follow"
+ },
+ {
+  "id": 285232,
+  "label": "c",
+  "cause": "docstring run-on; params missing breaks"
+ },
+ {
+  "id": 291253,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 909915,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 170276,
+  "label": "d",
+  "cause": "missing article 'the challenge object'"
+ },
+ {
+  "id": 825919,
+  "label": "w",
+  "cause": "clear docstring line"
+ },
+ {
+  "id": 504593,
+  "label": "w",
+  "cause": "clear list item; placeholder token"
+ },
+ {
+  "id": 689215,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 144249,
+  "label": "d",
+  "cause": "missing article 'the non-exception family'"
+ },
+ {
+  "id": 331654,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 637156,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 613397,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 385260,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 700460,
+  "label": "c",
+  "cause": "'each of -' broken list; missing 'the'"
+ },
+ {
+  "id": 928462,
+  "label": "w",
+  "cause": "clear byline"
+ },
+ {
+  "id": 235210,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 277228,
+  "label": "d",
+  "cause": "subjectless fragment"
+ },
+ {
+  "id": 454035,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 372294,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 697993,
+  "label": "d",
+  "cause": "stray slash; missing underscore in identifier"
+ },
+ {
+  "id": 296944,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 516909,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 131767,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 440629,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 737197,
+  "label": "d",
+  "cause": "mixed-language comment; stray space before colon"
+ },
+ {
+  "id": 305269,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 951643,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 706181,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 982933,
+  "label": "d",
+  "cause": "long legal enumeration; hard to scan"
+ },
+ {
+  "id": 216539,
+  "label": "d",
+  "cause": "'this way of the interposition' awkward; comma placement"
+ },
+ {
+  "id": 447594,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 193879,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 447365,
+  "label": "w",
+  "cause": "terse heading fragment, clear enough"
+ },
+ {
+  "id": 603995,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 226170,
+  "label": "d",
+  "cause": "long conditional chain of dispatch rules"
+ },
+ {
+  "id": 464418,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 371161,
+  "label": "d",
+  "cause": "long semicolon chain; dense purpose clause"
+ },
+ {
+  "id": 968591,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 979764,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 184545,
+  "label": "d",
+  "cause": "'ensuring' dangles after decision clause"
+ },
+ {
+  "id": 806258,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 504424,
+  "label": "d",
+  "cause": "semicolon chain; 'which' referent unclear"
+ },
+ {
+  "id": 442781,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 523906,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 519166,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 585549,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 332330,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 407936,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 303981,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 835161,
+  "label": "d",
+  "cause": "redundant 'another different'"
+ },
+ {
+  "id": 825268,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 316738,
+  "label": "w",
+  "cause": "long but clear as written"
+ },
+ {
+  "id": 381177,
+  "label": "d",
+  "cause": "dash-set clauses; 'inform only' ambiguous"
+ },
+ {
+  "id": 158074,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 797109,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 578836,
+  "label": "c",
+  "cause": "overlong; 'so there' unclear; nested parentheses"
+ },
+ {
+  "id": 551937,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 502609,
+  "label": "d",
+  "cause": "dashes split subject from verb"
+ },
+ {
+  "id": 296684,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 209964,
+  "label": "w",
+  "cause": "clear glossary entry"
+ },
+ {
+  "id": 419507,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 892486,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 247875,
+  "label": "c",
+  "cause": "missing word 'yet' makes opening unclear"
+ },
+ {
+  "id": 856361,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 887800,
+  "label": "c",
+  "cause": "unclosed parenthesis in comment"
+ },
+ {
+  "id": 567671,
+  "label": "d",
+  "cause": "long noun-phrase subject; wordy"
+ },
+ {
+  "id": 265510,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 505871,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 258063,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 359211,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 745107,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 447183,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 495109,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 976189,
+  "label": "d",
+  "cause": "long clause; 'where' and 'includes' stacked"
+ },
+ {
+  "id": 680547,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 284376,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 194652,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 260667,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 206244,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 273159,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 242210,
+  "label": "w",
+  "cause": "clear lead-in to list"
+ },
+ {
+  "id": 296778,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 960686,
+  "label": "w",
+  "cause": "clear comment fragment"
+ },
+ {
+  "id": 724908,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 744020,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 401660,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 637433,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 845752,
+  "label": "w",
+  "cause": "clear image prompt"
+ },
+ {
+  "id": 602486,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 519720,
+  "label": "d",
+  "cause": "'e.g.' mid-clause; comma-heavy"
+ },
+ {
+  "id": 178170,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 509852,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 104985,
+  "label": "w",
+  "cause": "code identifier, no prose problem"
+ },
+ {
+  "id": 124142,
+  "label": "d",
+  "cause": "overlong chain of 'and' clauses"
+ },
+ {
+  "id": 548379,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 559961,
+  "label": "c",
+  "cause": "faulty parallelism: 'added ... as well as collected'"
+ },
+ {
+  "id": 311302,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 257023,
+  "label": "w",
+  "cause": "clear docstring fragment"
+ },
+ {
+  "id": 378100,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 326851,
+  "label": "d",
+  "cause": "missing 'where' before 'the conf is set'"
+ },
+ {
+  "id": 636397,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 693687,
+  "label": "w",
+  "cause": "long but parallel and readable"
+ },
+ {
+  "id": 258610,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 521588,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 899048,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 715856,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 432591,
+  "label": "w",
+  "cause": "clear reference entry"
+ },
+ {
+  "id": 764468,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 474956,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 587109,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 161836,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 402550,
+  "label": "d",
+  "cause": "'map read mirrored' noun-verb ambiguity"
+ },
+ {
+  "id": 214354,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 416871,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 655689,
+  "label": "d",
+  "cause": "missing hyphen; 'baserate' joined word"
+ },
+ {
+  "id": 898121,
+  "label": "w",
+  "cause": "clear legal text"
+ },
+ {
+  "id": 883512,
+  "label": "c",
+  "cause": "overlong; stacked nested parentheses"
+ },
+ {
+  "id": 368429,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 959453,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 221982,
+  "label": "d",
+  "cause": "misspelling 'ephermeral'"
+ },
+ {
+  "id": 424563,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 270677,
+  "label": "d",
+  "cause": "missing closing period"
+ },
+ {
+  "id": 924413,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 935706,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 344838,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 887997,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 815090,
+  "label": "d",
+  "cause": "clumsy 'same results to be received'"
+ },
+ {
+  "id": 532650,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 205481,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 527263,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 509385,
+  "label": "d",
+  "cause": "missing comma; 'projects many participants' garbles"
+ },
+ {
+  "id": 186887,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 818967,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 632076,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 692914,
+  "label": "d",
+  "cause": "'their' and 'they' referents unclear"
+ },
+ {
+  "id": 141475,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 572983,
+  "label": "d",
+  "cause": "typo 'to distributed'"
+ },
+ {
+  "id": 712367,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 240155,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 579742,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 692833,
+  "label": "d",
+  "cause": "missing 'that' before 'devices provide'"
+ },
+ {
+  "id": 620966,
+  "label": "w",
+  "cause": "clear figure caption markup"
+ },
+ {
+  "id": 236419,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 277109,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 283851,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 480028,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 701144,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 960502,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 738984,
+  "label": "c",
+  "cause": "jammed JSDoc params; no line breaks"
+ },
+ {
+  "id": 557260,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 905149,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 782895,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 204871,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 120287,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 385068,
+  "label": "d",
+  "cause": "missing article 'Extract the address'"
+ },
+ {
+  "id": 157885,
+  "label": "c",
+  "cause": "overlong; split 'in order to'; awkward 'as well as'"
+ },
+ {
+  "id": 871997,
+  "label": "d",
+  "cause": "informal 'bunch of stuff'; vague"
+ },
+ {
+  "id": 196557,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 535710,
+  "label": "c",
+  "cause": "overlong changelog; many semicolon clauses"
+ },
+ {
+  "id": 536803,
+  "label": "d",
+  "cause": "'eg.' should read 'e.g.'; long comment"
+ },
+ {
+  "id": 819517,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 458625,
+  "label": "w",
+  "cause": "clear list item"
+ },
+ {
+  "id": 703774,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 278639,
+  "label": "c",
+  "cause": "overlong changelog list in one sentence"
+ },
+ {
+  "id": 138730,
+  "label": "d",
+  "cause": "faulty parallelism: 'to get', 'using', 'injecting'"
+ },
+ {
+  "id": 253601,
+  "label": "d",
+  "cause": "misplaced 'whenever' clause splits subject and verb"
+ },
+ {
+  "id": 627422,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 132020,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 151974,
+  "label": "c",
+  "cause": "garbled 'should be also be'; typo 'appSate'"
+ },
+ {
+  "id": 315017,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 251445,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 990424,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 427609,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 222369,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 666351,
+  "label": "w",
+  "cause": "template placeholder line, clear"
+ },
+ {
+  "id": 648331,
+  "label": "d",
+  "cause": "subject-verb error 'name suggest'"
+ },
+ {
+  "id": 727286,
+  "label": "d",
+  "cause": "long gerund subject; repeated 'packet digests'"
+ },
+ {
+  "id": 433940,
+  "label": "d",
+  "cause": "'take precedent' should be 'precedence'"
+ },
+ {
+  "id": 618259,
+  "label": "d",
+  "cause": "agreement error 'One type of applications'"
+ },
+ {
+  "id": 135568,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 527621,
+  "label": "w",
+  "cause": "clear placeholder reference"
+ },
+ {
+  "id": 893811,
+  "label": "c",
+  "cause": "overlong; missing 'the' before 'ability'"
+ },
+ {
+  "id": 980821,
+  "label": "d",
+  "cause": "long list of outcomes; 'such as' misplaced"
+ },
+ {
+  "id": 358801,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 724257,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 203704,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 403825,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 180584,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 780067,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 889293,
+  "label": "w",
+  "cause": "clear list item, readable"
+ },
+ {
+  "id": 364892,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 168012,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 668659,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 208333,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 681821,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 591250,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 614861,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 274243,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 219009,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 931429,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 338032,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 670707,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 323936,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 272200,
+  "label": "d",
+  "cause": "doubled 'the the'"
+ },
+ {
+  "id": 713863,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 478841,
+  "label": "d",
+  "cause": "agreement error 'either ... are'"
+ },
+ {
+  "id": 761714,
+  "label": "d",
+  "cause": "long dash clause; 'otherwise' trails"
+ },
+ {
+  "id": 613989,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 871603,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 800470,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 583361,
+  "label": "w",
+  "cause": "clear parallel steps"
+ },
+ {
+  "id": 565631,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 755182,
+  "label": "d",
+  "cause": "comma splits subject from verb"
+ },
+ {
+  "id": 636248,
+  "label": "c",
+  "cause": "overlong fragment list in semicolons"
+ },
+ {
+  "id": 701721,
+  "label": "c",
+  "cause": "overlong conditional list in one sentence"
+ },
+ {
+  "id": 427727,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 557979,
+  "label": "d",
+  "cause": "long legal enumeration; hard to scan"
+ },
+ {
+  "id": 818496,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 476980,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 963435,
+  "label": "w",
+  "cause": "template placeholder line, clear"
+ },
+ {
+  "id": 880597,
+  "label": "d",
+  "cause": "stray comma after 'make sure'; long"
+ },
+ {
+  "id": 305552,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 653628,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 298593,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 327468,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 150794,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 477673,
+  "label": "d",
+  "cause": "dense slash-separated nested lists"
+ },
+ {
+  "id": 887410,
+  "label": "c",
+  "cause": "missing 'out' in 'pointed that'; garbled"
+ },
+ {
+  "id": 512480,
+  "label": "w",
+  "cause": "clear parallel list"
+ },
+ {
+  "id": 530412,
+  "label": "d",
+  "cause": "legal list; typo 'or such disclosing Party'"
+ },
+ {
+  "id": 717880,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 797911,
+  "label": "d",
+  "cause": "agreement error 'one ... are'"
+ },
+ {
+  "id": 836232,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 275738,
+  "label": "d",
+  "cause": "long mapping clause; 'as well as' ambiguous"
+ },
+ {
+  "id": 813788,
+  "label": "w",
+  "cause": "clear, jargon readable"
+ },
+ {
+  "id": 429042,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 718299,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 689059,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 963024,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 924000,
+  "label": "w",
+  "cause": "clear code comment"
+ },
+ {
+  "id": 548900,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 894180,
+  "label": "w",
+  "cause": "clear imperative"
+ },
+ {
+  "id": 234127,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 144840,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 310444,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 891020,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 577653,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 378346,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 358872,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 193608,
+  "label": "d",
+  "cause": "long clause; 'they' after semicolon"
+ },
+ {
+  "id": 616203,
+  "label": "d",
+  "cause": "reference list dump; unreadable as prose"
+ },
+ {
+  "id": 386917,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 632642,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 685179,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 510098,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 405313,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 255090,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 961290,
+  "label": "w",
+  "cause": "clear parallel list fragments"
+ },
+ {
+  "id": 133518,
+  "label": "c",
+  "cause": "overlong; typo 'and event-driven API'"
+ },
+ {
+  "id": 362005,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 839442,
+  "label": "w",
+  "cause": "clear, dense but readable"
+ },
+ {
+  "id": 109139,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 425068,
+  "label": "w",
+  "cause": "telegraphic but clear"
+ },
+ {
+  "id": 189380,
+  "label": "w",
+  "cause": "telegraphic but clear"
+ },
+ {
+  "id": 520651,
+  "label": "w",
+  "cause": "clear lead-in to list"
+ },
+ {
+  "id": 157177,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 541811,
+  "label": "w",
+  "cause": "clear list item fragment"
+ },
+ {
+  "id": 807067,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 600982,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 961865,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 597500,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 786955,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 960867,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 484379,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 903320,
+  "label": "w",
+  "cause": "clear lead-in to code"
+ },
+ {
+  "id": 974663,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 876865,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 759324,
+  "label": "w",
+  "cause": "terse formula line, clear in context"
+ },
+ {
+  "id": 410856,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 124446,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 628804,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 445563,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 415529,
+  "label": "c",
+  "cause": "garbled 'to to'; broken clause structure"
+ },
+ {
+  "id": 593382,
+  "label": "w",
+  "cause": "clear list fragment"
+ },
+ {
+  "id": 316259,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 122963,
+  "label": "d",
+  "cause": "'goes wherever it is' obscure meaning"
+ },
+ {
+  "id": 887083,
+  "label": "w",
+  "cause": "clear frontmatter"
+ },
+ {
+  "id": 189338,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 162272,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 154590,
+  "label": "d",
+  "cause": "long semicolon chain in changelog"
+ },
+ {
+  "id": 577563,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 426797,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 948526,
+  "label": "d",
+  "cause": "comma splice joins two main clauses"
+ },
+ {
+  "id": 238464,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 360730,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 897851,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 861359,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 124454,
+  "label": "w",
+  "cause": "clear licence boilerplate"
+ },
+ {
+  "id": 863816,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 521422,
+  "label": "d",
+  "cause": "wordy 'can be the following values'"
+ },
+ {
+  "id": 445586,
+  "label": "d",
+  "cause": "long appositive chain in one sentence"
+ },
+ {
+  "id": 119948,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 573339,
+  "label": "w",
+  "cause": "clear heading"
+ },
+ {
+  "id": 903429,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 369192,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 693499,
+  "label": "w",
+  "cause": "long but parallel verb list"
+ },
+ {
+  "id": 785175,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 158236,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 500100,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 821651,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 838151,
+  "label": "w",
+  "cause": "long but clear as written"
+ },
+ {
+  "id": 339512,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 563246,
+  "label": "w",
+  "cause": "clear docstring line"
+ },
+ {
+  "id": 158477,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 767421,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 493305,
+  "label": "d",
+  "cause": "long legal sentence with stacked qualifiers"
+ },
+ {
+  "id": 445874,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 756940,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 561224,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 421253,
+  "label": "d",
+  "cause": "'allows to' grammar error"
+ },
+ {
+  "id": 982647,
+  "label": "c",
+  "cause": "overlong changelog; many semicolon clauses"
+ },
+ {
+  "id": 950730,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 308079,
+  "label": "d",
+  "cause": "missing comma before 'while' clause"
+ },
+ {
+  "id": 909793,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 337978,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 312100,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 922222,
+  "label": "d",
+  "cause": "symbol-laden docstring; 'a Chrome the Browser launched'"
+ },
+ {
+  "id": 480313,
+  "label": "d",
+  "cause": "dash joins fragment; unclear 'all matter'"
+ },
+ {
+  "id": 204908,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 902221,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 517397,
+  "label": "d",
+  "cause": "heading run into sentence without punctuation"
+ },
+ {
+  "id": 522851,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 574514,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 382177,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 489235,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 171519,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 721743,
+  "label": "d",
+  "cause": "lowercase fragment opener; nested parentheses"
+ },
+ {
+  "id": 588709,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 668932,
+  "label": "d",
+  "cause": "typo 'as as appropriate'"
+ },
+ {
+  "id": 277095,
+  "label": "d",
+  "cause": "typo 'network polices'"
+ },
+ {
+  "id": 340734,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 993800,
+  "label": "w",
+  "cause": "clear example"
+ },
+ {
+  "id": 811687,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 847929,
+  "label": "d",
+  "cause": "two appositives split subject from verb"
+ },
+ {
+  "id": 844096,
+  "label": "c",
+  "cause": "overlong single sentence; many stacked clauses"
+ },
+ {
+  "id": 849025,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 970793,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 798454,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 699181,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 388063,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 837917,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 428582,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 108495,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 442381,
+  "label": "w",
+  "cause": "clear docstring line"
+ },
+ {
+  "id": 735328,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 274068,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 877340,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 373640,
+  "label": "w",
+  "cause": "clear docstring line"
+ },
+ {
+  "id": 432533,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 927505,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 124132,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 394300,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 858113,
+  "label": "c",
+  "cause": "overlong subject list far from its verb"
+ },
+ {
+  "id": 309032,
+  "label": "w",
+  "cause": "code fragment, no prose problem"
+ },
+ {
+  "id": 709543,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 829465,
+  "label": "d",
+  "cause": "broken parallel 'or via ... or to configure'"
+ },
+ {
+  "id": 160711,
+  "label": "d",
+  "cause": "long dash-set clause; nested parentheses"
+ },
+ {
+  "id": 659145,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 672719,
+  "label": "w",
+  "cause": "clear checklist item"
+ },
+ {
+  "id": 715349,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 498425,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 379045,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 800712,
+  "label": "d",
+  "cause": "'than' should be 'that'"
+ },
+ {
+  "id": 411810,
+  "label": "c",
+  "cause": "garbled grammar: 'will be display', 'any sources'"
+ },
+ {
+  "id": 368199,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 426912,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 107247,
+  "label": "d",
+  "cause": "comment run-on; missing period"
+ },
+ {
+  "id": 596623,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 538080,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 745163,
+  "label": "w",
+  "cause": "clear docstring line"
+ },
+ {
+  "id": 755779,
+  "label": "c",
+  "cause": "missing article; nonsense 'hereby initialization'"
+ },
+ {
+  "id": 618209,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 321437,
+  "label": "d",
+  "cause": "agreement error 'community meet'"
+ },
+ {
+  "id": 327335,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 666938,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 322976,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 127075,
+  "label": "c",
+  "cause": "'returns follows' garbled; overlong"
+ },
+ {
+  "id": 904317,
+  "label": "w",
+  "cause": "clear list fragment"
+ },
+ {
+  "id": 473610,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 995276,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 478921,
+  "label": "w",
+  "cause": "clear legal text"
+ },
+ {
+  "id": 140700,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 855622,
+  "label": "c",
+  "cause": "garbled 'one of will be one of'; 'their was'"
+ },
+ {
+  "id": 398080,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 160094,
+  "label": "d",
+  "cause": "agreement error 'files that contains'"
+ },
+ {
+  "id": 722952,
+  "label": "d",
+  "cause": "missing 'as' in 'such as'"
+ },
+ {
+  "id": 287855,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 741939,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 690099,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 638340,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 244216,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 980755,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 155280,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 514668,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 191645,
+  "label": "d",
+  "cause": "stilted 'needed focus'; bracketed template text"
+ },
+ {
+  "id": 356823,
+  "label": "w",
+  "cause": "clear docstring line"
+ },
+ {
+  "id": 566856,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 829361,
+  "label": "d",
+  "cause": "'a 100%' awkward; 'where' misused"
+ },
+ {
+  "id": 388264,
+  "label": "w",
+  "cause": "clear parenthetical dashes"
+ },
+ {
+  "id": 235612,
+  "label": "c",
+  "cause": "garbled comma splice; 'just in time that'"
+ },
+ {
+  "id": 811421,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 822982,
+  "label": "w",
+  "cause": "clear changelog fragment"
+ },
+ {
+  "id": 666969,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 250769,
+  "label": "d",
+  "cause": "missing 'that' in 'dir/ this tested'"
+ },
+ {
+  "id": 727597,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 606321,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 188331,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 181968,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 964961,
+  "label": "w",
+  "cause": "clear list item"
+ },
+ {
+  "id": 459276,
+  "label": "w",
+  "cause": "intentional filler text, not a defect"
+ },
+ {
+  "id": 579107,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 981126,
+  "label": "c",
+  "cause": "overlong; nested parentheses; stacked clauses"
+ },
+ {
+  "id": 299359,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 116755,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 905756,
+  "label": "d",
+  "cause": "subject-verb error 'users that sends'"
+ },
+ {
+  "id": 696319,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 361959,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 161416,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 264756,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 802331,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 249580,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 644791,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 506605,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 187050,
+  "label": "d",
+  "cause": "awkward 'Some breakpoint' subject"
+ },
+ {
+  "id": 264697,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 771286,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 437431,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 263320,
+  "label": "d",
+  "cause": "'static member' should be plural"
+ },
+ {
+  "id": 409224,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 831413,
+  "label": "w",
+  "cause": "clear dash-set clause"
+ },
+ {
+  "id": 586774,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 577438,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 771970,
+  "label": "w",
+  "cause": "doc reference, no prose problem"
+ },
+ {
+  "id": 713503,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 276871,
+  "label": "d",
+  "cause": "overlong dash-chained sentence; nested parentheses"
+ },
+ {
+  "id": 676919,
+  "label": "w",
+  "cause": "clear legal term"
+ },
+ {
+  "id": 234134,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 780961,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 517958,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 723861,
+  "label": "d",
+  "cause": "overlong semicolon-chained changelog sentence"
+ },
+ {
+  "id": 856656,
+  "label": "d",
+  "cause": "overlong list; 'fixes grammar and clarity' odd"
+ },
+ {
+  "id": 467030,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 884821,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 849315,
+  "label": "d",
+  "cause": "long parenthetical with dashes and semicolons"
+ },
+ {
+  "id": 811113,
+  "label": "d",
+  "cause": "stray backtick after 'val'"
+ },
+ {
+  "id": 928703,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 359129,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 590382,
+  "label": "d",
+  "cause": "ambiguous 'like Logstash' placement"
+ },
+ {
+  "id": 512946,
+  "label": "w",
+  "cause": "TOML frontmatter, code fragment"
+ },
+ {
+  "id": 367535,
+  "label": "d",
+  "cause": "overlong nested-parenthesis changelog list"
+ },
+ {
+  "id": 436420,
+  "label": "w",
+  "cause": "clear legal term"
+ },
+ {
+  "id": 891788,
+  "label": "d",
+  "cause": "'shim creating failed' awkward; 'cause' informal"
+ },
+ {
+  "id": 234595,
+  "label": "d",
+  "cause": "'each following wait twice the last' awkward"
+ },
+ {
+  "id": 812432,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 614855,
+  "label": "w",
+  "cause": "clear legal text"
+ },
+ {
+  "id": 512722,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 843932,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 883413,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 717982,
+  "label": "c",
+  "cause": "typo 'by the either the'; overlong"
+ },
+ {
+  "id": 922324,
+  "label": "w",
+  "cause": "clear list lead-in"
+ },
+ {
+  "id": 361755,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 170887,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 226840,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 833560,
+  "label": "d",
+  "cause": "'real world projects' needs hyphens"
+ },
+ {
+  "id": 471940,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 380642,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 336732,
+  "label": "d",
+  "cause": "overlong nested parenthetical; 'not only' clause"
+ },
+ {
+  "id": 992774,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 128598,
+  "label": "d",
+  "cause": "terse fragment; referent unclear"
+ },
+ {
+  "id": 508298,
+  "label": "d",
+  "cause": "run-on 'and' chain; missing space before parenthesis"
+ },
+ {
+  "id": 886921,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 916796,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 184455,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 701138,
+  "label": "d",
+  "cause": "missing article 'for similar setup'"
+ },
+ {
+  "id": 545753,
+  "label": "w",
+  "cause": "intentional filler text, not a defect"
+ },
+ {
+  "id": 385266,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 338425,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 874671,
+  "label": "w",
+  "cause": "clear docstring line"
+ },
+ {
+  "id": 906435,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 841202,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 997716,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 267820,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 686311,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 626063,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 542967,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 993379,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 697415,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 236928,
+  "label": "w",
+  "cause": "long but standard legal wording"
+ },
+ {
+  "id": 243977,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 675275,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 716145,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 523790,
+  "label": "w",
+  "cause": "clear image prompt"
+ },
+ {
+  "id": 563058,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 478781,
+  "label": "d",
+  "cause": "overlong conditional; nested clauses"
+ },
+ {
+  "id": 467848,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 823411,
+  "label": "w",
+  "cause": "template placeholders, not prose"
+ },
+ {
+  "id": 322969,
+  "label": "d",
+  "cause": "subject-verb 'procedures ... is'"
+ },
+ {
+  "id": 910308,
+  "label": "d",
+  "cause": "grammar error 'configured to allowing'"
+ },
+ {
+  "id": 550911,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 611470,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 749591,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 674864,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 330313,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 962333,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 165105,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 800603,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 479343,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 915453,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 686431,
+  "label": "d",
+  "cause": "dangling 'with' phrase; no clear verb for employees"
+ },
+ {
+  "id": 285331,
+  "label": "w",
+  "cause": "clear lead-in to list"
+ },
+ {
+  "id": 890268,
+  "label": "w",
+  "cause": "intentional filler text, not a defect"
+ },
+ {
+  "id": 663537,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 610094,
+  "label": "w",
+  "cause": "clear changelog lead-in"
+ },
+ {
+  "id": 525026,
+  "label": "c",
+  "cause": "'Addendum ... applies' agreement; list ends 'certifications'"
+ },
+ {
+  "id": 360371,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 170615,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 460468,
+  "label": "w",
+  "cause": "clear changelog fragment"
+ },
+ {
+  "id": 389684,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 866590,
+  "label": "d",
+  "cause": "'notice ... explain' agreement error"
+ },
+ {
+  "id": 490213,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 342918,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 287649,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 413543,
+  "label": "d",
+  "cause": "overlong sentence; double-hyphen parenthetical"
+ },
+ {
+  "id": 741330,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 845453,
+  "label": "w",
+  "cause": "clear docstring line"
+ },
+ {
+  "id": 880942,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 904179,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 431374,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 946734,
+  "label": "w",
+  "cause": "standard legal wording"
+ },
+ {
+  "id": 704416,
+  "label": "w",
+  "cause": "clear parallel list"
+ },
+ {
+  "id": 747497,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 982109,
+  "label": "d",
+  "cause": "stray comma between subject and verb"
+ },
+ {
+  "id": 332322,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 898072,
+  "label": "d",
+  "cause": "overlong semicolon chain; nested parentheses"
+ },
+ {
+  "id": 751949,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 343313,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 550005,
+  "label": "d",
+  "cause": "unclosed backtick around garbled code path"
+ },
+ {
+  "id": 824392,
+  "label": "w",
+  "cause": "standard legal wording"
+ },
+ {
+  "id": 681584,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 147277,
+  "label": "w",
+  "cause": "long but parallel legal wording"
+ },
+ {
+  "id": 620129,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 635869,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 546120,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 564265,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 922123,
+  "label": "c",
+  "cause": "sentences run together without punctuation"
+ },
+ {
+  "id": 580440,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 770541,
+  "label": "d",
+  "cause": "overlong chained 'so ... meaning that' clauses"
+ },
+ {
+  "id": 286222,
+  "label": "d",
+  "cause": "shellcheck directive run into prose; missing comment marker"
+ },
+ {
+  "id": 145708,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 871879,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 200349,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 891179,
+  "label": "d",
+  "cause": "overlong dashed clauses; 'the latter' hard to follow"
+ },
+ {
+  "id": 693980,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 761312,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 947995,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 883949,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 869626,
+  "label": "w",
+  "cause": "clear docstring line"
+ },
+ {
+  "id": 351564,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 144469,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 784234,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 470610,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 981555,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 856889,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 521361,
+  "label": "d",
+  "cause": "missing period between two sentences in comment"
+ },
+ {
+  "id": 439735,
+  "label": "w",
+  "cause": "long but parallel legal list"
+ },
+ {
+  "id": 760082,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 757219,
+  "label": "w",
+  "cause": "clear docstring line"
+ },
+ {
+  "id": 740800,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 135731,
+  "label": "w",
+  "cause": "clear severity entry"
+ },
+ {
+  "id": 396415,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 154245,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 888769,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 356113,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 738961,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 412479,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 745663,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 510250,
+  "label": "w",
+  "cause": "clear imperative"
+ },
+ {
+  "id": 527883,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 405806,
+  "label": "d",
+  "cause": "English text duplicated in Chinese; mixed-language"
+ },
+ {
+  "id": 224544,
+  "label": "d",
+  "cause": "'units having ... bars collide' awkward"
+ },
+ {
+  "id": 876612,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 562777,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 320348,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 607390,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 576901,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 100368,
+  "label": "w",
+  "cause": "standard legal wording"
+ },
+ {
+  "id": 544447,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 500934,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 662743,
+  "label": "d",
+  "cause": "dash-joined note; 'too long for too long' wording"
+ },
+ {
+  "id": 187640,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 564726,
+  "label": "w",
+  "cause": "clear legal list lead-in"
+ },
+ {
+  "id": 503792,
+  "label": "w",
+  "cause": "code fragment, no prose problem"
+ },
+ {
+  "id": 371501,
+  "label": "d",
+  "cause": "awkward 'patch missing the processes Wand starts'"
+ },
+ {
+  "id": 156278,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 298881,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 984725,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 725719,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 616273,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 915906,
+  "label": "w",
+  "cause": "dense but clear"
+ },
+ {
+  "id": 452209,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 843760,
+  "label": "w",
+  "cause": "clear legal wording"
+ },
+ {
+  "id": 677777,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 510404,
+  "label": "d",
+  "cause": "overlong chained 'saying that' clause"
+ },
+ {
+  "id": 115115,
+  "label": "w",
+  "cause": "clear legal wording"
+ },
+ {
+  "id": 571175,
+  "label": "d",
+  "cause": "missing article and plural 'a meaningful runbook'"
+ },
+ {
+  "id": 844370,
+  "label": "d",
+  "cause": "overlong semicolon chain; 'emits right' awkward"
+ },
+ {
+  "id": 625356,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 727547,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 348545,
+  "label": "d",
+  "cause": "missing punctuation in comment; run-on heading"
+ },
+ {
+  "id": 298247,
+  "label": "d",
+  "cause": "unclear list 'JavaScript, and React'"
+ },
+ {
+  "id": 455903,
+  "label": "w",
+  "cause": "clear list item"
+ },
+ {
+  "id": 806380,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 869000,
+  "label": "d",
+  "cause": "overlong; stray comma after 'in which case'"
+ },
+ {
+  "id": 496648,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 781185,
+  "label": "d",
+  "cause": "typo 'identfier'; missing hyphen"
+ },
+ {
+  "id": 942512,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 727330,
+  "label": "w",
+  "cause": "clear list item"
+ },
+ {
+  "id": 539534,
+  "label": "d",
+  "cause": "'those rights as are granted' should read 'that'"
+ },
+ {
+  "id": 501103,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 375566,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 289613,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 593891,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 541866,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 478615,
+  "label": "c",
+  "cause": "overlong; missing comma before 'notwithstanding'"
+ },
+ {
+  "id": 107612,
+  "label": "d",
+  "cause": "missing 'and' between two portal names"
+ },
+ {
+  "id": 693598,
+  "label": "w",
+  "cause": "clear legal list"
+ },
+ {
+  "id": 547347,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 150999,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 415546,
+  "label": "w",
+  "cause": "long but clear comment"
+ },
+ {
+  "id": 764825,
+  "label": "d",
+  "cause": "overlong docstring; dash-joined clauses"
+ },
+ {
+  "id": 163699,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 459616,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 170616,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 262220,
+  "label": "w",
+  "cause": "clear imperative"
+ },
+ {
+  "id": 172749,
+  "label": "w",
+  "cause": "clear legal wording"
+ },
+ {
+  "id": 273558,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 151266,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 743174,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 105318,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 225290,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 931686,
+  "label": "w",
+  "cause": "clear runbook step"
+ },
+ {
+  "id": 589535,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 988851,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 611773,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 181370,
+  "label": "d",
+  "cause": "heading run into sentence; missing break"
+ },
+ {
+  "id": 111863,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 662215,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 185857,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 771852,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 514005,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 559730,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 700030,
+  "label": "w",
+  "cause": "clear legal wording"
+ },
+ {
+  "id": 429611,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 295039,
+  "label": "c",
+  "cause": "overlong; nested parenthetical; stacked clauses"
+ },
+ {
+  "id": 435609,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 823631,
+  "label": "w",
+  "cause": "clear list item"
+ },
+ {
+  "id": 800568,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 963817,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 457612,
+  "label": "d",
+  "cause": "missing article 'authentication of client'"
+ },
+ {
+  "id": 284240,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 307252,
+  "label": "d",
+  "cause": "missing article 'at first time'"
+ },
+ {
+  "id": 513262,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 754811,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 668191,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 898013,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 363859,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 419207,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 543606,
+  "label": "c",
+  "cause": "agreement errors 'doing so ... impact'; 'class' singular"
+ },
+ {
+  "id": 291383,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 375725,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 301428,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 842663,
+  "label": "d",
+  "cause": "dense nested parentheses; 'which' referent unclear"
+ },
+ {
+  "id": 862138,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 874931,
+  "label": "w",
+  "cause": "clear colon-list runbook step"
+ },
+ {
+  "id": 579794,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 895676,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 172501,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 397077,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 499853,
+  "label": "w",
+  "cause": "clear acknowledgment list"
+ },
+ {
+  "id": 472489,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 474049,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 169058,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 966469,
+  "label": "d",
+  "cause": "faulty parallelism in list of nouns and gerunds"
+ },
+ {
+  "id": 434175,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 708219,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 414422,
+  "label": "w",
+  "cause": "long but clear legal wording"
+ },
+ {
+  "id": 966740,
+  "label": "d",
+  "cause": "dense colon and comma chain; hard to parse"
+ },
+ {
+  "id": 918621,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 957452,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 838406,
+  "label": "c",
+  "cause": "overlong; nested parenthetical; 'which' unclear"
+ },
+ {
+  "id": 813862,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 418422,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 810116,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 203807,
+  "label": "w",
+  "cause": "clear reference line"
+ },
+ {
+  "id": 647796,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 411741,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 255225,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 770898,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 820664,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 840703,
+  "label": "w",
+  "cause": "clear list item"
+ },
+ {
+  "id": 227471,
+  "label": "w",
+  "cause": "clear changelog line"
+ },
+ {
+  "id": 341702,
+  "label": "c",
+  "cause": "overlong; clumsy 'to be reading this' clause"
+ },
+ {
+  "id": 975382,
+  "label": "w",
+  "cause": "clear legal wording"
+ },
+ {
+  "id": 203660,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 179979,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 327312,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 445354,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 273676,
+  "label": "w",
+  "cause": "code fragment, no prose problem"
+ },
+ {
+  "id": 126616,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 857247,
+  "label": "d",
+  "cause": "terse dash fragment; 'incremental, keeps' unclear"
+ },
+ {
+  "id": 310989,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 383473,
+  "label": "d",
+  "cause": "'Image that the ... run' fragment unclear"
+ },
+ {
+  "id": 544895,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 996660,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 997703,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 453272,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 999561,
+  "label": "w",
+  "cause": "clear legal list lead-in"
+ },
+ {
+  "id": 428448,
+  "label": "d",
+  "cause": "repeated 'as well as'; awkward criteria list"
+ },
+ {
+  "id": 580494,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 889351,
+  "label": "d",
+  "cause": "stray semicolon ends sentence"
+ },
+ {
+  "id": 658417,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 719873,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 639721,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 669221,
+  "label": "w",
+  "cause": "long but clear"
+ },
+ {
+  "id": 231443,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 600353,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 824712,
+  "label": "d",
+  "cause": "awkward embedded clause in doc comment"
+ },
+ {
+  "id": 748574,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 723470,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 751553,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 510321,
+  "label": "d",
+  "cause": "overlong dash and parenthetical clauses"
+ },
+ {
+  "id": 221975,
+  "label": "d",
+  "cause": "overlong; 'some which' informal"
+ },
+ {
+  "id": 428133,
+  "label": "w",
+  "cause": "clear legal wording"
+ },
+ {
+  "id": 725695,
+  "label": "w",
+  "cause": "clear legal wording"
+ },
+ {
+  "id": 751447,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 141678,
+  "label": "d",
+  "cause": "overlong; 'sites(e.g.,' missing space"
+ },
+ {
+  "id": 218237,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 877197,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 492452,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 402812,
+  "label": "d",
+  "cause": "'streamlined' vs 'streamline' term mismatch"
+ },
+ {
+  "id": 251042,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 390434,
+  "label": "d",
+  "cause": "missing period before 'Gating on gen_ok'"
+ },
+ {
+  "id": 538897,
+  "label": "w",
+  "cause": "clear as written"
+ },
+ {
+  "id": 623074,
+  "label": "d",
+  "cause": "'Agreement ... represent' agreement error"
+ },
+ {
+  "id": 995769,
+  "label": "c",
+  "cause": "overlong; garbled either/or clause chain"
+ },
+ {
+  "id": 363765,
+  "label": "w",
+  "cause": "clear docstring line"
+ }
+]

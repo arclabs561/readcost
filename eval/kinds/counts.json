@@ -1,0 +1,833 @@
+{
+ "tutorial": {
+  "findings": {
+   "stacked-nouns": 810,
+   "inline-list": 486,
+   "inanimate-subject": 137,
+   "participial-clause": 161,
+   "undefined-acronym": 572,
+   "reduced-object-relative": 115,
+   "hyphen-compound": 151,
+   "long-dependency": 93,
+   "nominalization": 11
+  },
+  "deduped": {
+   "inline-list": 478,
+   "undefined-acronym": 502,
+   "stacked-nouns": 768,
+   "inanimate-subject": 134,
+   "reduced-object-relative": 112,
+   "hyphen-compound": 146,
+   "long-dependency": 91,
+   "participial-clause": 159,
+   "nominalization": 11
+  },
+  "near": {
+   "stacked-nouns": 6274,
+   "inline-list": 857,
+   "center-embedding": 469,
+   "long-dependency": 102,
+   "undefined-acronym": 59
+  },
+  "near_deduped": {
+   "stacked-nouns": 4995,
+   "center-embedding": 469,
+   "inline-list": 853,
+   "long-dependency": 101,
+   "undefined-acronym": 57
+  },
+  "sampled": {
+   "stacked-nouns": 12,
+   "long-dependency": 12,
+   "reduced-object-relative": 12,
+   "hyphen-compound": 12,
+   "inline-list": 12,
+   "inanimate-subject": 4,
+   "participial-clause": 4,
+   "nominalization": 4,
+   "center-embedding": 0,
+   "undefined-acronym": 4
+  },
+  "sampled_near": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "inline-list": 4,
+   "center-embedding": 2,
+   "undefined-acronym": 2
+  },
+  "decoy_pool": 9542,
+  "decoys": 16,
+  "decoys_rejected_as_seen": 0,
+  "ranked_docs": 20,
+  "ranked": 50
+ },
+ "reference": {
+  "findings": {
+   "participial-clause": 225,
+   "undefined-acronym": 612,
+   "inline-list": 555,
+   "stacked-nouns": 993,
+   "hyphen-compound": 171,
+   "inanimate-subject": 165,
+   "long-dependency": 133,
+   "reduced-object-relative": 180,
+   "nominalization": 17,
+   "center-embedding": 2
+  },
+  "deduped": {
+   "hyphen-compound": 155,
+   "stacked-nouns": 946,
+   "reduced-object-relative": 171,
+   "inanimate-subject": 162,
+   "participial-clause": 218,
+   "undefined-acronym": 536,
+   "inline-list": 536,
+   "long-dependency": 131,
+   "center-embedding": 2,
+   "nominalization": 17
+  },
+  "near": {
+   "stacked-nouns": 7484,
+   "inline-list": 839,
+   "center-embedding": 701,
+   "long-dependency": 144,
+   "undefined-acronym": 69
+  },
+  "near_deduped": {
+   "stacked-nouns": 5750,
+   "inline-list": 815,
+   "center-embedding": 687,
+   "long-dependency": 136,
+   "undefined-acronym": 65
+  },
+  "sampled": {
+   "stacked-nouns": 12,
+   "long-dependency": 12,
+   "reduced-object-relative": 12,
+   "hyphen-compound": 12,
+   "inline-list": 12,
+   "inanimate-subject": 4,
+   "participial-clause": 4,
+   "nominalization": 4,
+   "center-embedding": 2,
+   "undefined-acronym": 4
+  },
+  "sampled_near": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "inline-list": 4,
+   "center-embedding": 2,
+   "undefined-acronym": 2
+  },
+  "decoy_pool": 12112,
+  "decoys": 16,
+  "decoys_rejected_as_seen": 0,
+  "ranked_docs": 20,
+  "ranked": 53
+ },
+ "explanation": {
+  "findings": {
+   "inanimate-subject": 222,
+   "inline-list": 651,
+   "nominalization": 6,
+   "undefined-acronym": 524,
+   "participial-clause": 157,
+   "stacked-nouns": 883,
+   "reduced-object-relative": 130,
+   "long-dependency": 85,
+   "hyphen-compound": 285,
+   "center-embedding": 1
+  },
+  "deduped": {
+   "participial-clause": 154,
+   "undefined-acronym": 455,
+   "stacked-nouns": 840,
+   "reduced-object-relative": 126,
+   "hyphen-compound": 271,
+   "inline-list": 649,
+   "long-dependency": 85,
+   "inanimate-subject": 220,
+   "nominalization": 6,
+   "center-embedding": 1
+  },
+  "near": {
+   "stacked-nouns": 7127,
+   "inline-list": 850,
+   "center-embedding": 516,
+   "undefined-acronym": 37,
+   "long-dependency": 90
+  },
+  "near_deduped": {
+   "inline-list": 850,
+   "stacked-nouns": 5130,
+   "center-embedding": 516,
+   "long-dependency": 90,
+   "undefined-acronym": 37
+  },
+  "sampled": {
+   "stacked-nouns": 12,
+   "long-dependency": 12,
+   "reduced-object-relative": 12,
+   "hyphen-compound": 12,
+   "inline-list": 12,
+   "inanimate-subject": 4,
+   "participial-clause": 4,
+   "nominalization": 4,
+   "center-embedding": 1,
+   "undefined-acronym": 4
+  },
+  "sampled_near": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "inline-list": 4,
+   "center-embedding": 2,
+   "undefined-acronym": 2
+  },
+  "decoy_pool": 6115,
+  "decoys": 16,
+  "decoys_rejected_as_seen": 0,
+  "ranked_docs": 20,
+  "ranked": 52
+ },
+ "design": {
+  "findings": {
+   "stacked-nouns": 519,
+   "participial-clause": 134,
+   "undefined-acronym": 301,
+   "inanimate-subject": 131,
+   "inline-list": 219,
+   "reduced-object-relative": 112,
+   "hyphen-compound": 140,
+   "long-dependency": 82,
+   "nominalization": 10,
+   "center-embedding": 3
+  },
+  "deduped": {
+   "stacked-nouns": 495,
+   "hyphen-compound": 136,
+   "participial-clause": 133,
+   "undefined-acronym": 260,
+   "inanimate-subject": 128,
+   "inline-list": 209,
+   "long-dependency": 82,
+   "center-embedding": 3,
+   "reduced-object-relative": 111,
+   "nominalization": 10
+  },
+  "near": {
+   "stacked-nouns": 3799,
+   "inline-list": 470,
+   "long-dependency": 77,
+   "center-embedding": 440,
+   "undefined-acronym": 9
+  },
+  "near_deduped": {
+   "stacked-nouns": 2937,
+   "center-embedding": 440,
+   "inline-list": 450,
+   "long-dependency": 76,
+   "undefined-acronym": 9
+  },
+  "sampled": {
+   "stacked-nouns": 12,
+   "long-dependency": 12,
+   "reduced-object-relative": 12,
+   "hyphen-compound": 12,
+   "inline-list": 12,
+   "inanimate-subject": 4,
+   "participial-clause": 4,
+   "nominalization": 4,
+   "center-embedding": 3,
+   "undefined-acronym": 4
+  },
+  "sampled_near": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "inline-list": 4,
+   "center-embedding": 2,
+   "undefined-acronym": 2
+  },
+  "decoy_pool": 5000,
+  "decoys": 16,
+  "decoys_rejected_as_seen": 0,
+  "ranked_docs": 20,
+  "ranked": 52
+ },
+ "runbook": {
+  "findings": {
+   "stacked-nouns": 167,
+   "inline-list": 133,
+   "participial-clause": 45,
+   "undefined-acronym": 107,
+   "inanimate-subject": 31,
+   "long-dependency": 21,
+   "reduced-object-relative": 11,
+   "hyphen-compound": 28,
+   "nominalization": 3
+  },
+  "deduped": {
+   "stacked-nouns": 159,
+   "inline-list": 131,
+   "undefined-acronym": 100,
+   "long-dependency": 21,
+   "hyphen-compound": 28,
+   "participial-clause": 36,
+   "inanimate-subject": 30,
+   "reduced-object-relative": 11,
+   "nominalization": 3
+  },
+  "near": {
+   "stacked-nouns": 1310,
+   "inline-list": 209,
+   "center-embedding": 81,
+   "undefined-acronym": 13,
+   "long-dependency": 26
+  },
+  "near_deduped": {
+   "stacked-nouns": 998,
+   "center-embedding": 80,
+   "inline-list": 209,
+   "undefined-acronym": 13,
+   "long-dependency": 26
+  },
+  "sampled": {
+   "stacked-nouns": 12,
+   "long-dependency": 11,
+   "reduced-object-relative": 8,
+   "hyphen-compound": 12,
+   "inline-list": 12,
+   "inanimate-subject": 4,
+   "participial-clause": 4,
+   "nominalization": 2,
+   "center-embedding": 0,
+   "undefined-acronym": 4
+  },
+  "sampled_near": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "inline-list": 4,
+   "center-embedding": 2,
+   "undefined-acronym": 2
+  },
+  "decoy_pool": 1397,
+  "decoys": 16,
+  "decoys_rejected_as_seen": 0,
+  "ranked_docs": 13,
+  "ranked": 32
+ },
+ "changelog": {
+  "findings": {
+   "stacked-nouns": 9895,
+   "hyphen-compound": 1679,
+   "long-dependency": 598,
+   "nominalization": 69,
+   "reduced-object-relative": 563,
+   "inline-list": 1757,
+   "participial-clause": 1010,
+   "inanimate-subject": 662,
+   "undefined-acronym": 4547,
+   "center-embedding": 16
+  },
+  "deduped": {
+   "undefined-acronym": 4009,
+   "stacked-nouns": 9453,
+   "participial-clause": 987,
+   "inline-list": 1726,
+   "hyphen-compound": 1611,
+   "long-dependency": 588,
+   "inanimate-subject": 644,
+   "reduced-object-relative": 539,
+   "nominalization": 69,
+   "center-embedding": 16
+  },
+  "near": {
+   "stacked-nouns": 43150,
+   "inline-list": 3062,
+   "long-dependency": 570,
+   "center-embedding": 2667,
+   "undefined-acronym": 414
+  },
+  "near_deduped": {
+   "stacked-nouns": 34569,
+   "undefined-acronym": 407,
+   "inline-list": 3027,
+   "center-embedding": 2638,
+   "long-dependency": 565
+  },
+  "sampled": {
+   "stacked-nouns": 12,
+   "long-dependency": 12,
+   "reduced-object-relative": 12,
+   "hyphen-compound": 12,
+   "inline-list": 12,
+   "inanimate-subject": 4,
+   "participial-clause": 4,
+   "nominalization": 4,
+   "center-embedding": 4,
+   "undefined-acronym": 4
+  },
+  "sampled_near": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "inline-list": 4,
+   "center-embedding": 2,
+   "undefined-acronym": 2
+  },
+  "decoy_pool": 58144,
+  "decoys": 16,
+  "decoys_rejected_as_seen": 0,
+  "ranked_docs": 20,
+  "ranked": 55
+ },
+ "blog": {
+  "findings": {
+   "reduced-object-relative": 36,
+   "inline-list": 140,
+   "inanimate-subject": 51,
+   "participial-clause": 147,
+   "stacked-nouns": 303,
+   "long-dependency": 24,
+   "undefined-acronym": 260,
+   "nominalization": 7,
+   "hyphen-compound": 36
+  },
+  "deduped": {
+   "undefined-acronym": 220,
+   "stacked-nouns": 288,
+   "nominalization": 7,
+   "participial-clause": 143,
+   "inline-list": 135,
+   "inanimate-subject": 50,
+   "hyphen-compound": 35,
+   "reduced-object-relative": 33,
+   "long-dependency": 24
+  },
+  "near": {
+   "stacked-nouns": 2060,
+   "inline-list": 286,
+   "center-embedding": 120,
+   "undefined-acronym": 17,
+   "long-dependency": 28
+  },
+  "near_deduped": {
+   "stacked-nouns": 1571,
+   "inline-list": 270,
+   "undefined-acronym": 17,
+   "center-embedding": 113,
+   "long-dependency": 28
+  },
+  "sampled": {
+   "stacked-nouns": 12,
+   "long-dependency": 12,
+   "reduced-object-relative": 12,
+   "hyphen-compound": 12,
+   "inline-list": 12,
+   "inanimate-subject": 4,
+   "participial-clause": 4,
+   "nominalization": 4,
+   "center-embedding": 0,
+   "undefined-acronym": 4
+  },
+  "sampled_near": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "inline-list": 4,
+   "center-embedding": 2,
+   "undefined-acronym": 2
+  },
+  "decoy_pool": 2503,
+  "decoys": 16,
+  "decoys_rejected_as_seen": 0,
+  "ranked_docs": 19,
+  "ranked": 49
+ },
+ "standards": {
+  "findings": {
+   "stacked-nouns": 580,
+   "undefined-acronym": 898,
+   "inline-list": 257,
+   "hyphen-compound": 214,
+   "inanimate-subject": 102,
+   "long-dependency": 211,
+   "participial-clause": 151,
+   "nominalization": 29,
+   "reduced-object-relative": 56
+  },
+  "deduped": {
+   "undefined-acronym": 592,
+   "stacked-nouns": 541,
+   "long-dependency": 209,
+   "reduced-object-relative": 55,
+   "hyphen-compound": 194,
+   "participial-clause": 148,
+   "inline-list": 252,
+   "inanimate-subject": 98,
+   "nominalization": 29
+  },
+  "near": {
+   "stacked-nouns": 3196,
+   "inline-list": 459,
+   "center-embedding": 466,
+   "undefined-acronym": 43,
+   "long-dependency": 123
+  },
+  "near_deduped": {
+   "stacked-nouns": 2450,
+   "long-dependency": 122,
+   "center-embedding": 464,
+   "inline-list": 442,
+   "undefined-acronym": 42
+  },
+  "sampled": {
+   "stacked-nouns": 12,
+   "long-dependency": 12,
+   "reduced-object-relative": 12,
+   "hyphen-compound": 12,
+   "inline-list": 12,
+   "inanimate-subject": 4,
+   "participial-clause": 4,
+   "nominalization": 4,
+   "center-embedding": 0,
+   "undefined-acronym": 4
+  },
+  "sampled_near": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "inline-list": 4,
+   "center-embedding": 2,
+   "undefined-acronym": 2
+  },
+  "decoy_pool": 4459,
+  "decoys": 16,
+  "decoys_rejected_as_seen": 0,
+  "ranked_docs": 20,
+  "ranked": 53
+ },
+ "code-doc": {
+  "findings": {
+   "long-dependency": 78,
+   "undefined-acronym": 307,
+   "stacked-nouns": 411,
+   "hyphen-compound": 76,
+   "participial-clause": 83,
+   "reduced-object-relative": 111,
+   "inanimate-subject": 87,
+   "center-embedding": 3,
+   "nominalization": 3
+  },
+  "deduped": {
+   "long-dependency": 75,
+   "stacked-nouns": 384,
+   "inanimate-subject": 86,
+   "undefined-acronym": 266,
+   "reduced-object-relative": 109,
+   "participial-clause": 73,
+   "hyphen-compound": 73,
+   "center-embedding": 3,
+   "nominalization": 3
+  },
+  "near": {
+   "stacked-nouns": 2943,
+   "center-embedding": 371,
+   "undefined-acronym": 32,
+   "long-dependency": 47
+  },
+  "near_deduped": {
+   "stacked-nouns": 2292,
+   "center-embedding": 353,
+   "long-dependency": 45,
+   "undefined-acronym": 30
+  },
+  "sampled": {
+   "stacked-nouns": 12,
+   "long-dependency": 12,
+   "reduced-object-relative": 12,
+   "hyphen-compound": 12,
+   "inline-list": 0,
+   "inanimate-subject": 4,
+   "participial-clause": 4,
+   "nominalization": 3,
+   "center-embedding": 3,
+   "undefined-acronym": 4
+  },
+  "sampled_near": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "inline-list": 0,
+   "center-embedding": 2,
+   "undefined-acronym": 2
+  },
+  "decoy_pool": 3853,
+  "decoys": 16,
+  "decoys_rejected_as_seen": 0,
+  "ranked_docs": 20,
+  "ranked": 50
+ },
+ "code-ordinary": {
+  "findings": {
+   "stacked-nouns": 552,
+   "undefined-acronym": 685,
+   "participial-clause": 85,
+   "long-dependency": 104,
+   "inanimate-subject": 93,
+   "hyphen-compound": 92,
+   "reduced-object-relative": 105,
+   "center-embedding": 3,
+   "nominalization": 2
+  },
+  "deduped": {
+   "hyphen-compound": 88,
+   "reduced-object-relative": 103,
+   "stacked-nouns": 509,
+   "undefined-acronym": 533,
+   "inanimate-subject": 92,
+   "participial-clause": 82,
+   "long-dependency": 100,
+   "nominalization": 2,
+   "center-embedding": 3
+  },
+  "near": {
+   "stacked-nouns": 4275,
+   "long-dependency": 67,
+   "center-embedding": 400,
+   "undefined-acronym": 78
+  },
+  "near_deduped": {
+   "stacked-nouns": 3294,
+   "center-embedding": 396,
+   "undefined-acronym": 71,
+   "long-dependency": 63
+  },
+  "sampled": {
+   "stacked-nouns": 12,
+   "long-dependency": 12,
+   "reduced-object-relative": 12,
+   "hyphen-compound": 12,
+   "inline-list": 0,
+   "inanimate-subject": 4,
+   "participial-clause": 4,
+   "nominalization": 2,
+   "center-embedding": 3,
+   "undefined-acronym": 4
+  },
+  "sampled_near": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "inline-list": 0,
+   "center-embedding": 2,
+   "undefined-acronym": 2
+  },
+  "decoy_pool": 6370,
+  "decoys": 16,
+  "decoys_rejected_as_seen": 0,
+  "ranked_docs": 20,
+  "ranked": 46
+ },
+ "contrast": {
+  "findings": {
+   "inline-list": 292,
+   "stacked-nouns": 105,
+   "undefined-acronym": 19,
+   "hyphen-compound": 3,
+   "long-dependency": 32,
+   "participial-clause": 19,
+   "reduced-object-relative": 12,
+   "inanimate-subject": 5,
+   "nominalization": 11,
+   "center-embedding": 1
+  },
+  "deduped": {
+   "inline-list": 284,
+   "stacked-nouns": 98,
+   "undefined-acronym": 19,
+   "hyphen-compound": 2,
+   "nominalization": 11,
+   "long-dependency": 30,
+   "inanimate-subject": 5,
+   "reduced-object-relative": 12,
+   "participial-clause": 17,
+   "center-embedding": 1
+  },
+  "near": {
+   "stacked-nouns": 786,
+   "inline-list": 311,
+   "center-embedding": 79,
+   "long-dependency": 25,
+   "undefined-acronym": 5
+  },
+  "near_deduped": {
+   "stacked-nouns": 613,
+   "inline-list": 307,
+   "center-embedding": 77,
+   "long-dependency": 24,
+   "undefined-acronym": 5
+  },
+  "sampled": {
+   "stacked-nouns": 12,
+   "long-dependency": 12,
+   "reduced-object-relative": 12,
+   "hyphen-compound": 2,
+   "inline-list": 12,
+   "inanimate-subject": 4,
+   "participial-clause": 4,
+   "nominalization": 4,
+   "center-embedding": 1,
+   "undefined-acronym": 4
+  },
+  "sampled_near": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "inline-list": 4,
+   "center-embedding": 2,
+   "undefined-acronym": 2
+  },
+  "decoy_pool": 1301,
+  "decoys": 16,
+  "decoys_rejected_as_seen": 0,
+  "ranked_docs": 20,
+  "ranked": 49
+ },
+ "_texts": {
+  "blog: kept": 91,
+  "blog: mostly code": 14,
+  "blog: not English": 1,
+  "blog: under 100 words": 28,
+  "changelog: duplicate text": 5,
+  "changelog: kept": 417,
+  "changelog: mostly code": 6,
+  "changelog: not English": 20,
+  "changelog: under 100 words": 115,
+  "code-doc: duplicate text": 18,
+  "code-doc: kept": 804,
+  "code-doc: not English": 13,
+  "code-doc: too large": 10,
+  "code-doc: under 40 words": 1368,
+  "code-ordinary: check error": 2,
+  "code-ordinary: duplicate text": 24,
+  "code-ordinary: kept": 909,
+  "code-ordinary: not English": 17,
+  "code-ordinary: too large": 12,
+  "code-ordinary: under 40 words": 1249,
+  "contrast: kept": 38,
+  "contrast: under 100 words": 2,
+  "design: kept": 121,
+  "design: mostly code": 32,
+  "design: not English": 12,
+  "design: under 100 words": 13,
+  "explanation: duplicate text": 1,
+  "explanation: kept": 235,
+  "explanation: mostly code": 34,
+  "explanation: not English": 16,
+  "explanation: under 100 words": 56,
+  "reference: check error": 1,
+  "reference: duplicate text": 3,
+  "reference: kept": 235,
+  "reference: mostly code": 78,
+  "reference: not English": 23,
+  "reference: under 100 words": 201,
+  "runbook: kept": 59,
+  "runbook: mostly code": 3,
+  "runbook: not English": 5,
+  "runbook: under 100 words": 21,
+  "standards: kept": 34,
+  "standards: mostly code": 3,
+  "standards: under 100 words": 2,
+  "tutorial: duplicate text": 3,
+  "tutorial: kept": 299,
+  "tutorial: mostly code": 122,
+  "tutorial: not English": 41,
+  "tutorial: under 100 words": 124
+ },
+ "_texts_by_source": {
+  "blog: named": 52,
+  "blog: walk": 39,
+  "changelog: named": 6,
+  "changelog: walk": 411,
+  "code-doc: walk": 804,
+  "code-ordinary: walk": 909,
+  "contrast: contrast": 38,
+  "design: named": 34,
+  "design: walk": 87,
+  "explanation: named": 52,
+  "explanation: walk": 183,
+  "reference: named": 23,
+  "reference: walk": 212,
+  "runbook: codesearch": 4,
+  "runbook: named": 40,
+  "runbook: walk": 15,
+  "standards: standards": 34,
+  "tutorial: named": 39,
+  "tutorial: walk": 260
+ },
+ "_jobs": {
+  "walk": {
+   "a: in a development corpus": 19,
+   "a: owner cap": 18,
+   "a: named source": 1,
+   "b: owner cap": 23,
+   "b: in a development corpus": 1,
+   "standards: owner cap": 3
+  },
+  "picked": {
+   "walk": 1000,
+   "standards": 80,
+   "contrast": 1,
+   "named": 7,
+   "codesearch": 3
+  }
+ },
+ "_repos": {
+  "walk: ok": 1000,
+  "standards: fetch error": 5,
+  "standards: ok": 75,
+  "named: ok": 7,
+  "contrast: ok": 1,
+  "codesearch: ok": 3
+ },
+ "_items": {
+  "blog: decoy": 16,
+  "blog: finding": 76,
+  "blog: near": 16,
+  "blog: ranked": 49,
+  "changelog: decoy": 16,
+  "changelog: finding": 80,
+  "changelog: near": 16,
+  "changelog: ranked": 55,
+  "code-doc: decoy": 16,
+  "code-doc: finding": 66,
+  "code-doc: near": 12,
+  "code-doc: ranked": 50,
+  "code-ordinary: decoy": 16,
+  "code-ordinary: finding": 65,
+  "code-ordinary: near": 12,
+  "code-ordinary: ranked": 46,
+  "contrast: decoy": 16,
+  "contrast: finding": 67,
+  "contrast: near": 16,
+  "contrast: ranked": 49,
+  "design: decoy": 16,
+  "design: finding": 79,
+  "design: near": 16,
+  "design: ranked": 52,
+  "explanation: decoy": 16,
+  "explanation: finding": 77,
+  "explanation: near": 16,
+  "explanation: ranked": 52,
+  "reference: decoy": 16,
+  "reference: finding": 78,
+  "reference: near": 16,
+  "reference: ranked": 53,
+  "runbook: decoy": 16,
+  "runbook: finding": 69,
+  "runbook: near": 16,
+  "runbook: ranked": 32,
+  "standards: decoy": 16,
+  "standards: finding": 76,
+  "standards: near": 16,
+  "standards: ranked": 53,
+  "tutorial: decoy": 16,
+  "tutorial: finding": 76,
+  "tutorial: near": 16,
+  "tutorial: ranked": 50
+ }
+}

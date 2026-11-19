@@ -2809,6 +2809,85 @@ cost worth fixing; without that telling, they find a problem there little
 more often than elsewhere. center-embedding, which is opt-in, is the
 exception the data support.
 
+## Precision by kind of document, pre-registered
+
+The plan is [docs/prereg/kinds-precision.md](prereg/kinds-precision.md),
+committed before any text was fetched. It draws from eleven kinds of
+document: tutorials, reference, explanation, design documents, runbooks,
+changelogs, blog posts, Internet-Drafts, doc comments, ordinary code
+comments, and a non-technical contrast (site policies). There are 1,694
+items: 1,153 findings, near misses and random decoys (16 decoys per kind,
+176 in all), and 541 sentences for a test of ranking, shown only to the
+unprimed raters. The same fifteen raters labelled every item. Labels and the
+full report are in `eval/kinds/`.
+
+Pooled over the ten technical kinds, majority of twelve:
+
+| Rule | Correct | Accepted | Near misses accepted | Unprimed problem |
+| --- | --- | --- | --- | --- |
+| stacked-nouns | 1 of 120 | 34 of 120 | 0 of 40 | 25% |
+| long-dependency | 15 of 119 | 53 of 119 | 12 of 40 | 37% |
+| reduced-object-relative | 1 of 116 | 40 of 116 | no threshold | 39% |
+| hyphen-compound | 0 of 120 | 35 of 120 | no threshold | 17% |
+| inline-list | 0 of 96 | 19 of 96 | 2 of 32 | 25% |
+| inanimate-subject (opt-in) | 0 of 40 | 4 of 40 | no threshold | 35% |
+| participial-clause (opt-in) | 0 of 40 | 13 of 40 | no threshold | 25% |
+| nominalization (opt-in) | 2 of 35 | 28 of 35 | no threshold | 43% |
+| center-embedding (opt-in) | 4 of 16 | 11 of 16 | 4 of 20 | 81% |
+| undefined-acronym (opt-in) | 0 of 40 | 12 of 40 | 3 of 20 | 28% |
+| random decoys | 0 of 160 | 0 of 160 | | 10% |
+
+"Unprimed problem" is the share the unprimed majority labelled c or d,
+rounded to the nearest point; the report has the exact counts.
+
+- A finding that an editor would fix is again rare. long-dependency is the
+  exception among the default rules: 15 of 119 (13%), against none of its
+  near misses (+13 points, +3 to +20), so its threshold earns its place here,
+  where in the test across formats it did not.
+- stacked-nouns' threshold earns its place again: no near miss accepted,
+  against 28% of findings.
+- Ranking. In each of 192 documents the unprimed raters saw the sentence
+  ranked first by a composite fixed in advance (length, longest dependency,
+  embedding depth and findings), the longest sentence, and a random one. They
+  saw a problem in 48% of the composite's picks, 54% of the longest
+  sentences and 13% of the random ones. The composite beats a random
+  sentence (+35 points, +26 to +43) but not the longest (−6, −16 to +4), so
+  by the plan it is not worth shipping: choosing the longest sentence does at
+  least as well.
+- Defaults across rounds. By the rule fixed before this round's data, a
+  default rule stays on if its findings beat its near misses, or if the
+  unprimed raters see a problem in them more often than in random decoys,
+  pooling rounds 1 to 3. Every default rule stays default. Four opt-in rules
+  meet the rule for becoming default: center-embedding, nominalization,
+  participial-clause and inanimate-subject.
+- The second criterion is weaker than intended. The ranking test shows the
+  unprimed raters see a problem in a random sentence 13% of the time and in
+  the longest sentence 54% of the time, and readcost's findings fall on
+  longer, denser sentences than random decoys do. A rule can pass "more than
+  random decoys" by flagging long sentences, whatever its construction:
+  inanimate-subject passes it (+17 points over decoys) though primed raters
+  accepted 4 of its 82 findings across rounds 2 and 3, and called none
+  correct. Only center-embedding beats the longest sentence: its
+  findings are a problem to 81% of unprimed raters, against 54%.
+- So only center-embedding's proposal is taken: it meets both criteria in
+  every round (over its near misses by +39 points, +20 to +54; over decoys by
+  +55, +42 to +66). Three proposals are not taken, because they rest on the
+  second criterion alone: nominalization, participial-clause and
+  inanimate-subject stay opt-in. This departs from the plan's decisions, and the reason
+  is recorded here; the plan's table is in `eval/kinds/report.md` as it was
+  computed.
+- Per kind, stacked-nouns meets the plan's rule for being off in blog posts
+  (none of 12 accepted, against 35% elsewhere, from a small cell), and
+  long-dependency has a detection problem in ordinary code comments (the
+  construction present in 1 of 12). Neither is acted on yet: readcost has no
+  notion of a blog post, and long-dependency in ordinary comments already
+  reports at info.
+- The models differ in leniency as before: pooled, Fable accepts 60% of
+  hyphen-compound findings and Haiku 3%.
+- One primed rater may have marked some three-item lists as present for
+  inline-list in its first 15 batches; its labels are kept (see the plan's
+  amendments).
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News
