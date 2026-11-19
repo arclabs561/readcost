@@ -296,7 +296,7 @@ def gh(args: list[str], tries: int = 4) -> str:
                            timeout=180, check=False)
         if p.returncode == 0:
             return p.stdout
-        if "404" in p.stderr or "Not Found" in p.stderr:
+        if any(x in p.stderr for x in ("HTTP 404", "HTTP 409", "HTTP 451", "Not Found")):
             raise FileNotFoundError(p.stderr.strip()[:200])
         time.sleep(10 * (attempt + 1))
     raise RuntimeError(f"gh api {' '.join(args)}: {p.stderr.strip()[:300]}")
@@ -346,25 +346,13 @@ def cmd_search(args) -> None:
     print(len(seen), "candidates ->", out)
 
 
-GQL = """query { %s }"""
-GQL_REPO = """r%d: repository(owner: %s, name: %s) { isFork isArchived defaultBranchRef { name target { oid } } }"""
-
-
-def head_commits(repos: list[str]) -> dict[str, dict]:
-    out = {}
-    for k in range(0, len(repos), 50):
-        chunk = repos[k:k + 50]
-        parts = [GQL_REPO % (i, json.dumps(r.split("/")[0]), json.dumps(r.split("/")[1])) for i, r in enumerate(chunk)]
-        p = subprocess.run(["gh", "api", "graphql", "-f", "query=" + GQL % " ".join(parts)],
-                           capture_output=True, text=True, timeout=180, check=False)
-        data = json.loads(p.stdout or "{}").get("data") or {}
-        for i, r in enumerate(chunk):
-            node = data.get(f"r{i}")
-            if node:
-                ref = node.get("defaultBranchRef") or {}
-                out[r] = {"fork": node["isFork"], "archived": node["isArchived"],
-                          "commit": (ref.get("target") or {}).get("oid")}
-    return out
+def head_commit(repo: str, branch: str) -> str | None:
+    """SHA of the head commit of branch (REST; GraphQL is not reachable from this shell)."""
+    try:
+        sha = gh(["-H", "Accept: application/vnd.github.sha", f"repos/{repo}/commits/{branch}"]).strip()
+    except FileNotFoundError:
+        return None
+    return sha if re.fullmatch(r"[0-9a-f]{40}", sha) else None
 
 
 def _store(ref: Path, repo: str, path: str, data: bytes) -> str:
@@ -417,22 +405,28 @@ def cmd_fetch(args) -> None:
             state[r] = {"drop": why}
         else:
             todo.append(r)
-    heads = head_commits([r for r in todo if r not in state])
-    for r in todo:
-        h = heads.get(r)
-        if not h or not h["commit"]:
-            state[r] = {"drop": "no default branch"}
-        elif h["fork"] or h["archived"]:
-            state[r] = {"drop": "fork" if h["fork"] else "archived"}
-        else:
-            state[r] = {"commit": h["commit"], "pending": True}
+    branch = {c["repo"]: c["default_branch"] for c in cands}
 
     def one(r):
+        try:
+            return fetch(r)
+        except RuntimeError as exc:
+            state[r] = {"drop": "fetch error", "error": str(exc)[:200]}
+            return r
+
+    def fetch(r):
         st = state[r]
+        if "commit" not in st:
+            st["commit"] = head_commit(r, branch[r])
+            if not st["commit"]:
+                state[r] = {"drop": "no default branch"}
+                return r
         st.update(fetch_readme(args.ref, r, st["commit"]))
         st.pop("pending", None)
         return r
 
+    for r in todo:
+        state[r] = {"pending": True}
     pending = [r for r, st in state.items() if st.get("pending")]
     with ThreadPoolExecutor(args.workers) as ex:
         for n, _ in enumerate(ex.map(one, pending), 1):

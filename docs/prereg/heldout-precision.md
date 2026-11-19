@@ -370,3 +370,14 @@ leaves open, written before any search, fetch or check was run:
   `excerpt`, `sentence`, `before` and `after`. The ids are six-digit
   numbers drawn with `random.Random("20261119:ids")` over the items in
   key order, so they carry no information about rule or decoy status.
+
+### 19 November 2026, after a failed first fetch
+
+GitHub's GraphQL API is not reachable from this shell, so the first fetch
+got nothing: every repository failed at the head-commit step, before any
+README was read. That attempt was discarded. The head commit now comes
+from the REST endpoint `repos/{repo}/commits/{branch}`, with the default
+branch that the search returned, and the fork and archived flags come from
+the search results only. A repository whose commit or README request fails
+for another reason (an empty repository, for example) is dropped as a
+fetch error.
