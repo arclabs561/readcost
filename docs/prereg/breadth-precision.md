@@ -424,3 +424,11 @@ cloned or any text read. One change to a decision rule, and details that
   one parse of each text.
 - The unprimed raters see `i`, `kind`, `excerpt`, `sentence`, `before` and
   `after`.
+
+### 19 November 2026, after labelling: one item drawn twice
+
+The sample holds one finding twice (id 768685, a TypeScript comment in
+`headwaymaps/headway`; the two rows differ by a stray `//` in the
+sentence), so raters saw 876 rows for 875 items. Every rater gave both
+copies the same label. The report counts the item once: it was run on the
+sample with the second row dropped.
