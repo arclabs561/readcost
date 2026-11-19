@@ -391,8 +391,10 @@ change.
    every repository unavailable and read no file. The draw instead clones
    each repository's default branch without file contents
    (`git clone --bare --depth 1 --filter=blob:none`). This gives the head
-   commit and the list of files with their sizes, and the files are read
-   from `raw.githubusercontent.com` at that commit. The README is the file
+   commit and the list of files, and the files are read from
+   `raw.githubusercontent.com` at that commit. The 1 MB limit applies to
+   the file as read (its text encoded as UTF-8), since the clone has no
+   sizes. The README is the file
    GitHub would show: the first match in the root, then in `.github/`,
    then in `docs/`, taking names (compared without case) in the order
    `README.md`, `README.markdown`, `README.mdx`, `README.rst`,

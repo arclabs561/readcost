@@ -304,16 +304,17 @@ def test_readme_choice_follows_github_and_files_come_at_the_commit():
     assert m.pick_readme({"Readme.rst": 1, "README": 1}) == "Readme.rst"
     assert m.pick_readme({"src/README.md": 1, ".github/README.md": 1, "docs/readme.md": 1}) == ".github/README.md"
     assert m.pick_readme({"src/README.md": 1}) is None
-    sizes = {"README.md": 10, "docs/guide.md": 20, "docs/huge.md": 2_000_000}
+    paths = ["README.md", "docs/guide.md", "docs/huge.md"]
     fetched = []
 
     def get(repo, commit, path):
         fetched.append((repo, commit, path))
-        return f"text of {path}"
-    commit, files = m.github_files("o/r", get_tree=lambda repo: ("abc", sizes), get=get)
+        return "x" * 2_000_000 if path == "docs/huge.md" else f"text of {path}"
+    commit, files = m.github_files("o/r", get_tree=lambda repo: ("abc", paths), get=get)
     assert commit == "abc" and files[0] == ("README.md", "text of README.md")
-    assert {p for p, _ in files} <= {"README.md", "docs/guide.md"}
+    assert [p for p, _ in files] == ["README.md", "docs/guide.md"]
     assert all(c == "abc" for _r, c, _p in fetched)
     assert m.github_files("o/r", get_tree=lambda repo: None) == "repository unavailable"
-    assert m.github_files("o/r", get_tree=lambda repo: ("abc", {"src/x.md": 1})) == "no README"
-    assert m.github_files("o/r", get_tree=lambda repo: ("abc", {"README.md": 2_000_000})) == "README over 1 MB"
+    assert m.github_files("o/r", get_tree=lambda repo: ("abc", ["src/x.md"])) == "no README"
+    assert m.github_files("o/r", get_tree=lambda repo: ("abc", ["README.md"]),
+                          get=lambda *a: "x" * 2_000_000) == "README over 1 MB"

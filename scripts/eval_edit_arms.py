@@ -230,6 +230,8 @@ def walk(repos: list[dict], files_for, analyzer, n: int = N_PARAGRAPHS) -> tuple
         if len(picked) >= n:
             break
         got = files_for(repo)
+        if len(log) % 100 == 0:
+            print(f"walked {len(log)}, drawn {len(picked)}", file=sys.stderr, flush=True)
         if isinstance(got, str):
             log.append({"repo": repo, "outcome": got})
             continue
@@ -262,10 +264,10 @@ def get_raw(repo: str, commit: str, path: str) -> str:
 README_ORDER = ("readme.md", "readme.markdown", "readme.mdx", "readme.rst", "readme.txt", "readme")
 
 
-def pick_readme(sizes: dict[str, int]) -> str | None:
+def pick_readme(paths) -> str | None:
     """The README GitHub would show: in the root, then .github/, then docs/, by extension in README_ORDER."""
     for folder in ("", ".github/", "docs/"):
-        here = sorted(p for p in sizes if p.lower().startswith(folder) and "/" not in p[len(folder):])
+        here = sorted(p for p in paths if p.lower().startswith(folder) and "/" not in p[len(folder):])
         for name in README_ORDER:
             for p in here:
                 if p[len(folder):].lower() == name:
@@ -273,48 +275,64 @@ def pick_readme(sizes: dict[str, int]) -> str | None:
     return None
 
 
-def tree(repo: str) -> tuple[str, dict[str, int]] | None:
-    """Head commit of the default branch and {path: size} of its files, from a clone without blobs."""
+def tree(repo: str) -> tuple[str, list[str]] | None:
+    """Head commit of the default branch and the paths of its files, from a clone without blobs.
+
+    `ls-tree` without `-l`: asking for sizes would fetch every blob, one request each.
+    """
     import os
     import tempfile
-    env = {**os.environ, "GIT_TERMINAL_PROMPT": "0"}
+    env = {**os.environ, "GIT_TERMINAL_PROMPT": "0", "GIT_NO_LAZY_FETCH": "1"}
     with tempfile.TemporaryDirectory() as d:
         g = f"{d}/g"
-        r = subprocess.run(["git", "clone", "-q", "--bare", "--depth", "1", "--filter=blob:none",
-                            f"https://github.com/{repo}", g], capture_output=True, timeout=180, check=False, env=env)
-        if r.returncode != 0:
+        try:
+            r = subprocess.run(["git", "clone", "-q", "--bare", "--depth", "1", "--filter=blob:none",
+                                f"https://github.com/{repo}", g], capture_output=True, timeout=180, check=False,
+                               env=env)
+            if r.returncode != 0:
+                return None
+            commit = subprocess.run(["git", "-C", g, "rev-parse", "HEAD"], capture_output=True, text=True,
+                                    check=True, env=env).stdout.strip()
+            out = subprocess.run(["git", "-C", g, "ls-tree", "-r", "-z", "HEAD"], capture_output=True,
+                                 text=True, check=True, timeout=120, env=env).stdout
+        except (subprocess.SubprocessError, OSError):
             return None
-        commit = subprocess.run(["git", "-C", g, "rev-parse", "HEAD"], capture_output=True, text=True,
-                                check=True).stdout.strip()
-        out = subprocess.run(["git", "-C", g, "ls-tree", "-r", "-l", "-z", "HEAD"], capture_output=True,
-                             text=True, check=True).stdout
-    sizes = {}
+    paths = []
     for entry in out.split("\0"):
-        if not entry:
-            continue
-        info, path = entry.split("\t", 1)
-        _mode, kind, _sha, size = info.split()
-        if kind == "blob" and size != "-":
-            sizes[path] = int(size)
-    return commit, sizes
+        if entry:
+            info, path = entry.split("\t", 1)
+            if info.split()[1] == "blob":
+                paths.append(path)
+    return commit, paths
 
 
 def github_files(repo: str, get_tree=tree, get=None):
-    """(commit, [(path, text)]) for a repository's README and up to two documentation files, or a reason."""
+    """(commit, [(path, text)]) for a repository's README and up to two documentation files, or a reason.
+
+    A file over 1 MB (UTF-8 bytes of the decoded text) is left out; for the README that drops the repository.
+    """
     get = get or get_raw
     got = get_tree(repo)
     if got is None:
         return "repository unavailable"
-    commit, sizes = got
-    readme = pick_readme(sizes)
+    commit, paths = got
+    readme = pick_readme(paths)
     if readme is None:
         return "no README"
-    if sizes[readme] > MAX_BYTES:
+    try:
+        text = get(repo, commit, readme)
+    except OSError:
+        return "README unavailable"
+    if len(text.encode("utf-8")) > MAX_BYTES:
         return "README over 1 MB"
-    files = [(readme, get(repo, commit, readme))]
-    for p in doc_paths([x for x in sizes if x != readme], repo):
-        if sizes[p] <= MAX_BYTES:
-            files.append((p, get(repo, commit, p)))
+    files = [(readme, text)]
+    for p in doc_paths([x for x in paths if x != readme], repo):
+        try:
+            text = get(repo, commit, p)
+        except OSError:
+            continue
+        if len(text.encode("utf-8")) <= MAX_BYTES:
+            files.append((p, text))
     return commit, files
 
 
