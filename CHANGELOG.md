@@ -126,6 +126,10 @@ configuration.
   phrases, or no clause) and reports a gap of prepositional phrases at info.
   The default, `"words"`, is unchanged. `scripts/eval_gap_content.py` splits
   the labelled findings by gap class.
+- `scripts/rebuild_items.py` rebuilds the rated items of the three precision
+  rounds from their committed pointers, with readcost at each round's frozen
+  commit, and `--verify` compares them field by field with another copy.
+  docs/evaluation.md, "Rebuilding the rated items", has the results.
 - `scripts/dataset_matrix.py` and `scripts/dataset_matrix_report.py`, with
   the `matrix` jobs of the eval workflow: one record per text for fourteen
   datasets of human ratings, revisions and reading times, each analysed on

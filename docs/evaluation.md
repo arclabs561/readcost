@@ -2888,6 +2888,54 @@ rounded to the nearest point; the report has the exact counts.
   inline-list in its first 15 batches; its labels are kept (see the plan's
   amendments).
 
+## Rebuilding the rated items
+
+The repository holds pointers to the items of the three precision rounds,
+not their text. Each row of `eval/heldout/sample.jsonl`,
+`eval/breadth/sample.jsonl` and `eval/kinds/sample.jsonl` names a file at a
+commit of a repository. It gives the file's hash and the item's offsets in
+that file. `scripts/rebuild_items.py` turns them back
+into the items as the raters saw them:
+
+```bash
+python3 scripts/rebuild_items.py --round all        # ref/rebuild/items/round{1,2,3}.jsonl.gz
+python3 scripts/rebuild_items.py --round all --verify DIR --no-build
+```
+
+It fetches each file from a blobless clone of its pinned commit and checks
+its Git hash. Commit messages come from `git log`, and pull request bodies
+from GitHub's issue search, checked against the SHA-256 in the pointer.
+`GITHUB_TOKEN` is optional; with it the search waits less between calls.
+The script then runs readcost at the commit each plan froze (`a57e19e`,
+`fa4a42c`, `663e0cc`). Each one is a checkout under `ref/rebuild/`,
+installed with `uv sync --locked`, so the job does not install this
+checkout. For each item it regenerates every field a rater saw, from the
+rule and message to the context on each side, the way each draw did, near
+misses and decoys included. It needs git, uv, GitHub and the Python package index. An item
+whose source is gone or has changed is unrecoverable: it is listed in
+`round{N}.missing.jsonl` with the reason, and nothing takes its place.
+
+Run on 19 November 2026 and compared, field by field, with copies built
+from the batch files that went to the raters:
+
+| Round | Items | Match exactly | Unrecoverable | Other |
+| --- | --- | --- | --- | --- |
+| 1 | 597 | 585 | 12: their 10 repositories are gone | none |
+| 2 | 875 | 871 | 3: pull request bodies edited since the draw | 1, see below |
+| 3 | 1,694 | 1,694 | none | none |
+
+The odd item in round 2 is id 768685, which the sample holds twice
+(round 2's amendments). The rebuild keeps the first row, the one with
+the stray `//`. The reference copy took its primed fields from the second
+row, which a rater's batches happened to show first, and its unprimed
+excerpt from the first.
+
+Pull request bodies are the weak part: authors can edit them. A run 40
+minutes earlier found two edited bodies; by this run a third had changed.
+A clean run of all three rounds took 10.5 minutes on two cores, with uv's
+download cache and the spaCy model already in place: 3 minutes for round
+1, 4.5 for round 2 (the search waits between calls) and 3 for round 3.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News
