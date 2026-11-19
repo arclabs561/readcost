@@ -2682,6 +2682,65 @@ labels; no person labelled anything. Against rater 1 in-sample, the held-out
 raters accept inanimate-subject less and differ on the other rules only when
 the lenient rater is counted.
 
+## Held-out precision: a wider panel and unprimed raters
+
+An amendment to the plan above ("a wider panel", committed before any of
+these labels existed) added nine raters on the same 597 items: three each of
+Claude Sonnet 5.5, Haiku 5.5 and Fable 5.2, with fresh shuffles and the same
+rubric. With the first three (Opus 5.5) they make twelve primed raters. Three
+more raters (Opus, Sonnet, Haiku) saw each item without readcost's rule name
+or message, and were asked only whether an editor would change the marked
+text ("unprimed"). All are one family of models. Labels and the full report
+are in `eval/heldout/` (`panel-report.md`).
+
+On READMEs (S1), majority of twelve:
+
+| Rule | Accepted, primed | Correct, primed | Accepted, unprimed |
+| --- | --- | --- | --- |
+| stacked-nouns | 23 of 40 (57%) | 0 | 5 of 40 (12%) |
+| long-dependency | 16 of 40 (40%) | 3 | 15 of 40 (38%) |
+| inanimate-subject | 0 of 40 | 0 | 8 of 40 (20%) |
+| reduced-object-relative | 19 of 40 (48%) | 0 | 8 of 40 (20%) |
+| hyphen-compound | 26 of 40 (65%) | 0 | 8 of 40 (20%) |
+| inline-list | 10 of 40 (25%) | 0 | 6 of 40 (15%) |
+| participial-clause (opt-in) | 19 of 20 (95%) | 0 | 0 of 20 |
+| nominalization (opt-in) | 17 of 20 (85%) | 0 | 3 of 20 (15%) |
+| decoys, random span | 0 of 40 | 0 | 0 of 40 |
+| decoys, longest sentence | 1 of 40 | 0 | 13 of 40 (33%) |
+
+- The pre-registered results. inanimate-subject has none accepted by the
+  twelve (upper bound 9%), so its move to opt-in stands. No other default
+  rule meets the rule for opt-in. Under the unprimed rubric a "correct"
+  label is too rare to test anything: 13 of the 240 findings of default
+  rules, and 2 of 80 decoys. By point estimate, stacked-nouns, long-dependency and
+  inanimate-subject do no better than the decoys; with intervals, no rule
+  does better.
+- Priming decides most of the acceptance. Told the rule and its message,
+  the twelve accept 57% of stacked-nouns findings and 95% of
+  participial-clause findings; shown the same sentences without them, the
+  unprimed raters see a problem in 12% and 0%. A model reading readcost's
+  message tends to agree with it. This bears on agents that act on
+  readcost's feedback (see the edit test, PR #96), and it means the primed
+  acceptance figures above, in the first report and in the in-sample
+  labels, measure partly the message and not the sentence.
+- Exploratory, not pre-registered: unprimed acceptance against the decoys.
+  On READMEs, only long-dependency (+21 points, 95% interval +5 to +38) and
+  center-embedding (+24, +3 to +46) are accepted more often than all
+  decoys, and neither more often than the longest-sentence decoys alone
+  (long-dependency +5, −15 to +25). On READMEs, then, no rule picks out
+  sentences that need work better than choosing the longest sentence that
+  has no finding. On docs files (S2), two rules do better than the long
+  decoys, from small cells: reduced-object-relative (17 of 20, against 8 of
+  20 long decoys) and center-embedding (9 of 10).
+- The four models differ in leniency more than they disagree on order.
+  Primed, Haiku accepts least (12% of stacked-nouns findings), Sonnet and
+  Fable most (78%, 62%); the agreement between the four model majorities is
+  kappa 0.51, the same as within the twelve (0.51). "Correct" is rare for
+  every model: no model's majority calls more than 12% of any default
+  rule's S1 findings correct.
+- One Haiku rater wrote its last batch before reading the items and then
+  rewrote it from the sentences; its labels are kept as it left them.
+
 ## Not yet evaluated
 
 The corpus above covers edited essays and documentation, READMEs, Hacker News
