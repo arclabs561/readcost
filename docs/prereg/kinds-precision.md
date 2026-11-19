@@ -580,3 +580,11 @@ any text read. Counts from the searches, and details that
   168 near misses, 176 random decoys) and 541 ranked sentences from 212
   documents for the unprimed raters only. No key and no rule with
   normalized sentence occurs twice.
+
+### 19 November 2026, after labelling: notes on the labels
+
+- One primed Haiku rater (rater 8) reported that in its first 15 batches it
+  may have marked three-item lists "present" for inline-list, though the
+  rubric asks for four or more, and corrected this only from batch 16 on.
+  Its labels are kept as it left them; "present" is a secondary outcome.
+- All fifteen label files cover every item exactly once.
