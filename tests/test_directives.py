@@ -7,8 +7,12 @@ from readcost.engine import Analyzer
 D = "We tune the shard compaction retry budget by hand, and it does not own indexing or compaction."
 
 
+# inanimate-subject is opt-in; turn it on so the directives have two rules to act on.
+ON = Config(rules={"inanimate-subject": "info"})
+
+
 def found(text: str) -> list[tuple[int, str]]:
-    return sorted((f.line, f.feature) for f in Analyzer(Config()).check_text(text, "markdown").findings)
+    return sorted((f.line, f.feature) for f in Analyzer(ON).check_text(text, "markdown").findings)
 
 
 def test_ignore_with_a_rule_drops_only_that_rule_in_the_next_block():
@@ -35,6 +39,6 @@ def test_ignore_before_a_list_covers_every_item():
 
 
 def test_misspelled_rule_is_reported_in_a_note():
-    r = Analyzer(Config()).check_text(f"<!-- readcost: ignore stacked-noun -->\n{D}\n", "markdown")
+    r = Analyzer(ON).check_text(f"<!-- readcost: ignore stacked-noun -->\n{D}\n", "markdown")
     assert {f.feature for f in r.findings} == {"inanimate-subject", "stacked-nouns"}
     assert r.notes == ["unknown rule in a readcost directive: stacked-noun; `readcost explain` lists the rules"]

@@ -5,7 +5,8 @@ from readcost import Analyzer, Config
 
 @pytest.fixture(scope="module")
 def analyzer():
-    return Analyzer(Config())
+    # inanimate-subject is opt-in; these tests also cover its detector.
+    return Analyzer(Config(rules={"inanimate-subject": "info"}))
 
 
 def feats(analyzer, text, **kw):
@@ -84,3 +85,9 @@ def test_verdict_thresholds(analyzer):
              "present versus after deleting those sidecars and forcing source-segment rebuilds. "
              "We tune the shard compaction retry budget by hand.")
     assert analyzer.check_text(dense, "markdown").verdict == "block"
+
+
+def test_inanimate_subject_is_off_by_default():
+    # Held-out precision (docs/evaluation.md): none of 40 findings accepted.
+    text = "It does not own indexing or compaction in any form."
+    assert "inanimate-subject" not in [f.feature for f in Analyzer(Config()).check_text(text, "markdown").findings]

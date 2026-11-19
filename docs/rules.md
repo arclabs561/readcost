@@ -18,7 +18,7 @@ its rule.
 | --- | --- | --- |
 | stacked-nouns | "For store restart measurement, the example prints first snapshot-query cost with persisted WAND sidecars present versus after deleting those sidecars and forcing source-segment rebuilds." | "To measure a store restart, the example prints the cost of the first snapshot query twice: with the persisted WAND sidecars present, and after deleting them, which forces each segment to be rebuilt from its source." |
 | long-dependency | "Comparisons keep the declared artifact-digest relation and packet-shape evidence as separate claims." | "Comparisons keep two claims separate: the relation that the artifact digests declare, and the evidence from packet shapes." |
-| inanimate-subject | "It does not decide how text should be split; it records the chosen span." | "The caller decides how to split the text; slabs records the span it chose." |
+| inanimate-subject (opt-in) | "It does not decide how text should be split; it records the chosen span." | "The caller decides how to split the text; slabs records the span it chose." |
 | reduced-object-relative | "`compressed_postings` compresses an inverted-index posting list with cnk, the storage-shrink use case these ID-set codecs exist for." | "`compressed_postings` uses cnk to compress the posting list of an inverted index. Storing ID sets in less space is what these codecs are for." |
 | hyphen-compound | "The missing-pattern check in `gitignore_audit` is a pattern-presence heuristic." | "The missing-pattern check in `gitignore_audit` only looks for whether a pattern is present." |
 | inline-list | "`durability` provides filesystem and in-memory directories, atomic writes, WALs, record logs, checkpoint files, CRC validation, and sync helpers." | a bulleted list |
@@ -65,6 +65,14 @@ A thing doing a person's action: a verb that normally takes a person as
 subject, such as own or decide, with a file or a function as its subject. It uses word lists derived from
 WordNet, so treat its findings as prompts to reread, not verdicts. An
 identifier as a subject (`` `parse()` returns ``) is not reported.
+
+It is opt-in after 0.3.0. On READMEs the rules had not been tuned on, three
+blind model raters accepted none of 40 of its findings, and judged the
+construction present in 9
+([evaluation](evaluation.md#held-out-precision-pre-registered)). The
+paper finds this construction more often in model text than in human
+corpora; the detector, not that result, is what failed. Turn it on
+with `inanimate-subject = "info"` under `[readcost.rules]`.
 
 ### reduced-object-relative
 

@@ -129,7 +129,13 @@ def test_git_pre_commit_survives_a_non_utf8_staged_file(tmp_path):
 
 # --------------------------------------------------------------- batch B
 
+# inanimate-subject is opt-in; the tests of its detector turn it on.
+INANIMATE_ON = Config(rules={"inanimate-subject": "info"})
+
+
 def _findings(text, feature=None, **cfg):
+    if feature == "inanimate-subject":  # opt-in; turn it on to test its detector
+        cfg.setdefault("rules", {"inanimate-subject": "info"})
     found = Analyzer(Config(**cfg)).check_text(text, "markdown").findings
     return [f for f in found if feature is None or f.feature == feature]
 
@@ -332,14 +338,14 @@ def test_a_row_of_links_is_navigation_not_prose():
     ("The output of the engineers decides the schedule.", True),
 ])
 def test_quantity_subject_takes_the_animacy_of_what_it_counts(sentence, flagged):
-    findings = Analyzer(Config()).check_text(sentence, "markdown").findings
+    findings = Analyzer(INANIMATE_ON).check_text(sentence, "markdown").findings
     assert any(f.feature == "inanimate-subject" for f in findings) is flagged
 
 
 def test_quantity_without_a_counted_noun_keeps_its_own_animacy():
     # From arclabs561/deformat's README: nothing is counted, so "number" is a thing.
     text = "Reporting per page type is the point: a single ALL number hides that one category carries the result."
-    findings = Analyzer(Config()).check_text(text, "markdown").findings
+    findings = Analyzer(INANIMATE_ON).check_text(text, "markdown").findings
     assert [f.feature for f in findings if f.feature == "inanimate-subject"] == ["inanimate-subject"]
 
 
@@ -477,7 +483,7 @@ def test_generic_hook_rejects_a_bad_line_range_with_exit_2():
 
 
 def test_phrasal_verb_that_takes_things_is_not_an_inanimate_subject():
-    a = Analyzer(Config())
+    a = Analyzer(INANIMATE_ON)
     feats = lambda t: [f.feature for f in a.check_text(t, "markdown").findings]  # noqa: E731
     assert "inanimate-subject" not in feats("Large inputs blow up the memory usage of the parser.")
     # A figurative phrasal verb with a thing as subject is still reported.

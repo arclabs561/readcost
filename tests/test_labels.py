@@ -215,7 +215,7 @@ def test_export_writes_a_blind_sheet_and_a_key(exported):
     text = (exported / "sheet.csv").read_text(encoding="utf-8")
     rows = list(csv.DictReader(io.StringIO(text)))
     keys = [json.loads(line) for line in (exported / "sheet.key.jsonl").read_text().splitlines()]
-    assert len(rows) == len(keys) >= 6 and [r["item"] for r in rows] == [k["item"] for k in keys]
+    assert len(rows) == len(keys) >= 5 and [r["item"] for r in rows] == [k["item"] for k in keys]
     assert tuple(rows[0]) == labels.SHEET_COLUMNS
     assert "a.md" not in text  # the sheet does not say where a sentence is from
     for row, key in zip(rows, keys):

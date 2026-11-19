@@ -136,10 +136,10 @@ Other commands:
 | --- | --- |
 | stacked-nouns | [three or more nouns in a row](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#stacked-nouns) |
 | long-dependency | [a subject far from its verb, or a verb far from its object](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#long-dependency) |
-| inanimate-subject | [a thing doing a person's action](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#inanimate-subject) |
 | reduced-object-relative | [an object relative clause without "that"](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#reduced-object-relative) |
 | hyphen-compound | [an ad hoc hyphenated noun compound](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#hyphen-compound) |
 | inline-list | [four or more items listed in one sentence](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#inline-list) |
+| inanimate-subject (opt-in) | [a thing doing a person's action](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#inanimate-subject) |
 | participial-clause (opt-in) | [a clause hung on an -ing verb after a comma](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#participial-clause) |
 | nominalization (opt-in) | [an action written as a noun](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#nominalization) |
 | center-embedding (opt-in) | [a clause nested inside a nested clause](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#center-embedding) |
