@@ -110,10 +110,14 @@ OPEN_MODELS = {
     # Replaces Mistral Small 4 only if that cannot be served on one H200 in the pilot.
     "mistralai/Ministral-3-14B-Instruct-2512": {
         "revision": "29439f81c2be264d8d393273f99e7db9c0961120", "family": "Mistral",
-        "licence": "Apache-2.0", "extra": {}, "engine": TEXT_ONLY},
+        "licence": "Apache-2.0", "extra": {},
+        # As its card says, and as the open-raters plan loads it.
+        "engine": {**TEXT_ONLY, "tokenizer_mode": "mistral", "config_format": "mistral", "load_format": "mistral"}},
 }
-OPEN_EDITORS = ["Qwen/Qwen3.8-27B", "google/gemma-4-31B-it", "mistralai/Mistral-Small-4-119B-2603"]
-OPEN_JUDGES = ["openai/gpt-oss-120b", "zai-org/GLM-4.7-Flash", "allenai/Olmo-3.1-32B-Instruct"]
+# The judges are three of the four families of the open-raters plan (pull request #110), at the
+# same revisions; the editors come from three families that do not judge (the second amendment).
+OPEN_EDITORS = ["openai/gpt-oss-120b", "mistralai/Mistral-Small-4-119B-2603", "allenai/Olmo-3.1-32B-Instruct"]
+OPEN_JUDGES = ["Qwen/Qwen3.8-27B", "google/gemma-4-31B-it", "zai-org/GLM-4.7-Flash"]
 MISTRAL_FALLBACK = ("mistralai/Mistral-Small-4-119B-2603", "mistralai/Ministral-3-14B-Instruct-2512")
 MAX_TOKENS = 2048        # reply tokens per call on the open models
 MAX_MODEL_LEN = 8192

@@ -565,7 +565,10 @@ def test_the_open_models_follow_the_amendment():
     assert not any("anthropic" in x.lower() or "claude" in x.lower() for x in fams)
     assert all(re.fullmatch(r"[0-9a-f]{40}", c["revision"]) for c in m.OPEN_MODELS.values())
     assert all(c["licence"] in ("Apache-2.0", "MIT") for c in m.OPEN_MODELS.values())
-    assert m.open_models(fallback=True)[0][2] == "mistralai/Ministral-3-14B-Instruct-2512"
+    assert m.open_models(fallback=True)[0][1] == "mistralai/Ministral-3-14B-Instruct-2512"
+    # The judges are the open-raters plan's Qwen, Gemma and GLM models (pull request #110).
+    assert judges == ["Qwen/Qwen3.8-27B", "google/gemma-4-31B-it", "zai-org/GLM-4.7-Flash"]
+    assert "--load-format" in m.serve_args("mistralai/Ministral-3-14B-Instruct-2512")
     args = m.serve_args("mistralai/Mistral-Small-4-119B-2603")
     rev = m.OPEN_MODELS["mistralai/Mistral-Small-4-119B-2603"]["revision"]
     assert args[:5] == ["mistralai/Mistral-Small-4-119B-2603", "--revision", rev, "--tokenizer-revision", rev]
@@ -690,7 +693,7 @@ def test_the_pilot_takes_five_paragraphs_loads_each_model_once_and_reports_no_wi
         tmp_path, analyzer, monkeypatch):
     job = _job(monkeypatch)
     ptr, fetch = _job_args(tmp_path, n=7)
-    backends = FakeBackends(broken={"allenai/Olmo-3.1-32B-Instruct"})
+    backends = FakeBackends(broken={"zai-org/GLM-4.7-Flash"})
     ref = tmp_path / "ref"
     job.main(["--run-id", "pilot-1", "--pilot", "--hours", "1.5", "--ref", str(ref), "--pointers", str(ptr),
               "--no-upload", "--workers", "4"], backends={"server": backends}, fetch=fetch,
@@ -699,8 +702,8 @@ def test_the_pilot_takes_five_paragraphs_loads_each_model_once_and_reports_no_wi
     editors, judges = job.ea.open_models()
     assert backends.loaded == editors + judges[:2]
     pilot = json.loads((ref / "pilot.json").read_text())
-    olmo = [s for s in pilot["steps"] if s["model"] == "allenai/Olmo-3.1-32B-Instruct"][0]
-    assert "out of memory" in olmo["error"] and pilot["status"]["BC"] is False
+    glm = [s for s in pilot["steps"] if s["model"] == "zai-org/GLM-4.7-Flash"][0]
+    assert "out of memory" in glm["error"] and pilot["status"]["BC"] is False
     assert pilot["replies"]["openai/gpt-oss-120b"]["failed"] == 0
     assert not (ref / "edit-arms.md").exists()
 
