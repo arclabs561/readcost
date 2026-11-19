@@ -2,8 +2,8 @@
 
 This page lists what each rule flags, how findings become a verdict, and
 what readcost prints on real READMEs. `readcost explain RULE` prints why a
-rule's construction costs the reader, how to fix it, and how many of its
-labelled findings raters accepted.
+rule's construction costs the reader, how to fix it, and how model raters
+judged its findings in the held-out test across formats.
 
 ## Examples
 

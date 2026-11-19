@@ -418,8 +418,9 @@ def _measured(rule: str) -> str:
     row = _precision(rule)
     if row is None:
         return "too few labelled findings to measure (see docs/evaluation.md)"
-    return (f"{row['accepted']} of {row['labelled']} labelled findings judged correct or defensible "
-            f"by a majority of {data['raters']} model raters, on essays and docs by well-regarded writers")
+    return (f"of {row['labelled']} findings in a held-out test across formats, a majority of "
+            f"{data['raters']} model raters said an editor would fix {row['correct']} and called "
+            f"{row['accepted'] - row['correct']} more optional (docs/evaluation.md, Precision across formats)")
 
 
 def _cmd_explain(args) -> int:

@@ -257,7 +257,7 @@ environment error (a missing spaCy model, an unreadable file or config) exits
 ```json
 {"verdict": "advise", "cost_index": 21.4, "words": 233, "points": 5.0,
  "counts": {"stacked-nouns": 3, "inline-list": 2},
- "feedback": "readcost: 5 hard-to-read constructions in 233 words. ...",
+ "feedback": "readcost: 5 sentences in 233 words that may be hard to follow. ...",
  "findings": [{"feature": "stacked-nouns", "severity": "warn", "line": 3, "...": "..."}]}
 ```
 

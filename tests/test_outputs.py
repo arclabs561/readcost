@@ -142,13 +142,30 @@ def test_json_and_agent_output_carry_measured_precision():
     for f in rows:
         row = data.get(f["feature"])
         if row and row["labelled"] >= 5:
-            assert f["precision"] == {"accepted": row["accepted"], "labelled": row["labelled"]}
+            assert f["precision"] == {"correct": row["correct"], "accepted": row["accepted"],
+                                      "labelled": row["labelled"]}
         else:
             assert f["precision"] is None
     assert any(f["precision"] for f in rows)
     first = next(f for f in rows if f["precision"])
     p = first["precision"]
-    assert f"(raters accepted {p['accepted']} of {p['labelled']} such findings)" in report.agent([r])
+    out = report.agent([r])
+    assert (f"Raters said an editor would fix {p['correct']} of {p['labelled']} such findings, "
+            f"and called {p['accepted'] - p['correct']} more optional." in out)
+    assert "Is it hard to follow here?" in out and "These are questions, not errors" in out
+
+
+def test_rule_precision_matches_the_committed_labels():
+    # data/rule_precision.json is built from eval/breadth/ by a script; a
+    # hand edit or a stale file fails here.
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    proc = subprocess.run([sys.executable, str(root / "scripts/build_rule_precision.py"), "--check"],
+                          capture_output=True, text=True, check=False)
+    assert proc.returncode == 0, proc.stderr
 
 
 def test_rule_sections_match_the_headings_in_rules_md():
