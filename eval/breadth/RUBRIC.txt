@@ -1,0 +1,56 @@
+Rubric (RUBRIC from scripts/second_rater.py, verbatim)
+
+You are labelling findings from a prose linter called readcost. Each finding says that a sentence
+contains a construction that may slow readers down. Judge each finding on its own, as an experienced
+technical editor would.
+
+Labels:
+- "c" (correct): the construction is really there and it is a real reading cost an editor would fix.
+- "d" (defensible): the construction is there and an editor might reasonably flag it, but fixing it is optional
+  or the author's choice is fine.
+- "w" (wrong): the construction is not really there (misparse, wrong definition), or it is there but costs the
+  reader nothing (a fixed phrase, a term of art, an idiom, an ordinary verb).
+
+Also give "present": true if the construction the rule names is actually in the sentence (judged by the rule's
+definition, apart from whether it costs the reader), else false. Give a short "cause" (under 8 words).
+
+Rules:
+- stacked-nouns: three or more nouns in a row used as one noun phrase ("source segment rebuilds").
+- long-dependency: related words (subject and verb, verb and object) far apart in the sentence.
+- inanimate-subject: a thing as subject of a verb that normally needs a person ("the file decides").
+- denominal-verb: a noun pressed into service as a verb ("footnote the exception").
+- reduced-object-relative: an object relative clause without "that" ("the format the reader expects").
+- hyphen-compound: an ad hoc hyphenated noun-noun compound used as a modifier ("storage-shrink use case").
+- inline-list: four or more coordinated items, or slash-joined items, inside one sentence.
+- center-embedding: a clause nested inside another clause that is itself in the middle of a larger clause
+  ("the reporter who the senator who John met attacked").
+- undefined-acronym: an acronym used before, or without, being spelled out in the document.
+
+Code spans in the sentence may appear as the placeholder word "Xcode"; treat it as a code identifier.
+Return JSON matching the schema: one entry per finding, with its "i" unchanged.
+
+Two rules the list above does not define:
+- nominalization: an action turned into a noun with a light verb ("performs validation of" for "validates").
+- participial-clause: a present participle clause tacked onto a sentence ("..., highlighting what changed").
+
+Each item also has "kind", the type of text the sentence comes from (for example "Markdown documentation", "Rust doc comment", "commit message" or "pull request description"); judge it as an editor of that type of text would.
+
+Reply format
+
+Each batch file is a JSON list of findings. Each finding has "i" (its id), "kind", "rule", "message", "excerpt"
+(the flagged words), "sentence", and "before" and "after" (up to 240 characters of the source on each
+side of the sentence, for context only; judge the finding in "sentence").
+
+Reply with one JSON object for the batch, and nothing else:
+
+{"labels": [{"i": 123456, "label": "c", "present": true, "cause": "short reason"}, ...]}
+
+- one entry per finding in the batch, with its "i" unchanged;
+- "label" is "c", "d" or "w";
+- "present" is true or false;
+- "cause" is a string under 8 words (it may be empty).
+
+The labels of one rater, all batches together, are collected into one file: a JSON list of
+{"id": <i>, "label": "c" | "d" | "w", "construction_present": true | false}
+(an optional "cause" may stay). The report script also reads the reply objects above as they
+are, one per batch, and accepts "i" for "id" and "present" for "construction_present".

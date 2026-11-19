@@ -1,0 +1,204 @@
+{
+ "labels": [
+  {
+   "i": 693450,
+   "label": "w",
+   "cause": "clear, repeated word is tolerable"
+  },
+  {
+   "i": 333134,
+   "label": "w",
+   "cause": "clear list of uses"
+  },
+  {
+   "i": 363504,
+   "label": "d",
+   "cause": "served is an odd verb choice"
+  },
+  {
+   "i": 913683,
+   "label": "w",
+   "cause": "clear statistic description"
+  },
+  {
+   "i": 560335,
+   "label": "w",
+   "cause": "clear, optional parameter stated"
+  },
+  {
+   "i": 927513,
+   "label": "w",
+   "cause": "clear list of report contents"
+  },
+  {
+   "i": 255456,
+   "label": "w",
+   "cause": "clear tagline"
+  },
+  {
+   "i": 947831,
+   "label": "w",
+   "cause": "repetitive but clear commit"
+  },
+  {
+   "i": 828429,
+   "label": "d",
+   "cause": "unpunctuated column list, naming ambiguous"
+  },
+  {
+   "i": 331258,
+   "label": "w",
+   "cause": "clear commit description"
+  },
+  {
+   "i": 347918,
+   "label": "d",
+   "cause": "UI label lacks quotation marks"
+  },
+  {
+   "i": 797679,
+   "label": "w",
+   "cause": "clear behavior description"
+  },
+  {
+   "i": 926495,
+   "label": "w",
+   "cause": "clear comment"
+  },
+  {
+   "i": 834832,
+   "label": "w",
+   "cause": "clear checklist item"
+  },
+  {
+   "i": 730660,
+   "label": "w",
+   "cause": "page title text, clear"
+  },
+  {
+   "i": 857952,
+   "label": "w",
+   "cause": "clear doc comment"
+  },
+  {
+   "i": 536176,
+   "label": "d",
+   "cause": "Fragment lacks a subject"
+  },
+  {
+   "i": 586916,
+   "label": "w",
+   "cause": "clear privacy statement"
+  },
+  {
+   "i": 638307,
+   "label": "d",
+   "cause": "missing article, incorrect number"
+  },
+  {
+   "i": 767829,
+   "label": "w",
+   "cause": "clear commit subject"
+  },
+  {
+   "i": 973290,
+   "label": "w",
+   "cause": "clear platform list"
+  },
+  {
+   "i": 348581,
+   "label": "w",
+   "cause": "clear PR summary"
+  },
+  {
+   "i": 491525,
+   "label": "w",
+   "cause": "clear change description"
+  },
+  {
+   "i": 749772,
+   "label": "w",
+   "cause": "clear test description"
+  },
+  {
+   "i": 615988,
+   "label": "w",
+   "cause": "clear commit description"
+  },
+  {
+   "i": 436131,
+   "label": "w",
+   "cause": "clear doc comment"
+  },
+  {
+   "i": 313399,
+   "label": "w",
+   "cause": "clear template placeholder"
+  },
+  {
+   "i": 590912,
+   "label": "w",
+   "cause": "clear rationale"
+  },
+  {
+   "i": 308394,
+   "label": "c",
+   "cause": "As natively, unclear, garbled"
+  },
+  {
+   "i": 132733,
+   "label": "w",
+   "cause": "clear rationale and design"
+  },
+  {
+   "i": 603901,
+   "label": "w",
+   "cause": "clear, neither tool prompts the other"
+  },
+  {
+   "i": 414822,
+   "label": "w",
+   "cause": "clear in math context"
+  },
+  {
+   "i": 780205,
+   "label": "w",
+   "cause": "long but clear, dashes bounded"
+  },
+  {
+   "i": 225285,
+   "label": "w",
+   "cause": "clear list of values"
+  },
+  {
+   "i": 568092,
+   "label": "w",
+   "cause": "clear docstring"
+  },
+  {
+   "i": 954406,
+   "label": "w",
+   "cause": "clear commit description"
+  },
+  {
+   "i": 567624,
+   "label": "d",
+   "cause": "clumsy fragment, adds does not affect"
+  },
+  {
+   "i": 220973,
+   "label": "w",
+   "cause": "standard license text"
+  },
+  {
+   "i": 637311,
+   "label": "w",
+   "cause": "clear YARD tags"
+  },
+  {
+   "i": 832415,
+   "label": "w",
+   "cause": "clear package description"
+  }
+ ]
+}
