@@ -73,6 +73,16 @@ configuration.
   Python `#` comment was a warning. A level set in config or a flag still
   wins. docs/research.md no longer says that `@param` lines in doc comments
   are skipped: they never were.
+- An inline footnote, `^[text]`, stopped readcost with a `TypeError`: the
+  footnote's paragraph has no line number in the parser's output. A regex
+  such as `^[a-z]` in a doc comment parses as one. The footnote's text is
+  now read at the line of its `^[`, and the words after it in the same
+  paragraph keep their offsets.
+- When readcost fails to extract the prose of one file, that file's result
+  has a note saying so, and the other files are still checked. Any other
+  error on one file is reported on that file and no longer stops the run.
+  Either way the exit status is still 2: a file readcost did not check is
+  not a pass.
 
 ## [0.3.0] - 2026-11-18
 

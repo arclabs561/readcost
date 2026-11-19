@@ -351,6 +351,8 @@ def _read_and_check(analyzer, opts: tuple, p: Path) -> tuple[list, str | None]:
         return results, None
     except (OSError, ValueError) as exc:
         return [], str(exc.strerror if isinstance(exc, OSError) and exc.strerror else exc)
+    except Exception as exc:  # noqa: BLE001 - a bug on one file must not stop the others
+        return [], f"internal error: {type(exc).__name__}: {exc}"
 
 
 # A process pool pays a model load per worker (about two seconds), so it is
@@ -422,6 +424,10 @@ def _collect(args, cfg, analyzer) -> tuple[list, bool]:
             failed = True
             print(f"readcost: {x}: {error}", file=sys.stderr)
         results.extend(out)
+    for r in results:
+        if r.error is not None:
+            failed = True  # the result's note says why; a file not checked is not a pass
+            print(f"readcost: {r.path}: not checked: {r.error}", file=sys.stderr)
     return results, failed
 
 
