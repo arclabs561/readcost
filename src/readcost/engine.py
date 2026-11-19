@@ -190,7 +190,7 @@ class Analyzer:
                 result.notes.append(f"text looks like {lang}, not English; readcost checks English only, "
                                     "so it reports no findings or reading time here")
                 return result
-        levels = self.cfg.rule_levels(path)
+        levels = self.cfg.rule_levels(path, context=context)
         enabled = {k for k, v in levels.items() if v != "ignore"}
         forced = {k: v for k, v in levels.items() if v in SEVERITIES}  # a level set in config or flags
         ctx = Context(self.cfg, self.profile, self.allow, enabled)
@@ -340,7 +340,8 @@ class Analyzer:
                    lines=None, field_path=None, last_only=False) -> Result:
         segments = extract(text, path, fmt, field_path=field_path, last_only=last_only,
                            comments=self.cfg.comments)
-        context = "commit" if (fmt or detect_format(path, text)) == "commit" else "prose"
+        kind = fmt or detect_format(path, text)
+        context = kind if kind in ("commit", "source") else "prose"
         result = self.analyze(segments, path, lines, context=context)
         result.source = text
         locate(result.findings, text)

@@ -9,6 +9,9 @@ configuration.
 
 ### Changed
 
+- inline-list is off in doc comments and docstrings unless a config sets
+  its level. In the pre-registered test across formats, model raters
+  accepted 1 of 28 of its findings there, against 5 of 16 in Markdown.
 - inanimate-subject is opt-in. In a pre-registered test on READMEs the rules
   had not been tuned on, model raters accepted none of its 40 findings and
   judged the construction present in 9 (docs/evaluation.md, "Held-out
