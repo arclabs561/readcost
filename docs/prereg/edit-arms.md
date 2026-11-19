@@ -400,3 +400,10 @@ change.
    `README.md`, `README.markdown`, `README.mdx`, `README.rst`,
    `README.txt`, `README`. Forks and archived repositories are known from
    the search results.
+5. Drop reason 2 could not act. The draw read `origin/main` as last
+   fetched, before the held-out precision study merged its
+   `eval/heldout/candidates.jsonl`, and the study's branch had no such
+   file. Checked afterwards against that file as merged: none of the 5,367
+   candidates is in it.
+6. The draw walked 784 repositories: 60 paragraphs drawn, 694 with no
+   eligible paragraph, 27 with no README, 3 that could not be cloned.
