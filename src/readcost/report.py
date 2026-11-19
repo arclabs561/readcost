@@ -18,6 +18,20 @@ from .features import FEATURES
 OUTPUTS = ("full", "concise", "json", "sarif", "github", "agent", "pr-comment")
 REPO_URL = "https://github.com/arclabs561/readcost"
 RULES_URL = REPO_URL + "#what-it-flags"
+# Rules with a section of their own in docs/rules.md; test_outputs checks this
+# set against the file's headings.
+RULE_SECTIONS = frozenset({
+    "stacked-nouns", "long-dependency", "inanimate-subject", "reduced-object-relative",
+    "hyphen-compound", "inline-list", "participial-clause", "nominalization", "center-embedding",
+    "undefined-acronym",
+})
+
+
+def rule_url(rule: str) -> str:
+    """The rule's section in docs/rules.md, or the README's rule table."""
+    if rule in RULE_SECTIONS:
+        return f"{REPO_URL}/blob/main/docs/rules.md#{rule}"
+    return RULES_URL
 # The template chooser, which lists the false-positive form; short enough for a terminal line.
 FEEDBACK_URL = REPO_URL + "/issues/new/choose"
 FEEDBACK_LINE = f"readcost: a finding is wrong? Report it at {FEEDBACK_URL}"
@@ -365,7 +379,7 @@ def sarif(results: list[Result], **_) -> str:
         "shortDescription": {"text": f.title},
         "fullDescription": {"text": f.why},
         "help": {"text": f.fix},
-        "helpUri": RULES_URL,
+        "helpUri": rule_url(f.id),
         "defaultConfiguration": {"level": level[f.severity]},
     } for f in FEATURES.values()]
     runs_results = []
