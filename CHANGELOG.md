@@ -9,6 +9,15 @@ configuration.
 
 ### Changed
 
+- `-o agent`, and the hooks that use it, put each finding as a question
+  ("Is it hard to follow here?") and tell the model to change a sentence
+  only if it reads badly. Model raters agreed with readcost's message far
+  more often than with the same sentence shown without it, so an order to
+  rewrite would pass that deference on to the agent.
+- The precision beside a finding, in `-o agent`, `-o json` and `readcost
+  explain`, comes from the held-out test across formats, built by
+  `scripts/build_rule_precision.py`, and now says how many findings raters
+  thought an editor would fix as well as how many they accepted.
 - inline-list is off in doc comments and docstrings unless a config sets
   its level. In the pre-registered test across formats, model raters
   accepted 1 of 28 of its findings there, against 5 of 16 in Markdown.
