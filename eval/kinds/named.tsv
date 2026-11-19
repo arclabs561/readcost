@@ -1,0 +1,9 @@
+repo	population	language	stars	created_at	default_branch	fork	archived	license
+github/site-policy	contrast		2202	2017-06-07T22:13:16Z	main	false	false	CC0-1.0
+github/docs	named	TypeScript	21509	2019-05-31T15:57:39Z	main	false	false	CC-BY-4.0
+Kotlin/KEEP	named	Markdown	3776	2016-03-21T12:54:23Z	main	false	false	Apache-2.0
+kubernetes/website	named	HTML	5433	2016-02-10T22:46:48Z	main	false	false	CC-BY-4.0
+openshift/runbooks	named	Shell	108	2021-01-07T01:05:25Z	master	false	false	Apache-2.0
+prometheus-operator/runbooks	named	HTML	123	2021-07-02T07:55:30Z	main	false	false	Apache-2.0
+rust-lang/blog.rust-lang.org	named	HTML	421	2014-09-08T19:38:05Z	main	false	false	Apache-2.0
+swiftlang/swift-evolution	named	Markdown	15886	2015-11-03T21:49:37Z	main	false	false	Apache-2.0

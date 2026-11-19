@@ -1,0 +1,625 @@
+repo	population	language	stars	created_at	default_branch	fork	archived	license
+7439henry/draft-ietf-avtcore-rtp-haptic-test	standards		0	2025-06-05T19:28:41Z	main	false	false	
+7439henry/draft-ietf-avtcore-rtp-haptics	standards	HTML	0	2023-12-06T15:27:35Z	main	false	false	NOASSERTION
+7439henry/draft-ietf-avtcore-rtp-vdmc	standards		0	2025-11-03T00:15:43Z	main	false	false	NOASSERTION
+7439henry/ietf-wg-avtcore-draft-ietf-avt	standards		0	2025-06-05T19:35:58Z	main	false	false	
+aaomidi/draft-ietf-acme-scoped-dns-challenges	standards	Dockerfile	7	2022-04-25T14:54:47Z	main	false	false	Apache-2.0
+abashandy-github/draft-ietf-rtgwg-segment-routing-ti-lfa	standards	HTML	0	2023-11-10T11:49:35Z	main	false	false	
+abbypan/ietf_draft	standards	HTML	0	2017-04-03T10:12:43Z	master	false	false	
+Abhayakara/draft-ietf-homenet-redact	standards	Makefile	0	2016-11-15T08:34:11Z	master	false	false	
+Abhayakara/draft-ietf-homenet-simple-naming-arch	standards	Makefile	0	2017-09-13T14:58:36Z	master	false	false	
+ableyjoe/draft-ietf-dnsop-as112-dname	standards		1	2014-09-08T16:43:32Z	master	false	false	
+ableyjoe/draft-ietf-dnsop-respsize	standards	Makefile	1	2014-01-29T16:45:08Z	master	false	false	
+ableyjoe/draft-ietf-dnsop-rfc6304bis	standards	Makefile	1	2014-10-08T18:14:30Z	master	false	false	
+actions-marketplace-validations/IRTF-HRPC_create-ietf-draft-repo-action	standards	Shell	0	2023-04-02T18:02:51Z	main	false	false	
+addogra/draft-ietf-rtgwg-vrrp-bfd-p2p	standards	HTML	0	2023-01-06T00:57:39Z	main	false	false	NOASSERTION
+agowa/IETF-RFC-drafts	standards	Dockerfile	0	2022-02-13T19:53:11Z	main	false	false	Apache-2.0
+ajeanmahoney/draft-ietf-stir-rfc4916-update	standards		0	2024-11-13T16:08:15Z	main	false	false	
+AlexanderFroemmgen/draft-ietf-mptcp-api-for-preference-awareness	standards		0	2018-04-06T15:37:30Z	master	false	false	MIT
+AnilKumarDocs/IETF_DRAFTS	standards		0	2016-08-17T07:35:37Z	master	false	false	
+antonyantony/draft-ietf-ipsecme-encrypted-esp-ping	standards	HTML	0	2025-04-01T09:57:48Z	main	false	false	
+antonyantony/draft-ietf-ipsecme-ikev2-beet-mode	standards	HTML	0	2025-02-25T14:57:40Z	main	false	false	
+appliedbits/draft-ietf-stir-certificate-transparency	standards	Makefile	1	2024-02-24T15:09:29Z	main	false	false	NOASSERTION
+aravindprasads/Patents-and-IETF-Drafts	standards		0	2020-12-23T04:38:39Z	main	false	false	
+balarajah/draft-ietf-ngfw-performance	standards		0	2020-10-17T21:26:18Z	main	false	false	
+becarpenter/draft-ietf-is-csmp	standards		0	2022-08-14T22:32:17Z	main	false	false	
+bemasc/draft-ietf-tls-lb	standards	Makefile	0	2019-06-28T01:16:38Z	master	false	false	NOASSERTION
+bemasc/ietf-drafts	standards	Makefile	1	2014-08-06T22:56:16Z	master	false	false	
+bfd-wg/draft-ietf-bfd-rfc5884-bis	standards		0	2024-03-25T11:53:10Z	main	false	false	
+bgp/draft-ietf-grow-bgp-gshut	standards	HTML	1	2017-06-13T08:15:01Z	master	false	false	
+bgp/draft-ietf-maxprefix	standards	HTML	2	2018-12-06T09:53:12Z	master	false	false	BSD-2-Clause
+bgp/draft-ietf-peering-api	standards	Makefile	6	2023-11-21T19:13:19Z	main	false	false	NOASSERTION
+billwuqin/draft-ietf-netmod-node-tags	standards		0	2022-04-12T14:26:11Z	main	false	false	
+BlockchainCommons/WIPs-IETF-draft-deterministic-cbor	standards	Makefile	1	2023-03-08T10:52:29Z	master	false	false	NOASSERTION
+BlockchainCommons/WIPs-IETF-draft-envelope	standards	Shell	2	2022-10-21T06:52:45Z	master	false	false	NOASSERTION
+BlockchainCommons/WIPs-IETF-draft-hashed-elision	standards	Makefile	0	2024-01-15T08:45:49Z	master	false	false	NOASSERTION
+bluesky-social/ietf-drafts	standards	Makefile	21	2025-09-10T20:34:00Z	main	false	false	
+bnitin/draft-ietf-i2rs-rib-info-model	standards		0	2013-06-13T23:40:39Z	master	false	false	
+boucadair/draft-boucadair-ietf-energy-overview	standards	Makefile	1	2025-09-01T13:44:02Z	main	false	false	NOASSERTION
+boucadair/draft-ietf-dots-data-channel	standards		0	2018-01-23T10:07:33Z	master	false	false	
+boucadair/draft-ietf-dots-multihoming	standards		0	2019-04-23T14:00:13Z	master	false	false	
+boucadair/draft-ietf-dots-robust-blocks	standards		0	2021-01-11T10:36:21Z	main	false	false	
+boucadair/draft-ietf-dots-signal-channel	standards		0	2018-01-23T06:41:42Z	master	false	false	
+boucadair/draft-ietf-i2rs-yang-l2-network-topology	standards		0	2019-10-15T07:09:28Z	master	false	false	
+boucadair/draft-ietf-ipsecme-add-ike	standards		0	2020-03-23T14:45:26Z	master	false	false	
+boucadair/draft-ietf-ipsecme-ipv6-ipv4-codes	standards		0	2019-04-17T13:13:22Z	master	false	false	
+boucadair/draft-ietf-lisp-pubsub	standards	Makefile	0	2023-01-27T09:37:04Z	main	false	false	NOASSERTION
+boucadair/draft-ietf-opsawg-add-encrypted-dns	standards		0	2021-06-01T14:26:40Z	main	false	false	
+boucadair/draft-ietf-opsawg-discardmodel	standards	Makefile	1	2025-01-17T08:29:16Z	main	false	false	NOASSERTION
+boucadair/draft-ietf-opsawg-nat-yang	standards	HTML	0	2017-11-06T12:46:24Z	master	false	false	
+boucadair/draft-ietf-sfc-nsh-integrity	standards		0	2020-06-19T07:28:08Z	master	false	false	
+boucadair/draft-ietf-sfc-oam-framework	standards		0	2017-08-03T09:08:37Z	master	false	false	
+boucadair/draft-ietf-softwire-dslite-yang	standards	HTML	0	2017-11-07T09:11:20Z	master	false	false	
+boucadair/draft-ietf-softwire-map-radius	standards		0	2019-05-20T07:05:35Z	master	false	false	
+boucadair/IETF-Drafts-Reviews	standards		2	2017-08-04T14:24:11Z	master	false	false	
+brady727/draft-ietf-httpbis-invalid-path-status-code	standards		0	2024-05-05T04:37:45Z	main	false	false	
+Bruno007/draft-ietf-rtgwg-backoff-algo	standards		0	2016-07-08T13:19:54Z	master	false	false	
+buraglio/draft-IETF-v6ops-ula	standards		1	2023-04-12T15:47:55Z	main	false	false	
+buraglio/draft-ietf-v6ops-ula-usage-considerations	standards		1	2023-06-23T19:42:06Z	main	false	false	
+buraglio/ietf-draft-buraglio-rfc6724-update	standards		1	2022-08-28T21:36:53Z	main	false	false	
+buraglio/ietf-md-draft-template	standards		1	2023-08-03T17:34:16Z	main	false	false	
+cbor-wg/draft-ietf-cbor-cde	standards	Ruby	0	2023-07-17T12:43:24Z	main	false	false	NOASSERTION
+cbor-wg/draft-ietf-cbor-serialization	standards	C	0	2025-11-18T20:33:49Z	main	false	false	NOASSERTION
+cbowers/draft-ietf-isis-mrt	standards		0	2015-07-22T14:04:51Z	master	false	false	
+cbowers/draft-ietf-mpls-ldp-mrt	standards		0	2015-09-25T19:15:14Z	master	false	false	
+cbowers/draft-ietf-ospf-mrt	standards		0	2015-04-01T02:04:02Z	master	false	false	
+cbowers/draft-ietf-rtgwg-mrt-frr-algorithm	standards	Python	2	2015-06-09T13:29:25Z	master	false	false	
+cbowers/draft-ietf-rtgwg-mrt-frr-architecture	standards		2	2015-03-31T21:57:18Z	master	false	false	
+cbowers/outgoing-feedback-on-ietf-drafts-2015	standards		0	2015-11-29T02:59:49Z	master	false	false	
+cbowers/outgoing-feedback-on-ietf-drafts-2016	standards		0	2016-03-04T18:58:53Z	master	false	false	
+cbowers/outgoing-feedback-on-ietf-drafts-2017	standards		0	2017-08-07T20:54:26Z	master	false	false	
+cbowers/outgoing-feedback-on-ietf-drafts-2018	standards		0	2018-02-27T22:36:42Z	master	false	false	
+cdt-gha-poc/update-ietf-draft-tasks-action	standards		0	2022-03-28T15:26:06Z	master	false	false	
+chris-wood/ietf-draft-tools	standards	Python	0	2019-06-01T18:13:43Z	master	false	false	
+cjbc/draft-ietf-dmm-distributed-mobility-anchoring	standards		0	2018-05-18T11:17:59Z	master	false	false	
+cjbc/draft-ietf-dmm-pmipv6-dlif	standards		0	2018-05-18T17:29:21Z	master	false	false	
+coien/draft-ietf-avtcore-srtp-ekt-03-patches	standards		0	2014-12-10T15:09:43Z	master	false	false	
+coopdanger/draft-ietf-policy-interactions	standards	Makefile	1	2023-07-03T19:18:19Z	main	false	false	NOASSERTION
+core-wg/draft-ietf-core-responses	standards	TeX	0	2020-07-30T13:13:20Z	master	false	false	NOASSERTION
+core-wg/draft-ietf-core-yang-metadata	standards	Makefile	1	2024-04-14T08:45:38Z	main	false	false	NOASSERTION
+cose-wg/draft-ietf-cose-cmac	standards	Python	0	2025-10-31T14:45:04Z	main	false	false	
+cose-wg/draft-ietf-cose-dilithium	standards	Makefile	2	2024-01-12T20:17:24Z	main	false	false	NOASSERTION
+cose-wg/draft-ietf-cose-falcon	standards	Makefile	1	2025-10-11T14:37:46Z	main	false	false	NOASSERTION
+cose-wg/draft-ietf-cose-hash-envelope	standards	Makefile	0	2023-11-06T21:49:03Z	main	false	false	NOASSERTION
+cose-wg/draft-ietf-cose-hpke	standards	Makefile	3	2022-01-16T22:01:41Z	main	false	false	NOASSERTION
+cose-wg/draft-ietf-cose-merkle-tree-proofs	standards	Makefile	0	2023-09-05T16:42:30Z	main	false	false	NOASSERTION
+cose-wg/draft-ietf-cose-sphincs-plus	standards	Makefile	0	2024-01-12T21:12:58Z	main	false	false	NOASSERTION
+cpu/draft-ietf-lamps-8410-ku-clarifications	standards	Makefile	0	2020-01-29T19:05:37Z	master	false	false	NOASSERTION
+credil/ietf-drafts	standards		1	2013-03-16T15:45:43Z	master	false	false	
+credil/ietf-drafts-sorted	standards		4	2013-03-16T15:20:51Z	master	false	false	
+dangarciacarrillo/draft-ietf-coap-eap-proof-of-concept	standards	C	0	2022-06-23T15:08:00Z	main	false	false	
+Dataparityone/ietf-draft-ai-security-events-template	standards	Makefile	0	2025-12-22T23:17:10Z	main	false	false	NOASSERTION
+davecrocker/draft-ietf-mtgvenue-iaoc-venue-selection-process	standards	HTML	0	2016-10-27T12:00:18Z	master	false	false	
+dconnolly/draft-ietf-pquip-hybrid-signature-spectrums	standards	Makefile	0	2023-10-23T17:30:48Z	main	false	false	NOASSERTION
+desec-io/draft-ietf-dnsop-dnssec-bootstrapping	standards	HTML	5	2021-06-23T16:38:18Z	main	false	false	
+desec-io/draft-ietf-dnsop-ds-automation	standards	Makefile	0	2024-10-18T12:53:01Z	main	false	false	NOASSERTION
+detnet-wg/draft-ietf-detnet-architecture	standards		0	2018-12-12T13:30:28Z	master	false	false	
+detnet-wg/draft-ietf-detnet-bounded-latency	standards		0	2020-02-03T13:07:24Z	master	false	false	
+detnet-wg/draft-ietf-detnet-dp-sol-ip	standards	HTML	2	2018-04-15T16:29:05Z	master	false	false	
+detnet-wg/draft-ietf-detnet-dp-sol-mpls	standards	HTML	2	2018-04-15T16:29:50Z	master	false	false	
+detnet-wg/draft-ietf-detnet-flow-information-model	standards		0	2019-03-04T09:00:51Z	master	false	false	
+detnet-wg/draft-ietf-detnet-scaling-requirements	standards	HTML	0	2023-03-14T14:59:27Z	main	false	false	
+detnet-wg/draft-ietf-detnet-yang	standards	HTML	3	2020-02-03T13:08:14Z	master	false	false	
+dhruvdhody/draft-dhody-coffee-at-ietf	standards	Makefile	1	2025-03-09T12:38:05Z	main	false	false	NOASSERTION
+dnssd-wg/draft-ietf-dnssd-advertising-proxy	standards	Makefile	0	2023-01-09T14:37:33Z	main	false	false	NOASSERTION
+dnssd-wg/draft-ietf-dnssd-multi-qtypes	standards	Makefile	3	2016-07-19T14:14:33Z	master	false	false	NOASSERTION
+dnssd-wg/draft-ietf-dnssd-srp	standards	Makefile	0	2022-08-18T20:06:25Z	main	false	false	NOASSERTION
+dnssd-wg/draft-ietf-dnssd-srp-replication	standards	Makefile	0	2022-02-15T05:28:06Z	main	false	false	NOASSERTION
+dnssd-wg/draft-ietf-dnssd-tsr	standards	Makefile	0	2025-05-19T20:37:19Z	main	false	false	
+dnssd-wg/draft-ietf-dnssd-update-lease	standards	Makefile	0	2022-09-19T21:25:46Z	main	false	false	NOASSERTION
+docjojo/ietf-hotreload-draft	standards		0	2025-11-27T15:57:04Z	main	false	false	
+dohwg/draft-ietf-doh-dns-over-https	standards	Makefile	54	2017-10-18T17:24:30Z	master	false	false	
+dohwg/draft-ietf-doh-resolver-associated-doh	standards		3	2019-02-19T03:01:44Z	master	false	false	
+dstebila/draft-ietf-tls-hybrid-design	standards	Makefile	8	2020-04-08T17:45:16Z	master	false	false	NOASSERTION
+earies/draft-ietf-netconf-privcand	standards		0	2025-04-13T21:36:38Z	main	false	false	
+eckelcu/draft-ietf-shmoo-hackathon	standards	Makefile	1	2021-05-20T21:24:30Z	main	false	false	NOASSERTION
+eckelcu/ietf-draft-template	standards	Makefile	1	2023-05-31T19:56:57Z	main	false	false	NOASSERTION
+ekr/ietf-drafts	standards	TeX	0	2012-10-22T16:16:06Z	master	false	false	
+emile22/draft-ietf-green-use-cases	standards	Makefile	1	2025-01-21T16:19:34Z	main	false	false	NOASSERTION
+emu-wg/draft-ietf-emu-eap-tls13	standards	Makefile	3	2018-08-04T07:02:36Z	master	false	false	NOASSERTION
+emu-wg/draft-ietf-emu-rfc5448bis	standards	HTML	0	2018-08-06T10:56:49Z	master	false	false	
+enyayaya-netizen/draft-ietf-ntp-ntpv5-extension-fields-00	standards		0	2025-10-20T08:05:45Z	main	false	false	
+epml-spec/draft-ietf-patterns-protocol	standards	Makefile	0	2023-03-25T18:08:55Z	main	false	false	NOASSERTION
+fgont/draft-ietf-opsec-icmp-filtering	standards		2	2012-06-13T08:58:45Z	master	false	false	
+fingon/ietf-drafts	standards	Makefile	0	2013-06-17T01:39:20Z	master	false	false	
+Flipzoon/https-datatracker.ietf.org-doc-html-draft-ietf-oauth-v2-bearer-23	standards	TypeScript	0	2025-01-14T19:55:15Z	main	false	false	MIT-0
+fluffy/draft-jennings-git-ietf	standards	Makefile	0	2017-04-18T00:34:06Z	master	false	false	
+g3ysx/IETF-Drafts	standards	Makefile	0	2016-08-25T10:18:02Z	master	false	false	
+gbxyz/draft-ietf-regext-rdap-referrals	standards	Makefile	0	2024-05-09T07:04:00Z	main	false	false	
+giralt/draft-ietf-alto-gradient-graph	standards	HTML	0	2022-02-03T16:42:18Z	main	false	false	NOASSERTION
+giralt/draft-ietf-alto-gradientgraph-multidomain	standards	Makefile	0	2022-09-28T10:55:20Z	main	false	false	NOASSERTION
+giralt/ietf-draft-reviews	standards		0	2024-11-02T08:28:45Z	master	false	false	
+gitnnelg/draft-deen-ietf-ipmc-update	standards	Makefile	0	2025-11-02T10:39:18Z	main	false	false	NOASSERTION
+gloinul/draft-ietf-avtcore-rtp-payload-registry	standards	Makefile	1	2023-11-08T09:08:39Z	main	false	false	NOASSERTION
+GrumpyOldTroll/draft-ietf-mboned-dorms-cluster	standards	Makefile	0	2022-03-02T16:57:44Z	main	false	false	NOASSERTION
+GrumpyOldTroll/draft-ietf-mnat	standards	Makefile	0	2020-12-23T18:18:51Z	main	false	false	NOASSERTION
+GrumpyOldTroll/ietf-drafts	standards		0	2017-12-02T06:48:06Z	master	false	false	
+gwhiteCL/draft-ietf-intarea-reordering	standards	Makefile	3	2025-02-28T00:44:15Z	main	false	false	NOASSERTION
+hannesgredler/draft-ietf-idr-ls-distribution	standards		0	2013-03-13T18:39:45Z	master	false	false	
+Hany-Inc/https---tools.ietf.org-id-draft-ietf-oauth-v2-31.xml	standards		0	2016-06-13T17:37:07Z	master	false	false	
+hardaker/draft-ietf-dnsop-child-syncronization	standards	Tcl	0	2014-11-12T01:19:58Z	master	false	false	
+hardaker/draft-ietf-dnsop-dnssec-roadblock-avoidance	standards		0	2014-03-07T12:42:57Z	master	false	false	
+hawkinsw/draft-ietf-cloud-dnssd-support	standards	Makefile	0	2023-04-07T13:50:34Z	main	false	false	
+heymarcel/draft-ietf-wimse-headless-jwt-authentication	standards	Makefile	0	2025-04-07T23:37:47Z	main	false	false	NOASSERTION
+hhappel/draft-ietf-sml-structured-email-use-cases	standards		0	2024-07-05T09:21:54Z	main	false	false	
+hmntsharma/draft-ietf-grow-bmp-tcp-ao	standards	Makefile	0	2024-02-04T21:05:03Z	main	false	false	NOASSERTION
+hn-research/ietf-drafts	standards	Shell	1	2025-12-28T21:16:32Z	master	false	false	
+hunator/draft-ietf-v6ops-dhcpv6pd-routing-req	standards		0	2019-04-08T16:55:05Z	master	false	false	BSD-2-Clause
+IASA2/draft-ietf-iasa2-struct	standards	TeX	1	2018-06-26T12:39:22Z	master	false	false	NOASSERTION
+IASA2/draft-ietf-iasa2-trust-rationale	standards	Makefile	0	2018-06-28T13:21:43Z	master	false	false	
+IASA2/draft-ietf-iasa2-trust-update	standards	Makefile	0	2018-06-28T13:22:21Z	master	false	false	
+ichdasich/draft-ietf-grow-bgpopsecupd	standards	Makefile	2	2023-10-06T10:04:20Z	main	false	false	NOASSERTION
+IDMEFv2/IDMEFv2-Drafts-IETF	standards	HTML	1	2022-10-26T14:06:53Z	main	false	false	
+ietf-ccamp-wg/draft-ietf-ccamp-actn-poi-pluggable-usecases-gaps	standards	Makefile	3	2024-01-10T09:24:18Z	main	false	false	NOASSERTION
+ietf-ccamp-wg/draft-ietf-ccamp-bwa-topo-yang	standards	Makefile	0	2022-12-01T10:18:39Z	main	false	false	NOASSERTION
+ietf-ccamp-wg/draft-ietf-ccamp-client-signal-yang	standards	Makefile	0	2021-04-16T15:39:19Z	main	false	false	NOASSERTION
+ietf-ccamp-wg/draft-ietf-ccamp-dwdm-if-param-yang	standards		1	2020-04-09T14:59:07Z	master	false	false	
+ietf-ccamp-wg/draft-ietf-ccamp-eth-client-te-topo-yang	standards	Makefile	0	2021-04-16T15:40:14Z	main	false	false	NOASSERTION
+ietf-ccamp-wg/draft-ietf-ccamp-fgotn-yang	standards	Makefile	5	2024-07-05T14:16:51Z	main	false	false	NOASSERTION
+ietf-ccamp-wg/draft-ietf-ccamp-flexigrid-yang	standards	Makefile	2	2020-09-17T14:51:44Z	main	false	false	NOASSERTION
+ietf-ccamp-wg/draft-ietf-ccamp-if-ref-topo-yang	standards	Makefile	0	2022-12-01T10:21:53Z	main	false	false	NOASSERTION
+ietf-ccamp-wg/draft-ietf-ccamp-layer0-types	standards		0	2019-11-21T08:40:29Z	master	false	false	
+ietf-ccamp-wg/draft-ietf-ccamp-mw-topo-yang	standards	HTML	3	2021-09-21T11:00:31Z	main	false	false	NOASSERTION
+ietf-ccamp-wg/draft-ietf-ccamp-optical-impairment-topology-yang	standards	Python	9	2019-05-10T18:38:03Z	main	false	false	
+ietf-ccamp-wg/draft-ietf-ccamp-rfc8561bis	standards	Makefile	1	2022-04-14T13:43:49Z	main	false	false	NOASSERTION
+ietf-ccamp-wg/draft-ietf-ccamp-wdm-tunnel-yang	standards	Makefile	2	2020-07-01T14:54:11Z	main	false	false	NOASSERTION
+ietf-ccamp-wg/draft-ietf-ccamp-wson-tunnel-model	standards		0	2021-10-19T18:02:10Z	main	false	false	
+ietf-ccamp-wg/draft-ietf-ccamp-wson-yang	standards		1	2020-04-15T07:19:52Z	master	false	false	
+IETF-Formatters/draft-iab-html-rfc	standards	HTML	0	2016-08-04T19:23:48Z	master	false	false	
+IETF-Formatters/draft-iab-rfcv3-preptool	standards	HTML	0	2016-08-04T20:28:52Z	master	false	false	
+IETF-Formatters/draft-iab-xml2rfc	standards	HTML	1	2016-08-04T20:45:54Z	master	false	false	
+ietf-gitwg/draft-ietf-git-github-wg-configuration	standards	Makefile	1	2019-02-14T03:11:27Z	master	false	false	NOASSERTION
+IETF-OPSAWG-WG/draft-ietf-opsawg-mud-iot-dns-considerations	standards	Makefile	3	2019-07-08T21:04:20Z	master	false	false	
+IETF-OPSAWG-WG/draft-ietf-opsawg-pcap	standards	XSLT	307	2014-07-16T22:04:49Z	master	false	false	NOASSERTION
+IETF-OPSAWG-WG/draft-opsarea-rfc5706bis	standards	Makefile	5	2025-04-08T18:47:36Z	main	false	false	NOASSERTION
+ietf-rats-wg/draft-eat-mt	standards	Makefile	0	2022-05-03T10:18:43Z	main	false	false	NOASSERTION
+ietf-rats-wg/draft-ietf-rats-ar4si	standards	Makefile	5	2021-12-02T15:31:31Z	main	false	false	NOASSERTION
+ietf-rats-wg/draft-ietf-rats-corim	standards	Makefile	17	2022-09-01T16:48:18Z	main	false	false	NOASSERTION
+ietf-rats-wg/draft-ietf-rats-corim-swid-triple	standards		0	2025-07-09T15:08:20Z	main	false	false	
+ietf-rats-wg/draft-ietf-rats-coserv	standards	Makefile	3	2025-02-27T11:05:49Z	main	false	false	NOASSERTION
+ietf-rats-wg/draft-ietf-rats-daa	standards	Makefile	0	2021-12-02T15:18:00Z	main	false	false	NOASSERTION
+ietf-rats-wg/draft-ietf-rats-ear	standards	Makefile	0	2022-11-22T14:03:31Z	main	false	false	NOASSERTION
+ietf-rats-wg/draft-ietf-rats-eat-da	standards	Makefile	1	2025-05-20T12:22:53Z	main	false	false	NOASSERTION
+ietf-rats-wg/draft-ietf-rats-eat-measured-component	standards	Makefile	2	2024-02-08T19:21:35Z	main	false	false	NOASSERTION
+ietf-rats-wg/draft-ietf-rats-epoch-marker	standards	Makefile	0	2022-04-24T15:28:34Z	main	false	false	NOASSERTION
+ietf-rats-wg/draft-ietf-rats-evidence-trans	standards	Makefile	1	2024-06-26T21:35:24Z	main	false	false	NOASSERTION
+ietf-rats-wg/draft-ietf-rats-msg-wrap	standards	Makefile	3	2022-09-29T15:59:58Z	main	false	false	NOASSERTION
+ietf-rats-wg/draft-ietf-rats-multi-verifier	standards	Makefile	3	2025-02-09T19:50:20Z	main	false	false	NOASSERTION
+ietf-rats-wg/draft-ietf-rats-network-device-subscription	standards	Makefile	0	2021-10-15T12:17:37Z	main	false	false	NOASSERTION
+ietf-rats-wg/draft-ietf-rats-posture-assessment	standards	Makefile	0	2024-11-08T11:53:42Z	main	false	false	NOASSERTION
+ietf-rats-wg/draft-ietf-rats-reference-interaction-models	standards	Makefile	2	2020-09-09T16:40:02Z	master	false	false	NOASSERTION
+ietf-rats-wg/draft-ietf-rats-uccs	standards	Makefile	1	2021-05-19T15:27:02Z	main	false	false	NOASSERTION
+ietf-rats-wg/draft-wallace-rats-concise-ta-stores	standards	Makefile	0	2022-06-14T12:29:57Z	main	false	false	NOASSERTION
+ietf-rats/draft-birkholz-rats-basic-yang-module	standards	Makefile	0	2018-06-13T14:45:11Z	master	false	false	NOASSERTION
+ietf-rats/draft-birkholz-rats-cosbom	standards		0	2021-11-11T22:57:06Z	main	false	false	
+ietf-rats/draft-birkholz-rats-coswid-rim	standards	Makefile	0	2020-02-18T10:10:05Z	master	false	false	NOASSERTION
+ietf-rats/draft-birkholz-rats-daa	standards	Makefile	0	2021-04-07T16:28:17Z	main	false	false	NOASSERTION
+ietf-rats/draft-birkholz-rats-endorsement-eat	standards	Makefile	1	2020-03-09T21:43:09Z	master	false	false	NOASSERTION
+ietf-rats/draft-birkholz-rats-evidence-media-types	standards	Makefile	0	2022-01-18T14:23:21Z	main	false	false	NOASSERTION
+ietf-rats/draft-birkholz-rats-information-model	standards	Makefile	0	2019-06-21T10:43:36Z	master	false	false	NOASSERTION
+ietf-rats/draft-birkholz-rats-mud	standards	Makefile	0	2019-07-21T14:13:33Z	master	false	false	NOASSERTION
+ietf-rats/draft-birkholz-rats-network-device-subscription	standards		0	2020-04-29T12:56:22Z	master	false	false	
+ietf-rats/draft-birkholz-rats-reference-interaction-model	standards	Makefile	2	2018-03-08T14:42:30Z	master	false	false	NOASSERTION
+ietf-rats/draft-birkholz-rats-suit-attestation-results	standards		0	2020-07-03T05:31:03Z	master	false	false	
+ietf-rats/draft-birkholz-rats-tuda	standards	Makefile	1	2021-01-13T19:58:08Z	master	false	false	NOASSERTION
+ietf-rats/draft-birkholz-rats-uccs	standards	Makefile	0	2020-03-09T19:49:39Z	master	false	false	NOASSERTION
+ietf-rats/draft-birkholz-scim	standards	HTML	0	2021-06-28T14:51:50Z	main	false	false	NOASSERTION
+ietf-rats/draft-fedorkow-rats-network-device-attestation	standards		0	2019-09-19T10:18:21Z	master	false	false	
+ietf-rats/draft-labiod-rats-attester-groups	standards	Makefile	0	2024-10-14T17:44:49Z	main	false	false	NOASSERTION
+ietf-rats/draft-many-rats-key-attestation	standards		0	2024-12-03T09:20:55Z	main	false	false	
+ietf-rats/draft-voit-rats-attestation-results	standards	Makefile	2	2021-04-26T07:28:35Z	main	false	false	NOASSERTION
+ietf-rats/draft-voit-rats-trusted-path-routing	standards		0	2020-06-10T16:21:34Z	master	false	false	
+ietf-rats/draft-voit-rats-trustworthy-path-routing	standards	Makefile	0	2024-06-28T16:45:25Z	main	false	false	NOASSERTION
+ietf-rats/draft-xia-rats-key-negotiation-integration	standards	Makefile	0	2025-07-02T09:37:28Z	main	false	false	NOASSERTION
+ietf-satp/draft-augusto-api1	standards	Makefile	0	2024-04-11T08:44:23Z	main	false	false	NOASSERTION
+ietf-satp/draft-avrilionis-satp-asset-profiles	standards		0	2025-01-20T10:38:45Z	main	false	false	
+ietf-satp/draft-avrilionis-satp-asset-schema-architecture	standards		0	2025-01-20T10:43:07Z	main	false	false	
+ietf-satp/draft-avrilionis-satp-setup-stage	standards	Makefile	0	2025-01-20T10:44:55Z	main	false	false	NOASSERTION
+ietf-satp/draft-belchior-satp-gateway-recovery	standards	Shell	0	2023-10-25T09:17:58Z	main	false	false	NOASSERTION
+ietf-satp/draft-hardjono-satp-terminology	standards		0	2025-08-14T12:32:23Z	main	false	false	
+ietf-satp/draft-ietf-satp-architecture	standards	Makefile	1	2023-07-27T21:09:52Z	main	false	false	NOASSERTION
+ietf-satp/draft-ietf-satp-core	standards	Shell	2	2023-10-24T19:29:37Z	main	false	false	NOASSERTION
+ietf-satp/draft-ietf-satp-usecases	standards	Makefile	1	2023-07-27T22:43:38Z	main	false	false	NOASSERTION
+ietf-satp/draft-marstein-satp-asset-exchange	standards	Makefile	0	2025-08-13T12:47:25Z	main	false	false	NOASSERTION
+ietf-satp/draft-ramakrishna-satp-data-sharing	standards	Makefile	0	2023-07-27T22:47:35Z	main	false	false	NOASSERTION
+ietf-satp/draft-ramakrishna-satp-views-addresses	standards	Makefile	0	2023-07-27T22:45:49Z	main	false	false	NOASSERTION
+ietf-scim-wg/draft-dingle-scim-use-cases	standards		2	2022-03-11T20:43:34Z	main	false	false	
+ietf-scim-wg/draft-ietf-scim-cursor-pagination	standards	Makefile	0	2023-02-28T15:09:15Z	main	false	false	NOASSERTION
+ietf-scim-wg/draft-ietf-scim-events	standards	HTML	5	2022-07-13T17:11:28Z	main	false	false	NOASSERTION
+ietf-scim-wg/draft-ietf-scim-roles-entitlements	standards	Makefile	2	2022-12-06T23:46:49Z	main	false	false	NOASSERTION
+ietf-scim-wg/draft-ietf-scim-use-cases	standards		1	2025-01-16T13:42:37Z	main	false	false	
+ietf-scim-wg/draft-sehgal-scim-delta-query	standards	Makefile	2	2023-11-01T20:40:26Z	main	false	false	NOASSERTION
+ietf-scim-wg/draft-zollner-scim-api	standards		0	2022-03-11T20:40:34Z	Zollnerd	false	false	
+ietf-scim-wg/draft-zollner-scim-core-schema	standards		0	2022-03-11T20:38:54Z	main	false	false	
+ietf-scitt/draft-birkholz-cose-cometre-ccf-profile	standards	Makefile	0	2023-06-08T09:54:53Z	main	false	false	NOASSERTION
+ietf-scitt/draft-birkholz-cose-tsa-tst-header-parameter	standards	Shell	2	2022-09-05T09:42:07Z	main	false	false	NOASSERTION
+ietf-scitt/draft-birkholz-scitt-scrapi	standards	Makefile	1	2023-07-22T21:22:28Z	main	false	false	NOASSERTION
+ietf-scitt/draft-birkholz-scitt-software-supply-chain-use-cases	standards	Makefile	3	2022-10-17T07:54:13Z	main	false	false	NOASSERTION
+ietf-tapswg/draft-ietf-taps-transport-security	standards	Makefile	6	2017-06-29T15:58:59Z	master	false	false	
+ietf-wg-acme/draft-acme-profiles	standards	Makefile	3	2024-08-23T22:51:11Z	main	false	false	NOASSERTION
+ietf-wg-acme/draft-ietf-acme-dns-persist	standards	Makefile	18	2025-06-08T23:53:15Z	main	false	false	NOASSERTION
+ietf-wg-acme/draft-ietf-acme-openid-federation	standards	Makefile	7	2023-07-13T05:32:45Z	main	false	false	NOASSERTION
+ietf-wg-acme/draft-ietf-acme-rats	standards	Makefile	3	2024-10-14T15:16:11Z	main	false	false	NOASSERTION
+ietf-wg-add/draft-ietf-add-ddr	standards	Makefile	10	2021-02-01T17:37:35Z	main	false	false	NOASSERTION
+ietf-wg-add/draft-ietf-add-dnr	standards	Makefile	1	2021-02-18T17:38:11Z	master	false	false	NOASSERTION
+ietf-wg-add/draft-ietf-add-Encrypted-DNS-Server-RedirectionEncDNSServerRedirect	standards	Makefile	1	2024-07-03T17:18:27Z	main	false	false	NOASSERTION
+ietf-wg-add/draft-ietf-add-requirements	standards	Makefile	5	2020-08-10T22:48:16Z	master	false	false	NOASSERTION
+ietf-wg-add/draft-ietf-add-split-horizon-authority	standards	Shell	2	2022-06-01T21:09:09Z	main	false	false	NOASSERTION
+ietf-wg-add/draft-ietf-add-svcb-dns	standards	Makefile	2	2020-07-31T19:00:47Z	main	false	false	NOASSERTION
+ietf-wg-alto/draft-ietf-alto-cdni-request-routing-alto	standards	Makefile	0	2021-03-19T14:01:44Z	main	false	false	NOASSERTION
+ietf-wg-alto/draft-ietf-alto-new-transport	standards	Makefile	0	2022-06-22T08:45:29Z	main	false	false	NOASSERTION
+ietf-wg-alto/draft-ietf-alto-oam-yang	standards	Makefile	0	2021-06-08T12:54:48Z	main	false	false	NOASSERTION
+ietf-wg-alto/draft-ietf-alto-path-vector	standards	XSLT	1	2021-03-19T14:03:41Z	main	false	false	NOASSERTION
+ietf-wg-alto/draft-ietf-alto-performance-metrics	standards	Shell	0	2021-03-19T14:04:18Z	main	false	false	
+ietf-wg-alto/draft-ietf-alto-unified-props-new	standards	XSLT	0	2021-03-19T14:04:56Z	main	false	false	NOASSERTION
+ietf-wg-avtcore/draft-ietf-avtcore-hevc-webrtc	standards	Roff	6	2023-04-11T17:57:49Z	main	false	false	NOASSERTION
+ietf-wg-avtcore/draft-ietf-avtcore-rtp-haptics	standards	HTML	0	2024-06-24T19:20:25Z	main	false	false	NOASSERTION
+ietf-wg-avtcore/draft-ietf-avtcore-rtp-j2k-scl	standards		0	2024-07-15T03:24:30Z	main	false	false	
+ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic	standards	Makefile	23	2021-04-12T10:14:26Z	main	false	false	NOASSERTION
+ietf-wg-avtcore/draft-ietf-avtcore-rtp-sframe	standards	Makefile	1	2023-05-23T07:27:07Z	main	false	false	NOASSERTION
+ietf-wg-avtcore/draft-ietf-avtcore-rtp-v3c	standards		0	2022-02-28T13:41:26Z	main	false	false	NOASSERTION
+ietf-wg-avtcore/draft-ietf-avtcore-rtp-volumetric-media-roi	standards		0	2025-06-06T17:56:20Z	main	false	false	NOASSERTION
+ietf-wg-bier/draft-chen-bier-frr	standards		0	2022-03-19T09:08:49Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-bar-ipa	standards		0	2022-03-16T08:22:12Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-bfd	standards		0	2022-03-16T08:44:43Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-bgp-ls-bier-ext	standards		0	2022-03-16T08:45:03Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-bier-yang	standards		0	2022-03-16T08:45:19Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-bierin6	standards		0	2022-03-16T08:36:32Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-entropy-staged-dc-clos	standards		0	2022-03-16T08:45:38Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-evpn	standards		0	2022-03-16T08:38:49Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-idr-extensions	standards		0	2022-03-16T08:45:56Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-ipv6-requirements	standards		0	2022-03-16T08:46:38Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-lsr-non-mpls-extensions	standards		0	2022-03-16T08:39:15Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-mld	standards		0	2022-03-16T08:39:53Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-mldp-signaling-over-bier	standards		0	2022-03-16T08:40:15Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-mtud	standards		0	2022-03-16T08:46:16Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-multicast-http-response	standards		0	2022-03-16T08:46:56Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-non-mpls-bift-encoding	standards		0	2022-03-16T08:47:16Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-oam-requirements	standards		0	2022-03-16T08:48:31Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-ospfv3-extensions	standards		0	2022-03-16T08:40:35Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-path-mtu-discovery	standards		0	2022-03-16T08:41:00Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-php	standards		0	2022-03-16T08:41:19Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-pim-signaling	standards		0	2022-03-16T08:48:52Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-ping	standards	Shell	2	2022-03-16T08:49:12Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-pmmm-oam	standards		0	2022-03-16T08:41:37Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-prefix-redistribute	standards		0	2022-03-16T08:42:03Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-source-protection	standards		0	2022-03-16T08:42:22Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-te-arch	standards		0	2022-03-16T08:42:47Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-te-isis	standards		0	2022-03-16T08:43:10Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-te-ospf	standards		0	2022-03-16T08:43:29Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-te-ospfv3	standards		0	2022-03-16T08:43:51Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-te-yang	standards		0	2022-03-16T08:44:18Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-tether	standards		0	2022-03-16T08:49:34Z	main	false	false	
+ietf-wg-bier/draft-ietf-bier-use-cases	standards		0	2022-03-16T08:49:56Z	main	false	false	
+ietf-wg-cats/draft-ietf-cats-framework	standards	Makefile	4	2023-02-23T09:24:03Z	main	false	false	NOASSERTION
+ietf-wg-cats/draft-ietf-cats-metric-definition	standards	Makefile	3	2024-07-08T08:57:50Z	main	false	false	NOASSERTION
+ietf-wg-cats/draft-ietf-cats-usecases-requirements	standards	Makefile	1	2023-10-12T02:57:26Z	main	false	false	NOASSERTION
+ietf-wg-ccwg/draft-ietf-ccwg-bbr	standards	Shell	12	2024-05-04T21:29:17Z	main	false	false	NOASSERTION
+ietf-wg-ccwg/draft-ietf-ccwg-ratelimited-increase	standards	Makefile	2	2023-12-11T17:43:29Z	main	false	false	NOASSERTION
+ietf-wg-dance/draft-dance-architecture	standards	Makefile	6	2021-11-02T18:50:18Z	main	false	false	NOASSERTION
+ietf-wg-dance/draft-ietf-dance-client-auth	standards	Makefile	2	2015-06-21T00:53:40Z	master	false	false	
+ietf-wg-dance/draft-ietf-dance-dancing-template	standards	Makefile	0	2023-01-19T17:28:21Z	main	false	false	NOASSERTION
+ietf-wg-dance/draft-ietf-dance-tls-clientid	standards	Makefile	0	2015-12-29T16:59:13Z	master	false	false	
+ietf-wg-deleg/draft-ietf-deleg-base	standards	Python	1	2025-06-09T19:19:47Z	main	false	false	NOASSERTION
+ietf-wg-deleg/draft-ietf-deleg-requirements	standards	Makefile	0	2024-08-30T15:46:56Z	main	false	false	NOASSERTION
+ietf-wg-dkim/draft-ietf-dkim-replay-problem	standards	HTML	0	2023-04-14T19:56:11Z	main	false	false	
+ietf-wg-dmarc/draft-ieft-dmarc-ops-deployment	standards		0	2022-07-28T17:47:24Z	main	false	false	
+ietf-wg-dmarc/draft-ietf-dmarc-aggregate-reporting	standards	Makefile	3	2020-11-13T21:28:53Z	main	false	false	
+ietf-wg-dmarc/draft-ietf-dmarc-arc-protocol	standards		0	2019-05-09T23:28:50Z	master	false	false	
+ietf-wg-dmarc/draft-ietf-dmarc-dmarcbis	standards	HTML	7	2020-11-13T21:29:34Z	main	false	false	
+ietf-wg-dmarc/draft-ietf-dmarc-eaiauth	standards		0	2019-05-09T23:34:29Z	master	false	false	
+ietf-wg-dmarc/draft-ietf-dmarc-failure-reporting	standards	Makefile	1	2020-11-13T21:27:23Z	main	false	false	
+ietf-wg-dmarc/draft-ietf-dmarc-psd	standards	HTML	0	2019-05-09T23:32:46Z	master	false	false	NOASSERTION
+ietf-wg-dmarc/draft-kucherawy-dmarc-dmarcbis	standards	Makefile	1	2020-03-09T01:14:27Z	master	false	false	
+ietf-wg-dnsop/draft-5966-bis	standards	Makefile	0	2015-03-03T12:08:14Z	master	false	false	
+ietf-wg-dnsop/draft-ietf-dnsop-3901bis	standards	Makefile	1	2025-03-17T17:25:09Z	main	false	false	NOASSERTION
+ietf-wg-dnsop/draft-ietf-dnsop-avoid-fragmentation	standards	Makefile	0	2024-01-05T08:37:11Z	main	false	false	
+ietf-wg-dnsop/draft-ietf-dnsop-dnssec-automation	standards	Makefile	3	2020-12-01T17:20:37Z	main	false	false	NOASSERTION
+ietf-wg-dnsop/draft-ietf-dnsop-domain-verification-techniques	standards	Makefile	9	2020-12-11T05:23:25Z	main	false	false	NOASSERTION
+ietf-wg-dnsop/draft-ietf-dnsop-glue-is-not-optional	standards	HTML	1	2021-06-11T23:07:01Z	main	false	false	
+ietf-wg-dnsop/draft-ietf-dnsop-grease	standards	Makefile	2	2023-11-09T09:12:49Z	main	false	false	
+ietf-wg-dnsop/draft-ietf-dnsop-must-not-gost	standards	HTML	0	2024-02-28T00:11:43Z	main	false	false	
+ietf-wg-dnsop/draft-ietf-dnsop-must-not-sha1	standards	Makefile	0	2022-08-12T15:40:52Z	main	false	false	
+ietf-wg-dnsop/draft-ietf-dnsop-qdcount-is-one	standards		0	2023-02-16T17:22:53Z	main	false	false	
+ietf-wg-dnsop/draft-ietf-dnsop-resolver-information	standards	Makefile	0	2019-08-19T18:54:02Z	master	false	false	
+ietf-wg-dnsop/draft-ietf-dnsop-rfc7958bis	standards		0	2024-03-26T10:08:38Z	main	false	false	
+ietf-wg-dnsop/draft-ietf-dnsop-rfc8499bis	standards		0	2020-11-17T19:43:40Z	main	false	false	
+ietf-wg-dnsop/draft-ietf-dnsop-structured-dns-error	standards	Makefile	0	2023-02-06T03:52:08Z	main	false	false	NOASSERTION
+ietf-wg-dnsop/draft-ietf-dnsop-terminology-bis	standards		0	2016-01-12T22:56:45Z	master	false	false	
+ietf-wg-dnsop/new-draft-ietf-dnsop-algorithm-update	standards	Makefile	0	2024-11-01T11:46:44Z	main	false	false	
+ietf-wg-dprive/draft-ietf-dprive-early-data	standards	Makefile	4	2019-03-04T15:48:16Z	master	false	false	NOASSERTION
+ietf-wg-drip/draft-ietf-drip-arch	standards	Makefile	1	2021-01-26T21:58:45Z	master	false	false	NOASSERTION
+ietf-wg-drip/draft-ietf-drip-auth	standards	Makefile	1	2021-01-26T22:19:09Z	main	false	false	
+ietf-wg-drip/draft-ietf-drip-registries	standards	Makefile	1	2022-01-26T20:47:49Z	main	false	false	
+ietf-wg-drip/draft-ietf-drip-reqs	standards		0	2021-01-26T22:20:32Z	main	false	false	
+ietf-wg-drip/draft-ietf-drip-rid	standards	Python	0	2022-03-14T07:53:48Z	main	false	false	NOASSERTION
+ietf-wg-green/draft-ietf-green-framework	standards	Makefile	0	2025-04-07T15:41:05Z	main	false	false	NOASSERTION
+ietf-wg-happy/draft-happy-eyeballs-v3	standards	Makefile	21	2023-08-16T18:35:11Z	main	false	false	NOASSERTION
+ietf-wg-idr/draft-dt-idr-bgp-autoconf-considerations	standards		2	2021-01-12T22:40:58Z	master	false	false	
+ietf-wg-idr/draft-ietf-idr-5g-edge-service-metadata	standards		0	2024-01-23T12:39:42Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-bgp-car	standards		0	2022-08-22T15:07:46Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-bgp-ct	standards	HTML	1	2022-08-22T15:11:26Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-bgp-ext-com-registry	standards		0	2020-03-10T09:55:48Z	master	false	false	
+ietf-wg-idr/draft-ietf-idr-bgp-fsm-iana	standards		0	2024-05-03T18:42:37Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-bgp-rpki-yang	standards		0	2025-04-11T14:32:33Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-bgpls-sr-vtn-mt	standards	HTML	0	2025-10-11T06:19:44Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-cpr	standards		0	2024-06-05T12:44:25Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-flowspec-v2	standards		0	2023-10-23T23:26:41Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-link-bandwidth	standards	HTML	1	2024-08-05T19:12:10Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-linklocal-capability	standards		1	2025-04-04T14:28:23Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-long-lived-gr	standards		0	2022-10-07T14:45:07Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-multinexthop-attribute	standards	HTML	0	2024-08-15T17:56:36Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-next-next-hop-nodes	standards		0	2025-10-20T15:21:47Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-registered-wide-bgp-communities	standards		0	2022-01-12T01:14:29Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-rfc4360-bis	standards	Makefile	0	2025-08-13T12:03:09Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-sdwan-edge-discovery	standards		0	2024-04-26T14:14:48Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-sr-policy-safi	standards		0	2024-04-16T16:58:00Z	main	false	false	
+ietf-wg-idr/draft-ietf-idr-wide-bgp-communities	standards		0	2022-01-11T02:20:52Z	main	false	false	
+ietf-wg-iotops/draft-ietf-iotops-security-protocol-comparison	standards		0	2024-10-24T17:30:29Z	main	false	false	
+ietf-wg-iotops/draft-ietf-iotops-security-summary	standards		0	2024-10-24T17:09:29Z	main	false	false	
+ietf-wg-iotops/draft-ietf-opsawg-mud-acceptable-urls	standards	Makefile	3	2020-01-19T01:03:01Z	master	false	false	
+ietf-wg-jose/draft-ietf-jose-fully-specified-algorithms	standards	Makefile	2	2023-08-29T21:45:09Z	main	false	false	NOASSERTION
+ietf-wg-jose/draft-ietf-jose-hpke-encrypt	standards	JavaScript	3	2024-06-22T13:13:16Z	main	false	false	NOASSERTION
+ietf-wg-jsonpath/draft-ietf-jsonpath-base	standards	Ruby	62	2020-07-06T11:28:06Z	main	false	false	NOASSERTION
+ietf-wg-keytrans/draft-arch	standards	Makefile	5	2023-10-17T13:00:30Z	main	false	false	NOASSERTION
+ietf-wg-keytrans/draft-protocol	standards	Makefile	4	2024-04-08T21:28:31Z	main	false	false	NOASSERTION
+ietf-wg-madinas/draft-ietf-madinas-mac-address-randomization	standards	Makefile	3	2022-07-08T10:11:28Z	main	false	false	
+ietf-wg-madinas/draft-ietf-madinas-use-cases	standards	HTML	1	2022-07-08T11:16:53Z	main	false	false	
+ietf-wg-masque/draft-ietf-masque-connect-ethernet	standards	Makefile	8	2023-04-26T14:12:59Z	main	false	false	NOASSERTION
+ietf-wg-masque/draft-ietf-masque-connect-ip	standards	Makefile	10	2021-09-01T16:49:26Z	main	false	false	NOASSERTION
+ietf-wg-masque/draft-ietf-masque-connect-ip-dns	standards	Makefile	2	2024-03-13T08:07:50Z	main	false	false	NOASSERTION
+ietf-wg-masque/draft-ietf-masque-connect-udp	standards	Makefile	30	2020-08-19T15:37:22Z	main	false	false	NOASSERTION
+ietf-wg-masque/draft-ietf-masque-connect-udp-listen	standards	Makefile	3	2022-07-07T02:03:42Z	main	false	false	NOASSERTION
+ietf-wg-masque/draft-ietf-masque-h3-datagram	standards	Makefile	14	2019-10-21T23:08:56Z	main	false	false	NOASSERTION
+ietf-wg-masque/draft-ietf-masque-http-datagram-compression	standards	Makefile	0	2025-10-04T18:31:47Z	main	false	false	NOASSERTION
+ietf-wg-masque/draft-ietf-masque-ip-proxy-reqs	standards	Makefile	6	2020-10-14T20:33:39Z	main	false	false	NOASSERTION
+ietf-wg-masque/draft-ietf-masque-quic-proxy	standards	JavaScript	17	2020-07-01T21:01:37Z	main	false	false	NOASSERTION
+ietf-wg-mimi/draft-ietf-mimi-content	standards	HTML	9	2023-05-11T23:46:22Z	main	false	false	NOASSERTION
+ietf-wg-mimi/draft-ietf-mimi-user-discovery-reqs	standards	Makefile	0	2024-09-12T04:18:31Z	main	false	false	
+ietf-wg-mops/draft-ietf-mops-ar-use-case	standards	Makefile	0	2021-11-06T15:06:53Z	master	false	false	NOASSERTION
+ietf-wg-mops/draft-ietf-mops-network-overlay-impacts	standards	Makefile	0	2025-02-10T21:39:22Z	main	false	false	NOASSERTION
+ietf-wg-mops/draft-ietf-mops-streaming-opcons	standards	Shell	6	2019-11-26T01:08:58Z	main	false	false	NOASSERTION
+ietf-wg-mpls/draft-andersson-mpls-open-dt-questions	standards		0	2021-06-03T03:14:11Z	main	false	false	
+ietf-wg-nmop/draft-ietf-nmop-digital-map-concept	standards	Makefile	3	2024-09-23T05:29:53Z	main	false	false	NOASSERTION
+ietf-wg-nmop/draft-ietf-nmop-message-broker-telemetry-message	standards		0	2025-06-30T22:54:04Z	main	false	false	
+ietf-wg-nmop/draft-ietf-nmop-network-anomaly-architecture	standards	Makefile	1	2024-09-09T13:44:42Z	main	false	false	NOASSERTION
+ietf-wg-nmop/draft-ietf-nmop-network-anomaly-lifecycle	standards	Makefile	1	2024-11-27T08:01:22Z	main	false	false	NOASSERTION
+ietf-wg-nmop/draft-ietf-nmop-network-anomaly-semantics	standards	Makefile	0	2024-11-27T08:02:58Z	main	false	false	NOASSERTION
+ietf-wg-nmop/draft-ietf-nmop-network-incident-yang	standards	Makefile	1	2024-05-07T12:41:12Z	main	false	false	NOASSERTION
+ietf-wg-nmop/draft-ietf-nmop-terminology	standards	Makefile	0	2024-05-24T15:08:21Z	main	false	false	NOASSERTION
+ietf-wg-nmop/draft-ietf-nmop-yang-message-broker-integration	standards	Makefile	1	2024-05-07T12:45:06Z	main	false	false	NOASSERTION
+ietf-wg-ntp/draft-ietf-ntp-interleaved-modes	standards	Python	0	2017-10-19T12:16:41Z	master	false	false	
+ietf-wg-ntp/draft-ietf-ntp-ntpv5	standards	Makefile	8	2020-11-11T15:55:56Z	main	false	false	
+ietf-wg-ntp/draft-ietf-ntp-ntpv5-requirements	standards	Makefile	1	2021-10-12T09:18:10Z	main	false	false	NOASSERTION
+ietf-wg-ntp/draft-ietf-ntp-nts-for-ptp	standards		0	2025-02-01T15:00:51Z	main	false	false	
+ietf-wg-ntp/draft-ietf-ntp-nts-keyexchange-pool	standards	Makefile	1	2023-12-15T10:02:16Z	main	false	false	NOASSERTION
+ietf-wg-ntp/draft-ietf-ntp-over-ptp	standards	Makefile	0	2021-06-24T10:57:53Z	main	false	false	
+ietf-wg-ntp/draft-roughtime	standards	Makefile	3	2024-09-10T05:23:25Z	main	false	false	NOASSERTION
+ietf-wg-ohai/draft-ohai-chunked-ohttp	standards	Makefile	0	2023-06-09T15:42:22Z	main	false	false	NOASSERTION
+ietf-wg-ohai/draft-ohai-svcb-config	standards	Makefile	0	2022-02-18T19:53:11Z	main	false	false	NOASSERTION
+ietf-wg-pce/draft-ietf-pce-iana-update	standards	Makefile	0	2024-08-19T10:24:44Z	main	false	false	NOASSERTION
+ietf-wg-pce/draft-ietf-pce-operational	standards	Makefile	0	2025-04-29T15:29:21Z	main	false	false	NOASSERTION
+ietf-wg-pim/draft-ietf-intarea-multicast-application-port	standards	C	0	2023-11-29T18:11:10Z	main	false	false	
+ietf-wg-pim/draft-ietf-pim-ipv6-zeroconf-assignment	standards		0	2023-11-30T08:27:28Z	main	false	false	
+ietf-wg-ppm/draft-ietf-ppm-dap	standards	TeX	55	2021-02-18T00:27:44Z	main	false	false	NOASSERTION
+ietf-wg-ppm/draft-ietf-ppm-dap-taskprov	standards	Makefile	4	2022-08-24T19:36:28Z	main	false	false	NOASSERTION
+ietf-wg-ppm/draft-ietf-ppm-l1-bound-sum	standards	Python	1	2024-10-10T23:24:09Z	main	false	false	NOASSERTION
+ietf-wg-privacypass/draft-arc	standards	Python	13	2025-01-30T19:59:08Z	main	false	false	NOASSERTION
+ietf-wg-privacypass/draft-ietf-privacypass-auth-scheme-extensions	standards	Makefile	0	2023-06-08T11:45:11Z	main	false	false	NOASSERTION
+ietf-wg-privacypass/draft-ietf-privacypass-consistency-mirror	standards	Makefile	0	2023-06-15T17:33:53Z	main	false	false	NOASSERTION
+ietf-wg-privacypass/draft-ietf-privacypass-expiration-extension	standards	Makefile	0	2023-06-15T17:22:37Z	main	false	false	NOASSERTION
+ietf-wg-privacypass/draft-ietf-privacypass-key-consistency	standards	Makefile	1	2021-02-21T20:37:55Z	main	false	false	NOASSERTION
+ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens	standards	Makefile	1	2022-09-01T14:03:05Z	main	false	false	NOASSERTION
+ietf-wg-privacypass/ietf-draft-privacypass-batched-tokens	standards	Makefile	1	2022-07-24T15:48:55Z	main	false	false	
+ietf-wg-rpp/draft-ietf-rpp-architecture	standards	Shell	2	2025-02-10T12:24:43Z	main	false	false	CC0-1.0
+ietf-wg-rpp/draft-ietf-rpp-core	standards	Python	2	2025-03-05T13:25:44Z	main	false	false	NOASSERTION
+ietf-wg-rpp/draft-ietf-rpp-data-objects	standards	Python	0	2025-09-11T15:43:08Z	main	false	false	
+ietf-wg-rpp/draft-ietf-rpp-json	standards	Python	1	2023-12-15T13:15:01Z	main	false	false	NOASSERTION
+ietf-wg-rpp/draft-ietf-rpp-requirements	standards	Shell	2	2025-03-18T07:14:11Z	main	false	false	
+ietf-wg-schc/draft-ietf-schc-8824-update	standards	Makefile	0	2025-05-14T15:21:02Z	main	false	false	NOASSERTION
+ietf-wg-schc/draft-ietf-schc-architecture	standards		0	2025-05-14T15:28:49Z	main	false	false	
+ietf-wg-schc/draft-ietf-schc-icmpv6-compression	standards		0	2025-05-14T15:37:55Z	master	false	false	
+ietf-wg-schc/draft-ietf-schc-over-networks-prone-to-disruptions	standards		0	2025-05-14T15:40:09Z	main	false	false	
+ietf-wg-schc/draft-ietf-schc-protocol-numbers	standards	HTML	0	2025-07-24T10:09:26Z	main	false	false	
+ietf-wg-schc/draft-ietf-schc-universal-option	standards		0	2025-05-14T15:24:02Z	master	false	false	
+ietf-wg-scitt/draft-ietf-scitt-architecture	standards	Makefile	19	2023-01-09T07:57:45Z	main	false	false	NOASSERTION
+ietf-wg-scitt/draft-ietf-scitt-scrapi	standards	Makefile	5	2024-01-25T14:15:44Z	main	false	false	NOASSERTION
+ietf-wg-scitt/draft-ietf-scitt-software-use-cases	standards	Makefile	0	2023-03-13T23:18:07Z	main	false	false	NOASSERTION
+ietf-wg-seat/draft-ietf-seat-use-cases	standards	Makefile	1	2025-10-10T13:52:10Z	main	false	false	NOASSERTION
+ietf-wg-sedate/draft-ietf-sedate-datetime-extended	standards	Makefile	2	2021-09-30T08:29:39Z	main	false	false	NOASSERTION
+ietf-wg-snac/draft-ietf-snac-simple	standards	Makefile	3	2022-10-21T08:55:29Z	main	false	false	
+ietf-wg-spice/draft-ietf-spice-glue-id	standards	Makefile	1	2024-07-05T18:13:47Z	main	false	false	NOASSERTION
+ietf-wg-spice/draft-ietf-spice-oidc-cwt	standards	Makefile	0	2024-07-12T12:20:11Z	main	false	false	NOASSERTION
+ietf-wg-spice/draft-ietf-spice-sd-cwt	standards	HTML	4	2024-08-22T17:44:55Z	main	false	false	NOASSERTION
+ietf-wg-spice/draft-ietf-spice-use-cases	standards	Makefile	0	2024-09-09T18:13:08Z	main	false	false	NOASSERTION
+ietf-wg-spring/draft-ietf-spring-srv6-srh-compression	standards		0	2022-02-11T18:09:58Z	main	false	false	
+ietf-wg-v6ops/draft-itef-v6ops-ipv6-app-testing	standards	Makefile	1	2025-12-15T15:20:36Z	main	false	false	NOASSERTION
+ietf-wg-v6ops/draft-nb-v6ops-rfc7439-update	standards	Makefile	2	2025-03-12T14:16:36Z	main	false	false	NOASSERTION
+ietf-wg-vcon/draft-ietf-vcon-privacy-primer	standards	Makefile	0	2025-05-28T19:42:42Z	main	false	false	NOASSERTION
+ietf-wg-webtrans/draft-ietf-webtrans-http2	standards	Makefile	8	2020-02-23T05:08:54Z	main	false	false	NOASSERTION
+ietf-wg-webtrans/draft-ietf-webtrans-http3	standards	Makefile	50	2019-04-26T19:01:43Z	main	false	false	NOASSERTION
+ietf-wg-webtrans/draft-ietf-webtrans-overview	standards	Makefile	14	2020-04-18T06:04:02Z	main	false	false	NOASSERTION
+ietf-wg-wimse/draft-ietf-wimse-aims	standards	Makefile	24	2025-11-05T15:19:25Z	main	false	false	NOASSERTION
+ietf-wg-wimse/draft-ietf-wimse-arch	standards	Makefile	11	2024-02-07T17:18:38Z	main	false	false	NOASSERTION
+ietf-wg-wimse/draft-ietf-wimse-identifier	standards	Makefile	1	2025-05-12T15:56:09Z	main	false	false	NOASSERTION
+ietf-wg-wimse/draft-ietf-wimse-s2s-protocol	standards	Shell	10	2024-01-25T16:14:01Z	main	false	false	NOASSERTION
+ietf-wg-wimse/draft-ietf-wimse-workload-identity-practices	standards	Makefile	7	2024-05-06T16:18:56Z	main	false	false	NOASSERTION
+ietfextra/draft-ietf-extra-imap-savedate	standards		0	2018-01-07T12:37:16Z	master	false	false	
+ietfextra/draft-ietf-extra-imap-status-size	standards		0	2018-01-07T09:18:43Z	master	false	false	
+ietfextra/draft-ietf-extra-sieve-special-use	standards		0	2017-09-30T17:20:53Z	master	false	false	
+iffy50/draft-ietf-dhcpv6-yang	standards	HTML	1	2017-11-20T09:19:29Z	master	false	false	
+iffy50/draft-ietf-softwire-yang	standards	HTML	0	2017-10-11T14:16:46Z	master	false	false	
+igorlord/draft-ietf-ippm-explicit-flow-measurements	standards	Makefile	3	2020-08-03T15:07:34Z	master	false	false	NOASSERTION
+igorlord/draft-ietf-sidrops-bar-sav	standards	Makefile	1	2022-09-03T17:32:18Z	main	false	false	NOASSERTION
+inaminei/ietf_drafts	standards		0	2013-08-07T21:10:14Z	master	false	false	
+invisible-college/ietf-braid-draft	standards		3	2019-07-02T23:43:24Z	master	false	false	
+IPv6-mPvD/mpvd-ietf-drafts	standards	Makefile	2	2017-05-18T16:20:22Z	master	false	false	NOASSERTION
+IRTF-HRPC/create-ietf-draft-repo-action	standards	Shell	0	2021-06-06T23:06:59Z	main	false	false	
+IurmanJ/draft-ietf-6man-eh-occurrences	standards	Makefile	0	2025-12-23T18:45:30Z	main	false	false	GPL-3.0
+IurmanJ/draft-ietf-ippm-ioam-integrity-yang	standards	Makefile	0	2025-12-09T13:24:09Z	main	false	false	NOASSERTION
+jaimejim/draft-ietf-core-coap-pubsub	standards	Makefile	1	2022-11-04T11:43:12Z	main	false	false	NOASSERTION
+Janfred/draft-ietf-emu-eap-fido	standards	Makefile	8	2024-07-08T21:32:37Z	main	false	false	NOASSERTION
+jawaidiqbal10/ietf-draft-ai-security-events	standards	Makefile	0	2025-12-19T18:34:21Z	main	false	false	
+jgcumming/draft-ietf-netconf-privcand	standards		0	2023-09-19T16:42:55Z	main	false	false	
+jhaas-pfrc/draft-ietf-idr-bgp-rt-constrains-extension	standards		0	2021-01-04T19:58:02Z	master	false	false	
+jhaas-pfrc/draft-ietf-idr-deprecate-as-set-confed-set	standards		0	2022-10-21T00:38:26Z	main	false	false	
+jhaas-pfrc/draft-ietf-idr-flowspec-interfaceset	standards		0	2017-03-01T20:53:10Z	master	false	false	
+jhaas-pfrc/draft-ietf-idr-flowspec-redirect-ip	standards		0	2022-09-27T17:57:57Z	master	false	false	
+jie-dong/ietf-drafts	standards		0	2022-06-21T03:17:42Z	main	false	false	
+jlivingood/draft-ietf-iasa2-consolidated-upd	standards		0	2018-11-12T14:53:48Z	master	false	false	
+johanix/draft-ietf-dnsop-delegation-mgmt-via-ddns	standards	Makefile	1	2023-09-25T14:55:31Z	main	false	false	NOASSERTION
+JonasPrimbs/draft-ietf-mla-oidc	standards	Go	2	2022-03-07T12:53:42Z	main	false	false	
+josephlhall/draft-ietf-iasa2-bcp	standards	Makefile	1	2018-05-16T14:57:03Z	master	false	false	NOASSERTION
+jquepi/draft-ietf-tls-hybrid-design	standards	Makefile	0	2022-08-03T23:17:04Z	master	false	false	NOASSERTION
+JulienPrat/draft-ietf-lamps-cms-kyber	standards	HTML	0	2024-01-17T12:47:23Z	main	false	false	
+kalirajv/draft-ietf-idr-bgp-fwd-rr	standards	HTML	0	2024-02-12T04:45:16Z	main	false	false	
+kamil-wojcicki/ietf-internet-drafts	standards	Makefile	0	2025-07-08T05:38:20Z	main	false	false	NOASSERTION
+KarimAttoumaniMohamed/draft-attoumani-ietf-inclusion	standards	HTML	0	2025-04-13T19:02:05Z	main	false	false	
+kyzer-davis/base64-sort-ietf-draft	standards		1	2025-11-26T18:02:56Z	main	false	false	
+lamps-wg/draft-ietf-lamps-5480-ku-clarifications	standards	Makefile	0	2019-05-21T02:22:31Z	master	false	false	NOASSERTION
+leaysgur/ietf-draft-to-markdown	standards	JavaScript	0	2019-11-05T02:26:14Z	master	false	false	
+lindadunbar/Obsolete-draft-ietf-idr-5g-edge-service-metadata	standards		0	2024-02-21T16:38:32Z	main	false	false	
+ln5/draft-ietf-trans-gossip	standards	Makefile	3	2015-08-28T14:11:23Z	master	false	false	
+m4mb01t4l14n0/draft-ietf-pluggable-transports	standards	HTML	0	2019-05-22T18:50:52Z	master	false	false	
+marco-tiloca-sics/draft-ietf-schc-8824-update	standards	Makefile	0	2023-12-05T08:33:25Z	main	false	false	NOASSERTION
+marenamat/ietf-draft-marenamat-grow-route-server-nh-translation	standards	Makefile	0	2025-07-23T09:43:33Z	main	false	false	NOASSERTION
+marenamat/ietf-draft-marenamat-idr-scrub-bgp-origin	standards	Makefile	2	2025-11-01T09:31:35Z	main	false	false	NOASSERTION
+marisolpalmero/draft-ietf-davis-generalized-capability-principles	standards	Makefile	0	2025-09-08T08:40:57Z	main	false	false	NOASSERTION
+martenrichter/draft-ietf-webtransport-websocket	standards	Makefile	0	2024-01-01T17:02:43Z	main	false	false	NOASSERTION
+martinthomson/draft-ietf-dcrup-dkim-usage	standards		1	2017-06-11T08:19:49Z	master	false	false	
+mattmathis/draft-ietf-ippm-mbm	standards	Makefile	1	2016-04-07T02:34:22Z	master	false	false	
+mattmathis/draft-ietf-ippm-mbm-registry	standards	Makefile	0	2017-03-13T04:57:48Z	master	false	false	
+meadmaker/draft-ietf-radext-status-realm	standards	Makefile	0	2025-01-21T03:08:43Z	main	false	false	NOASSERTION
+MeherRushi/draft-ietf-netconf-https-notif-cbor	standards	Makefile	1	2025-03-03T14:09:57Z	main	false	false	NOASSERTION
+mglt/draft-ietf-dots-use-cases	standards		0	2016-05-07T17:39:43Z	master	false	false	
+mglt/draft-ietf-tls-ecdhe-psk-aead	standards		0	2016-10-09T20:21:58Z	master	false	false	
+MikeBishop/draft-ietf-tls-svcb-ech	standards	Makefile	0	2023-09-27T21:05:28Z	main	false	false	NOASSERTION
+milewg/draft-ietf-mile-jsoniodef	standards	Python	2	2017-10-24T01:37:40Z	master	false	false	
+mmcbride7/draft-ietf-grow-as-path-prepend	standards		0	2020-08-04T00:17:47Z	master	false	false	
+mohaisen/draft-ietf-dprive-eval	standards		0	2015-12-15T17:38:53Z	master	false	false	
+mohittahiliani/draft-ietf-tsvwg-fq-pie	standards	Makefile	1	2024-11-07T16:24:33Z	main	false	false	NOASSERTION
+moonshiner/draft-ietf-deleg-requirements-old	standards	Makefile	2	2024-07-12T15:00:49Z	main	false	false	NOASSERTION
+MSR6-community/IETF-Draft-Discussion	standards		0	2022-05-09T02:08:45Z	main	false	false	
+multipath-tcp/draft-ietf-mptcp-rfc6824bis	standards		1	2018-01-30T16:29:50Z	master	false	false	
+muzixing/draft-ietf-idr-bgp-ls-sr-policy-path-segment	standards		0	2025-09-11T09:08:51Z	main	false	false	
+muzixing/draft-ietf-idr-sr-policy-path-segment	standards		0	2025-09-11T09:05:02Z	main	false	false	
+muzixing/draft-ietf-pce-stateful-pce-optional	standards	HTML	0	2024-03-13T02:57:45Z	main	false	false	
+muzixing/IETF-drafts	standards		0	2020-04-11T08:13:02Z	master	false	false	
+neilcook/ietf-add-drafts	standards		1	2020-06-24T10:41:05Z	master	false	false	
+nerocrux/draft-ietf-gnap-core-protocol-jp	standards		4	2020-12-12T11:33:43Z	master	false	false	
+network-analytics/draft-ietf-grow-bmp-yang	standards	Shell	0	2023-01-31T15:11:08Z	main	false	false	
+network-analytics/draft-ietf-message-broker-telemetry-message	standards		0	2024-08-15T09:19:39Z	main	false	false	
+network-analytics/draft-ietf-netconf-distributed-notif	standards		1	2020-05-03T10:31:20Z	master	false	false	
+network-analytics/draft-ietf-netconf-udp-notif	standards	Shell	0	2020-10-13T12:28:40Z	main	false	false	
+network-analytics/draft-ietf-netconf-yang-notifications-versioning	standards	Shell	0	2022-09-18T16:55:22Z	main	false	false	
+network-analytics/draft-ietf-nmop-yang-message-broker-integration	standards		0	2024-02-11T08:13:16Z	main	false	false	
+network-analytics/draft-ietf-opsawg-ipfix-on-path-telemetry	standards		2	2022-06-26T12:49:29Z	main	false	false	
+network-quality/draft-ietf-ippm-responsiveness	standards	Makefile	26	2021-07-29T00:11:07Z	main	false	false	
+nov/draft-ietf-oauth	standards		1	2010-04-22T15:44:09Z	master	false	false	
+o-pylypenko-aws/draft-ietf-opsawg-discardmodel-sample	standards		0	2025-06-24T16:37:40Z	main	false	false	MIT
+o-pylypenko/draft-ietf-opsawg-discardmodel	standards	Makefile	0	2025-03-03T07:17:02Z	main	false	false	NOASSERTION
+oauth-wg/draft-ietf-oauth-attestation-based-client-auth	standards	Makefile	20	2023-04-22T16:30:04Z	main	false	false	NOASSERTION
+oauth-wg/draft-ietf-oauth-client-id-metadata-document	standards	Makefile	16	2024-05-23T01:35:08Z	main	false	false	NOASSERTION
+oauth-wg/draft-ietf-oauth-rfc7523bis	standards	Makefile	2	2024-11-14T01:14:36Z	main	false	false	NOASSERTION
+oauth-wg/draft-ietf-oauth-rfc8725bis	standards	Makefile	4	2024-12-21T19:33:12Z	main	false	false	NOASSERTION
+oauth-wg/draft-ietf-oauth-status-list	standards	Python	21	2023-04-21T22:28:55Z	main	false	false	NOASSERTION
+oauthstuff/draft-ietf-oauth-jwt-introspection-response	standards		2	2019-09-05T10:29:20Z	master	false	false	
+oauthstuff/draft-ietf-oauth-security-topics	standards	Makefile	13	2019-09-12T07:44:29Z	master	false	false	NOASSERTION
+oerdnj/draft-ietf-dnsop-algorithm-update	standards	Makefile	0	2018-03-22T10:50:16Z	master	false	false	
+oerdnj/draft-ietf-dnssec-algorithm-update	standards		0	2016-03-17T14:55:34Z	master	false	false	
+openid-foundation-japan/draft-ietf-jose	standards		1	2013-08-06T08:07:45Z	master	false	false	
+openid-foundation-japan/draft-ietf-oauth-v2-bearer	standards		2	2011-10-27T01:59:28Z	master	false	false	
+openpgp-pqc/draft-ietf-openpgp-nist-bp-comp	standards	Rust	0	2024-05-07T09:56:32Z	main	false	false	NOASSERTION
+OR13/google-docs-ietf-draft-template	standards	HTML	0	2023-12-22T14:10:44Z	main	false	false	NOASSERTION
+Oryon/ietf-drafts	standards	Makefile	0	2014-01-30T15:06:40Z	master	false	false	
+otroan/IETF-drafts	standards	Makefile	3	2011-05-27T12:12:32Z	master	false	false	
+palerikm/IETF-drafts	standards		0	2013-11-20T09:01:39Z	master	false	false	NOASSERTION
+paololucente/draft-ietf-grow-bmp-adj-ribs-filtered	standards		0	2024-06-21T14:48:41Z	main	false	false	
+paololucente/draft-ietf-grow-bmp-peer-up	standards		0	2023-05-15T18:46:20Z	main	false	false	
+paololucente/draft-ietf-grow-bmp-rel	standards		1	2022-10-08T21:46:08Z	main	false	false	
+paololucente/draft-ietf-grow-bmp-tlv	standards		1	2019-07-11T13:14:26Z	master	false	false	
+paololucente/draft-ietf-grow-bmp-tlv-ebit	standards		1	2019-11-02T08:49:33Z	master	false	false	
+pawal/ietf-drafts	standards	Makefile	0	2016-04-05T14:42:35Z	master	false	false	
+peterthomassen/draft-ietf-dnsop-cds-consistency	standards	HTML	0	2022-07-09T11:32:23Z	main	false	false	
+peterthomassen/draft-ietf-dnsop-generalized-notify	standards	Makefile	0	2022-11-11T22:34:31Z	main	false	false	NOASSERTION
+plapukhov/ietf-drafts	standards		1	2015-11-05T13:28:35Z	master	false	false	
+prilaksh/IETF_Draft	standards		0	2013-07-31T00:05:40Z	master	false	false	
+protocollabs/ietf-drafts	standards	Shell	1	2017-09-05T13:45:47Z	master	false	false	
+przygienda/draft-ietf-lsr-isis-flood-reflection	standards	HTML	0	2022-08-30T15:35:45Z	main	false	false	
+pusateri/draft-ietf-dnssd-push	standards	HTML	0	2015-03-07T23:03:54Z	master	false	false	
+pusateri/draft-ietf-dnssd-update-proxy	standards	XSLT	0	2019-01-31T17:21:46Z	master	false	false	
+rachelhuang/ietf-draft-template	standards		0	2023-08-07T01:35:30Z	main	false	false	
+radext-wg/draft-ietf-radext-deprecate-radius	standards	Makefile	0	2023-11-07T09:48:22Z	main	false	false	
+radext-wg/draft-ietf-radext-radiusdtls-bis	standards	Makefile	1	2024-04-09T08:55:15Z	main	false	false	NOASSERTION
+radext-wg/draft-ietf-radext-radiusv11	standards	Makefile	0	2023-04-26T12:48:37Z	master	false	false	
+radext-wg/draft-ietf-radext-reverse-coa	standards	Makefile	0	2023-11-07T10:14:48Z	master	false	false	
+radext-wg/draft-ietf-radext-tls-psk	standards	Makefile	0	2023-07-26T00:33:29Z	master	false	false	
+reza-github/repo-draft-ietf-ccamp-actn-wdm-pluggable-modelling	standards	Makefile	0	2025-12-10T12:07:04Z	main	false	false	NOASSERTION
+rgaglian/ietf_draft-fmejias-opsec-secure-origin-a-country-	standards		0	2013-09-13T14:19:05Z	master	false	false	
+rgwilton/draft-wilton-ietf-yang-pkg-defn	standards	Shell	0	2025-03-12T19:08:19Z	initial-work	false	false	NOASSERTION
+RichiH/draft-ietf-opsawg-prometheus-exposition-format	standards	Makefile	1	2016-06-21T09:12:55Z	master	false	false	
+rohanmahy/draft-ietf-cbor-serialization	standards	Makefile	0	2025-12-11T07:13:30Z	main	false	false	NOASSERTION
+rohanmahy/ietf-drafts	standards	Makefile	0	2022-02-23T05:24:39Z	main	false	false	NOASSERTION
+roll-wg/draft-ietf-roll-enrollment-priority	standards	Makefile	2	2019-11-16T15:09:50Z	master	false	false	
+roll-wg/draft-ietf-roll-nsa-extension	standards	XSLT	0	2019-10-30T13:43:05Z	master	false	false	
+RoyArends/draft-ietf-dnsop-dns-error-reporting	standards		1	2021-11-09T21:51:37Z	main	false	false	
+rsto/draft-ietf-calext-jscalendar	standards		1	2024-01-17T12:01:50Z	main	false	false	
+rute19104/ietf-bmwg-draft-2025-1	standards	HTML	1	2025-05-05T20:48:43Z	main	false	false	NOASSERTION
+sacmwg/draft-ietf-sacm-architecture	standards	Makefile	1	2015-02-10T19:16:18Z	master	false	false	
+sacmwg/draft-ietf-sacm-coswid	standards	Makefile	2	2017-01-10T09:37:55Z	master	false	false	NOASSERTION
+sacmwg/draft-ietf-sacm-ecp	standards		0	2017-08-25T14:52:09Z	master	false	false	
+sacmwg/draft-ietf-sacm-information-model	standards	Python	4	2015-02-10T19:16:29Z	master	false	false	
+sacmwg/draft-ietf-sacm-requirements	standards	Makefile	1	2015-02-10T19:16:07Z	master	false	false	
+sacmwg/draft-ietf-sacm-rolie-softwaredescriptor	standards		0	2017-08-25T14:52:48Z	master	false	false	
+sacmwg/draft-ietf-sacm-terminology	standards	Makefile	2	2015-02-10T19:15:55Z	master	false	false	NOASSERTION
+sacmwg/draft-ietf-sacm-use-cases	standards		0	2015-02-10T19:15:36Z	master	false	false	
+saradickinson/draft-ietf-dnsop-edns-tcp-keepalive	standards		1	2015-06-15T10:36:40Z	master	false	false	
+saradickinson/draft-ietf-dprive-dtls-and-tls-profiles	standards		0	2016-01-30T14:28:09Z	master	false	false	
+sayrer/draft-ietf-emailcore-rfc5321bis-as	standards	HTML	0	2025-08-01T16:16:14Z	main	false	false	
+selfissued/draft-ietf-cose-typ-header-parameter	standards	Makefile	0	2023-07-08T23:00:48Z	main	false	false	NOASSERTION
+sli35/draft-ietf-bess-ebgp-dmz	standards		0	2025-10-08T22:17:23Z	master	false	false	
+songlinjian/ietf-draft-ixfr-ps	standards		0	2016-04-28T03:19:20Z	master	false	false	
+sprevidi/draft-ietf-isis-segment-routing-extensions	standards		2	2013-06-26T09:16:30Z	master	false	false	
+SriganeshKini/Algorithm-draft-ietf-mpls-spring-entropy-label	standards	C	0	2016-05-20T17:21:42Z	master	false	false	BSD-3-Clause
+srinivasgu/draft-ietf-avtcore-rtp-volumetric-media-roi	standards		0	2025-06-05T19:34:06Z	main	false	false	NOASSERTION
+stefanholmer/ietf-drafts	standards	Makefile	0	2015-10-12T11:11:58Z	master	false	false	
+stoffi92/draft-ietf-idr-flow-spec-v6	standards	Python	1	2019-09-20T14:34:18Z	master	false	false	
+suhasHere/ietf-drafts	standards	Makefile	0	2014-06-26T22:27:13Z	master	false	false	
+superlitong/recovery_ietf_drafts	standards		0	2025-11-16T05:25:25Z	main	false	false	MIT
+superlitong/rtt_estimation_ietf_drafts	standards		0	2025-11-16T04:19:37Z	main	false	false	MIT
+superlitong/tack_ietf_drafts	standards		0	2021-05-25T07:05:24Z	main	false	false	MIT
+taylor-b/draft-ietf-mmusic-sdp-bundle-negotiation	standards		0	2016-12-14T17:29:38Z	master	false	false	
+ties/draft-ietf-sidrops-roa-considerations	standards		0	2022-07-11T14:07:07Z	main	false	false	
+TimEvens/draft-ietf-grow-bmp-adj-rib-out	standards		2	2017-05-30T16:09:33Z	master	false	false	
+TimEvens/draft-ietf-grow-bmp-loc-rib	standards		2	2017-05-30T16:08:58Z	master	false	false	
+tlswg/draft-ietf-tls-cert-abridge	standards	Python	2	2023-05-22T09:40:30Z	main	false	false	NOASSERTION
+tlswg/draft-ietf-tls-ctls	standards	Makefile	1	2019-03-05T00:40:34Z	master	false	false	NOASSERTION
+tlswg/draft-ietf-tls-ecdhe-psk-aead	standards		0	2016-10-11T14:39:36Z	master	false	false	
+tlswg/draft-ietf-tls-ech-keylogfile	standards	Makefile	1	2024-05-27T22:01:14Z	main	false	false	NOASSERTION
+tlswg/draft-ietf-tls-esni	standards	Python	246	2018-05-10T20:43:26Z	master	false	false	NOASSERTION
+tlswg/draft-ietf-tls-external-psk-importer	standards	Makefile	1	2018-07-26T17:17:39Z	master	false	false	NOASSERTION
+tlswg/draft-ietf-tls-grease	standards		0	2017-01-03T14:38:07Z	master	false	false	
+tlswg/draft-ietf-tls-iana-registry-updates	standards	Makefile	0	2016-12-21T01:17:34Z	master	false	false	NOASSERTION
+tlswg/draft-ietf-tls-md5-sha1-deprecate	standards		3	2019-10-16T16:28:09Z	master	false	false	
+tlswg/draft-ietf-tls-mlkem	standards	Makefile	8	2024-02-28T17:31:22Z	main	false	false	NOASSERTION
+tlswg/draft-ietf-tls-semistatic-dh	standards	Makefile	3	2018-03-02T16:37:15Z	master	false	false	NOASSERTION
+tlswg/draft-ietf-tls-ticketrequest	standards	Makefile	0	2017-10-23T15:44:14Z	master	false	false	NOASSERTION
+tlswg/draft-ietf-tls-tls13-vectors	standards	Python	5	2017-01-03T14:35:57Z	master	false	false	NOASSERTION
+tojens-ietf/draft-jens-7050-secure-channel	standards	Makefile	0	2024-06-13T15:20:18Z	main	false	false	NOASSERTION
+tojens-ietf/draft-tdj-associated-prefixes-for-domains	standards	Makefile	1	2025-01-27T19:07:39Z	main	false	false	NOASSERTION
+tojens-ietf/draft-tjjk-cared	standards		2	2024-06-12T17:57:32Z	main	false	false	
+tojens-ietf/draft-tojens-dhcp-option-concat-considerations	standards		0	2024-10-18T20:17:25Z	main	false	false	
+tplooker/draft-ietf-cose-bls-key-representations	standards	Makefile	1	2022-01-29T00:40:08Z	main	false	false	NOASSERTION
+tplooker/draft-ietf-cose-cwt-claims-in-headers	standards	Makefile	0	2022-02-03T23:27:06Z	main	false	false	NOASSERTION
+tsvwg/draft-ietf-tsvwg-udp-options	standards		1	2023-06-30T07:06:41Z	main	false	false	
+uuid6/new-uuid-encoding-techniques-ietf-draft	standards		6	2022-04-18T20:30:24Z	master	false	false	
+vpbeeram/ietf-drafts	standards		0	2022-06-20T17:55:30Z	main	false	false	
+webbotauth/draft-ietf-webbotauth-httpsig-protocol	standards	Makefile	11	2025-04-10T08:24:08Z	main	false	false	NOASSERTION
+William-PanWei/draft-ietf-ipsecme-ikev2-sa-ts-payloads-opt	standards		0	2024-06-11T07:04:51Z	main	false	false	
+WilliamDenniss/draft-ietf-oauth-device-flow	standards		1	2016-02-17T21:39:26Z	master	false	false	NOASSERTION
+WilliamDenniss/draft-ietf-oauth-spop	standards		0	2014-09-19T22:35:07Z	master	false	false	
+wkumari/draft-ietf-dnsop-nsec-aggressiveuse	standards	Makefile	0	2016-06-15T16:50:03Z	master	false	false	
+woobagooba/draft-ietf-is-csmp	standards		1	2022-06-03T16:28:36Z	main	false	false	
+xinbenlv/ietf-drafts	standards		1	2023-07-26T23:50:07Z	main	false	false	
+younglee-ietf/IETF-PCE-GMPLS-drafts	standards	Perl	0	2019-07-08T20:46:19Z	master	false	false	
+yuma-m/draft-ietf-ice-trickle	standards		0	2021-01-04T13:56:04Z	main	false	false	

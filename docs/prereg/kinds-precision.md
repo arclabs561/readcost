@@ -526,3 +526,41 @@ Third-party text stays under `ref/kinds/`; the repository holds pointers
 only, in `eval/kinds/sample.jsonl`.
 
 ## Amendments
+
+### 19 November 2026, after the searches and before any fetch
+
+Written after the searches ran and before any repository was cloned or
+any text read. Counts from the searches, and details that
+`scripts/kinds_precision.py` fixes and the text above leaves open.
+
+- The searches returned 1,357 repositories for (a) and 11,446 for (b)
+  (12,803 candidates), 624 for the drafts query and the records of the
+  eight named sources and `github/site-policy`. The six code searches
+  each returned their limit of 1,000 results (4,803 distinct files); only
+  12 files in 3 repositories that are kept candidates and not walked pass
+  the kind rule, so the runbook stratum rests on the walk and the two
+  named runbook sources.
+- The drafts query is run as registered, without a star range: its count
+  is under the search's limit, so no split is needed.
+- The walk drops 19 repositories of (a) and 1 of (b) as named in a
+  development corpus, 41 for the owner cap, and `github/docs` from (a) as
+  a named source; the drafts walk drops 3 for its owner cap.
+- Code search results in walked repositories are not used: the walk reads
+  their runbook files by the kind rule already.
+- The chosen blobs of a clone are fetched in one batch (`git fetch origin
+  OID...` in the blobless clone) and read with `git cat-file`; the bytes
+  are the same as one fetch per blob.
+- A changelog is cut when it is stored, so pointers' offsets refer to the
+  cut text; its record says whether it was cut.
+- In a Python file, a sentence whose line starts with `#` outside a
+  docstring is ordinary; every other sentence readcost reads there is in a
+  docstring.
+- Under `comments = "all"`, readcost reads a Rust `///` line a second time
+  as a `//` comment. Such a sentence is classified doc by its own line, so
+  it never enters code-ordinary; in the ranked sentences of a document a
+  sentence at the same offsets counts once.
+- Documents for ranked sentences are sorted by the smallest key of the
+  items they gave, then shuffled.
+- Ids are drawn over all items, ranked ones included. Primed batches hold
+  findings, near misses and random decoys; unprimed batches hold those and
+  the ranked items.

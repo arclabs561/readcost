@@ -1,0 +1,1638 @@
+[
+ {
+  "q": "stars:20001..1000000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1357,
+  "incomplete": false,
+  "at": "2026-11-19T14:44:27.366215+00:00"
+ },
+ {
+  "q": "stars:20001..510000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1356,
+  "incomplete": false,
+  "at": "2026-11-19T14:44:32.203856+00:00"
+ },
+ {
+  "q": "stars:20001..265000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1346,
+  "incomplete": false,
+  "at": "2026-11-19T14:44:37.164750+00:00"
+ },
+ {
+  "q": "stars:20001..142500 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1305,
+  "incomplete": false,
+  "at": "2026-11-19T14:44:44.504533+00:00"
+ },
+ {
+  "q": "stars:20001..81250 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1214,
+  "incomplete": false,
+  "at": "2026-11-19T14:44:50.013557+00:00"
+ },
+ {
+  "q": "stars:20001..50625 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1025,
+  "incomplete": false,
+  "at": "2026-11-19T14:44:55.612387+00:00"
+ },
+ {
+  "q": "stars:20001..35313 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 735,
+  "incomplete": false,
+  "at": "2026-11-19T14:45:01.186197+00:00"
+ },
+ {
+  "q": "stars:20001..35313 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 735,
+  "incomplete": false,
+  "at": "2026-11-19T14:45:07.633698+00:00"
+ },
+ {
+  "q": "stars:20001..35313 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 735,
+  "incomplete": false,
+  "at": "2026-11-19T14:45:13.701193+00:00"
+ },
+ {
+  "q": "stars:20001..35313 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 4,
+  "total_count": 735,
+  "incomplete": false,
+  "at": "2026-11-19T14:45:19.857643+00:00"
+ },
+ {
+  "q": "stars:20001..35313 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 5,
+  "total_count": 735,
+  "incomplete": false,
+  "at": "2026-11-19T14:45:26.330221+00:00"
+ },
+ {
+  "q": "stars:20001..35313 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 6,
+  "total_count": 735,
+  "incomplete": false,
+  "at": "2026-11-19T14:45:33.199884+00:00"
+ },
+ {
+  "q": "stars:20001..35313 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 7,
+  "total_count": 735,
+  "incomplete": false,
+  "at": "2026-11-19T14:45:40.997070+00:00"
+ },
+ {
+  "q": "stars:20001..35313 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 8,
+  "total_count": 735,
+  "incomplete": false,
+  "at": "2026-11-19T14:45:43.513336+00:00"
+ },
+ {
+  "q": "stars:35314..50625 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 290,
+  "incomplete": false,
+  "at": "2026-11-19T14:45:49.697625+00:00"
+ },
+ {
+  "q": "stars:35314..50625 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 290,
+  "incomplete": false,
+  "at": "2026-11-19T14:45:57.092794+00:00"
+ },
+ {
+  "q": "stars:35314..50625 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 3,
+  "total_count": 290,
+  "incomplete": false,
+  "at": "2026-11-19T14:46:03.975078+00:00"
+ },
+ {
+  "q": "stars:50626..81250 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 189,
+  "incomplete": false,
+  "at": "2026-11-19T14:46:10.135416+00:00"
+ },
+ {
+  "q": "stars:50626..81250 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 2,
+  "total_count": 189,
+  "incomplete": false,
+  "at": "2026-11-19T14:46:16.481166+00:00"
+ },
+ {
+  "q": "stars:81251..142500 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 91,
+  "incomplete": false,
+  "at": "2026-11-19T14:46:24.160459+00:00"
+ },
+ {
+  "q": "stars:142501..265000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 41,
+  "incomplete": false,
+  "at": "2026-11-19T14:46:26.989939+00:00"
+ },
+ {
+  "q": "stars:265001..510000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 10,
+  "incomplete": false,
+  "at": "2026-11-19T14:46:28.304518+00:00"
+ },
+ {
+  "q": "stars:510001..1000000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false",
+  "page": 1,
+  "total_count": 1,
+  "incomplete": false,
+  "at": "2026-11-19T14:46:29.997504+00:00"
+ },
+ {
+  "q": "stars:200..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 11443,
+  "incomplete": false,
+  "at": "2026-11-19T14:46:37.321594+00:00"
+ },
+ {
+  "q": "stars:200..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 11190,
+  "incomplete": false,
+  "at": "2026-11-19T14:46:42.312762+00:00"
+ },
+ {
+  "q": "stars:200..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 10692,
+  "incomplete": false,
+  "at": "2026-11-19T14:46:47.639024+00:00"
+ },
+ {
+  "q": "stars:200..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 9895,
+  "incomplete": false,
+  "at": "2026-11-19T14:46:53.978287+00:00"
+ },
+ {
+  "q": "stars:200..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 8596,
+  "incomplete": false,
+  "at": "2026-11-19T14:46:59.244793+00:00"
+ },
+ {
+  "q": "stars:200..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 7008,
+  "incomplete": false,
+  "at": "2026-11-19T14:47:06.014301+00:00"
+ },
+ {
+  "q": "stars:200..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 5147,
+  "incomplete": false,
+  "at": "2026-11-19T14:47:12.585687+00:00"
+ },
+ {
+  "q": "stars:200..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 3423,
+  "incomplete": false,
+  "at": "2026-11-19T14:47:18.649605+00:00"
+ },
+ {
+  "q": "stars:200..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 2058,
+  "incomplete": false,
+  "at": "2026-11-19T14:47:24.084212+00:00"
+ },
+ {
+  "q": "stars:200..238 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 1139,
+  "incomplete": false,
+  "at": "2026-11-19T14:47:29.277703+00:00"
+ },
+ {
+  "q": "stars:200..219 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 639,
+  "incomplete": false,
+  "at": "2026-11-19T14:47:35.664173+00:00"
+ },
+ {
+  "q": "stars:200..219 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 639,
+  "incomplete": false,
+  "at": "2026-11-19T14:47:41.694645+00:00"
+ },
+ {
+  "q": "stars:200..219 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 639,
+  "incomplete": false,
+  "at": "2026-11-19T14:47:47.861963+00:00"
+ },
+ {
+  "q": "stars:200..219 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 4,
+  "total_count": 639,
+  "incomplete": false,
+  "at": "2026-11-19T14:47:54.500482+00:00"
+ },
+ {
+  "q": "stars:200..219 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 5,
+  "total_count": 639,
+  "incomplete": false,
+  "at": "2026-11-19T14:47:59.850323+00:00"
+ },
+ {
+  "q": "stars:200..219 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 6,
+  "total_count": 639,
+  "incomplete": false,
+  "at": "2026-11-19T14:48:05.169027+00:00"
+ },
+ {
+  "q": "stars:200..219 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 7,
+  "total_count": 639,
+  "incomplete": false,
+  "at": "2026-11-19T14:48:07.784153+00:00"
+ },
+ {
+  "q": "stars:220..238 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 500,
+  "incomplete": false,
+  "at": "2026-11-19T14:48:13.294620+00:00"
+ },
+ {
+  "q": "stars:220..238 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 500,
+  "incomplete": false,
+  "at": "2026-11-19T14:48:18.547916+00:00"
+ },
+ {
+  "q": "stars:220..238 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 500,
+  "incomplete": false,
+  "at": "2026-11-19T14:48:24.217144+00:00"
+ },
+ {
+  "q": "stars:220..238 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 4,
+  "total_count": 500,
+  "incomplete": false,
+  "at": "2026-11-19T14:48:30.577340+00:00"
+ },
+ {
+  "q": "stars:220..238 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 5,
+  "total_count": 500,
+  "incomplete": false,
+  "at": "2026-11-19T14:48:35.229113+00:00"
+ },
+ {
+  "q": "stars:239..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 919,
+  "incomplete": false,
+  "at": "2026-11-19T14:48:41.045049+00:00"
+ },
+ {
+  "q": "stars:239..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 919,
+  "incomplete": false,
+  "at": "2026-11-19T14:48:46.131951+00:00"
+ },
+ {
+  "q": "stars:239..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 919,
+  "incomplete": false,
+  "at": "2026-11-19T14:48:52.598543+00:00"
+ },
+ {
+  "q": "stars:239..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 4,
+  "total_count": 919,
+  "incomplete": false,
+  "at": "2026-11-19T14:48:57.892011+00:00"
+ },
+ {
+  "q": "stars:239..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 5,
+  "total_count": 919,
+  "incomplete": false,
+  "at": "2026-11-19T14:49:03.238450+00:00"
+ },
+ {
+  "q": "stars:239..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 6,
+  "total_count": 919,
+  "incomplete": false,
+  "at": "2026-11-19T14:49:09.515321+00:00"
+ },
+ {
+  "q": "stars:239..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 7,
+  "total_count": 919,
+  "incomplete": false,
+  "at": "2026-11-19T14:49:14.599041+00:00"
+ },
+ {
+  "q": "stars:239..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 8,
+  "total_count": 919,
+  "incomplete": false,
+  "at": "2026-11-19T14:49:20.298952+00:00"
+ },
+ {
+  "q": "stars:239..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 9,
+  "total_count": 919,
+  "incomplete": false,
+  "at": "2026-11-19T14:49:25.727534+00:00"
+ },
+ {
+  "q": "stars:239..277 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 10,
+  "total_count": 919,
+  "incomplete": false,
+  "at": "2026-11-19T14:49:27.300236+00:00"
+ },
+ {
+  "q": "stars:278..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 1366,
+  "incomplete": false,
+  "at": "2026-11-19T14:49:33.433613+00:00"
+ },
+ {
+  "q": "stars:278..316 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 750,
+  "incomplete": false,
+  "at": "2026-11-19T14:49:38.842477+00:00"
+ },
+ {
+  "q": "stars:278..316 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 750,
+  "incomplete": false,
+  "at": "2026-11-19T14:49:44.554172+00:00"
+ },
+ {
+  "q": "stars:278..316 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 750,
+  "incomplete": false,
+  "at": "2026-11-19T14:49:50.503731+00:00"
+ },
+ {
+  "q": "stars:278..316 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 4,
+  "total_count": 750,
+  "incomplete": false,
+  "at": "2026-11-19T14:49:57.254935+00:00"
+ },
+ {
+  "q": "stars:278..316 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 5,
+  "total_count": 750,
+  "incomplete": false,
+  "at": "2026-11-19T14:50:03.171465+00:00"
+ },
+ {
+  "q": "stars:278..316 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 6,
+  "total_count": 750,
+  "incomplete": false,
+  "at": "2026-11-19T14:50:08.071064+00:00"
+ },
+ {
+  "q": "stars:278..316 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 7,
+  "total_count": 750,
+  "incomplete": false,
+  "at": "2026-11-19T14:50:14.103200+00:00"
+ },
+ {
+  "q": "stars:278..316 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 8,
+  "total_count": 750,
+  "incomplete": false,
+  "at": "2026-11-19T14:50:17.184264+00:00"
+ },
+ {
+  "q": "stars:317..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 616,
+  "incomplete": false,
+  "at": "2026-11-19T14:50:22.421243+00:00"
+ },
+ {
+  "q": "stars:317..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 616,
+  "incomplete": false,
+  "at": "2026-11-19T14:50:27.702343+00:00"
+ },
+ {
+  "q": "stars:317..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 616,
+  "incomplete": false,
+  "at": "2026-11-19T14:50:34.324728+00:00"
+ },
+ {
+  "q": "stars:317..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 4,
+  "total_count": 616,
+  "incomplete": false,
+  "at": "2026-11-19T14:50:39.367641+00:00"
+ },
+ {
+  "q": "stars:317..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 5,
+  "total_count": 616,
+  "incomplete": false,
+  "at": "2026-11-19T14:50:43.192258+00:00"
+ },
+ {
+  "q": "stars:317..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 6,
+  "total_count": 616,
+  "incomplete": false,
+  "at": "2026-11-19T14:50:51.549252+00:00"
+ },
+ {
+  "q": "stars:317..354 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 7,
+  "total_count": 616,
+  "incomplete": false,
+  "at": "2026-11-19T14:50:52.846862+00:00"
+ },
+ {
+  "q": "stars:355..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 1724,
+  "incomplete": false,
+  "at": "2026-11-19T14:50:58.878420+00:00"
+ },
+ {
+  "q": "stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 992,
+  "incomplete": false,
+  "at": "2026-11-19T14:51:04.348251+00:00"
+ },
+ {
+  "q": "stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 992,
+  "incomplete": false,
+  "at": "2026-11-19T14:51:10.361216+00:00"
+ },
+ {
+  "q": "stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 992,
+  "incomplete": false,
+  "at": "2026-11-19T14:51:16.030539+00:00"
+ },
+ {
+  "q": "stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 4,
+  "total_count": 992,
+  "incomplete": false,
+  "at": "2026-11-19T14:51:21.934380+00:00"
+ },
+ {
+  "q": "stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 5,
+  "total_count": 992,
+  "incomplete": false,
+  "at": "2026-11-19T14:51:27.892366+00:00"
+ },
+ {
+  "q": "stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 6,
+  "total_count": 992,
+  "incomplete": false,
+  "at": "2026-11-19T14:51:33.476862+00:00"
+ },
+ {
+  "q": "stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 7,
+  "total_count": 992,
+  "incomplete": false,
+  "at": "2026-11-19T14:51:38.999432+00:00"
+ },
+ {
+  "q": "stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 8,
+  "total_count": 992,
+  "incomplete": false,
+  "at": "2026-11-19T14:51:44.025803+00:00"
+ },
+ {
+  "q": "stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 9,
+  "total_count": 992,
+  "incomplete": false,
+  "at": "2026-11-19T14:51:48.987968+00:00"
+ },
+ {
+  "q": "stars:355..432 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 10,
+  "total_count": 992,
+  "incomplete": false,
+  "at": "2026-11-19T14:51:54.278796+00:00"
+ },
+ {
+  "q": "stars:433..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 732,
+  "incomplete": false,
+  "at": "2026-11-19T14:52:00.058107+00:00"
+ },
+ {
+  "q": "stars:433..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 732,
+  "incomplete": false,
+  "at": "2026-11-19T14:52:06.197743+00:00"
+ },
+ {
+  "q": "stars:433..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 732,
+  "incomplete": false,
+  "at": "2026-11-19T14:52:11.944632+00:00"
+ },
+ {
+  "q": "stars:433..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 4,
+  "total_count": 732,
+  "incomplete": false,
+  "at": "2026-11-19T14:52:17.052395+00:00"
+ },
+ {
+  "q": "stars:433..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 5,
+  "total_count": 732,
+  "incomplete": false,
+  "at": "2026-11-19T14:52:22.021595+00:00"
+ },
+ {
+  "q": "stars:433..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 6,
+  "total_count": 732,
+  "incomplete": false,
+  "at": "2026-11-19T14:52:27.533705+00:00"
+ },
+ {
+  "q": "stars:433..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 7,
+  "total_count": 732,
+  "incomplete": false,
+  "at": "2026-11-19T14:52:33.540440+00:00"
+ },
+ {
+  "q": "stars:433..509 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 8,
+  "total_count": 732,
+  "incomplete": false,
+  "at": "2026-11-19T14:52:35.842348+00:00"
+ },
+ {
+  "q": "stars:510..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 1861,
+  "incomplete": false,
+  "at": "2026-11-19T14:52:40.878399+00:00"
+ },
+ {
+  "q": "stars:510..664 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 1104,
+  "incomplete": false,
+  "at": "2026-11-19T14:52:45.617705+00:00"
+ },
+ {
+  "q": "stars:510..587 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 611,
+  "incomplete": false,
+  "at": "2026-11-19T14:52:51.739976+00:00"
+ },
+ {
+  "q": "stars:510..587 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 611,
+  "incomplete": false,
+  "at": "2026-11-19T14:52:57.017750+00:00"
+ },
+ {
+  "q": "stars:510..587 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 611,
+  "incomplete": false,
+  "at": "2026-11-19T14:53:02.340162+00:00"
+ },
+ {
+  "q": "stars:510..587 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 4,
+  "total_count": 611,
+  "incomplete": false,
+  "at": "2026-11-19T14:53:07.723722+00:00"
+ },
+ {
+  "q": "stars:510..587 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 5,
+  "total_count": 611,
+  "incomplete": false,
+  "at": "2026-11-19T14:53:14.114038+00:00"
+ },
+ {
+  "q": "stars:510..587 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 6,
+  "total_count": 611,
+  "incomplete": false,
+  "at": "2026-11-19T14:53:19.062454+00:00"
+ },
+ {
+  "q": "stars:510..587 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 7,
+  "total_count": 611,
+  "incomplete": false,
+  "at": "2026-11-19T14:53:20.282054+00:00"
+ },
+ {
+  "q": "stars:588..664 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 493,
+  "incomplete": false,
+  "at": "2026-11-19T14:53:25.847850+00:00"
+ },
+ {
+  "q": "stars:588..664 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 493,
+  "incomplete": false,
+  "at": "2026-11-19T14:53:31.384933+00:00"
+ },
+ {
+  "q": "stars:588..664 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 493,
+  "incomplete": false,
+  "at": "2026-11-19T14:53:36.601080+00:00"
+ },
+ {
+  "q": "stars:588..664 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 4,
+  "total_count": 493,
+  "incomplete": false,
+  "at": "2026-11-19T14:53:42.016864+00:00"
+ },
+ {
+  "q": "stars:588..664 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 5,
+  "total_count": 493,
+  "incomplete": false,
+  "at": "2026-11-19T14:53:47.503592+00:00"
+ },
+ {
+  "q": "stars:665..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 757,
+  "incomplete": false,
+  "at": "2026-11-19T14:53:52.435882+00:00"
+ },
+ {
+  "q": "stars:665..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 757,
+  "incomplete": false,
+  "at": "2026-11-19T14:53:57.702686+00:00"
+ },
+ {
+  "q": "stars:665..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 757,
+  "incomplete": false,
+  "at": "2026-11-19T14:54:03.649129+00:00"
+ },
+ {
+  "q": "stars:665..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 4,
+  "total_count": 757,
+  "incomplete": false,
+  "at": "2026-11-19T14:54:08.279380+00:00"
+ },
+ {
+  "q": "stars:665..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 5,
+  "total_count": 757,
+  "incomplete": false,
+  "at": "2026-11-19T14:54:13.000167+00:00"
+ },
+ {
+  "q": "stars:665..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 6,
+  "total_count": 757,
+  "incomplete": false,
+  "at": "2026-11-19T14:54:18.827881+00:00"
+ },
+ {
+  "q": "stars:665..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 7,
+  "total_count": 757,
+  "incomplete": false,
+  "at": "2026-11-19T14:54:24.604157+00:00"
+ },
+ {
+  "q": "stars:665..818 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 8,
+  "total_count": 757,
+  "incomplete": false,
+  "at": "2026-11-19T14:54:28.182731+00:00"
+ },
+ {
+  "q": "stars:819..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 1589,
+  "incomplete": false,
+  "at": "2026-11-19T14:54:33.399217+00:00"
+ },
+ {
+  "q": "stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 964,
+  "incomplete": false,
+  "at": "2026-11-19T14:54:38.641517+00:00"
+ },
+ {
+  "q": "stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 964,
+  "incomplete": false,
+  "at": "2026-11-19T14:54:44.087453+00:00"
+ },
+ {
+  "q": "stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 964,
+  "incomplete": false,
+  "at": "2026-11-19T14:54:48.864608+00:00"
+ },
+ {
+  "q": "stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 4,
+  "total_count": 964,
+  "incomplete": false,
+  "at": "2026-11-19T14:54:53.720637+00:00"
+ },
+ {
+  "q": "stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 5,
+  "total_count": 964,
+  "incomplete": false,
+  "at": "2026-11-19T14:54:58.202493+00:00"
+ },
+ {
+  "q": "stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 6,
+  "total_count": 964,
+  "incomplete": false,
+  "at": "2026-11-19T14:55:04.744991+00:00"
+ },
+ {
+  "q": "stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 7,
+  "total_count": 964,
+  "incomplete": false,
+  "at": "2026-11-19T14:55:10.215442+00:00"
+ },
+ {
+  "q": "stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 8,
+  "total_count": 964,
+  "incomplete": false,
+  "at": "2026-11-19T14:55:15.287264+00:00"
+ },
+ {
+  "q": "stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 9,
+  "total_count": 964,
+  "incomplete": false,
+  "at": "2026-11-19T14:55:20.988953+00:00"
+ },
+ {
+  "q": "stars:819..1128 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 10,
+  "total_count": 964,
+  "incomplete": false,
+  "at": "2026-11-19T14:55:24.453075+00:00"
+ },
+ {
+  "q": "stars:1129..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 625,
+  "incomplete": false,
+  "at": "2026-11-19T14:55:29.950436+00:00"
+ },
+ {
+  "q": "stars:1129..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 625,
+  "incomplete": false,
+  "at": "2026-11-19T14:55:34.940333+00:00"
+ },
+ {
+  "q": "stars:1129..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 625,
+  "incomplete": false,
+  "at": "2026-11-19T14:55:41.005549+00:00"
+ },
+ {
+  "q": "stars:1129..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 4,
+  "total_count": 625,
+  "incomplete": false,
+  "at": "2026-11-19T14:55:46.216616+00:00"
+ },
+ {
+  "q": "stars:1129..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 5,
+  "total_count": 625,
+  "incomplete": false,
+  "at": "2026-11-19T14:55:51.343807+00:00"
+ },
+ {
+  "q": "stars:1129..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 6,
+  "total_count": 625,
+  "incomplete": false,
+  "at": "2026-11-19T14:55:56.230522+00:00"
+ },
+ {
+  "q": "stars:1129..1437 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 7,
+  "total_count": 625,
+  "incomplete": false,
+  "at": "2026-11-19T14:55:58.205929+00:00"
+ },
+ {
+  "q": "stars:1438..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 1299,
+  "incomplete": false,
+  "at": "2026-11-19T14:56:03.975854+00:00"
+ },
+ {
+  "q": "stars:1438..2056 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 825,
+  "incomplete": false,
+  "at": "2026-11-19T14:56:08.526082+00:00"
+ },
+ {
+  "q": "stars:1438..2056 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 825,
+  "incomplete": false,
+  "at": "2026-11-19T14:56:13.630414+00:00"
+ },
+ {
+  "q": "stars:1438..2056 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 825,
+  "incomplete": false,
+  "at": "2026-11-19T14:56:19.267931+00:00"
+ },
+ {
+  "q": "stars:1438..2056 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 4,
+  "total_count": 825,
+  "incomplete": false,
+  "at": "2026-11-19T14:56:24.414175+00:00"
+ },
+ {
+  "q": "stars:1438..2056 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 5,
+  "total_count": 825,
+  "incomplete": false,
+  "at": "2026-11-19T14:56:29.671266+00:00"
+ },
+ {
+  "q": "stars:1438..2056 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 6,
+  "total_count": 825,
+  "incomplete": false,
+  "at": "2026-11-19T14:56:35.010009+00:00"
+ },
+ {
+  "q": "stars:1438..2056 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 7,
+  "total_count": 825,
+  "incomplete": false,
+  "at": "2026-11-19T14:56:40.019561+00:00"
+ },
+ {
+  "q": "stars:1438..2056 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 8,
+  "total_count": 825,
+  "incomplete": false,
+  "at": "2026-11-19T14:56:44.408330+00:00"
+ },
+ {
+  "q": "stars:1438..2056 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 9,
+  "total_count": 825,
+  "incomplete": false,
+  "at": "2026-11-19T14:56:46.190125+00:00"
+ },
+ {
+  "q": "stars:2057..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 474,
+  "incomplete": false,
+  "at": "2026-11-19T14:56:51.607938+00:00"
+ },
+ {
+  "q": "stars:2057..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 474,
+  "incomplete": false,
+  "at": "2026-11-19T14:56:56.779524+00:00"
+ },
+ {
+  "q": "stars:2057..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 474,
+  "incomplete": false,
+  "at": "2026-11-19T14:57:01.962977+00:00"
+ },
+ {
+  "q": "stars:2057..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 4,
+  "total_count": 474,
+  "incomplete": false,
+  "at": "2026-11-19T14:57:06.611506+00:00"
+ },
+ {
+  "q": "stars:2057..2675 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 5,
+  "total_count": 474,
+  "incomplete": false,
+  "at": "2026-11-19T14:57:10.454082+00:00"
+ },
+ {
+  "q": "stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 797,
+  "incomplete": false,
+  "at": "2026-11-19T14:57:15.022509+00:00"
+ },
+ {
+  "q": "stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 797,
+  "incomplete": false,
+  "at": "2026-11-19T14:57:20.540589+00:00"
+ },
+ {
+  "q": "stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 797,
+  "incomplete": false,
+  "at": "2026-11-19T14:57:25.431187+00:00"
+ },
+ {
+  "q": "stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 4,
+  "total_count": 797,
+  "incomplete": false,
+  "at": "2026-11-19T14:57:30.784789+00:00"
+ },
+ {
+  "q": "stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 5,
+  "total_count": 797,
+  "incomplete": false,
+  "at": "2026-11-19T14:57:35.851092+00:00"
+ },
+ {
+  "q": "stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 6,
+  "total_count": 797,
+  "incomplete": false,
+  "at": "2026-11-19T14:57:40.898903+00:00"
+ },
+ {
+  "q": "stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 7,
+  "total_count": 797,
+  "incomplete": false,
+  "at": "2026-11-19T14:57:45.991042+00:00"
+ },
+ {
+  "q": "stars:2676..5150 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 8,
+  "total_count": 797,
+  "incomplete": false,
+  "at": "2026-11-19T14:57:50.729672+00:00"
+ },
+ {
+  "q": "stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 499,
+  "incomplete": false,
+  "at": "2026-11-19T14:57:55.621724+00:00"
+ },
+ {
+  "q": "stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 499,
+  "incomplete": false,
+  "at": "2026-11-19T14:58:01.097706+00:00"
+ },
+ {
+  "q": "stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 499,
+  "incomplete": false,
+  "at": "2026-11-19T14:58:05.923431+00:00"
+ },
+ {
+  "q": "stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 4,
+  "total_count": 499,
+  "incomplete": false,
+  "at": "2026-11-19T14:58:10.336941+00:00"
+ },
+ {
+  "q": "stars:5151..10100 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 5,
+  "total_count": 499,
+  "incomplete": false,
+  "at": "2026-11-19T14:58:16.680688+00:00"
+ },
+ {
+  "q": "stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 1,
+  "total_count": 253,
+  "incomplete": false,
+  "at": "2026-11-19T14:58:21.694973+00:00"
+ },
+ {
+  "q": "stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 2,
+  "total_count": 253,
+  "incomplete": false,
+  "at": "2026-11-19T14:58:26.527559+00:00"
+ },
+ {
+  "q": "stars:10101..20000 pushed:>=2026-11-01 created:<2026-01-01 fork:false archived:false -language:Python -language:Rust -language:Go -language:JavaScript -language:TypeScript -language:Java -language:Kotlin -language:C# -language:Swift -language:C -language:C++ -language:Ruby",
+  "page": 3,
+  "total_count": 253,
+  "incomplete": false,
+  "at": "2026-11-19T14:58:29.499757+00:00"
+ },
+ {
+  "q": "draft-ietf in:name fork:false archived:false created:<2026-01-01",
+  "page": 1,
+  "total_count": 624,
+  "incomplete": false,
+  "at": "2026-11-19T14:58:36.068712+00:00"
+ },
+ {
+  "q": "draft-ietf in:name fork:false archived:false created:<2026-01-01",
+  "page": 2,
+  "total_count": 624,
+  "incomplete": false,
+  "at": "2026-11-19T14:58:43.000039+00:00"
+ },
+ {
+  "q": "draft-ietf in:name fork:false archived:false created:<2026-01-01",
+  "page": 3,
+  "total_count": 624,
+  "incomplete": false,
+  "at": "2026-11-19T14:58:49.136679+00:00"
+ },
+ {
+  "q": "draft-ietf in:name fork:false archived:false created:<2026-01-01",
+  "page": 4,
+  "total_count": 624,
+  "incomplete": false,
+  "at": "2026-11-19T14:58:55.781265+00:00"
+ },
+ {
+  "q": "draft-ietf in:name fork:false archived:false created:<2026-01-01",
+  "page": 5,
+  "total_count": 624,
+  "incomplete": false,
+  "at": "2026-11-19T14:59:02.535674+00:00"
+ },
+ {
+  "q": "draft-ietf in:name fork:false archived:false created:<2026-01-01",
+  "page": 6,
+  "total_count": 624,
+  "incomplete": false,
+  "at": "2026-11-19T14:59:10.054147+00:00"
+ },
+ {
+  "q": "draft-ietf in:name fork:false archived:false created:<2026-01-01",
+  "page": 7,
+  "total_count": 624,
+  "incomplete": false,
+  "at": "2026-11-19T14:59:12.064225+00:00"
+ },
+ {
+  "q": "repo:github/docs",
+  "total_count": 1,
+  "at": "2026-11-19T14:59:12.792451+00:00"
+ },
+ {
+  "q": "repo:kubernetes/website",
+  "total_count": 1,
+  "at": "2026-11-19T14:59:14.980444+00:00"
+ },
+ {
+  "q": "repo:rust-lang/blog.rust-lang.org",
+  "total_count": 1,
+  "at": "2026-11-19T14:59:16.927371+00:00"
+ },
+ {
+  "q": "repo:swiftlang/swift-evolution",
+  "total_count": 1,
+  "at": "2026-11-19T14:59:19.265934+00:00"
+ },
+ {
+  "q": "repo:Kotlin/KEEP",
+  "total_count": 1,
+  "at": "2026-11-19T14:59:21.199039+00:00"
+ },
+ {
+  "q": "repo:openshift/runbooks",
+  "total_count": 1,
+  "at": "2026-11-19T14:59:23.258615+00:00"
+ },
+ {
+  "q": "repo:prometheus-operator/runbooks",
+  "total_count": 1,
+  "at": "2026-11-19T14:59:25.441406+00:00"
+ },
+ {
+  "q": "repo:github/site-policy",
+  "total_count": 1,
+  "at": "2026-11-19T14:59:27.499672+00:00"
+ },
+ {
+  "q": "filename:runbook extension:md",
+  "page": 1,
+  "total_count": 168960,
+  "incomplete": false,
+  "at": "2026-11-19T14:59:34.286624+00:00"
+ },
+ {
+  "q": "filename:runbook extension:md",
+  "page": 2,
+  "total_count": 168960,
+  "incomplete": false,
+  "at": "2026-11-19T14:59:40.957605+00:00"
+ },
+ {
+  "q": "filename:runbook extension:md",
+  "page": 3,
+  "total_count": 168960,
+  "incomplete": false,
+  "at": "2026-11-19T14:59:47.329533+00:00"
+ },
+ {
+  "q": "filename:runbook extension:md",
+  "page": 4,
+  "total_count": 168960,
+  "incomplete": false,
+  "at": "2026-11-19T14:59:53.696443+00:00"
+ },
+ {
+  "q": "filename:runbook extension:md",
+  "page": 5,
+  "total_count": 168960,
+  "incomplete": false,
+  "at": "2026-11-19T15:00:00.582968+00:00"
+ },
+ {
+  "q": "filename:runbook extension:md",
+  "page": 6,
+  "total_count": 168960,
+  "incomplete": false,
+  "at": "2026-11-19T15:00:06.915226+00:00"
+ },
+ {
+  "q": "filename:runbook extension:md",
+  "page": 7,
+  "total_count": 168960,
+  "incomplete": false,
+  "at": "2026-11-19T15:00:13.472847+00:00"
+ },
+ {
+  "q": "filename:runbook extension:md",
+  "page": 8,
+  "total_count": 168960,
+  "incomplete": false,
+  "at": "2026-11-19T15:00:20.220048+00:00"
+ },
+ {
+  "q": "filename:runbook extension:md",
+  "page": 9,
+  "total_count": 168960,
+  "incomplete": false,
+  "at": "2026-11-19T15:00:26.617130+00:00"
+ },
+ {
+  "q": "filename:runbook extension:md",
+  "page": 10,
+  "total_count": 168960,
+  "incomplete": false,
+  "at": "2026-11-19T15:00:32.900041+00:00"
+ },
+ {
+  "q": "path:runbooks extension:md",
+  "page": 1,
+  "total_count": 11712,
+  "incomplete": false,
+  "at": "2026-11-19T15:00:40.827742+00:00"
+ },
+ {
+  "q": "path:runbooks extension:md",
+  "page": 2,
+  "total_count": 11712,
+  "incomplete": false,
+  "at": "2026-11-19T15:00:46.206275+00:00"
+ },
+ {
+  "q": "path:runbooks extension:md",
+  "page": 3,
+  "total_count": 11712,
+  "incomplete": false,
+  "at": "2026-11-19T15:00:52.574476+00:00"
+ },
+ {
+  "q": "path:runbooks extension:md",
+  "page": 4,
+  "total_count": 11712,
+  "incomplete": false,
+  "at": "2026-11-19T15:00:59.112471+00:00"
+ },
+ {
+  "q": "path:runbooks extension:md",
+  "page": 5,
+  "total_count": 11712,
+  "incomplete": false,
+  "at": "2026-11-19T15:01:05.202294+00:00"
+ },
+ {
+  "q": "path:runbooks extension:md",
+  "page": 6,
+  "total_count": 11712,
+  "incomplete": false,
+  "at": "2026-11-19T15:01:11.976997+00:00"
+ },
+ {
+  "q": "path:runbooks extension:md",
+  "page": 7,
+  "total_count": 11712,
+  "incomplete": false,
+  "at": "2026-11-19T15:01:17.976311+00:00"
+ },
+ {
+  "q": "path:runbooks extension:md",
+  "page": 8,
+  "total_count": 11712,
+  "incomplete": false,
+  "at": "2026-11-19T15:01:24.832590+00:00"
+ },
+ {
+  "q": "path:runbooks extension:md",
+  "page": 9,
+  "total_count": 11712,
+  "incomplete": false,
+  "at": "2026-11-19T15:01:31.865678+00:00"
+ },
+ {
+  "q": "path:runbooks extension:md",
+  "page": 10,
+  "total_count": 11712,
+  "incomplete": false,
+  "at": "2026-11-19T15:01:38.127509+00:00"
+ },
+ {
+  "q": "filename:postmortem extension:md",
+  "page": 1,
+  "total_count": 14624,
+  "incomplete": false,
+  "at": "2026-11-19T15:01:45.085242+00:00"
+ },
+ {
+  "q": "filename:postmortem extension:md",
+  "page": 2,
+  "total_count": 14624,
+  "incomplete": false,
+  "at": "2026-11-19T15:01:57.233678+00:00"
+ },
+ {
+  "q": "filename:postmortem extension:md",
+  "page": 3,
+  "total_count": 14624,
+  "incomplete": false,
+  "at": "2026-11-19T15:01:58.445510+00:00"
+ },
+ {
+  "q": "filename:postmortem extension:md",
+  "page": 4,
+  "total_count": 14624,
+  "incomplete": false,
+  "at": "2026-11-19T15:02:04.577237+00:00"
+ },
+ {
+  "q": "filename:postmortem extension:md",
+  "page": 5,
+  "total_count": 14624,
+  "incomplete": false,
+  "at": "2026-11-19T15:02:11.082449+00:00"
+ },
+ {
+  "q": "filename:postmortem extension:md",
+  "page": 6,
+  "total_count": 14624,
+  "incomplete": false,
+  "at": "2026-11-19T15:02:17.725886+00:00"
+ },
+ {
+  "q": "filename:postmortem extension:md",
+  "page": 7,
+  "total_count": 14624,
+  "incomplete": false,
+  "at": "2026-11-19T15:02:24.157966+00:00"
+ },
+ {
+  "q": "filename:postmortem extension:md",
+  "page": 8,
+  "total_count": 14624,
+  "incomplete": false,
+  "at": "2026-11-19T15:02:30.551042+00:00"
+ },
+ {
+  "q": "filename:postmortem extension:md",
+  "page": 9,
+  "total_count": 14624,
+  "incomplete": false,
+  "at": "2026-11-19T15:02:37.207369+00:00"
+ },
+ {
+  "q": "filename:postmortem extension:md",
+  "page": 10,
+  "total_count": 14624,
+  "incomplete": false,
+  "at": "2026-11-19T15:02:43.918647+00:00"
+ },
+ {
+  "q": "path:postmortems extension:md",
+  "page": 1,
+  "total_count": 1293,
+  "incomplete": false,
+  "at": "2026-11-19T15:02:50.560034+00:00"
+ },
+ {
+  "q": "path:postmortems extension:md",
+  "page": 2,
+  "total_count": 1293,
+  "incomplete": false,
+  "at": "2026-11-19T15:02:57.122884+00:00"
+ },
+ {
+  "q": "path:postmortems extension:md",
+  "page": 3,
+  "total_count": 1293,
+  "incomplete": false,
+  "at": "2026-11-19T15:03:03.117808+00:00"
+ },
+ {
+  "q": "path:postmortems extension:md",
+  "page": 4,
+  "total_count": 1293,
+  "incomplete": false,
+  "at": "2026-11-19T15:03:10.170831+00:00"
+ },
+ {
+  "q": "path:postmortems extension:md",
+  "page": 5,
+  "total_count": 1293,
+  "incomplete": false,
+  "at": "2026-11-19T15:03:16.060044+00:00"
+ },
+ {
+  "q": "path:postmortems extension:md",
+  "page": 6,
+  "total_count": 1293,
+  "incomplete": false,
+  "at": "2026-11-19T15:03:23.050031+00:00"
+ },
+ {
+  "q": "path:postmortems extension:md",
+  "page": 7,
+  "total_count": 1293,
+  "incomplete": false,
+  "at": "2026-11-19T15:03:29.597310+00:00"
+ },
+ {
+  "q": "path:postmortems extension:md",
+  "page": 8,
+  "total_count": 1293,
+  "incomplete": false,
+  "at": "2026-11-19T15:03:36.065236+00:00"
+ },
+ {
+  "q": "path:postmortems extension:md",
+  "page": 9,
+  "total_count": 1293,
+  "incomplete": false,
+  "at": "2026-11-19T15:03:42.506502+00:00"
+ },
+ {
+  "q": "path:postmortems extension:md",
+  "page": 10,
+  "total_count": 1293,
+  "incomplete": false,
+  "at": "2026-11-19T15:03:48.754524+00:00"
+ },
+ {
+  "q": "filename:post-mortem extension:md",
+  "page": 1,
+  "total_count": 2608,
+  "incomplete": false,
+  "at": "2026-11-19T15:03:55.208044+00:00"
+ },
+ {
+  "q": "filename:post-mortem extension:md",
+  "page": 2,
+  "total_count": 2608,
+  "incomplete": false,
+  "at": "2026-11-19T15:04:01.841831+00:00"
+ },
+ {
+  "q": "filename:post-mortem extension:md",
+  "page": 3,
+  "total_count": 2608,
+  "incomplete": false,
+  "at": "2026-11-19T15:04:08.041981+00:00"
+ },
+ {
+  "q": "filename:post-mortem extension:md",
+  "page": 4,
+  "total_count": 2608,
+  "incomplete": false,
+  "at": "2026-11-19T15:04:14.652934+00:00"
+ },
+ {
+  "q": "filename:post-mortem extension:md",
+  "page": 5,
+  "total_count": 2608,
+  "incomplete": false,
+  "at": "2026-11-19T15:04:20.973421+00:00"
+ },
+ {
+  "q": "filename:post-mortem extension:md",
+  "page": 6,
+  "total_count": 2608,
+  "incomplete": false,
+  "at": "2026-11-19T15:04:27.778763+00:00"
+ },
+ {
+  "q": "filename:post-mortem extension:md",
+  "page": 7,
+  "total_count": 2608,
+  "incomplete": false,
+  "at": "2026-11-19T15:04:34.132352+00:00"
+ },
+ {
+  "q": "filename:post-mortem extension:md",
+  "page": 8,
+  "total_count": 2608,
+  "incomplete": false,
+  "at": "2026-11-19T15:04:40.790637+00:00"
+ },
+ {
+  "q": "filename:post-mortem extension:md",
+  "page": 9,
+  "total_count": 2608,
+  "incomplete": false,
+  "at": "2026-11-19T15:04:47.263076+00:00"
+ },
+ {
+  "q": "filename:post-mortem extension:md",
+  "page": 10,
+  "total_count": 2608,
+  "incomplete": false,
+  "at": "2026-11-19T15:04:54.134449+00:00"
+ },
+ {
+  "q": "filename:incident extension:md",
+  "page": 1,
+  "total_count": 90880,
+  "incomplete": false,
+  "at": "2026-11-19T15:05:01.807202+00:00"
+ },
+ {
+  "q": "filename:incident extension:md",
+  "page": 2,
+  "total_count": 90880,
+  "incomplete": false,
+  "at": "2026-11-19T15:05:06.820760+00:00"
+ },
+ {
+  "q": "filename:incident extension:md",
+  "page": 3,
+  "total_count": 90880,
+  "incomplete": false,
+  "at": "2026-11-19T15:05:13.262098+00:00"
+ },
+ {
+  "q": "filename:incident extension:md",
+  "page": 4,
+  "total_count": 90880,
+  "incomplete": false,
+  "at": "2026-11-19T15:05:20.280117+00:00"
+ },
+ {
+  "q": "filename:incident extension:md",
+  "page": 5,
+  "total_count": 90880,
+  "incomplete": false,
+  "at": "2026-11-19T15:05:26.517007+00:00"
+ },
+ {
+  "q": "filename:incident extension:md",
+  "page": 6,
+  "total_count": 90880,
+  "incomplete": false,
+  "at": "2026-11-19T15:05:32.551979+00:00"
+ },
+ {
+  "q": "filename:incident extension:md",
+  "page": 7,
+  "total_count": 90880,
+  "incomplete": false,
+  "at": "2026-11-19T15:05:39.008867+00:00"
+ },
+ {
+  "q": "filename:incident extension:md",
+  "page": 8,
+  "total_count": 90880,
+  "incomplete": false,
+  "at": "2026-11-19T15:05:45.633138+00:00"
+ },
+ {
+  "q": "filename:incident extension:md",
+  "page": 9,
+  "total_count": 90880,
+  "incomplete": false,
+  "at": "2026-11-19T15:05:52.683693+00:00"
+ },
+ {
+  "q": "filename:incident extension:md",
+  "page": 10,
+  "total_count": 90880,
+  "incomplete": false,
+  "at": "2026-11-19T15:05:59.092260+00:00"
+ }
+]
