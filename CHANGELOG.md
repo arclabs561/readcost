@@ -9,6 +9,14 @@ configuration.
 
 ### Changed
 
+- The Claude Code and piku hooks report a finding once per session and file
+  (`hooks.repeat = "once"`, the default). After an edit, PostToolUse reports
+  only new findings and says nothing when all of them were reported before.
+  In block mode a finding blocks or denies an edit once; after that it gets
+  one advisory line. A finding is its rule and flagged words, so it survives
+  rewording around it. Without a `session_id` the hooks keep no memory.
+  `hooks.repeat = "always"` restores the old behaviour. The memory lives in
+  `~/.cache/readcost/hooks/` and expires after a day.
 - Editor diagnostics and SARIF rules link to the rule's own section in
   docs/rules.md, not to the README's rule table. long-sentence, which has no
   section, still links to the table.

@@ -30,6 +30,7 @@ CHOICES = {
     "mode": ("off", "advise", "block"),
     "stop": ("off", "report", "revise"),
     "display": ("off", "note"),
+    "repeat": ("once", "always"),
     "min_severity": SEVERITIES,
     "advise_severity": (*SEVERITIES, "off"),
     "comments": ("doc", "all"),
@@ -58,6 +59,7 @@ class HookConfig:
     max_items: int = 8
     max_chars: int = 2500
     edited_lines_only: bool = True
+    repeat: str = "once"            # once | always  (report a finding once per session and file)
     timeout_seconds: float = 8.0
 
 
