@@ -181,7 +181,7 @@ def test_stale_state_is_ignored_and_pruned(tmp_path, state):
     path = next(state.glob("*.json"))
     old = time.time() - repeats.MAX_AGE - 60
     os.utime(path, (old, old))
-    other = state / "other.json"
+    other = state / ("0" * 32 + ".json")  # another session's state
     other.write_text("{}")
     os.utime(other, (old, old))
     assert post(d, DENSE)  # a day later the finding is new again
