@@ -242,3 +242,20 @@ uploaded.
 readcost's rules, defaults and output do not change in this pull request.
 
 ## Amendments
+
+### 20 November 2026, before any model call: today's text, and repeated sentences
+
+1. **R0.** Today's text has no scope line, so it is the arm with S at "−"
+   and every other factor at "+" (HsFPX in the report), not the arm with all
+   five at "+". That arm, HSFPX, is not in the fraction. The test checks that
+   HsFPX gives exactly what `readcost check -o agent` prints (without the
+   feedback link). It does for all 100 paragraphs of the main set. Where
+   the seed rule keeps R0's level, S keeps "−".
+2. **Decoys.** A sentence that appears more than once in a paragraph, word
+   for word after collapsing whitespace, could not be told apart in the
+   edit. So the decoy and the control must each appear once, and the decoy
+   set's rule, "at least two checked sentences that hold no finding", counts
+   only such sentences.
+
+The main set has 100 paragraphs and the decoy set 40, as planned. No model
+had been called when this was written.
