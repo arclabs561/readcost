@@ -100,3 +100,27 @@ def test_explain_reports_measured_precision_or_says_it_is_unmeasured():
             and f"would fix {row['correct']} and called {row['accepted'] - row['correct']} more optional" in out)
     out = run(["explain", "long-sentence"]).stdout
     assert "Measured: too few labelled findings to measure" in out
+
+
+def test_check_with_no_path_says_it_is_reading_the_terminal(monkeypatch, capsys):
+    import io
+
+    from readcost import cli
+
+    class Terminal(io.StringIO):
+        def isatty(self):
+            return True
+    monkeypatch.setattr("sys.stdin", Terminal("The service writes a short log line for each request it handles.\n"))
+    assert cli.main(["check", "-o", "concise"]) == 0
+    err = capsys.readouterr().err
+    assert "reading text from the terminal" in err and "Ctrl-D" in err
+
+
+def test_check_from_a_pipe_or_with_a_dash_prints_no_hint(monkeypatch, capsys):
+    import io
+
+    from readcost import cli
+
+    monkeypatch.setattr("sys.stdin", io.StringIO("The service writes a short log line for each request.\n"))
+    assert cli.main(["check", "-o", "concise"]) == 0
+    assert "terminal" not in capsys.readouterr().err

@@ -106,6 +106,13 @@ def _load_config(args):
     return cfg
 
 
+def _is_terminal(stream) -> bool:
+    try:
+        return bool(stream.isatty())
+    except (AttributeError, ValueError):  # a closed or replaced stream
+        return False
+
+
 def _cmd_check(args) -> int:
     from .engine import Analyzer
     from .report import render, use_color
@@ -392,6 +399,10 @@ def _collect(args, cfg, analyzer) -> tuple[list, bool]:
     inputs: list = []
     for path in args.paths or ["-"]:
         if path == "-":
+            if not args.paths and _is_terminal(sys.stdin):
+                # With no path and no pipe, a new user would otherwise see a silent wait.
+                print("readcost: reading text from the terminal; end it with Ctrl-D "
+                      "(Ctrl-Z, Enter on Windows), or give a file or directory to check", file=sys.stderr)
             inputs.append(("-", sys.stdin.read()))
             continue
         if Path(path).is_dir():
