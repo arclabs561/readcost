@@ -13,6 +13,7 @@ from __future__ import annotations
 import importlib
 import re
 from functools import lru_cache
+from pathlib import Path
 
 # Languages with stop-word lists in spaCy that need no model download.
 CANDIDATES = ("de", "es", "fr", "nl", "it", "pt", "sv", "da", "nb", "pl", "tr", "id")
@@ -21,7 +22,28 @@ MIN_WORDS = 20
 
 @lru_cache(maxsize=None)
 def _stop_words(lang: str) -> frozenset[str]:
-    return frozenset(importlib.import_module(f"spacy.lang.{lang}.stop_words").STOP_WORDS)
+    # Importing spacy.lang.<lang>.stop_words runs the language package's
+    # __init__ first, which compiles its tokenizer exceptions: about 0.5 s for
+    # these 13 languages, paid on every hook call. Each stop_words.py is a
+    # plain list with no imports, so it is read on its own.
+    return frozenset(_stop_words_file(lang) or importlib.import_module(f"spacy.lang.{lang}.stop_words").STOP_WORDS)
+
+
+def _stop_words_file(lang: str) -> set[str] | None:
+    """STOP_WORDS from spaCy's stop_words.py for ``lang``, without importing its package; None if absent."""
+    import importlib.util
+
+    spec = importlib.util.find_spec("spacy")
+    if spec is None or not spec.submodule_search_locations:
+        return None
+    for root in spec.submodule_search_locations:
+        path = Path(root) / "lang" / lang / "stop_words.py"
+        if path.is_file():
+            env: dict = {}
+            exec(compile(path.read_text(encoding="utf-8"), str(path), "exec"), env)  # noqa: S102  spaCy's own list
+            words = env.get("STOP_WORDS")
+            return set(words) if isinstance(words, (set, frozenset)) else None
+    return None
 
 
 def other_language(text: str) -> str | None:
