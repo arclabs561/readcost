@@ -7,6 +7,16 @@ configuration.
 
 ## [Unreleased]
 
+### Changed
+
+- `-o agent`, and the hooks that use it, are worded as in 0.3.0 again:
+  "Rewrite these sentences where the finding holds", and each finding's fix,
+  with how often raters accepted the rule's findings (now from the held-out
+  test across formats). The questions of 0.4.0 are gone. In the
+  pre-registered edit test, edits made from the questions read no better
+  and changed the paragraph's facts more often (docs/evaluation.md,
+  "Editing with readcost's feedback").
+
 ## [0.4.0] - 2026-11-19
 
 ### Added

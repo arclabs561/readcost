@@ -150,9 +150,8 @@ def test_json_and_agent_output_carry_measured_precision():
     first = next(f for f in rows if f["precision"])
     p = first["precision"]
     out = report.agent([r])
-    assert (f"Raters said an editor would fix {p['correct']} of {p['labelled']} such findings, "
-            f"and called {p['accepted'] - p['correct']} more optional." in out)
-    assert "Is it hard to follow here?" in out and "These are questions, not errors" in out
+    assert f"(raters accepted {p['accepted']} of {p['labelled']} such findings)" in out
+    assert "Rewrite these sentences where the finding holds" in out and "Is it hard to follow" not in out
 
 
 def test_rule_precision_matches_the_committed_labels():

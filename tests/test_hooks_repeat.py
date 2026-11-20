@@ -67,7 +67,7 @@ def test_small_rewrite_keeps_the_finding_and_a_new_one_is_reported(tmp_path, sta
     assert post(d, REWORDED) is None  # same rule, same flagged words
     out = post(d, REWORDED + OTHER)
     msg = context(out)
-    assert "readcost: 1 sentence in" in msg and "line 2 [stacked-nouns]" in msg
+    assert "readcost: 1 hard-to-read construction" in msg and "line 2 [stacked-nouns]" in msg
     assert "(1 finding reported earlier in this session is not repeated.)" in msg
 
 

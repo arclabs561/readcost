@@ -27,7 +27,7 @@ def test_loop_stops_when_the_text_has_no_findings():
     trace = m.loop(Analyzer(Config()), DENSE, rewrite, "holds")
     assert [r["round"] for r in trace] == [0, 1]
     assert trace[0]["findings"] and not trace[1]["findings"]
-    assert "These are questions, not errors" in seen[0]
+    assert "where the finding holds" in seen[0]
 
 
 def test_loop_runs_out_of_rounds_and_churn_counts_a_returning_finding():
@@ -45,9 +45,8 @@ def test_plain_feedback_drops_the_precision_note_and_the_hedge():
     m = _script()
     r = Analyzer(Config()).check_text(DENSE, "markdown")
     plain, holds = m.feedback(r, "plain"), m.feedback(r, "holds")
-    assert "Raters said an editor would fix" in holds and "Raters said" not in plain
-    assert "Is it hard to follow here?" in holds and "Is it hard to follow" not in plain
-    assert "These are questions" not in plain and "Rewrite these sentences" in plain
+    assert "raters accepted" in holds and "raters accepted" not in plain
+    assert "where the finding holds" not in plain and "Rewrite these sentences" in plain
 
 
 def test_summary_counts_a_model_that_returns_the_text_unchanged_as_a_fixed_point():

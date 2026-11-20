@@ -13,15 +13,14 @@ readcost check README.md -o agent          # short, worst sentences first, with 
 readcost check README.md -o json           # every finding, with exact location
 ```
 
-`-o agent` names each finding's line and rule, asks whether the sentence is
-hard to follow there, and says what to do if it is. Where the evaluation
-measured it, it adds how the raters judged that rule's findings ("Raters
-said an editor would fix 0 of 100 such findings, and called 36 more
-optional."). The output is worded as questions on purpose: shown readcost's
-message, model raters agreed with it far more often than when they saw the
-same sentence without it (docs/evaluation.md, "a wider panel"), and an agent
-told to rewrite will rewrite. Its first line asks the model to change a
-sentence only if it reads badly, and to leave the rest.
+`-o agent` names each finding's line and rule, says what to do, and, where
+the evaluation measured it, how often raters accepted that rule's findings
+in the held-out test across formats ("raters accepted 36 of 100 such
+findings"). A low share means the finding is often wrong: judge it before
+rewriting. For a while the output put each finding as a question instead.
+In the edit test (docs/evaluation.md, "Editing with readcost's feedback"),
+that wording did not make edits read better, and it made the editing model
+change the paragraph's facts more often, so the plain wording is back.
 
 In `-o json` each finding has `start` and `end`, character offsets into the
 file with the end exclusive, so a tool can replace exactly the flagged
