@@ -95,13 +95,24 @@ def _span(f, source_lines: list[str]) -> list[tuple[int, int, int]]:
     if not words or not 0 < f.line <= len(source_lines):
         return []
     pat = re.compile(_SEP.join(re.escape(w) for w in words))
-    for first in (f.line, max(f.line - 2, 1)):
-        window = "\n".join(source_lines[first - 1:first + 5])
+    if f.label:
+        # A finding inside a record (a transcript message, a JSONL row): only
+        # that record's own line may be quoted. Searching the neighbouring
+        # lines found the same words in a different record, such as the user
+        # message the assistant was answering, and put the carets under it.
+        first = f.line
+        window = source_lines[first - 1]
         m = pat.search(window)
-        if m:
-            break
+        if not m:
+            return []
     else:
-        return []
+        for first in (f.line, max(f.line - 2, 1)):
+            window = "\n".join(source_lines[first - 1:first + 5])
+            m = pat.search(window)
+            if m:
+                break
+        else:
+            return []
     out, pos = [], m.start()
     line_no = first + window.count("\n", 0, pos)
     line_start = window.rfind("\n", 0, pos) + 1
