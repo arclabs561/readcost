@@ -2917,7 +2917,9 @@ was seen raised the cap only to finish the pre-registered phases, and
   better than a generic instruction does, nor shown to add nothing.
 - Content: edits made with readcost's feedback changed the paragraph's
   facts less often, 47.5% of edits against 58.1% (difference −10.6 points,
-  −19.4 to −2.2). Specific findings seem to keep an editor's changes narrow.
+  −19.4 to −2.2). The localization control below finds that feedback
+  pointing at the longest sentences does as well, so the narrower edits come
+  from naming sentences, not from what readcost found in them.
   The share is high in every arm because GLM lists lost facts freely; the
   difference is what the plan measures.
 - Both edits read better than the original by the judges' pairwise votes
@@ -2931,6 +2933,51 @@ was seen raised the cap only to finish the pre-registered phases, and
   in-sample), so the test cannot say which of the two did it.
 - The judges and editors are open-weight models, weaker than the closed
   ones first planned, and no person read any edit.
+
+## Pointing at sentences: a control for the edit test, pre-registered
+
+The edit test left one difference standing: edits made with readcost's
+feedback changed facts less often than edits made with a generic
+instruction. Feedback that names a few sentences may do that whatever picks
+them. The plan [docs/prereg/edit-localize.md](prereg/edit-localize.md),
+committed before any paragraph was drawn or model called, adds arm E. E's
+feedback has the form of readcost's (B): the same first line, one line per
+sentence, and the order to rewrite them. It names as many sentences as hold
+B's findings, but takes the longest ones and gives a generic fix ("Split it
+into shorter sentences"). The test used the edit test's 60 paragraphs and
+140 more, drawn by continuing its walk, with the same editors, judges,
+prompts and fact check. B's and C's edits of the first 60 came from the edit
+test's cache. It ran as one Hugging Face Job (run `main-1`, 41 minutes, about
+$4); the report is `eval/edit-localize/report.md`.
+
+| Share of edits changing content, paired by unit | Points [95%] |
+| --- | --- |
+| B minus E, 200 paragraphs (primary) | +3.9 [−0.5, +8.4] |
+| B minus C, the 140 new paragraphs | −15.1 [−20.4, −9.8] |
+| E minus C, 200 paragraphs | −17.6 [−22.2, −12.9] |
+
+- The plan's second claim holds: pointing at the longest sentences keeps
+  facts as well as readcost's findings, within 5 points. Its estimate is on
+  E's side. The fact-keeping effect of the edit test was not shown to need
+  readcost's rules.
+- The edit test's finding repeats on paragraphs it did not see: B changed
+  content in fewer edits than C, by 15 points. E did so by 18.
+- Scope shows why. Under B or E, editors left 16% to 18% of the sentences
+  that the feedback did not name unchanged. Under C they left 3% unchanged.
+  Naming sentences keeps the editor off the rest of the paragraph.
+- Readability, a secondary outcome: the judges preferred B's edits to E's,
+  0.569 [0.541, 0.598] for B, so B read better. Where the findings point,
+  and what they say, seem to matter for how the edit reads, not for
+  whether it keeps the facts. Against a generic instruction, B's edits did
+  not read better (0.542 in the edit test, inconclusive).
+- E named exactly B's sentences in 49 of 200 paragraphs, and 58% of E's
+  sentences were among B's. In those 49, B minus E was −3.4 [−12.3, +5.6];
+  in the rest, +6.2 [+1.3, +11.3]. These figures decide nothing.
+- GLM-4.7 Flash listed a lost or changed fact in over 99% of edits, in every
+  arm. So "two of three judges" mostly means that Qwen or Gemma listed one.
+  Each of those two alone gives B minus E on E's side: +4.7 [+0.5, +8.8] for
+  Qwen and +3.2 [−0.8, +7.2] for Gemma. The editors and judges are
+  open-weight models, and no person read the edits.
 
 ## Re-rating with open models from other families, pre-registered
 
