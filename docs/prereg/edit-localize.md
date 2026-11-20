@@ -299,3 +299,12 @@ The paragraphs are not uploaded.
 readcost's rules and defaults do not change in this pull request.
 
 ## Amendments
+
+### 20 November 2026, before the draw: the draw's own files
+
+The new drop reason (step 2 of the draw) names every file under `eval/`.
+That includes `eval/edit-arms/candidates.jsonl`, which lists every
+candidate, so as written it would drop every repository. It now leaves out
+the files under `eval/edit-arms/`: the draw's own candidates, walk and
+pointers. The files of every other test still count. No repository past the
+784th had been opened when this was written, and no model had been called.
