@@ -1551,10 +1551,18 @@ def extract(text: str, path: str, fmt: str | None = None, *, field_path: str | N
             msgs = msgs[-1:]
         segments: list[Segment] = []
         for label, body in msgs:
+            record_line = int(label[4:]) if label.startswith("line") and label[4:].isdigit() else 0
             for seg in extract_markdown(body, path, label):
                 # The offsets are into the message, which the file holds as an
                 # escaped JSON string, so they say nothing about the file.
                 seg.starts, seg.ends = [], []
+                if record_line:
+                    # Line numbers counted inside the message are not file
+                    # lines either. A JSONL record is one line of the file, so
+                    # every finding in it belongs on that line. Left as they
+                    # were, a finding in the third paragraph of the record on
+                    # line 40 was reported at line 3 of the file.
+                    seg.anchors = [(0, record_line)]
                 segments.append(seg)
         return segments
     raise ValueError(f"unknown format {fmt!r}; choose one of {', '.join(FORMATS)}")

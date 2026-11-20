@@ -207,6 +207,23 @@ def test_transcript_segments_have_no_offsets():
     assert seg.starts == [] and seg.span(0, 3) is None
 
 
+def test_transcript_segments_carry_the_record_line():
+    """Lines counted inside a message are not file lines; the record's line is."""
+    records = [
+        {"type": "user", "message": {"role": "user", "content": "Explain the cache."}},
+        {"type": "assistant", "message": {"role": "assistant", "content": (
+            "The cache keeps one entry per URL.\n\nEntries expire after the TTL you set.\n\n"
+            "A purge removes them at once.")}},
+        {"type": "user", "message": {"role": "user", "content": "And the index?"}},
+        {"type": "assistant", "message": {"role": "assistant", "content": "The index stores every term."}},
+    ]
+    text = "\n".join(json.dumps(r) for r in records)
+    segs = extract(text, "t.jsonl")
+    assert [s.label for s in segs] == ["line2", "line2", "line2", "line4"]
+    assert [s.line_at(0) for s in segs] == [2, 2, 2, 4]
+    assert [s.line_at(len(s.text) - 1) for s in segs] == [2, 2, 2, 4]
+
+
 def test_reference_followed_by_parentheses_is_not_a_destination():
     src = "See the [guide] (not a link) before the index stores a term.\n\n[guide]: https://example.com\n"
     seg, = check_segments(src, "a.md")
@@ -378,3 +395,26 @@ def test_full_and_concise_report_use_the_offsets(analyzer):
     assert "a.md:3:31: warn: [stacked-nouns]" in render([result], "concise")
     full = render([result], "full")
     assert "3 | > Every write ends up forcing source" in full and "4 | > segment rebuilds" in full
+
+
+def test_transcript_finding_is_reported_on_its_own_record(analyzer, tmp_path):
+    """The same words in an earlier record must not be quoted in place of the finding."""
+    phrase = "the storage engine page cache"
+    records = [
+        {"type": "summary", "summary": "s"},
+        {"type": "system", "content": "x"},
+        {"type": "user", "message": {"role": "user", "content": f"Tell me about {phrase} please."}},
+        {"type": "assistant", "message": {"role": "assistant", "content": [{"type": "text", "text": (
+            "Sure, here is an overview of the system.\n\n"
+            f"The writes touch {phrase} first, and the readers come later.")}]}},
+    ]
+    path = tmp_path / "t.jsonl"
+    path.write_text("\n".join(json.dumps(r) for r in records) + "\n")
+    result = analyzer.check_file(str(path))
+    stacked = [f for f in result.findings if "storage engine page cache" in f.excerpt]
+    assert stacked, [f.excerpt for f in result.findings]
+    assert {f.line for f in result.findings} == {4}
+    shown = render([result], "full", color=False) if "color" in render.__code__.co_varnames else render([result], "full")
+    assert "Tell me about" not in shown
+    assert json.loads(render([result], "json"))
+
