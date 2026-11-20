@@ -750,3 +750,126 @@ def test_upload_goes_to_a_private_dataset_without_the_paragraphs(tmp_path, monke
     assert up["ignore_patterns"] == ["texts.jsonl"]
     with pytest.raises(SystemExit, match="not private"):
         job.upload(tmp_path, "main-1", "tok", api=Api(private=False))
+
+
+class FailingQwen(FakeAsk):
+    """Qwen fails every fact check of paragraph p0, so those calls fail twice in a finished phase."""
+
+    def __call__(self, model, prompt, schema, system=None):
+        if model == "Qwen/Qwen3.8-27B" and "lost" in schema["properties"] and "release 0" in prompt:
+            self.calls.append((model, system, prompt))
+            return None, {"requested": model, "error": "no JSON object"}
+        return super().__call__(model, prompt, schema, system)
+
+
+def _stopped_like_main_1(tmp_path, analyzer, monkeypatch, job):
+    """A run that stops as main-1 did: the third judge's original phases meet the original cap,
+    which the first two judges' D replies count toward."""
+    ptr, fetch = _job_args(tmp_path, n=3)
+    backends = FakeBackends()
+    backends.asks = FailingQwen()
+    ref = tmp_path / "ref1"
+    # 27 edits, 54 B against C, then per judge 117 calls (Qwen 9 more, asked again): Gemma's
+    # original phases end at 261 calls, and GLM's would start at 324.
+    monkeypatch.setattr(job.ea, "CALL_CAP", 300)
+    job.main(["--run-id", "main-1", "--hours", "4", "--ref", str(ref), "--pointers", str(ptr), "--no-upload",
+              "--workers", "4"], backends={"server": backends}, fetch=fetch, verify=lambda: 0,
+             analyzer=analyzer, env={})
+    return ref, ptr, fetch, backends
+
+
+def _downloader(runs):
+    def download(run_id, token, dest):
+        out = dest / "edit-arms" / run_id
+        out.mkdir(parents=True)
+        for name in ("replies.jsonl", "run.json"):
+            (out / name).write_bytes((runs[run_id] / name).read_bytes())
+        return out
+    return download
+
+
+def test_a_resumed_run_asks_only_the_missing_calls_and_keeps_b_against_c(tmp_path, analyzer, monkeypatch):
+    job = _job(monkeypatch)
+    ref1, ptr, fetch, first = _stopped_like_main_1(tmp_path, analyzer, monkeypatch, job)
+    glm, qwen = "zai-org/GLM-4.7-Flash", "Qwen/Qwen3.8-27B"
+    log1 = json.loads((ref1 / "run.json").read_text())
+    assert log1["steps"][-1]["model"] == glm and log1["steps"][-1]["calls"] == 0
+    assert log1["steps"][-1]["status"] == {"facts": False}
+    gemma_rest = log1["steps"][-2]["calls"]
+    lines1 = (ref1 / "replies.jsonl").read_text().splitlines()
+    res1 = json.loads((ref1 / "edit-arms.json").read_text())
+
+    monkeypatch.setattr(job, "RESUMED_CALL_CAP", 400)
+    second, uploads = FakeBackends(), []
+    ref2 = tmp_path / "ref2"
+    rc = job.main(["--run-id", "main-1b", "--resume-from", "main-1", "--hours", "1.5", "--ref", str(ref2),
+                   "--pointers", str(ptr), "--workers", "4"], backends={"server": second},
+                  uploader=lambda r, run_id, token: uploads.append(run_id), fetch=fetch, verify=lambda: 0,
+                  analyzer=analyzer, env={}, downloader=_downloader({"main-1": ref1}))
+    assert rc == 0
+    # Only GLM loads, and it is asked only what main-1 did not ask: none of its B against C, and
+    # not Qwen's fact checks that failed twice in a phase main-1 finished.
+    assert second.loaded == [glm] == second.stopped
+    asked = second.asks.calls
+    assert {c[0] for c in asked} == {glm} and len(asked) == gemma_rest
+    old_prompts = {(c[0], c[2]) for c in first.asks.calls}
+    assert not old_prompts & {(c[0], c[2]) for c in asked}
+    log2 = json.loads((ref2 / "run.json").read_text())
+    assert log2["resumed_from"]["run_id"] == "main-1" and log2["resumed_from"]["replies"] == len(lines1)
+    qwen_rest = next(s for s in log2["steps"] if s["model"] == qwen and "facts" in s["phases"])
+    assert qwen_rest["carried_from"] == "main-1" and qwen_rest["not_asked"] == 9 and not qwen_rest["loaded"]
+    assert [s.get("loaded", True) for s in log2["steps"]] == [False] * 8 + [True]
+    assert log2["steps"][-1]["planned_calls"] == gemma_rest == log2["steps"][-1]["calls"]
+    # The outputs hold the replies of both runs, and every phase is done.
+    lines2 = (ref2 / "replies.jsonl").read_text().splitlines()
+    assert lines2[:len(lines1)] == lines1 and len(lines2) == len(lines1) + gemma_rest
+    status = json.loads((ref2 / "status.json").read_text())
+    assert status["final"] and all(status["phases"].values()) and len(status["phases"]) == 10
+    # B against C is main-1's, from the cache.
+    res2 = json.loads((ref2 / "edit-arms.json").read_text())
+    assert res2["pairs"]["BC"] == res1["pairs"]["BC"]
+    assert res2["per_judge"] and res2["per_judge"][glm]["BC"] == res1["per_judge"][glm]["BC"]
+    assert res1["per_judge"][glm]["BA"]["estimate"] is None is not res2["per_judge"][glm]["BA"]["estimate"]
+    md = (ref2 / "edit-arms.md").read_text()
+    hits = int(re.search(r"served from cache (\d+)", md).group(1))
+    assert f"new this run {gemma_rest}," in md and hits >= len(lines1) - 9 - 9
+    assert "call caps 400 for the original phases" in md
+    assert uploads and set(uploads) == {"main-1b"}
+
+
+def test_resuming_a_finished_run_loads_no_model(tmp_path, analyzer, monkeypatch):
+    job = _job(monkeypatch)
+    ptr, fetch = _job_args(tmp_path, n=2)
+    ref1 = tmp_path / "ref1"
+    job.main(["--run-id", "main-1", "--hours", "4", "--ref", str(ref1), "--pointers", str(ptr), "--no-upload",
+              "--workers", "4"], backends={"server": FakeBackends()}, fetch=fetch, verify=lambda: 0,
+             analyzer=analyzer, env={})
+    again = FakeBackends()
+    ref2 = tmp_path / "ref2"
+    job.main(["--run-id", "main-1b", "--resume-from", "main-1", "--hours", "1", "--ref", str(ref2),
+              "--pointers", str(ptr), "--no-upload"], backends={"server": again}, fetch=fetch,
+             verify=lambda: 0, analyzer=analyzer, env={}, downloader=_downloader({"main-1": ref1}))
+    assert again.loaded == [] and again.asks.calls == []
+    assert (ref2 / "replies.jsonl").read_bytes() == (ref1 / "replies.jsonl").read_bytes()
+    one, two = (json.loads((r / "edit-arms.json").read_text())["pairs"] for r in (ref1, ref2))
+    assert one == two
+    assert all(json.loads((ref2 / "status.json").read_text())["phases"].values())
+
+
+def test_a_resumed_run_refuses_its_own_id_the_pilot_more_hours_and_other_models(tmp_path, analyzer, monkeypatch):
+    job = _job(monkeypatch)
+    ptr, fetch = _job_args(tmp_path, n=2)
+    base = ["--ref", str(tmp_path / "ref"), "--pointers", str(ptr), "--no-upload"]
+    for args in (["--run-id", "a", "--resume-from", "a", "--hours", "1"],
+                 ["--run-id", "b", "--resume-from", "a", "--hours", "2"],
+                 ["--run-id", "b", "--resume-from", "a", "--hours", "1", "--pilot"]):
+        with pytest.raises(SystemExit):
+            job.main(args + base, backends={"server": FakeBackends()}, fetch=fetch, verify=lambda: 0, env={})
+    prior = tmp_path / "prior"
+    prior.mkdir()
+    (prior / "replies.jsonl").write_text("")
+    (prior / "run.json").write_text(json.dumps({"models": {"x/y": {"revision": "0"}}, "steps": []}))
+    with pytest.raises(SystemExit, match="other models"):
+        job.main(["--run-id", "b", "--resume-from", "a", "--hours", "1"] + base,
+                 backends={"server": FakeBackends()}, fetch=fetch, verify=lambda: 0, analyzer=analyzer,
+                 env={}, downloader=_downloader({"a": prior}))

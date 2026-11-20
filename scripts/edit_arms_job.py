@@ -31,6 +31,15 @@ What it does:
 
 The job's own clock stops new calls 15 minutes before `--hours` is up, so
 the report and the upload finish inside the job's timeout.
+
+`--resume-from RUN_ID` (the prereg's amendment of 20 November 2026) starts
+from that run's replies in the dataset instead of an empty cache. A phase
+that run finished for a model is not run again for it: its replies are read
+from the cache ("served from cache") and nothing in it is asked, not even a
+call that failed twice. A model with nothing left to ask is not loaded. The
+original phases' call cap is `RESUMED_CALL_CAP`, and `--hours` may be at
+most `RESUMED_HOURS`. The outputs, under the new run id, hold the replies of
+both runs.
 """
 
 from __future__ import annotations
@@ -41,6 +50,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 import urllib.request
 from collections import Counter
@@ -48,6 +58,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import eval_edit_arms as ea
+from eval_edit_arms import sha
 
 ROOT = Path(__file__).resolve().parent.parent
 # The job's shell command: the source at READCOST_SHA, readcost and its pins from uv.lock (the
@@ -67,6 +78,9 @@ READY_TIMEOUT_S = 45 * 60    # download, load and compile one model
 JUDGE_REST = ["facts", "BA", "CA", "DB", "factsD", "DC", "DA"]
 EDIT_PHASES = ["edits", "editsD"]
 UPLOAD_SKIP = ["texts.jsonl"]   # the paragraphs belong to their authors; the job refetches them
+# The amendment of 20 November 2026, for resuming main-1: the original phases' call cap, and the job's hours.
+RESUMED_CALL_CAP = 7500
+RESUMED_HOURS = 1.5
 
 
 def passes(pilot: bool) -> list[tuple[str, list[str]]]:
@@ -153,6 +167,43 @@ def upload(ref: Path, run_id: str, token: str | None, repo_id: str = DATASET, ap
                       commit_message=f"edit-arms {run_id}")
 
 
+def download(run_id: str, token: str | None, dest: Path, repo_id: str = DATASET) -> Path:
+    """replies.jsonl and run.json of an earlier run, from the dataset, into ``dest``; returns their folder."""
+    from huggingface_hub import hf_hub_download
+    for name in ("replies.jsonl", "run.json"):
+        hf_hub_download(repo_id, f"edit-arms/{run_id}/{name}", repo_type="dataset", token=token,
+                        local_dir=str(dest))
+    return dest / "edit-arms" / run_id
+
+
+def finished(prior: dict) -> set[tuple[str, str]]:
+    """(model, phase) pairs that an earlier run's steps finished."""
+    return {(s["model"], ph) for s in prior.get("steps", []) for ph, ok in (s.get("status") or {}).items() if ok}
+
+
+class CacheOnly:
+    """A client's cache without its model: a reply not in the cache is None, and nothing is asked,
+    written or counted toward the caps. ``wanted`` collects the keys that would have been asked.
+    With ``count``, a cached reply counts as served from cache."""
+
+    def __init__(self, client: ea.Client, count: bool = True):
+        self.client, self.count, self.wanted = client, count, set()
+
+    def __getattr__(self, name):
+        return getattr(self.client, name)
+
+    def __call__(self, model: str, system: str | None, prompt: str, schema: dict) -> dict | None:
+        k = self.client.key(model, system, prompt)
+        with self.client.lock:
+            row = self.client.ok.get(k)
+            if row is None:
+                self.wanted.add(k)
+                return None
+            if self.count:
+                self.client.cached_hits += 1
+            return row["data"]
+
+
 def reply_counts(path: Path) -> dict:
     """{model: {"replies", "failed", "errors"}} over the reply cache."""
     out: dict = {}
@@ -169,7 +220,7 @@ def reply_counts(path: Path) -> dict:
 
 
 def main(argv: list[str] | None = None, backends=None, uploader=upload, clock=time.time, fetch=ea.fetch,
-         verify=ea.verify, analyzer=None, env=None) -> int:
+         verify=ea.verify, analyzer=None, env=None, downloader=download) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--pilot", action="store_true", help=f"the first {PILOT_PARAGRAPHS} paragraphs, no win rates")
@@ -181,7 +232,15 @@ def main(argv: list[str] | None = None, backends=None, uploader=upload, clock=ti
     ap.add_argument("--pointers", type=Path, default=ROOT / "eval" / "edit-arms")
     ap.add_argument("--workers", type=int, default=128, help="calls in flight at once")
     ap.add_argument("--no-upload", action="store_true")
+    ap.add_argument("--resume-from", metavar="RUN_ID",
+                    help="start from that run's replies in the dataset (the prereg's amendment of 20 November)")
     a = ap.parse_args(argv)
+    if a.resume_from and a.pilot:
+        ap.error("--resume-from is for a full run, not the pilot")
+    if a.resume_from == a.run_id:
+        ap.error("a resumed run needs a new --run-id")
+    if a.resume_from and a.hours > RESUMED_HOURS:
+        ap.error(f"a resumed run may take at most {RESUMED_HOURS} hours")
     backends = backends or BACKENDS
     env = os.environ if env is None else env
     start = clock()
@@ -199,6 +258,20 @@ def main(argv: list[str] | None = None, backends=None, uploader=upload, clock=ti
                             for m in editors + judges},
                  "steps": [], "stopped": None}
     status: dict = {}
+    done: set = set()
+    if a.resume_from:
+        with tempfile.TemporaryDirectory() as tmp:
+            got = downloader(a.resume_from, env.get("HF_TOKEN"), Path(tmp))
+            prior = json.loads((got / "run.json").read_text())
+            shutil.copyfile(got / "replies.jsonl", ref / "replies.jsonl")
+        models = {m: v["revision"] for m, v in log["models"].items()}
+        if {m: v.get("revision") for m, v in prior.get("models", {}).items()} != models:
+            raise SystemExit(f"{a.resume_from} ran other models or revisions; not resumed")
+        done = finished(prior)
+        log["resumed_from"] = {"run_id": a.resume_from, "readcost_sha": prior.get("readcost_sha"),
+                               "replies": len((ref / "replies.jsonl").read_text().splitlines()),
+                               "replies_sha256": sha((ref / "replies.jsonl").read_text()),
+                               "finished": len(done)}
 
     def save(final: bool = False) -> None:
         log["seconds"] = round(clock() - start)
@@ -226,7 +299,13 @@ def main(argv: list[str] | None = None, backends=None, uploader=upload, clock=ti
         from readcost import Analyzer, Config
         analyzer = Analyzer(Config())
     client = ea.Client(ref / "replies.jsonl", ask=lambda *x, **k: (None, {"error": "no model loaded"}),
+                       call_cap=RESUMED_CALL_CAP if a.resume_from else ea.CALL_CAP,
                        count_cost=False, deadline=deadline, clock=clock)
+
+    def run_step(c, model, role, phases):
+        return ea.run(ref, c, analyzer, editors, judges, workers=a.workers,
+                      call_editors=[model] if role == "editor" else [],
+                      call_judges=[model] if role == "judge" else [], phases=phases)
 
     for role, phases in passes(a.pilot):
         for model in editors if role == "editor" else judges:
@@ -235,11 +314,36 @@ def main(argv: list[str] | None = None, backends=None, uploader=upload, clock=ti
                 break
             step = {"model": model, "role": role, "phases": phases, "start_s": round(clock() - start)}
             log["steps"].append(step)
+            carried = [ph for ph in phases if (model, ph) in done]
+            left = [ph for ph in phases if ph not in carried]
+            if carried:
+                # Finished by the earlier run: read from the cache, ask nothing.
+                view = CacheOnly(client)
+                got = run_step(view, model, role, carried)
+                step["status"] = got
+                step["carried_from"] = a.resume_from
+                step["not_asked"] = len(view.wanted)
+                for ph in carried:
+                    status[ph] = status.get(ph, True) and bool(got.get(ph))
+            if left and a.resume_from:
+                plan = CacheOnly(client, count=False)
+                planned = run_step(plan, model, role, left)
+                step["planned_calls"] = len(plan.wanted)
+                if not plan.wanted:
+                    step["status"] = {**step.get("status", {}), **planned}
+                    for ph in left:
+                        status[ph] = status.get(ph, True) and bool(planned.get(ph))
+                    left = []
+            if not left:
+                step["loaded"] = False
+                step["end_s"] = round(clock() - start)
+                save()
+                continue
             try:
                 backend = backends[a.backend](model, logs)
             except Exception as exc:  # a model that does not load leaves its calls missing
                 step["error"] = str(exc)[:500]
-                for ph in phases:
+                for ph in left:
                     status[ph] = False
                 save()
                 continue
@@ -247,15 +351,13 @@ def main(argv: list[str] | None = None, backends=None, uploader=upload, clock=ti
             client.ask = backend.ask
             before = client.new_calls
             try:
-                got = ea.run(ref, client, analyzer, editors, judges, workers=a.workers,
-                             call_editors=[model] if role == "editor" else [],
-                             call_judges=[model] if role == "judge" else [], phases=phases)
+                got = run_step(client, model, role, left)
             finally:
                 backend.stop()
             step["calls"] = client.new_calls - before
             step["end_s"] = round(clock() - start)
-            step["status"] = got
-            for ph in phases:
+            step["status"] = {**step.get("status", {}), **got}
+            for ph in left:
                 status[ph] = status.get(ph, True) and bool(got.get(ph))
             save()
         else:
