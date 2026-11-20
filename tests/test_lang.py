@@ -41,3 +41,21 @@ def test_analyzer_skips_other_languages_with_a_note_unless_turned_off():
     assert r.notes and r.notes[0].startswith("text looks like de, not English")
     r = Analyzer(Config(language_check=False)).check_text(OTHER["de"], "markdown")
     assert r.words > 0 and r.reading_seconds is not None
+
+
+def test_stop_words_come_from_spacys_lists_without_importing_their_packages():
+    import importlib
+    import subprocess
+    import sys
+
+    from readcost import lang
+
+    for code in ("en", *lang.CANDIDATES):
+        direct = lang._stop_words_file(code)
+        assert direct and direct == set(importlib.import_module(f"spacy.lang.{code}.stop_words").STOP_WORDS)
+    # A fresh process: telling a long German text apart loads no language package.
+    probe = ("import sys; from readcost.lang import other_language; "
+             "t = 'Das ist ein Satz, der nur aus deutschen Wörtern besteht und den man gut lesen kann, ' * 3; "
+             "print(other_language(t), any(m.startswith('spacy.lang.') for m in sys.modules))")
+    out = subprocess.run([sys.executable, "-c", probe], capture_output=True, text=True, check=True).stdout.split()
+    assert out == ["de", "False"]
