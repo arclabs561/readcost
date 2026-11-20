@@ -34,6 +34,7 @@ from dataclasses import replace
 from pathlib import Path
 
 from . import _log, emit, read_payload
+from .actions import Ledger
 from .common import (
     analyze,
     changed_lines,
@@ -88,6 +89,8 @@ def post_tool_use(payload: dict, cfg, cwd: str) -> int:
     if not path or not cfg.wants(rel) or not Path(path).is_file():
         return 0
     text = Path(path).read_text(encoding="utf-8", errors="ignore")
+    ledger = Ledger(payload, cfg, path, cwd)
+    ledger.observe(text)  # did this edit remove findings reported earlier?
     lines = _edited_ranges(payload, text) if cfg.hooks.edited_lines_only else None
     if lines == []:
         return 0  # the Write left every line as it was
@@ -105,6 +108,7 @@ def post_tool_use(payload: dict, cfg, cwd: str) -> int:
         return 0
     message = feedback(cfg, replace(result, findings=new), suffix=earlier(len(old)))
     memory.remember(result.findings)
+    ledger.record(new[: cfg.hooks.max_items])
     emit({"decision": "block", "reason": message} if blocking else _context("PostToolUse", message))
     return 0
 
@@ -140,6 +144,7 @@ def pre_tool_use(payload: dict, cfg, cwd: str) -> int:
     if not new:
         return 0  # denied on these already; let it through, PostToolUse notes it
     memory.remember(result.findings)
+    Ledger(payload, cfg, ti.get("file_path", ""), cwd).record(new[: cfg.hooks.max_items])
     again = ("\nRewrite the text and try the edit again. Where a finding does not hold, "
              "make the same edit again: readcost denies an edit for a finding once.") if memory.active \
         else "\nRewrite the text and try the edit again."

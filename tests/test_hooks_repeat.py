@@ -150,7 +150,8 @@ def test_repeat_always_is_the_old_behaviour(tmp_path, state):
     d = project(tmp_path, "block", 'repeat = "always"\n')
     assert post(d, DENSE)["decision"] == "block"
     assert post(d, DENSE)["decision"] == "block"
-    assert not state.exists()
+    # No repeat memory; only the action counters (hooks.track) are written.
+    assert not any(p.name.endswith(".json") and len(p.stem) == 32 for p in state.iterdir())
 
 
 @pytest.mark.parametrize("garbage", ["not json", "[1, 2]", '{"format": 99, "files": {}}',
@@ -178,7 +179,7 @@ def test_unwritable_state_fails_open(tmp_path, monkeypatch):
 def test_stale_state_is_ignored_and_pruned(tmp_path, state):
     d = project(tmp_path)
     post(d, DENSE)
-    path = next(state.glob("*.json"))
+    path = next(p for p in state.glob("*.json") if len(p.stem) == 32)  # the repeat memory
     old = time.time() - repeats.MAX_AGE - 60
     os.utime(path, (old, old))
     other = state / ("0" * 32 + ".json")  # another session's state

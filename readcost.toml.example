@@ -43,6 +43,7 @@ stop = "off"                    # off | report | revise   (Claude Code Stop hook
 display = "off"                 # off | note             (Claude Code MessageDisplay)
 edited_lines_only = true        # judge only the lines an edit touched
 repeat = "once"                 # once | always   (report a finding once per session and file)
+track = true                    # count locally how often reported findings are acted on (readcost stats)
 max_items = 8                   # findings sent back to a model
 max_chars = 2500
 timeout_seconds = 8.0           # not read yet

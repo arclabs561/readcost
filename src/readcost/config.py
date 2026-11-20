@@ -60,6 +60,7 @@ class HookConfig:
     max_chars: int = 2500
     edited_lines_only: bool = True
     repeat: str = "once"            # once | always  (report a finding once per session and file)
+    track: bool = True              # count locally how often reported findings are acted on (actions.py)
     timeout_seconds: float = 8.0
 
 

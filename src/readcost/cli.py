@@ -531,6 +531,22 @@ def _cmd_hook(args) -> int:
     return hooks.run(args.harness, args.event, args.rest)
 
 
+def _cmd_stats(args) -> int:
+    from .hooks import actions
+
+    if args.reset:
+        print("readcost: action counters deleted" if actions.reset() else "readcost: no action counters to delete")
+        return EXIT_OK
+    rows = actions.stats()
+    if args.output == "json":
+        import json
+
+        print(json.dumps({"rules": rows, "file": str(actions.state_root() / actions.STATS)}, indent=2))
+    else:
+        print(actions.render(rows), end="")
+    return EXIT_OK
+
+
 def _cmd_lsp(args) -> int:
     try:
         from . import lsp
@@ -787,6 +803,11 @@ def build_parser() -> argparse.ArgumentParser:
     h.add_argument("event", nargs="?", default="")
     h.add_argument("rest", nargs="*")
     h.set_defaults(func=_cmd_hook)
+
+    sa = sub.add_parser("stats", help="how often findings the agent hooks reported were acted on, per rule")
+    sa.add_argument("-o", "--output", choices=("text", "json"), default="text")
+    sa.add_argument("--reset", action="store_true", help="delete the counters")
+    sa.set_defaults(func=_cmd_stats)
 
     lb = sub.add_parser("label", help="sheets for people to label findings, and agreement between raters")
     lbsub = lb.add_subparsers(dest="label_cmd", required=True)

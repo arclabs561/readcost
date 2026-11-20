@@ -7,6 +7,15 @@ configuration.
 
 ## [Unreleased]
 
+### Added
+
+- `readcost stats` prints, per rule, how often findings that the Claude Code
+  and piku hooks reported were acted on: the flagged words were gone at a later
+  hook check of the same file in the same session. The counts stay on the
+  machine (`action-stats.json` beside the hooks' session memory), hold no text
+  or paths, and stop with `hooks.track = false` (docs/hooks.md, "Which
+  findings get acted on").
+
 ## [0.4.0] - 2026-11-19
 
 ### Added
