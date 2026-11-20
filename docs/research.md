@@ -36,7 +36,9 @@ Panthaplackel et al. 2021).
   the human rate in Reinhart et al. 2025, over general genres). Repetition
   of sentence frames is measured across many texts by `readcost corpus`
   (Shaib et al. 2024), not per document.
-- Two opt-in rules with weaker evidence. center-embedding flags a clause
+- Two rules with weaker evidence, both opt-in; center-embedding was briefly
+  on by default after the held-out tests, until open models re-rating them
+  disagreed. center-embedding flags a clause
   nested two deep inside clauses that continue after it. Gibson (1998, 2000)
   argues from acceptability judgements of constructed sentences that such
   nesting is hard, except when the innermost subject is I or you (readcost
@@ -72,8 +74,8 @@ each context gets its own defaults and its own reference profile.
 | Context | Detected from | Differences from the README defaults |
 | --- | --- | --- |
 | readme | Markdown, RST, HTML files | Baseline. Introduction and purpose sections stay strict. |
-| doc-comment | Rust `///`, Python docstrings, `/** */` | Tag and parameter lines (`@param`, `Args:`, `# Arguments`) skipped; in Java, `@param` and `@throws` lines are mostly predictable from the code, `@return` lines less so (Louis et al. 2018). |
-| inline-comment | `//`, `#` comments with `comments = "all"` | Syntax findings at info level. A comment's effect on comprehension ranges from harmful to helpful by snippet (Abdelsalam et al. 2026), and on small tasks comments made little measurable difference (Nielebock et al. 2019). |
+| doc-comment | Rust `///`, Python docstrings, `/** */`, and the others in [configuration](configuration.md#formats) | inline-list off. Tag and parameter lines (`@param`, `Args:`, `# Arguments`) are read like any other line. In Java, `@param` and `@throws` lines are mostly predictable from the code, `@return` lines less so (Louis et al. 2018). |
+| inline-comment | Comments that only `comments = "all"` reads, such as Python `#` and Rust `//` | Findings at info level, unless a config or flag sets the rule's level. In C-family languages and shell, readcost reads plain comments by default, so this context does not apply to them. A comment's effect on comprehension ranges from harmful to helpful by snippet (Abdelsalam et al. 2026), and on small tasks comments made little measurable difference (Nielebock et al. 2019). |
 | commit-subject | First line of a commit message | Stacked-noun and hyphen-compound off: subjects are headlines. |
 | commit-body | Rest of a commit message | On. Commit-message studies judge whether a message says what changed and why (Tian et al. 2022; Li and Ahmed 2023); readcost checks only how it is written. |
 | llm-output | stdin, chat JSON, transcripts | Baseline plus the full detector set. |

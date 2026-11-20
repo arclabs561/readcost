@@ -115,7 +115,10 @@ def _cmd_check(args) -> int:
         cfg.min_severity = args.min_severity
     if args.baseline:
         cfg.baseline = args.baseline
-    results, failed = _collect(args, cfg, Analyzer(cfg))
+    analyzer = Analyzer(cfg)
+    results, failed = _collect(args, cfg, analyzer) if args.paths or not args.pr_text else ([], False)
+    pr_results = _pr_text(args, analyzer) if args.pr_text else []
+    results += pr_results
     color = use_color(sys.stdout, args.color)
     out = render(results, args.output, max_items=cfg.hooks.max_items, max_chars=cfg.hooks.max_chars,
                  feedback_link=cfg.feedback_link, color=color)
@@ -129,9 +132,36 @@ def _cmd_check(args) -> int:
             print("\n" + spots)
     if failed:
         return EXIT_USAGE
-    worst = max((VERDICT_RANK[r.verdict] for r in results), default=0)
-    threshold = {"never": 99, "advise": 1, "block": 2}["never" if args.exit_zero else args.fail_on]
-    return EXIT_FINDINGS if worst >= threshold else EXIT_OK
+    rank = {"never": 99, "advise": 1, "block": 2}
+    files = results[:len(results) - len(pr_results)]
+    worst = max((VERDICT_RANK[r.verdict] for r in files), default=0)
+    worst_pr = max((VERDICT_RANK[r.verdict] for r in pr_results), default=0)
+    threshold = rank["never" if args.exit_zero else args.fail_on]
+    pr_threshold = rank["never" if args.exit_zero else args.pr_text_fail_on]
+    return EXIT_FINDINGS if worst >= threshold or worst_pr >= pr_threshold else EXIT_OK
+
+
+def _pr_text(args, analyzer) -> list:
+    """Results for the pull request title and description in ``args.pr_text``, or none.
+
+    None when the event has no pull request or its text is shorter than
+    --pr-text-min-words; a note on stderr says which.
+    """
+    from . import prtext
+
+    pr = prtext.read_event(args.pr_text)
+    if pr is None:
+        print(f"readcost: {args.pr_text}: no pull request in this event; its text is not checked",
+              file=sys.stderr)
+        return []
+    results = prtext.check_pull_request(analyzer, pr)
+    words = sum(r.words for r in results)
+    least = prtext.MIN_WORDS if args.pr_text_min_words is None else args.pr_text_min_words
+    if words < least:
+        print(f"readcost: the pull request text has {words} words of prose, under {least}; not checked",
+              file=sys.stderr)
+        return []
+    return results
 
 
 def _read_rev_or_file(path: str) -> str:
@@ -156,7 +186,7 @@ def _cmd_compare(args) -> int:
     results = []
     for path in (args.old, args.new):
         text = sys.stdin.read() if path == "-" else _read_rev_or_file(path)
-        fmt = args.format or ("markdown" if path == "-" else detect_format(path.split(":", 1)[-1]))
+        fmt = args.format or ("markdown" if path == "-" else detect_format(path.split(":", 1)[-1], text))
         results.append(analyzer.check_text(text, fmt, path))
     old, new = results
     if args.output == "json":
@@ -296,7 +326,7 @@ def _check_one(analyzer, opts: tuple, text: str, path: str, name: str) -> list:
     from .extract import detect_format
 
     fmt_opt, per_record, field_path, last, lines = opts
-    fmt = fmt_opt or ("markdown" if path == "-" else detect_format(path))
+    fmt = fmt_opt or ("markdown" if path == "-" else detect_format(path, text))
     if per_record:
         out = analyzer.check_records(text, fmt, name, field_path=field_path)
     else:
@@ -321,6 +351,8 @@ def _read_and_check(analyzer, opts: tuple, p: Path) -> tuple[list, str | None]:
         return results, None
     except (OSError, ValueError) as exc:
         return [], str(exc.strerror if isinstance(exc, OSError) and exc.strerror else exc)
+    except Exception as exc:  # noqa: BLE001 - a bug on one file must not stop the others
+        return [], f"internal error: {type(exc).__name__}: {exc}"
 
 
 # A process pool pays a model load per worker (about two seconds), so it is
@@ -392,6 +424,10 @@ def _collect(args, cfg, analyzer) -> tuple[list, bool]:
             failed = True
             print(f"readcost: {x}: {error}", file=sys.stderr)
         results.extend(out)
+    for r in results:
+        if r.error is not None:
+            failed = True  # the result's note says why; a file not checked is not a pass
+            print(f"readcost: {r.path}: not checked: {r.error}", file=sys.stderr)
     return results, failed
 
 
@@ -418,8 +454,9 @@ def _measured(rule: str) -> str:
     row = _precision(rule)
     if row is None:
         return "too few labelled findings to measure (see docs/evaluation.md)"
-    return (f"{row['accepted']} of {row['labelled']} labelled findings judged correct or defensible "
-            f"by a majority of {data['raters']} model raters, on essays and docs by well-regarded writers")
+    return (f"of {row['labelled']} findings in a held-out test across formats, a majority of "
+            f"{data['raters']} model raters said an editor would fix {row['correct']} and called "
+            f"{row['accepted'] - row['correct']} more optional (docs/evaluation.md, Precision across formats)")
 
 
 def _cmd_explain(args) -> int:
@@ -668,6 +705,13 @@ def build_parser() -> argparse.ArgumentParser:
     c.add_argument("--lines", help="only report sentences touching these lines, e.g. 10-24,40")
     c.add_argument("--last", action="store_true", help="for transcripts: only the last assistant message")
     c.add_argument("--baseline", help="baseline JSON from `readcost baseline`; only findings not in it count")
+    c.add_argument("--pr-text", metavar="EVENT",
+                   help="also check the pull request title and description in this GitHub event file; "
+                        "with no paths, check only them")
+    c.add_argument("--pr-text-fail-on", choices=("never", "advise", "block"), default="never",
+                   help="exit 1 when the pull request text reaches this verdict (default: never)")
+    c.add_argument("--pr-text-min-words", type=int, default=None, metavar="N",
+                   help="skip pull request text with fewer words of prose than this (default: 30)")
     c.set_defaults(func=_cmd_check)
 
     st = sub.add_parser("style", help="compare rule rates, sentence length and reading time with a reference style")

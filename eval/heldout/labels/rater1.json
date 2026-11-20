@@ -1,0 +1,3584 @@
+[
+ {
+  "id": 679738,
+  "label": "d",
+  "construction_present": true,
+  "cause": "feature-list nominals, optional fix"
+ },
+ {
+  "id": 163927,
+  "label": "w",
+  "construction_present": false,
+  "cause": "three predicates, not six items"
+ },
+ {
+  "id": 380173,
+  "label": "d",
+  "construction_present": true,
+  "cause": "stack readable, near term"
+ },
+ {
+  "id": 928150,
+  "label": "d",
+  "construction_present": true,
+  "cause": "coined compounds in dense sentence"
+ },
+ {
+  "id": 303224,
+  "label": "d",
+  "construction_present": true,
+  "cause": "headline-style stack"
+ },
+ {
+  "id": 297086,
+  "label": "w",
+  "construction_present": true,
+  "cause": "short parallel verbs read easily"
+ },
+ {
+  "id": 902843,
+  "label": "d",
+  "construction_present": true,
+  "cause": "long list of stage names"
+ },
+ {
+  "id": 438387,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'is' is not a person verb"
+ },
+ {
+  "id": 225377,
+  "label": "w",
+  "construction_present": false,
+  "cause": "misparse of a list"
+ },
+ {
+  "id": 316942,
+  "label": "w",
+  "construction_present": false,
+  "cause": "general-purpose is an adjective"
+ },
+ {
+  "id": 156812,
+  "label": "d",
+  "construction_present": true,
+  "cause": "reduced relative in crowded parenthesis"
+ },
+ {
+  "id": 409151,
+  "label": "c",
+  "construction_present": true,
+  "cause": "parenthetical splits subject and verb"
+ },
+ {
+  "id": 279081,
+  "label": "w",
+  "construction_present": true,
+  "cause": "stock list of activities"
+ },
+ {
+  "id": 299937,
+  "label": "d",
+  "construction_present": true,
+  "cause": "'reserve' would be plainer"
+ },
+ {
+  "id": 544683,
+  "label": "d",
+  "construction_present": true,
+  "cause": "figurative personification, style choice"
+ },
+ {
+  "id": 620077,
+  "label": "w",
+  "construction_present": false,
+  "cause": "misparse, no nominalization"
+ },
+ {
+  "id": 704065,
+  "label": "w",
+  "construction_present": false,
+  "cause": "refresh suits things"
+ },
+ {
+  "id": 474382,
+  "label": "w",
+  "construction_present": false,
+  "cause": "right-branching, not embedded"
+ },
+ {
+  "id": 611094,
+  "label": "d",
+  "construction_present": true,
+  "cause": "participle's subject slightly unclear"
+ },
+ {
+  "id": 325214,
+  "label": "c",
+  "construction_present": true,
+  "cause": "nested parentheticals, very hard"
+ },
+ {
+  "id": 315556,
+  "label": "w",
+  "construction_present": true,
+  "cause": "ordinary hyphenated modifier"
+ },
+ {
+  "id": 700153,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'powers' not a person verb"
+ },
+ {
+  "id": 901833,
+  "label": "c",
+  "construction_present": true,
+  "cause": "heavy possessive noun stack"
+ },
+ {
+  "id": 202931,
+  "label": "d",
+  "construction_present": true,
+  "cause": "long subject, still followable"
+ },
+ {
+  "id": 597976,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'absence' deliberate, not light verb"
+ },
+ {
+  "id": 303960,
+  "label": "w",
+  "construction_present": false,
+  "cause": "words not related"
+ },
+ {
+  "id": 281647,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no embedding"
+ },
+ {
+  "id": 951446,
+  "label": "w",
+  "construction_present": false,
+  "cause": "software authenticates, term of art"
+ },
+ {
+  "id": 591090,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no center embedding"
+ },
+ {
+  "id": 698360,
+  "label": "w",
+  "construction_present": false,
+  "cause": "fragment, no dependency"
+ },
+ {
+  "id": 562765,
+  "label": "w",
+  "construction_present": false,
+  "cause": "complement clause, not relative"
+ },
+ {
+  "id": 455090,
+  "label": "w",
+  "construction_present": false,
+  "cause": "misparse of Chinese text"
+ },
+ {
+  "id": 357306,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'sticks' is the verb"
+ },
+ {
+  "id": 340375,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no hyphen compound"
+ },
+ {
+  "id": 208688,
+  "label": "w",
+  "construction_present": false,
+  "cause": "three items only"
+ },
+ {
+  "id": 293900,
+  "label": "w",
+  "construction_present": false,
+  "cause": "separate clauses, misparse"
+ },
+ {
+  "id": 240193,
+  "label": "d",
+  "construction_present": true,
+  "cause": "clear link, tacked-on participle"
+ },
+ {
+  "id": 946537,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no list"
+ },
+ {
+  "id": 248774,
+  "label": "d",
+  "construction_present": true,
+  "cause": "mild reduced relative"
+ },
+ {
+  "id": 526311,
+  "label": "c",
+  "construction_present": true,
+  "cause": "compound plus noun 'returns' garden-paths"
+ },
+ {
+  "id": 605269,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'jailbroken' is an adjective"
+ },
+ {
+  "id": 282651,
+  "label": "c",
+  "construction_present": true,
+  "cause": "dense relative delays the verb"
+ },
+ {
+  "id": 477730,
+  "label": "d",
+  "construction_present": true,
+  "cause": "coined but clear compound"
+ },
+ {
+  "id": 629415,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no relative clause"
+ },
+ {
+  "id": 853484,
+  "label": "d",
+  "construction_present": true,
+  "cause": "participle subject unclear"
+ },
+ {
+  "id": 213842,
+  "label": "d",
+  "construction_present": true,
+  "cause": "tacked-on participle, marketing"
+ },
+ {
+  "id": 267688,
+  "label": "w",
+  "construction_present": false,
+  "cause": "three items only"
+ },
+ {
+  "id": 644179,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no hyphen; 'records' is the verb"
+ },
+ {
+  "id": 216308,
+  "label": "w",
+  "construction_present": true,
+  "cause": "short noun list reads fine"
+ },
+ {
+  "id": 396427,
+  "label": "w",
+  "construction_present": true,
+  "cause": "feature list fragment, fine"
+ },
+ {
+  "id": 459857,
+  "label": "w",
+  "construction_present": false,
+  "cause": "not an acronym"
+ },
+ {
+  "id": 927545,
+  "label": "d",
+  "construction_present": true,
+  "cause": "long sequence, ordered steps"
+ },
+ {
+  "id": 699965,
+  "label": "c",
+  "construction_present": true,
+  "cause": "deep nesting in huge sentence"
+ },
+ {
+  "id": 473334,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 677701,
+  "label": "w",
+  "construction_present": true,
+  "cause": "clear sequence of steps"
+ },
+ {
+  "id": 279226,
+  "label": "d",
+  "construction_present": true,
+  "cause": "parenthetical splits subject, verb"
+ },
+ {
+  "id": 222352,
+  "label": "d",
+  "construction_present": true,
+  "cause": "idiomatic 'claims to'"
+ },
+ {
+  "id": 117986,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no center embedding"
+ },
+ {
+  "id": 820166,
+  "label": "w",
+  "construction_present": false,
+  "cause": "different clauses, misparse"
+ },
+ {
+  "id": 943181,
+  "label": "w",
+  "construction_present": false,
+  "cause": "three verbs only"
+ },
+ {
+  "id": 802602,
+  "label": "w",
+  "construction_present": false,
+  "cause": "code selecting is normal"
+ },
+ {
+  "id": 565431,
+  "label": "c",
+  "construction_present": true,
+  "cause": "'meaning no' garden path"
+ },
+ {
+  "id": 503600,
+  "label": "d",
+  "construction_present": true,
+  "cause": "texture format names, term of art"
+ },
+ {
+  "id": 798939,
+  "label": "w",
+  "construction_present": false,
+  "cause": "possessive noun, no relative"
+ },
+ {
+  "id": 202148,
+  "label": "w",
+  "construction_present": false,
+  "cause": "misparse, verb and object close"
+ },
+ {
+  "id": 914268,
+  "label": "d",
+  "construction_present": true,
+  "cause": "reduced relative in heavy sentence"
+ },
+ {
+  "id": 732897,
+  "label": "d",
+  "construction_present": true,
+  "cause": "'detect' would be plainer"
+ },
+ {
+  "id": 750037,
+  "label": "w",
+  "construction_present": false,
+  "cause": "repository name"
+ },
+ {
+  "id": 975795,
+  "label": "w",
+  "construction_present": true,
+  "cause": "legal boilerplate"
+ },
+ {
+  "id": 298691,
+  "label": "w",
+  "construction_present": true,
+  "cause": "casual 'X style' idiom"
+ },
+ {
+  "id": 132576,
+  "label": "d",
+  "construction_present": true,
+  "cause": "'lets them delegate' plainer"
+ },
+ {
+  "id": 311581,
+  "label": "w",
+  "construction_present": false,
+  "cause": "not an acronym"
+ },
+ {
+  "id": 840459,
+  "label": "w",
+  "construction_present": false,
+  "cause": "software authenticates, term of art"
+ },
+ {
+  "id": 932476,
+  "label": "w",
+  "construction_present": false,
+  "cause": "adjacent words"
+ },
+ {
+  "id": 230133,
+  "label": "w",
+  "construction_present": false,
+  "cause": "flow notation, not a clause"
+ },
+ {
+  "id": 457704,
+  "label": "w",
+  "construction_present": false,
+  "cause": "three items only"
+ },
+ {
+  "id": 583015,
+  "label": "d",
+  "construction_present": true,
+  "cause": "compound in notation list"
+ },
+ {
+  "id": 494539,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'default' adjective, readable"
+ },
+ {
+  "id": 533967,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no hyphen compound"
+ },
+ {
+  "id": 137950,
+  "label": "w",
+  "construction_present": false,
+  "cause": "three items only"
+ },
+ {
+  "id": 944128,
+  "label": "w",
+  "construction_present": false,
+  "cause": "fronted whether-clause, no split"
+ },
+ {
+  "id": 387816,
+  "label": "d",
+  "construction_present": true,
+  "cause": "stack of product terms"
+ },
+ {
+  "id": 104189,
+  "label": "d",
+  "construction_present": true,
+  "cause": "result participle, clear enough"
+ },
+ {
+  "id": 491715,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 667207,
+  "label": "d",
+  "construction_present": true,
+  "cause": "formula prose with parenthetical"
+ },
+ {
+  "id": 793510,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no four-item list"
+ },
+ {
+  "id": 957895,
+  "label": "w",
+  "construction_present": false,
+  "cause": "misparse, no nominalization"
+ },
+ {
+  "id": 274367,
+  "label": "d",
+  "construction_present": true,
+  "cause": "tacked-on participle"
+ },
+ {
+  "id": 936383,
+  "label": "w",
+  "construction_present": false,
+  "cause": "separate clauses, misparse"
+ },
+ {
+  "id": 601622,
+  "label": "w",
+  "construction_present": false,
+  "cause": "words in different clauses"
+ },
+ {
+  "id": 213146,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no four-item list"
+ },
+ {
+  "id": 934203,
+  "label": "d",
+  "construction_present": true,
+  "cause": "coined but clear compound"
+ },
+ {
+  "id": 569826,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'final gather' is a noun term"
+ },
+ {
+  "id": 159872,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no verb, misparse"
+ },
+ {
+  "id": 971534,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'batch-append' is a verb"
+ },
+ {
+  "id": 347785,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no center embedding"
+ },
+ {
+  "id": 603709,
+  "label": "d",
+  "construction_present": true,
+  "cause": "coined compound, technical"
+ },
+ {
+  "id": 614544,
+  "label": "w",
+  "construction_present": false,
+  "cause": "simple relative, no nesting"
+ },
+ {
+  "id": 954088,
+  "label": "w",
+  "construction_present": false,
+  "cause": "parenthetical examples, not nesting"
+ },
+ {
+  "id": 710374,
+  "label": "w",
+  "construction_present": false,
+  "cause": "misparse, no light verb"
+ },
+ {
+  "id": 408090,
+  "label": "w",
+  "construction_present": false,
+  "cause": "verb phrase, not nouns"
+ },
+ {
+  "id": 312539,
+  "label": "d",
+  "construction_present": true,
+  "cause": "license rights list, conventional"
+ },
+ {
+  "id": 378352,
+  "label": "w",
+  "construction_present": false,
+  "cause": "ordinary passive"
+ },
+ {
+  "id": 449674,
+  "label": "w",
+  "construction_present": false,
+  "cause": "product name"
+ },
+ {
+  "id": 904324,
+  "label": "d",
+  "construction_present": true,
+  "cause": "coined but clear compound"
+ },
+ {
+  "id": 278498,
+  "label": "w",
+  "construction_present": false,
+  "cause": "software indexes, normal"
+ },
+ {
+  "id": 223366,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'trust' standard in sensor fusion"
+ },
+ {
+  "id": 885705,
+  "label": "d",
+  "construction_present": true,
+  "cause": "stranded preposition among appositives"
+ },
+ {
+  "id": 474422,
+  "label": "w",
+  "construction_present": false,
+  "cause": "imperative, reader is subject"
+ },
+ {
+  "id": 242809,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 544056,
+  "label": "d",
+  "construction_present": true,
+  "cause": "well-known library acronym"
+ },
+ {
+  "id": 465122,
+  "label": "w",
+  "construction_present": true,
+  "cause": "mild personification, clear"
+ },
+ {
+  "id": 613373,
+  "label": "d",
+  "construction_present": true,
+  "cause": "'lets you select' plainer"
+ },
+ {
+  "id": 668494,
+  "label": "w",
+  "construction_present": false,
+  "cause": "three adjectives"
+ },
+ {
+  "id": 384280,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no center embedding"
+ },
+ {
+  "id": 520712,
+  "label": "c",
+  "construction_present": true,
+  "cause": "relative inside relative with gapping"
+ },
+ {
+  "id": 333944,
+  "label": "d",
+  "construction_present": true,
+  "cause": "nested parenthetical in long sentence"
+ },
+ {
+  "id": 660039,
+  "label": "w",
+  "construction_present": false,
+  "cause": "words not related"
+ },
+ {
+  "id": 596157,
+  "label": "d",
+  "construction_present": true,
+  "cause": "jargon compound"
+ },
+ {
+  "id": 537636,
+  "label": "d",
+  "construction_present": true,
+  "cause": "parenthetical list of controls"
+ },
+ {
+  "id": 516659,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no center embedding"
+ },
+ {
+  "id": 351514,
+  "label": "w",
+  "construction_present": false,
+  "cause": "misparse, words unrelated"
+ },
+ {
+  "id": 978511,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 285587,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no relative clause"
+ },
+ {
+  "id": 221641,
+  "label": "w",
+  "construction_present": true,
+  "cause": "ubiquitous acronym"
+ },
+ {
+  "id": 793256,
+  "label": "d",
+  "construction_present": true,
+  "cause": "stack, parallels other column names"
+ },
+ {
+  "id": 119424,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no list"
+ },
+ {
+  "id": 718588,
+  "label": "d",
+  "construction_present": true,
+  "cause": "'head unit' is a term"
+ },
+ {
+  "id": 353441,
+  "label": "w",
+  "construction_present": false,
+  "cause": "imperative, misparse"
+ },
+ {
+  "id": 619115,
+  "label": "w",
+  "construction_present": false,
+  "cause": "adjacent words"
+ },
+ {
+  "id": 173271,
+  "label": "w",
+  "construction_present": false,
+  "cause": "garbled sentence, wrong diagnosis"
+ },
+ {
+  "id": 189322,
+  "label": "c",
+  "construction_present": true,
+  "cause": "huge list with nested parentheses"
+ },
+ {
+  "id": 892013,
+  "label": "d",
+  "construction_present": true,
+  "cause": "feature-list nominals"
+ },
+ {
+  "id": 608054,
+  "label": "d",
+  "construction_present": true,
+  "cause": "jargon noun stack"
+ },
+ {
+  "id": 331429,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'force feedback' is a term"
+ },
+ {
+  "id": 745908,
+  "label": "d",
+  "construction_present": true,
+  "cause": "note-style semicolon list"
+ },
+ {
+  "id": 311067,
+  "label": "d",
+  "construction_present": true,
+  "cause": "tacked-on 'ensuring'"
+ },
+ {
+  "id": 346740,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no center embedding"
+ },
+ {
+  "id": 509152,
+  "label": "w",
+  "construction_present": false,
+  "cause": "code span subject, no relative"
+ },
+ {
+  "id": 400904,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'group' is a noun here"
+ },
+ {
+  "id": 307642,
+  "label": "w",
+  "construction_present": false,
+  "cause": "refresh suits things"
+ },
+ {
+  "id": 398183,
+  "label": "w",
+  "construction_present": false,
+  "cause": "intransitive 'hides', fine"
+ },
+ {
+  "id": 985199,
+  "label": "d",
+  "construction_present": true,
+  "cause": "compound plus stack, technical"
+ },
+ {
+  "id": 824755,
+  "label": "d",
+  "construction_present": true,
+  "cause": "'ignore files' ambiguity with relative"
+ },
+ {
+  "id": 588590,
+  "label": "d",
+  "construction_present": true,
+  "cause": "coined but clear compound"
+ },
+ {
+  "id": 637595,
+  "label": "d",
+  "construction_present": true,
+  "cause": "tacked-on participle"
+ },
+ {
+  "id": 783412,
+  "label": "d",
+  "construction_present": true,
+  "cause": "mild noun stack"
+ },
+ {
+  "id": 554054,
+  "label": "w",
+  "construction_present": true,
+  "cause": "ordinary hyphenated modifier"
+ },
+ {
+  "id": 868293,
+  "label": "w",
+  "construction_present": false,
+  "cause": "two nouns only"
+ },
+ {
+  "id": 681791,
+  "label": "w",
+  "construction_present": false,
+  "cause": "brand name"
+ },
+ {
+  "id": 688505,
+  "label": "w",
+  "construction_present": false,
+  "cause": "a list, not embedding"
+ },
+ {
+  "id": 338760,
+  "label": "w",
+  "construction_present": false,
+  "cause": "software planning, normal"
+ },
+ {
+  "id": 106362,
+  "label": "d",
+  "construction_present": true,
+  "cause": "noun stack in parenthetical"
+ },
+ {
+  "id": 749475,
+  "label": "w",
+  "construction_present": true,
+  "cause": "clear manner participle"
+ },
+ {
+  "id": 348041,
+  "label": "w",
+  "construction_present": false,
+  "cause": "elliptical passive, not person verb"
+ },
+ {
+  "id": 404601,
+  "label": "w",
+  "construction_present": true,
+  "cause": "well-known license acronym"
+ },
+ {
+  "id": 530973,
+  "label": "w",
+  "construction_present": false,
+  "cause": "adjacent words"
+ },
+ {
+  "id": 526012,
+  "label": "d",
+  "construction_present": true,
+  "cause": "four noun items, heavy"
+ },
+ {
+  "id": 619280,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'confirms' suits things"
+ },
+ {
+  "id": 829169,
+  "label": "w",
+  "construction_present": false,
+  "cause": "metric names, terms of art"
+ },
+ {
+  "id": 633278,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'swallows' not a person verb"
+ },
+ {
+  "id": 723480,
+  "label": "d",
+  "construction_present": true,
+  "cause": "dash aside splits subject, verb"
+ },
+ {
+  "id": 218796,
+  "label": "w",
+  "construction_present": false,
+  "cause": "absolute phrase, not relative"
+ },
+ {
+  "id": 240915,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no hyphen compound"
+ },
+ {
+  "id": 920225,
+  "label": "w",
+  "construction_present": false,
+  "cause": "thread sleeps, term of art"
+ },
+ {
+  "id": 414176,
+  "label": "w",
+  "construction_present": false,
+  "cause": "absolute 'with' phrase"
+ },
+ {
+  "id": 194384,
+  "label": "w",
+  "construction_present": false,
+  "cause": "adjective plus noun"
+ },
+ {
+  "id": 244974,
+  "label": "d",
+  "construction_present": true,
+  "cause": "paired coined compounds"
+ },
+ {
+  "id": 984258,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no relative clause"
+ },
+ {
+  "id": 389079,
+  "label": "w",
+  "construction_present": true,
+  "cause": "clear manner participle"
+ },
+ {
+  "id": 588584,
+  "label": "d",
+  "construction_present": true,
+  "cause": "noun stack after participle"
+ },
+ {
+  "id": 695941,
+  "label": "d",
+  "construction_present": true,
+  "cause": "botanical term, little cost"
+ },
+ {
+  "id": 639438,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no relative clause there"
+ },
+ {
+  "id": 520026,
+  "label": "w",
+  "construction_present": false,
+  "cause": "different clauses"
+ },
+ {
+  "id": 334207,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'claims' is queue jargon"
+ },
+ {
+  "id": 755910,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no list"
+ },
+ {
+  "id": 490450,
+  "label": "d",
+  "construction_present": true,
+  "cause": "mild noun stack"
+ },
+ {
+  "id": 506474,
+  "label": "d",
+  "construction_present": true,
+  "cause": "participle link somewhat loose"
+ },
+ {
+  "id": 943555,
+  "label": "w",
+  "construction_present": true,
+  "cause": "API promises, standard usage"
+ },
+ {
+  "id": 224710,
+  "label": "d",
+  "construction_present": true,
+  "cause": "vague noun stack"
+ },
+ {
+  "id": 866800,
+  "label": "w",
+  "construction_present": false,
+  "cause": "different clauses"
+ },
+ {
+  "id": 789966,
+  "label": "d",
+  "construction_present": true,
+  "cause": "coined compound, technical"
+ },
+ {
+  "id": 219427,
+  "label": "w",
+  "construction_present": false,
+  "cause": "different clauses"
+ },
+ {
+  "id": 595792,
+  "label": "w",
+  "construction_present": false,
+  "cause": "mode name, 'excludes' fine"
+ },
+ {
+  "id": 241184,
+  "label": "d",
+  "construction_present": true,
+  "cause": "three-gerund subject delays verb"
+ },
+ {
+  "id": 448393,
+  "label": "w",
+  "construction_present": false,
+  "cause": "Turkish misparse"
+ },
+ {
+  "id": 646368,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 904243,
+  "label": "d",
+  "construction_present": true,
+  "cause": "relative fine, sentence overloaded"
+ },
+ {
+  "id": 609613,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'symbol table' is a term"
+ },
+ {
+  "id": 271379,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'shaped' suits things"
+ },
+ {
+  "id": 804799,
+  "label": "d",
+  "construction_present": true,
+  "cause": "coined compound"
+ },
+ {
+  "id": 851437,
+  "label": "w",
+  "construction_present": false,
+  "cause": "misparse, no light verb"
+ },
+ {
+  "id": 936793,
+  "label": "d",
+  "construction_present": true,
+  "cause": "noun stack"
+ },
+ {
+  "id": 486287,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no participle"
+ },
+ {
+  "id": 616876,
+  "label": "d",
+  "construction_present": true,
+  "cause": "niche acronym left undefined"
+ },
+ {
+  "id": 851503,
+  "label": "w",
+  "construction_present": false,
+  "cause": "software initializes, normal"
+ },
+ {
+  "id": 453062,
+  "label": "w",
+  "construction_present": false,
+  "cause": "misparse, no nominalization"
+ },
+ {
+  "id": 841014,
+  "label": "w",
+  "construction_present": false,
+  "cause": "three items only"
+ },
+ {
+  "id": 294840,
+  "label": "d",
+  "construction_present": true,
+  "cause": "five steps, could be bullets"
+ },
+ {
+  "id": 336105,
+  "label": "d",
+  "construction_present": true,
+  "cause": "coined compound in list"
+ },
+ {
+  "id": 435003,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no verb, misparse"
+ },
+ {
+  "id": 921454,
+  "label": "w",
+  "construction_present": true,
+  "cause": "instruction mnemonic, code-like"
+ },
+ {
+  "id": 768474,
+  "label": "w",
+  "construction_present": false,
+  "cause": "adjacent words"
+ },
+ {
+  "id": 559064,
+  "label": "d",
+  "construction_present": true,
+  "cause": "inserted clause delays second object"
+ },
+ {
+  "id": 549615,
+  "label": "w",
+  "construction_present": false,
+  "cause": "three verb phrases"
+ },
+ {
+  "id": 280566,
+  "label": "w",
+  "construction_present": true,
+  "cause": "short field list, clear"
+ },
+ {
+  "id": 881177,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 810161,
+  "label": "d",
+  "construction_present": true,
+  "cause": "named step, sentence overloaded"
+ },
+ {
+  "id": 946697,
+  "label": "w",
+  "construction_present": true,
+  "cause": "ubiquitous acronym"
+ },
+ {
+  "id": 390490,
+  "label": "w",
+  "construction_present": false,
+  "cause": "dash, not relative"
+ },
+ {
+  "id": 946346,
+  "label": "d",
+  "construction_present": true,
+  "cause": "'enabling X of' nominal"
+ },
+ {
+  "id": 748067,
+  "label": "w",
+  "construction_present": false,
+  "cause": "misparse across 'or'"
+ },
+ {
+  "id": 854258,
+  "label": "w",
+  "construction_present": true,
+  "cause": "part of license name"
+ },
+ {
+  "id": 665560,
+  "label": "w",
+  "construction_present": true,
+  "cause": "proper-noun modifier, clear"
+ },
+ {
+  "id": 478927,
+  "label": "d",
+  "construction_present": true,
+  "cause": "mild noun stack"
+ },
+ {
+  "id": 928059,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 569475,
+  "label": "w",
+  "construction_present": false,
+  "cause": "single relative, no double nesting"
+ },
+ {
+  "id": 856187,
+  "label": "d",
+  "construction_present": true,
+  "cause": "tacked-on participle"
+ },
+ {
+  "id": 153949,
+  "label": "w",
+  "construction_present": false,
+  "cause": "list of action names"
+ },
+ {
+  "id": 890120,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no four-item list"
+ },
+ {
+  "id": 301611,
+  "label": "w",
+  "construction_present": true,
+  "cause": "readable feature list"
+ },
+ {
+  "id": 945042,
+  "label": "d",
+  "construction_present": true,
+  "cause": "long compound subject"
+ },
+ {
+  "id": 513449,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no hyphen compound"
+ },
+ {
+  "id": 322447,
+  "label": "d",
+  "construction_present": true,
+  "cause": "tacked-on 'ensuring'"
+ },
+ {
+  "id": 537100,
+  "label": "c",
+  "construction_present": true,
+  "cause": "five-noun stack"
+ },
+ {
+  "id": 438200,
+  "label": "w",
+  "construction_present": false,
+  "cause": "product name as subject"
+ },
+ {
+  "id": 318812,
+  "label": "w",
+  "construction_present": false,
+  "cause": "not an acronym"
+ },
+ {
+  "id": 433852,
+  "label": "w",
+  "construction_present": false,
+  "cause": "words not related"
+ },
+ {
+  "id": 852766,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'abstracts' programming term"
+ },
+ {
+  "id": 605328,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'yield' is a noun here"
+ },
+ {
+  "id": 970528,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no list"
+ },
+ {
+  "id": 447952,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no embedding"
+ },
+ {
+  "id": 938332,
+  "label": "w",
+  "construction_present": false,
+  "cause": "not an acronym"
+ },
+ {
+  "id": 176869,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'sensing modality' is a term"
+ },
+ {
+  "id": 477095,
+  "label": "d",
+  "construction_present": true,
+  "cause": "niche escape-code acronym"
+ },
+ {
+  "id": 727646,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 852724,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 690323,
+  "label": "w",
+  "construction_present": false,
+  "cause": "prepositional phrase, misparse"
+ },
+ {
+  "id": 488009,
+  "label": "w",
+  "construction_present": false,
+  "cause": "independent clause, not relative"
+ },
+ {
+  "id": 845831,
+  "label": "w",
+  "construction_present": false,
+  "cause": "three items only"
+ },
+ {
+  "id": 695520,
+  "label": "w",
+  "construction_present": false,
+  "cause": "apps refusing is normal usage"
+ },
+ {
+  "id": 920546,
+  "label": "w",
+  "construction_present": false,
+  "cause": "not an acronym"
+ },
+ {
+  "id": 419396,
+  "label": "d",
+  "construction_present": true,
+  "cause": "mild noun stack"
+ },
+ {
+  "id": 216619,
+  "label": "w",
+  "construction_present": false,
+  "cause": "dependency-injection jargon"
+ },
+ {
+  "id": 195261,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'label' is a plain noun"
+ },
+ {
+  "id": 692024,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'trace back to' idiom"
+ },
+ {
+  "id": 641111,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no hyphen compound"
+ },
+ {
+  "id": 458054,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no participle"
+ },
+ {
+  "id": 837623,
+  "label": "w",
+  "construction_present": true,
+  "cause": "list of platform names"
+ },
+ {
+  "id": 961467,
+  "label": "w",
+  "construction_present": true,
+  "cause": "readable four-item subject"
+ },
+ {
+  "id": 644698,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no participle"
+ },
+ {
+  "id": 496003,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'vote account' is a term"
+ },
+ {
+  "id": 105167,
+  "label": "c",
+  "construction_present": true,
+  "cause": "reduced relative then verb garden-paths"
+ },
+ {
+  "id": 366995,
+  "label": "w",
+  "construction_present": true,
+  "cause": "well-known graphics acronym"
+ },
+ {
+  "id": 342938,
+  "label": "d",
+  "construction_present": true,
+  "cause": "spec checklist, nested lists"
+ },
+ {
+  "id": 107162,
+  "label": "d",
+  "construction_present": true,
+  "cause": "relative plus long parenthetical"
+ },
+ {
+  "id": 849394,
+  "label": "w",
+  "construction_present": true,
+  "cause": "clear manner participle"
+ },
+ {
+  "id": 151336,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no four-item list"
+ },
+ {
+  "id": 979970,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'cheat sites' compound, misparse"
+ },
+ {
+  "id": 324813,
+  "label": "d",
+  "construction_present": true,
+  "cause": "long legal compound subject"
+ },
+ {
+  "id": 988028,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 511463,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no embedding"
+ },
+ {
+  "id": 577190,
+  "label": "d",
+  "construction_present": true,
+  "cause": "'folders ours' reads oddly"
+ },
+ {
+  "id": 840313,
+  "label": "d",
+  "construction_present": true,
+  "cause": "parenthetical module list"
+ },
+ {
+  "id": 803734,
+  "label": "w",
+  "construction_present": false,
+  "cause": "coordinated clauses, not nested"
+ },
+ {
+  "id": 178419,
+  "label": "w",
+  "construction_present": true,
+  "cause": "setting name; sentence is problem"
+ },
+ {
+  "id": 695972,
+  "label": "d",
+  "construction_present": true,
+  "cause": "long subject with nested relative"
+ },
+ {
+  "id": 664719,
+  "label": "w",
+  "construction_present": true,
+  "cause": "config 'owns' is standard"
+ },
+ {
+  "id": 725156,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 839260,
+  "label": "w",
+  "construction_present": false,
+  "cause": "short question, misparse"
+ },
+ {
+  "id": 524266,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'tightens' is the verb"
+ },
+ {
+  "id": 911428,
+  "label": "d",
+  "construction_present": true,
+  "cause": "tacked-on participle"
+ },
+ {
+  "id": 234382,
+  "label": "d",
+  "construction_present": true,
+  "cause": "components personified, context explains"
+ },
+ {
+  "id": 544120,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 169446,
+  "label": "w",
+  "construction_present": true,
+  "cause": "clear participle link"
+ },
+ {
+  "id": 436414,
+  "label": "w",
+  "construction_present": false,
+  "cause": "absolute phrase"
+ },
+ {
+  "id": 533839,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 639079,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'Pin' is the verb"
+ },
+ {
+  "id": 582647,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'client certificate' is a term"
+ },
+ {
+  "id": 898819,
+  "label": "d",
+  "construction_present": true,
+  "cause": "coined compound in notes"
+ },
+ {
+  "id": 488807,
+  "label": "w",
+  "construction_present": false,
+  "cause": "adjacent words, heading"
+ },
+ {
+  "id": 790493,
+  "label": "w",
+  "construction_present": true,
+  "cause": "standard segment name"
+ },
+ {
+  "id": 334720,
+  "label": "d",
+  "construction_present": true,
+  "cause": "'C source files' would do"
+ },
+ {
+  "id": 704851,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'review' is a noun"
+ },
+ {
+  "id": 930211,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no participle"
+ },
+ {
+  "id": 695271,
+  "label": "w",
+  "construction_present": true,
+  "cause": "short parenthetical examples"
+ },
+ {
+  "id": 397019,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'app' is a noun"
+ },
+ {
+  "id": 851791,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'hosting' is a noun"
+ },
+ {
+  "id": 672238,
+  "label": "w",
+  "construction_present": false,
+  "cause": "a check auditing is normal"
+ },
+ {
+  "id": 363299,
+  "label": "w",
+  "construction_present": true,
+  "cause": "models misread, clear metonymy"
+ },
+ {
+  "id": 767404,
+  "label": "d",
+  "construction_present": true,
+  "cause": "trading jargon compound"
+ },
+ {
+  "id": 548716,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'large-scale' is adjective"
+ },
+ {
+  "id": 815043,
+  "label": "w",
+  "construction_present": true,
+  "cause": "well-known gaming acronym"
+ },
+ {
+  "id": 729449,
+  "label": "w",
+  "construction_present": false,
+  "cause": "three items only"
+ },
+ {
+  "id": 771026,
+  "label": "d",
+  "construction_present": true,
+  "cause": "possessive would read easier"
+ },
+ {
+  "id": 222777,
+  "label": "w",
+  "construction_present": true,
+  "cause": "list after colon, fine"
+ },
+ {
+  "id": 184519,
+  "label": "w",
+  "construction_present": true,
+  "cause": "clear ordered steps"
+ },
+ {
+  "id": 135528,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no participle"
+ },
+ {
+  "id": 161211,
+  "label": "w",
+  "construction_present": false,
+  "cause": "garden path, not embedding"
+ },
+ {
+  "id": 996043,
+  "label": "d",
+  "construction_present": true,
+  "cause": "ambiguous list grouping"
+ },
+ {
+  "id": 976714,
+  "label": "d",
+  "construction_present": true,
+  "cause": "noun stack, technical"
+ },
+ {
+  "id": 829914,
+  "label": "w",
+  "construction_present": false,
+  "cause": "adjacent words"
+ },
+ {
+  "id": 516414,
+  "label": "d",
+  "construction_present": true,
+  "cause": "list inside long subject"
+ },
+ {
+  "id": 744911,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no hyphen compound"
+ },
+ {
+  "id": 860699,
+  "label": "c",
+  "construction_present": true,
+  "cause": "nested relatives with stranded preposition"
+ },
+ {
+  "id": 930158,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'watching data update', not relative"
+ },
+ {
+  "id": 196039,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'agree' fine for states"
+ },
+ {
+  "id": 317014,
+  "label": "d",
+  "construction_present": true,
+  "cause": "parenthetical splits subject, verb"
+ },
+ {
+  "id": 288645,
+  "label": "w",
+  "construction_present": true,
+  "cause": "gaming term"
+ },
+ {
+  "id": 449613,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no embedding"
+ },
+ {
+  "id": 372602,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 223141,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 528335,
+  "label": "w",
+  "construction_present": false,
+  "cause": "absolute 'with' phrase"
+ },
+ {
+  "id": 901605,
+  "label": "c",
+  "construction_present": true,
+  "cause": "five-noun stack"
+ },
+ {
+  "id": 597002,
+  "label": "d",
+  "construction_present": true,
+  "cause": "mild noun stack"
+ },
+ {
+  "id": 244233,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'run loop' is a term"
+ },
+ {
+  "id": 964160,
+  "label": "w",
+  "construction_present": false,
+  "cause": "words not related"
+ },
+ {
+  "id": 329773,
+  "label": "w",
+  "construction_present": true,
+  "cause": "plain hyphenated modifier"
+ },
+ {
+  "id": 430610,
+  "label": "w",
+  "construction_present": false,
+  "cause": "coordinated participles, not tacked-on"
+ },
+ {
+  "id": 808335,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'mode change' is a term"
+ },
+ {
+  "id": 354173,
+  "label": "w",
+  "construction_present": false,
+  "cause": "build step refusing is normal"
+ },
+ {
+  "id": 756744,
+  "label": "d",
+  "construction_present": true,
+  "cause": "inserted alternative delays verb"
+ },
+ {
+  "id": 493273,
+  "label": "c",
+  "construction_present": true,
+  "cause": "'one's sits' garden path"
+ },
+ {
+  "id": 838145,
+  "label": "w",
+  "construction_present": false,
+  "cause": "fragment, words unrelated"
+ },
+ {
+  "id": 335277,
+  "label": "d",
+  "construction_present": true,
+  "cause": "jargon compound"
+ },
+ {
+  "id": 413772,
+  "label": "w",
+  "construction_present": false,
+  "cause": "participle adjective, no relative"
+ },
+ {
+  "id": 207023,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no participle clause"
+ },
+ {
+  "id": 490490,
+  "label": "w",
+  "construction_present": false,
+  "cause": "product name"
+ },
+ {
+  "id": 280518,
+  "label": "w",
+  "construction_present": true,
+  "cause": "ownership jargon"
+ },
+ {
+  "id": 787329,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'hosts' suits things"
+ },
+ {
+  "id": 695195,
+  "label": "w",
+  "construction_present": true,
+  "cause": "clear result participle"
+ },
+ {
+  "id": 531066,
+  "label": "w",
+  "construction_present": true,
+  "cause": "file extension, known"
+ },
+ {
+  "id": 986672,
+  "label": "w",
+  "construction_present": false,
+  "cause": "verb and object close"
+ },
+ {
+  "id": 196621,
+  "label": "w",
+  "construction_present": true,
+  "cause": "plain hyphenated modifier"
+ },
+ {
+  "id": 822050,
+  "label": "d",
+  "construction_present": true,
+  "cause": "legal nominals, optional fix"
+ },
+ {
+  "id": 838247,
+  "label": "w",
+  "construction_present": false,
+  "cause": "not an acronym"
+ },
+ {
+  "id": 404734,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no hyphen compound"
+ },
+ {
+  "id": 873784,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no verb, misparse"
+ },
+ {
+  "id": 498966,
+  "label": "d",
+  "construction_present": true,
+  "cause": "noun stack in list"
+ },
+ {
+  "id": 566339,
+  "label": "w",
+  "construction_present": true,
+  "cause": "short parenthetical examples"
+ },
+ {
+  "id": 255110,
+  "label": "w",
+  "construction_present": false,
+  "cause": "software initializes, normal"
+ },
+ {
+  "id": 867106,
+  "label": "w",
+  "construction_present": false,
+  "cause": "brand name"
+ },
+ {
+  "id": 839933,
+  "label": "d",
+  "construction_present": true,
+  "cause": "mild noun stack"
+ },
+ {
+  "id": 291199,
+  "label": "d",
+  "construction_present": true,
+  "cause": "relative in overlong sentence"
+ },
+ {
+  "id": 538399,
+  "label": "w",
+  "construction_present": false,
+  "cause": "elliptical passive, not person verb"
+ },
+ {
+  "id": 135464,
+  "label": "c",
+  "construction_present": true,
+  "cause": "mixed list subject delays verb"
+ },
+ {
+  "id": 844598,
+  "label": "w",
+  "construction_present": false,
+  "cause": "words not related"
+ },
+ {
+  "id": 106214,
+  "label": "w",
+  "construction_present": true,
+  "cause": "well-known emulator name"
+ },
+ {
+  "id": 875055,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'control' is the verb"
+ },
+ {
+  "id": 844924,
+  "label": "d",
+  "construction_present": true,
+  "cause": "tacked-on participle"
+ },
+ {
+  "id": 528367,
+  "label": "w",
+  "construction_present": false,
+  "cause": "adjacent words"
+ },
+ {
+  "id": 444467,
+  "label": "w",
+  "construction_present": false,
+  "cause": "tag list, no clause"
+ },
+ {
+  "id": 628514,
+  "label": "d",
+  "construction_present": true,
+  "cause": "rhetorical anacoluthon"
+ },
+ {
+  "id": 729058,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no list"
+ },
+ {
+  "id": 344322,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no list"
+ },
+ {
+  "id": 175209,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'entry point' is a term"
+ },
+ {
+  "id": 763460,
+  "label": "c",
+  "construction_present": true,
+  "cause": "garden path in parenthetical"
+ },
+ {
+  "id": 340672,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no center embedding"
+ },
+ {
+  "id": 153765,
+  "label": "d",
+  "construction_present": true,
+  "cause": "long parenthetical list in spec"
+ },
+ {
+  "id": 288214,
+  "label": "d",
+  "construction_present": true,
+  "cause": "paired coined compounds"
+ },
+ {
+  "id": 997364,
+  "label": "w",
+  "construction_present": false,
+  "cause": "software examines, normal"
+ },
+ {
+  "id": 335883,
+  "label": "w",
+  "construction_present": false,
+  "cause": "garbled text, misparse"
+ },
+ {
+  "id": 895771,
+  "label": "w",
+  "construction_present": false,
+  "cause": "not an acronym"
+ },
+ {
+  "id": 667789,
+  "label": "w",
+  "construction_present": false,
+  "cause": "sequential clauses, not nested"
+ },
+ {
+  "id": 576421,
+  "label": "d",
+  "construction_present": true,
+  "cause": "opaque noun stack"
+ },
+ {
+  "id": 863670,
+  "label": "d",
+  "construction_present": true,
+  "cause": "noun stack"
+ },
+ {
+  "id": 712604,
+  "label": "d",
+  "construction_present": true,
+  "cause": "boilerplate nominals, fixable"
+ },
+ {
+  "id": 532297,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no embedding"
+ },
+ {
+  "id": 608015,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'tone map' is a term"
+ },
+ {
+  "id": 423840,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no participle"
+ },
+ {
+  "id": 123770,
+  "label": "w",
+  "construction_present": false,
+  "cause": "parallel relatives, not nested"
+ },
+ {
+  "id": 591557,
+  "label": "w",
+  "construction_present": false,
+  "cause": "product name"
+ },
+ {
+  "id": 511198,
+  "label": "d",
+  "construction_present": true,
+  "cause": "compound in dense notes"
+ },
+ {
+  "id": 294364,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'picked' fine for code"
+ },
+ {
+  "id": 461781,
+  "label": "w",
+  "construction_present": false,
+  "cause": "daemon picks, normal"
+ },
+ {
+  "id": 504060,
+  "label": "d",
+  "construction_present": true,
+  "cause": "tacked-on participle"
+ },
+ {
+  "id": 617387,
+  "label": "w",
+  "construction_present": true,
+  "cause": "license boilerplate"
+ },
+ {
+  "id": 572770,
+  "label": "w",
+  "construction_present": true,
+  "cause": "common acronym"
+ },
+ {
+  "id": 292923,
+  "label": "w",
+  "construction_present": false,
+  "cause": "parenthetical clause, no relative"
+ },
+ {
+  "id": 520575,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no list"
+ },
+ {
+  "id": 842621,
+  "label": "w",
+  "construction_present": false,
+  "cause": "three items only"
+ },
+ {
+  "id": 609063,
+  "label": "d",
+  "construction_present": true,
+  "cause": "participle link loose"
+ },
+ {
+  "id": 498039,
+  "label": "d",
+  "construction_present": true,
+  "cause": "technical stack in list"
+ },
+ {
+  "id": 627979,
+  "label": "w",
+  "construction_present": true,
+  "cause": "plain hyphenated modifier"
+ },
+ {
+  "id": 459516,
+  "label": "w",
+  "construction_present": true,
+  "cause": "feature fragment, fine"
+ },
+ {
+  "id": 244534,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'Test' is a verb"
+ },
+ {
+  "id": 640775,
+  "label": "d",
+  "construction_present": true,
+  "cause": "clunky heading compound"
+ },
+ {
+  "id": 135405,
+  "label": "w",
+  "construction_present": true,
+  "cause": "plain hyphenated modifier"
+ },
+ {
+  "id": 230402,
+  "label": "d",
+  "construction_present": true,
+  "cause": "three-part subject delays verb"
+ },
+ {
+  "id": 425700,
+  "label": "w",
+  "construction_present": true,
+  "cause": "readable verb list"
+ },
+ {
+  "id": 967266,
+  "label": "c",
+  "construction_present": true,
+  "cause": "long subject, relative and parenthetical"
+ },
+ {
+  "id": 294564,
+  "label": "w",
+  "construction_present": false,
+  "cause": "prepositional phrase, misparse"
+ },
+ {
+  "id": 117356,
+  "label": "w",
+  "construction_present": false,
+  "cause": "package name"
+ },
+ {
+  "id": 963114,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no participle"
+ },
+ {
+  "id": 928995,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 287391,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'entry point' is a term"
+ },
+ {
+  "id": 997283,
+  "label": "d",
+  "construction_present": true,
+  "cause": "stack with compound"
+ },
+ {
+  "id": 981714,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no hyphen compound"
+ },
+ {
+  "id": 311131,
+  "label": "w",
+  "construction_present": false,
+  "cause": "Vietnamese compound verb, misparse"
+ },
+ {
+  "id": 210343,
+  "label": "d",
+  "construction_present": true,
+  "cause": "coined compound"
+ },
+ {
+  "id": 312327,
+  "label": "d",
+  "construction_present": true,
+  "cause": "jargon compound"
+ },
+ {
+  "id": 982403,
+  "label": "w",
+  "construction_present": false,
+  "cause": "broken text, misparse"
+ },
+ {
+  "id": 446552,
+  "label": "w",
+  "construction_present": true,
+  "cause": "ubiquitous acronym"
+ },
+ {
+  "id": 375576,
+  "label": "w",
+  "construction_present": false,
+  "cause": "single relative, no double nesting"
+ },
+ {
+  "id": 408871,
+  "label": "w",
+  "construction_present": true,
+  "cause": "plain hyphenated modifier"
+ },
+ {
+  "id": 344811,
+  "label": "w",
+  "construction_present": false,
+  "cause": "gerund subject, no relative"
+ },
+ {
+  "id": 882044,
+  "label": "d",
+  "construction_present": true,
+  "cause": "boilerplate nominals, fixable"
+ },
+ {
+  "id": 213238,
+  "label": "w",
+  "construction_present": true,
+  "cause": "casual metaphor, clear"
+ },
+ {
+  "id": 476868,
+  "label": "w",
+  "construction_present": false,
+  "cause": "a list, not embedding"
+ },
+ {
+  "id": 493073,
+  "label": "w",
+  "construction_present": true,
+  "cause": "short parenthetical examples"
+ },
+ {
+  "id": 352385,
+  "label": "w",
+  "construction_present": false,
+  "cause": "prepositional phrase, misparse"
+ },
+ {
+  "id": 626120,
+  "label": "w",
+  "construction_present": false,
+  "cause": "parenthetical list, not embedding"
+ },
+ {
+  "id": 883634,
+  "label": "w",
+  "construction_present": false,
+  "cause": "simple sentence"
+ },
+ {
+  "id": 334807,
+  "label": "w",
+  "construction_present": true,
+  "cause": "parallel nominal list after 'covers'"
+ },
+ {
+  "id": 634013,
+  "label": "w",
+  "construction_present": true,
+  "cause": "compound subject, easy"
+ },
+ {
+  "id": 591145,
+  "label": "w",
+  "construction_present": false,
+  "cause": "legend list, not embedding"
+ },
+ {
+  "id": 320607,
+  "label": "w",
+  "construction_present": false,
+  "cause": "caption, no compound"
+ },
+ {
+  "id": 597418,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'refuse' fine in API context"
+ },
+ {
+  "id": 252946,
+  "label": "d",
+  "construction_present": true,
+  "cause": "tacked-on 'enabling'"
+ },
+ {
+  "id": 512717,
+  "label": "w",
+  "construction_present": false,
+  "cause": "not an acronym"
+ },
+ {
+  "id": 997910,
+  "label": "c",
+  "construction_present": true,
+  "cause": "deeply nested parentheses"
+ },
+ {
+  "id": 244463,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no relative clause"
+ },
+ {
+  "id": 249634,
+  "label": "w",
+  "construction_present": false,
+  "cause": "user is the subject"
+ },
+ {
+  "id": 959648,
+  "label": "d",
+  "construction_present": true,
+  "cause": "suspended compound"
+ },
+ {
+  "id": 334480,
+  "label": "d",
+  "construction_present": true,
+  "cause": "reduced relative with code span"
+ },
+ {
+  "id": 375763,
+  "label": "w",
+  "construction_present": false,
+  "cause": "absolute 'with' phrase"
+ },
+ {
+  "id": 274542,
+  "label": "w",
+  "construction_present": false,
+  "cause": "time placeholder"
+ },
+ {
+  "id": 813045,
+  "label": "w",
+  "construction_present": false,
+  "cause": "participle phrase, misparse"
+ },
+ {
+  "id": 781053,
+  "label": "w",
+  "construction_present": false,
+  "cause": "mapping notes, no list"
+ },
+ {
+  "id": 211751,
+  "label": "w",
+  "construction_present": false,
+  "cause": "code picks, normal"
+ },
+ {
+  "id": 865069,
+  "label": "w",
+  "construction_present": true,
+  "cause": "common acronym"
+ },
+ {
+  "id": 307903,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no list"
+ },
+ {
+  "id": 326731,
+  "label": "w",
+  "construction_present": true,
+  "cause": "legal boilerplate"
+ },
+ {
+  "id": 752383,
+  "label": "w",
+  "construction_present": true,
+  "cause": "common acronym"
+ },
+ {
+  "id": 681158,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 111668,
+  "label": "w",
+  "construction_present": true,
+  "cause": "readable noun stack"
+ },
+ {
+  "id": 461961,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no participle"
+ },
+ {
+  "id": 115880,
+  "label": "w",
+  "construction_present": true,
+  "cause": "agent deciding is its function"
+ },
+ {
+  "id": 183712,
+  "label": "c",
+  "construction_present": true,
+  "cause": "fronted participle, opaque subject"
+ },
+ {
+  "id": 167856,
+  "label": "w",
+  "construction_present": false,
+  "cause": "words not related"
+ },
+ {
+  "id": 606861,
+  "label": "w",
+  "construction_present": false,
+  "cause": "short clause, misparse"
+ },
+ {
+  "id": 749917,
+  "label": "w",
+  "construction_present": false,
+  "cause": "three-item lists only"
+ },
+ {
+  "id": 132445,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'fund flow' finance term"
+ },
+ {
+  "id": 311223,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no relative clause"
+ },
+ {
+  "id": 725998,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'package manager' is a term"
+ },
+ {
+  "id": 753703,
+  "label": "d",
+  "construction_present": true,
+  "cause": "short interruption after 'that'"
+ },
+ {
+  "id": 954207,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 522326,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no light verb"
+ },
+ {
+  "id": 705607,
+  "label": "w",
+  "construction_present": false,
+  "cause": "absolute phrase, notes"
+ },
+ {
+  "id": 190162,
+  "label": "w",
+  "construction_present": false,
+  "cause": "tool refusing, normal"
+ },
+ {
+  "id": 766617,
+  "label": "w",
+  "construction_present": false,
+  "cause": "words not related"
+ },
+ {
+  "id": 272813,
+  "label": "w",
+  "construction_present": false,
+  "cause": "participle phrase, not stack"
+ },
+ {
+  "id": 536231,
+  "label": "w",
+  "construction_present": false,
+  "cause": "not an acronym"
+ },
+ {
+  "id": 522108,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no embedding"
+ },
+ {
+  "id": 268660,
+  "label": "w",
+  "construction_present": true,
+  "cause": "standard SQLite term"
+ },
+ {
+  "id": 971610,
+  "label": "d",
+  "construction_present": true,
+  "cause": "three gerunds delay verb"
+ },
+ {
+  "id": 296254,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no list"
+ },
+ {
+  "id": 714341,
+  "label": "d",
+  "construction_present": true,
+  "cause": "'allowing X of' nominal"
+ },
+ {
+  "id": 121934,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no relative clause"
+ },
+ {
+  "id": 546753,
+  "label": "w",
+  "construction_present": false,
+  "cause": "passive, not person verb"
+ },
+ {
+  "id": 976330,
+  "label": "w",
+  "construction_present": false,
+  "cause": "verb and noun"
+ },
+ {
+  "id": 359199,
+  "label": "w",
+  "construction_present": true,
+  "cause": "playful, clear compound"
+ },
+ {
+  "id": 555674,
+  "label": "d",
+  "construction_present": true,
+  "cause": "nominal fluff, optional fix"
+ },
+ {
+  "id": 899946,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 567806,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 518460,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no participle"
+ },
+ {
+  "id": 518277,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no verb, misparse"
+ },
+ {
+  "id": 101314,
+  "label": "w",
+  "construction_present": true,
+  "cause": "license boilerplate"
+ },
+ {
+  "id": 916765,
+  "label": "w",
+  "construction_present": false,
+  "cause": "command name"
+ },
+ {
+  "id": 440724,
+  "label": "w",
+  "construction_present": false,
+  "cause": "list, no relative"
+ },
+ {
+  "id": 385526,
+  "label": "d",
+  "construction_present": true,
+  "cause": "'allowing X of' nominal"
+ },
+ {
+  "id": 723670,
+  "label": "d",
+  "construction_present": true,
+  "cause": "suspended modifier list"
+ },
+ {
+  "id": 920660,
+  "label": "w",
+  "construction_present": true,
+  "cause": "plain hyphenated modifier"
+ },
+ {
+  "id": 438492,
+  "label": "w",
+  "construction_present": true,
+  "cause": "known file format"
+ },
+ {
+  "id": 496743,
+  "label": "w",
+  "construction_present": false,
+  "cause": "ordinary passive"
+ },
+ {
+  "id": 969803,
+  "label": "d",
+  "construction_present": true,
+  "cause": "coined compound in dense list"
+ },
+ {
+  "id": 523755,
+  "label": "d",
+  "construction_present": true,
+  "cause": "mild noun stack"
+ },
+ {
+  "id": 530209,
+  "label": "d",
+  "construction_present": true,
+  "cause": "relative inside parenthetical subject"
+ },
+ {
+  "id": 394330,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no four-item list"
+ },
+ {
+  "id": 778420,
+  "label": "w",
+  "construction_present": true,
+  "cause": "common acronym"
+ },
+ {
+  "id": 483567,
+  "label": "d",
+  "construction_present": true,
+  "cause": "'enabling X of' nominal"
+ },
+ {
+  "id": 157644,
+  "label": "w",
+  "construction_present": false,
+  "cause": "quoted question, no relative"
+ },
+ {
+  "id": 449428,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no hyphen compound"
+ },
+ {
+  "id": 284877,
+  "label": "w",
+  "construction_present": true,
+  "cause": "common acronym"
+ },
+ {
+  "id": 526460,
+  "label": "w",
+  "construction_present": false,
+  "cause": "adjective compound, misparse"
+ },
+ {
+  "id": 696735,
+  "label": "w",
+  "construction_present": false,
+  "cause": "fragment, words unrelated"
+ },
+ {
+  "id": 504419,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'waits' is the verb"
+ },
+ {
+  "id": 221798,
+  "label": "w",
+  "construction_present": true,
+  "cause": "clear participle link"
+ },
+ {
+  "id": 933799,
+  "label": "d",
+  "construction_present": true,
+  "cause": "noun stack"
+ },
+ {
+  "id": 503448,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no embedding"
+ },
+ {
+  "id": 898924,
+  "label": "d",
+  "construction_present": true,
+  "cause": "participle plus nominal 'ability of'"
+ },
+ {
+  "id": 895581,
+  "label": "w",
+  "construction_present": false,
+  "cause": "adjacent words"
+ },
+ {
+  "id": 792803,
+  "label": "w",
+  "construction_present": true,
+  "cause": "readable modifier stack"
+ },
+ {
+  "id": 848651,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'publisher' is a noun"
+ },
+ {
+  "id": 727751,
+  "label": "c",
+  "construction_present": true,
+  "cause": "parenthetical list splits subject, verb"
+ },
+ {
+  "id": 762270,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'begins' is the verb"
+ },
+ {
+  "id": 699228,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no participle"
+ },
+ {
+  "id": 408662,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'hide' suits devices"
+ },
+ {
+  "id": 978602,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no embedding"
+ },
+ {
+  "id": 654663,
+  "label": "w",
+  "construction_present": false,
+  "cause": "passive, no light verb"
+ },
+ {
+  "id": 851018,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 552614,
+  "label": "w",
+  "construction_present": false,
+  "cause": "noun phrase, misparse"
+ },
+ {
+  "id": 522079,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'recreates' suits things"
+ },
+ {
+  "id": 597652,
+  "label": "w",
+  "construction_present": false,
+  "cause": "not an acronym"
+ },
+ {
+  "id": 999589,
+  "label": "w",
+  "construction_present": true,
+  "cause": "plain hyphenated modifier"
+ },
+ {
+  "id": 813635,
+  "label": "w",
+  "construction_present": true,
+  "cause": "product name modifier"
+ },
+ {
+  "id": 466381,
+  "label": "w",
+  "construction_present": false,
+  "cause": "different clauses"
+ },
+ {
+  "id": 383139,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'confirms' suits things"
+ },
+ {
+  "id": 532542,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'stack pointer' is a term"
+ },
+ {
+  "id": 751424,
+  "label": "w",
+  "construction_present": false,
+  "cause": "Chinese misparse"
+ },
+ {
+  "id": 846315,
+  "label": "w",
+  "construction_present": false,
+  "cause": "adjective, no relative"
+ },
+ {
+  "id": 616501,
+  "label": "w",
+  "construction_present": true,
+  "cause": "common anthropomorphism"
+ },
+ {
+  "id": 722309,
+  "label": "w",
+  "construction_present": true,
+  "cause": "common anthropomorphism"
+ },
+ {
+  "id": 470209,
+  "label": "w",
+  "construction_present": false,
+  "cause": "feature names"
+ },
+ {
+  "id": 426990,
+  "label": "w",
+  "construction_present": true,
+  "cause": "metonymy, clear"
+ },
+ {
+  "id": 118561,
+  "label": "w",
+  "construction_present": false,
+  "cause": "words not related"
+ },
+ {
+  "id": 463667,
+  "label": "w",
+  "construction_present": true,
+  "cause": "standard security phrasing"
+ },
+ {
+  "id": 881805,
+  "label": "d",
+  "construction_present": true,
+  "cause": "participle refers to whole clause"
+ },
+ {
+  "id": 370508,
+  "label": "d",
+  "construction_present": true,
+  "cause": "compound subject with parentheticals"
+ },
+ {
+  "id": 372853,
+  "label": "w",
+  "construction_present": false,
+  "cause": "noun then verb"
+ },
+ {
+  "id": 699581,
+  "label": "w",
+  "construction_present": false,
+  "cause": "fragment, misparse"
+ },
+ {
+  "id": 560629,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 185382,
+  "label": "d",
+  "construction_present": true,
+  "cause": "tacked-on 'helping'"
+ },
+ {
+  "id": 840841,
+  "label": "w",
+  "construction_present": true,
+  "cause": "idiomatic 'wants' for needs"
+ },
+ {
+  "id": 158476,
+  "label": "w",
+  "construction_present": false,
+  "cause": "percentage of bytes agree, fine"
+ },
+ {
+  "id": 860053,
+  "label": "w",
+  "construction_present": false,
+  "cause": "store name"
+ },
+ {
+  "id": 667264,
+  "label": "d",
+  "construction_present": true,
+  "cause": "odd 'is' plus list"
+ },
+ {
+  "id": 924626,
+  "label": "d",
+  "construction_present": true,
+  "cause": "'operator must verify' plainer"
+ },
+ {
+  "id": 356660,
+  "label": "d",
+  "construction_present": true,
+  "cause": "noun stack"
+ },
+ {
+  "id": 288698,
+  "label": "w",
+  "construction_present": false,
+  "cause": "separate clauses"
+ },
+ {
+  "id": 887993,
+  "label": "d",
+  "construction_present": true,
+  "cause": "relative in overloaded sentence"
+ },
+ {
+  "id": 785706,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'KV cache' known term"
+ },
+ {
+  "id": 266456,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no list"
+ },
+ {
+  "id": 676489,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'string table' is a term"
+ },
+ {
+  "id": 662031,
+  "label": "w",
+  "construction_present": false,
+  "cause": "adjacent words"
+ },
+ {
+  "id": 376356,
+  "label": "d",
+  "construction_present": true,
+  "cause": "'lets you adjust' plainer"
+ },
+ {
+  "id": 742235,
+  "label": "w",
+  "construction_present": false,
+  "cause": "subject plus verb, misparse"
+ },
+ {
+  "id": 718715,
+  "label": "d",
+  "construction_present": true,
+  "cause": "opaque noun stack"
+ },
+ {
+  "id": 487453,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no relative clause"
+ },
+ {
+  "id": 851063,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no relative clause"
+ },
+ {
+  "id": 164428,
+  "label": "w",
+  "construction_present": false,
+  "cause": "nouns, no verb"
+ },
+ {
+  "id": 699550,
+  "label": "d",
+  "construction_present": true,
+  "cause": "coined compound in long list"
+ },
+ {
+  "id": 885550,
+  "label": "w",
+  "construction_present": false,
+  "cause": "three items only"
+ },
+ {
+  "id": 877080,
+  "label": "w",
+  "construction_present": false,
+  "cause": "product name"
+ },
+ {
+  "id": 529990,
+  "label": "w",
+  "construction_present": false,
+  "cause": "verb and object close"
+ },
+ {
+  "id": 551031,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'bug bounty' is a term"
+ },
+ {
+  "id": 404789,
+  "label": "w",
+  "construction_present": true,
+  "cause": "clear participle"
+ },
+ {
+  "id": 887013,
+  "label": "w",
+  "construction_present": true,
+  "cause": "parenthetical examples, clear"
+ },
+ {
+  "id": 962613,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 878418,
+  "label": "w",
+  "construction_present": false,
+  "cause": "note fragment, misparse"
+ },
+ {
+  "id": 602177,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no embedding"
+ },
+ {
+  "id": 302451,
+  "label": "w",
+  "construction_present": false,
+  "cause": "three items only"
+ },
+ {
+  "id": 538622,
+  "label": "d",
+  "construction_present": true,
+  "cause": "participle with long list"
+ },
+ {
+  "id": 400359,
+  "label": "d",
+  "construction_present": true,
+  "cause": "four coordinated clauses"
+ },
+ {
+  "id": 282595,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 745691,
+  "label": "w",
+  "construction_present": false,
+  "cause": "unit, not noun stack"
+ },
+ {
+  "id": 971398,
+  "label": "w",
+  "construction_present": true,
+  "cause": "short noun list"
+ },
+ {
+  "id": 532638,
+  "label": "d",
+  "construction_present": true,
+  "cause": "dense feature list"
+ },
+ {
+  "id": 826692,
+  "label": "w",
+  "construction_present": false,
+  "cause": "adjacent words"
+ },
+ {
+  "id": 456145,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no list"
+ },
+ {
+  "id": 466806,
+  "label": "w",
+  "construction_present": false,
+  "cause": "heading fragment, misparse"
+ },
+ {
+  "id": 616520,
+  "label": "w",
+  "construction_present": true,
+  "cause": "list after colon, fine"
+ },
+ {
+  "id": 471178,
+  "label": "d",
+  "construction_present": true,
+  "cause": "vague modifier stack"
+ },
+ {
+  "id": 990399,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'Future' is adjective"
+ },
+ {
+  "id": 784647,
+  "label": "w",
+  "construction_present": true,
+  "cause": "acronym known to audience"
+ },
+ {
+  "id": 458265,
+  "label": "w",
+  "construction_present": true,
+  "cause": "disclaimer boilerplate list"
+ },
+ {
+  "id": 922264,
+  "label": "w",
+  "construction_present": true,
+  "cause": "errno name, code identifier"
+ },
+ {
+  "id": 981005,
+  "label": "w",
+  "construction_present": false,
+  "cause": "list fragment, misparse"
+ },
+ {
+  "id": 750959,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no hyphen compound"
+ },
+ {
+  "id": 451960,
+  "label": "w",
+  "construction_present": true,
+  "cause": "clear participle"
+ },
+ {
+  "id": 689966,
+  "label": "w",
+  "construction_present": false,
+  "cause": "adjacent words"
+ },
+ {
+  "id": 116913,
+  "label": "w",
+  "construction_present": false,
+  "cause": "not an acronym"
+ },
+ {
+  "id": 942930,
+  "label": "w",
+  "construction_present": false,
+  "cause": "'confirms' suits devices"
+ },
+ {
+  "id": 154010,
+  "label": "w",
+  "construction_present": true,
+  "cause": "plain hyphenated modifier"
+ },
+ {
+  "id": 138259,
+  "label": "w",
+  "construction_present": false,
+  "cause": "noun compound, no relative"
+ },
+ {
+  "id": 159762,
+  "label": "d",
+  "construction_present": true,
+  "cause": "extraction through 'thinks', mild"
+ },
+ {
+  "id": 580776,
+  "label": "w",
+  "construction_present": false,
+  "cause": "words not related"
+ },
+ {
+  "id": 284608,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no four-item list"
+ },
+ {
+  "id": 465376,
+  "label": "d",
+  "construction_present": true,
+  "cause": "coined compound"
+ },
+ {
+  "id": 515597,
+  "label": "w",
+  "construction_present": false,
+  "cause": "adjacent words"
+ },
+ {
+  "id": 797842,
+  "label": "w",
+  "construction_present": true,
+  "cause": "natural reduced relative"
+ },
+ {
+  "id": 104342,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no hyphen compound"
+ },
+ {
+  "id": 768847,
+  "label": "d",
+  "construction_present": true,
+  "cause": "compound plus stack"
+ },
+ {
+  "id": 697485,
+  "label": "w",
+  "construction_present": true,
+  "cause": "readable four-item subject"
+ },
+ {
+  "id": 157727,
+  "label": "w",
+  "construction_present": true,
+  "cause": "'base model' is a term"
+ },
+ {
+  "id": 854588,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no embedding"
+ },
+ {
+  "id": 278963,
+  "label": "d",
+  "construction_present": true,
+  "cause": "long parenthetical button list"
+ },
+ {
+  "id": 444925,
+  "label": "w",
+  "construction_present": true,
+  "cause": "readable noun stack"
+ },
+ {
+  "id": 686961,
+  "label": "d",
+  "construction_present": true,
+  "cause": "relative in overlong sentence"
+ },
+ {
+  "id": 842705,
+  "label": "d",
+  "construction_present": true,
+  "cause": "'allowing X of' nominal"
+ },
+ {
+  "id": 804026,
+  "label": "w",
+  "construction_present": true,
+  "cause": "short appositive, easy"
+ },
+ {
+  "id": 867902,
+  "label": "w",
+  "construction_present": false,
+  "cause": "library name"
+ },
+ {
+  "id": 298903,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no relative clause"
+ },
+ {
+  "id": 500729,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no relative clause"
+ },
+ {
+  "id": 221614,
+  "label": "w",
+  "construction_present": false,
+  "cause": "no relative clause"
+ },
+ {
+  "id": 978871,
+  "label": "w",
+  "construction_present": true,
+  "cause": "standard slash trio"
+ },
+ {
+  "id": 318750,
+  "label": "w",
+  "construction_present": false,
+  "cause": "wrong diagnosis, full relative"
+ }
+]

@@ -57,7 +57,39 @@ lookups are precomputed into the package, so they cost nothing at run time.
 
 **Bounded loops.** The Stop hook asks Claude to revise at most once per turn: it
 does nothing when `stop_hook_active` is true. Claude Code also overrides a Stop
-hook after eight consecutive continuations.
+hook after eight consecutive continuations. Each turn's answer is new text, so
+the Stop hook keeps no memory between turns.
+
+**Each finding once.** Agents given the same findings after every edit tend to
+fix them in one round or get stuck: they leave a finding they judge wrong while
+the hook repeats it, or they alternate between two wordings around it (see
+[Agents editing in a loop](evaluation.md#agents-editing-in-a-loop)). So by
+default (`hooks.repeat = "once"`) the Claude Code and piku hooks remember, per
+session and file, which findings they have reported:
+
+- After a Write or Edit, Claude Code's PostToolUse reports only findings it
+  has not reported for that file in this session, with one line saying how
+  many older ones it left out. When every finding was reported before, it says
+  nothing.
+- In block mode, a hook blocks or denies on a finding at most once. Claude
+  Code's PostToolUse then adds one line instead of blocking again, saying the
+  findings were reported before and to leave the text where a finding does not
+  hold. PreToolUse lets the same edit through on the next attempt, and its
+  deny reason says so. piku's PreToolUse allows the write and adds the same
+  line.
+
+A finding is known by its rule and its flagged words, lowercased and without
+punctuation. Moving it to another line or rewording the text around it keeps
+it the same finding; changing the flagged words makes a new one. The same
+words flagged by the same rule twice in one file count once.
+
+The session is the harness's `session_id` (Claude Code's `transcript_path`
+when that is missing), and a Claude Code subagent (`agent_id`) has its own
+memory, since it never saw its parent's feedback. A payload with neither field
+gets no memory: the hook reports every time, as with `hooks.repeat =
+"always"`, rather than hide findings from a session it cannot tell apart from
+another. git hooks and `readcost hook generic` keep no memory; a harness that
+loops on the generic protocol should stop when the same findings come back.
 
 **Short feedback.** A model gets at most 8 findings and 2,500 characters, worst
 first, each with its fix (`hooks.max_items`, `hooks.max_chars`). Claude Code
@@ -67,7 +99,14 @@ caps `additionalContext` at 10,000 characters.
 message that it is assembling in `$CLAUDE_PLUGIN_DATA/readcost-display/` (or
 under `$XDG_STATE_HOME` or `~/.local/state`, owner-only) and deletes it after
 the final batch. State left by an interrupted message is deleted after a day. The piku
-PostToolUse hook appends to `.piku/readcost.jsonl` in the project.
+PostToolUse hook appends to `.piku/readcost.jsonl` in the project. The memory
+of reported findings is one JSON file per session in
+`$XDG_CACHE_HOME/readcost/hooks/` (`~/.cache/readcost/hooks/`, owner-only;
+`READCOST_HOOK_STATE` names another directory). It holds hashes, not text or
+paths. A file untouched for a day is ignored and deleted, and each write
+replaces the file whole. If the file cannot be read or written, the hook
+carries on without memory; two hooks that run at once can lose each other's
+update, which means a finding is reported again.
 
 ## Event map
 
@@ -93,7 +132,8 @@ PostToolUse hook appends to `.piku/readcost.jsonl` in the project.
 - **A repository with a style bar.** Add `hooks.mode = "block"`. PreToolUse
   then denies writes whose new text would be blocked, and Claude retries with
   the reason in hand. Expect some retries; raise `block_cost_index` if they
-  are too frequent.
+  are too frequent. A finding denies a write once per session; Claude can
+  make the same edit again where it judges the finding wrong.
 - **Long answers in chat.** `hooks.stop = "report"` shows you a warning line
   and lets the turn end. `"revise"` asks Claude once to restate the answer,
   which costs a second message.
@@ -188,12 +228,89 @@ Inputs:
 - `fail-on`: `never`, `advise` or `block` (default `block`).
 - `comment`: `"true"` to post the summary comment (default `"false"`).
 - `changed-only`: on a pull request, check only changed files (default `"true"`).
+- `check-pr-text`: `"true"` to also check the pull request title and
+  description, `"only"` to check them and no files (default `"false"`).
+- `pr-text-fail-on`: the verdict of the pull request text that fails the job:
+  `never`, `advise` or `block` (default `never`).
+- `pr-text-min-words`: skip pull request text with fewer words of prose
+  than this (default `"30"`).
 
 Without `fetch-depth: 0` the action fetches the base commit itself and
 compares it with the checked-out commit; that list can include files that
 changed on the base branch after the pull request was opened. A pull request
 from a fork gets a read-only token, so the comment fails with a warning and the
 annotations still appear.
+
+#### Pull request descriptions
+
+With `check-pr-text: "true"`, on `pull_request` and `pull_request_target`
+events, the action also checks the pull request's title as plain text and
+its description as Markdown. It skips code, link targets and HTML
+comments, which hold the instructions of a pull request template. Text with fewer than
+`pr-text-min-words` words of prose, title and description together, is
+skipped: "Fixes #12" has no reading cost to report. The minimum of 30 was
+chosen, not measured.
+
+Findings appear in the summary comment and as annotations, located by the
+text and the line within it: "pull request description, line 4". These
+annotations name no file, so GitHub lists them on the run's summary page,
+not beside the diff.
+
+The pull request text is advisory: it never fails the job unless
+`pr-text-fail-on` is `advise` or `block`. `fail-on` applies only to files.
+In the held-out test across formats (evaluation, "Precision across
+formats"), findings in pull request descriptions fared about as well as
+findings in Markdown docs, and in every format raters said few of them
+needed an editor's fix, so failing a pull request on its description would mostly block
+good ones.
+
+Add `edited` to the event types so that a changed description is checked
+again:
+
+```yaml
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+```
+
+The description comes from whoever opened the pull request. readcost reads
+it from the event file (`GITHUB_EVENT_PATH`) and only analyses it; no step
+puts it in a shell command or an expression. Do the same in your own steps:
+never write `${{ github.event.pull_request.body }}` in a `run:` script.
+
+A pull request from a fork gets a read-only token under `pull_request`, so
+the comment cannot be posted. `pull_request_target` runs with a write
+token in the base repository. There, use `check-pr-text: "only"` and no
+checkout step: the job then reads only the event file, and no code or
+configuration from the pull request runs with that token.
+
+```yaml
+name: readcost description
+on:
+  pull_request_target:
+    types: [opened, edited, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  description:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: arclabs561/readcost@main   # pin a commit SHA in real use
+        with:
+          check-pr-text: only
+          comment: "true"
+```
+
+Never check out the pull request's head (`ref: ${{ github.event.pull_request.head.sha }}`)
+in a `pull_request_target` job. The comment carries one marker, so turn on
+`comment` in one job only; two jobs that both post it would overwrite each
+other. The action edits only a comment that `github-actions[bot]` posted.
+
+From the command line, `readcost check --pr-text EVENT_FILE` does the same
+with any event file; with no paths it checks only the pull request text.
+Issue bodies are not checked.
 
 For code scanning, run `readcost check . -o sarif --fail-on never > readcost.sarif`
 and upload the file with `github/codeql-action/upload-sarif`. Each result's
@@ -217,7 +334,7 @@ environment error (a missing spaCy model, an unreadable file or config) exits
 ```json
 {"verdict": "advise", "cost_index": 21.4, "words": 233, "points": 5.0,
  "counts": {"stacked-nouns": 3, "inline-list": 2},
- "feedback": "readcost: 5 hard-to-read constructions in 233 words. ...",
+ "feedback": "readcost: 5 sentences in 233 words that may be hard to follow. ...",
  "findings": [{"feature": "stacked-nouns", "severity": "warn", "line": 3, "...": "..."}]}
 ```
 

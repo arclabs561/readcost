@@ -65,6 +65,8 @@ class Result:
     metrics: dict = field(default_factory=dict)
     # The checked text, so reports can quote the source line; not in to_dict.
     source: str = field(default="", repr=False)
+    # Why the text could not be extracted, when it could not; the notes say so too.
+    error: str | None = None
 
     def counts(self) -> dict[str, int]:
         out: dict[str, int] = {}
@@ -190,7 +192,7 @@ class Analyzer:
                 result.notes.append(f"text looks like {lang}, not English; readcost checks English only, "
                                     "so it reports no findings or reading time here")
                 return result
-        levels = self.cfg.rule_levels(path)
+        levels = self.cfg.rule_levels(path, context=context)
         enabled = {k for k, v in levels.items() if v != "ignore"}
         forced = {k: v for k, v in levels.items() if v in SEVERITIES}  # a level set in config or flags
         ctx = Context(self.cfg, self.profile, self.allow, enabled)
@@ -234,6 +236,8 @@ class Analyzer:
                 for feature, sev, msg, toks in found:
                     if feature in seg.skip:
                         continue
+                    if seg.kind == "inline-comment":
+                        sev = "info"  # a level set in config still wins, below
                     finding = self._finding(ctx, seg, sent, text, path, line, feature, sev, msg, toks)
                     if _first_use(finding, seen_terms) and selected:
                         result.findings.append(finding)
@@ -338,17 +342,37 @@ class Analyzer:
 
     def check_text(self, text: str, fmt: str | None = "markdown", path: str = "<text>", *,
                    lines=None, field_path=None, last_only=False) -> Result:
-        segments = extract(text, path, fmt, field_path=field_path, last_only=last_only,
-                           comments=self.cfg.comments)
-        context = "commit" if (fmt or detect_format(path, text)) == "commit" else "prose"
+        notes: list[str] = []
+        try:
+            segments = extract(text, path, fmt, field_path=field_path, last_only=last_only,
+                               comments=self.cfg.comments, notes=notes)
+        except ValueError:
+            raise  # a format or field that does not fit the input: the caller says so
+        except Exception as exc:  # noqa: BLE001 - one file readcost cannot read must not stop a run
+            segments, error = [], f"{type(exc).__name__}: {exc}"
+            notes.append(extraction_note(error))
+        else:
+            error = None
+        kind = fmt or detect_format(path, text)
+        context = kind if kind in ("commit", "source") else "prose"
         result = self.analyze(segments, path, lines, context=context)
-        result.source = text
+        result.notes[:0] = notes
+        result.source, result.error = text, error
         locate(result.findings, text)
         return result
 
     def check_records(self, text: str, fmt: str, path: str, *, field_path=None) -> list[Result]:
         """One result per message or JSONL record, labeled ``path#label``."""
-        segments = extract(text, path, fmt, field_path=field_path, comments=self.cfg.comments)
+        try:
+            segments = extract(text, path, fmt, field_path=field_path, comments=self.cfg.comments)
+        except ValueError:
+            raise
+        except Exception as exc:  # noqa: BLE001 - as in check_text
+            result = self.analyze([], path)
+            result.error = f"{type(exc).__name__}: {exc}"
+            result.notes.append(extraction_note(result.error))
+            result.source = text
+            return [result]
         groups: dict[str, list[Segment]] = {}
         for seg in segments:
             groups.setdefault(seg.label, []).append(seg)
@@ -402,6 +426,12 @@ def locate(findings: list[Finding], text: str) -> None:
             continue
         f.line, f.column = index.position(f.start)
         f.end_line, f.end_column = index.position(f.end)
+
+
+def extraction_note(error: str) -> str:
+    """The note on a file whose text readcost failed to extract."""
+    return (f"readcost failed to read the prose in this file ({error}), so it was not "
+            "checked; this is a bug in readcost, please report it")
 
 
 def read_source(path) -> tuple[str, str | None]:

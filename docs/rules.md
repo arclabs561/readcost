@@ -2,8 +2,8 @@
 
 This page lists what each rule flags, how findings become a verdict, and
 what readcost prints on real READMEs. `readcost explain RULE` prints why a
-rule's construction costs the reader, how to fix it, and how many of its
-labelled findings raters accepted.
+rule's construction costs the reader, how to fix it, and how model raters
+judged its findings in the held-out test across formats.
 
 ## Examples
 
@@ -18,7 +18,7 @@ its rule.
 | --- | --- | --- |
 | stacked-nouns | "For store restart measurement, the example prints first snapshot-query cost with persisted WAND sidecars present versus after deleting those sidecars and forcing source-segment rebuilds." | "To measure a store restart, the example prints the cost of the first snapshot query twice: with the persisted WAND sidecars present, and after deleting them, which forces each segment to be rebuilt from its source." |
 | long-dependency | "Comparisons keep the declared artifact-digest relation and packet-shape evidence as separate claims." | "Comparisons keep two claims separate: the relation that the artifact digests declare, and the evidence from packet shapes." |
-| inanimate-subject | "It does not decide how text should be split; it records the chosen span." | "The caller decides how to split the text; slabs records the span it chose." |
+| inanimate-subject (opt-in) | "It does not decide how text should be split; it records the chosen span." | "The caller decides how to split the text; slabs records the span it chose." |
 | reduced-object-relative | "`compressed_postings` compresses an inverted-index posting list with cnk, the storage-shrink use case these ID-set codecs exist for." | "`compressed_postings` uses cnk to compress the posting list of an inverted index. Storing ID sets in less space is what these codecs are for." |
 | hyphen-compound | "The missing-pattern check in `gitignore_audit` is a pattern-presence heuristic." | "The missing-pattern check in `gitignore_audit` only looks for whether a pattern is present." |
 | inline-list | "`durability` provides filesystem and in-memory directories, atomic writes, WALs, record logs, checkpoint files, CRC validation, and sync helpers." | a bulleted list |
@@ -66,6 +66,14 @@ subject, such as own or decide, with a file or a function as its subject. It use
 WordNet, so treat its findings as prompts to reread, not verdicts. An
 identifier as a subject (`` `parse()` returns ``) is not reported.
 
+It is opt-in since 0.4.0. On READMEs the rules had not been tuned on, three
+blind model raters accepted none of 40 of its findings, and judged the
+construction present in 9
+([evaluation](evaluation.md#held-out-precision-pre-registered)). The
+paper finds this construction more often in model text than in human
+corpora; the detector, not that result, is what failed. Turn it on
+with `inanimate-subject = "info"` under `[readcost.rules]`.
+
 ### reduced-object-relative
 
 An object relative clause without "that" (the format the reader expects).
@@ -85,6 +93,11 @@ Four or more coordinated items in one sentence, or items joined by slashes.
 As with long-dependency, a sentence that gives a reason gets a suggestion to
 keep the reason when splitting it.
 
+It is off in doc comments and docstrings. In the test across formats, model
+raters accepted 1 of 28 of its findings there, against 5 of 16 in Markdown
+([evaluation](evaluation.md#precision-across-formats-pre-registered)). A
+level for it in `[readcost.rules]` or an override turns it back on.
+
 ### participial-clause
 
 Opt-in. A present participle clause set off by a comma (", making X faster").
@@ -100,9 +113,13 @@ share a sentence. Language models use it more often than people
 
 ### center-embedding
 
-Opt-in. A clause nested two deep inside clauses that continue after it, which
-people judge hard in constructed sentences unless the innermost subject is I,
-you or we (Gibson 1998, 2000).
+A clause nested two deep inside clauses that continue after it, which people
+judge hard in constructed sentences unless the innermost subject is I, you or
+we (Gibson 1998, 2000). Opt-in. Claude raters supported it in every held-out
+round, and it was briefly on by default; open models from other families,
+re-rating the same items, mostly rejected it, and its findings did not beat
+the longest sentence without the rule's message
+([evaluation](evaluation.md#re-rating-with-open-models-from-other-families-pre-registered)).
 
 ### undefined-acronym
 
@@ -289,7 +306,11 @@ The README lists the main limits. This is the full list.
   lenient raters: 75 to 77%). Agreement between raters is modest (Fleiss' kappa 0.40
   over the eight). The rules were revised after the first rater's labels on
   this sample were read, and the two lenient raters were set aside after
-  theirs were seen, so 23% is an in-sample estimate. `readcost explain RULE`
+  theirs were seen, so 23% is an in-sample estimate. In a pre-registered test
+  on new READMEs, three blind model raters accepted 30% (23 to 38%), nearly
+  all of it as "defensible", and none of inanimate-subject's findings
+  ([evaluation](evaluation.md#held-out-precision-pre-registered)).
+  `readcost explain RULE`
   shows the count for each rule. See [evaluation](evaluation.md).
 - Every label behind these numbers comes from a model rater. No person has
   labelled a finding, and agreement among model raters is not a measured

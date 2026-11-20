@@ -7,7 +7,8 @@ from readcost import Analyzer, Config
 
 @pytest.fixture(scope="module")
 def analyzer():
-    return Analyzer(Config())
+    # inanimate-subject is opt-in; these tests cover its detector.
+    return Analyzer(Config(rules={"inanimate-subject": "info"}))
 
 
 def feats(a, text):

@@ -119,5 +119,5 @@ def test_retired_rules_warn_and_are_ignored(tmp_path):
     assert out.returncode == 0
     for rule in ("denominal-verb", "repeated-frame"):
         assert f"rule '{rule}' was removed in 0.3" in out.stderr
-    assert "center-embedding" not in out.stderr  # still an opt-in rule
+    assert "center-embedding" not in out.stderr  # a current rule, not a retired one
     assert "error: [stacked-nouns]" in out.stdout  # the rest of the table still applies

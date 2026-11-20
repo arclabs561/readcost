@@ -94,7 +94,9 @@ the model installed as a package.
 ## Use
 
 readcost reads documentation and commit messages. It also reads doc comments
-in source files, and a model's answers on stdin or in a transcript.
+in source files, the Markdown cells of Jupyter
+notebooks, and a model's answers on stdin or in a transcript
+([formats](https://github.com/arclabs561/readcost/blob/main/docs/configuration.md#formats)).
 
 ```sh
 readcost check README.md docs/
@@ -136,10 +138,10 @@ Other commands:
 | --- | --- |
 | stacked-nouns | [three or more nouns in a row](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#stacked-nouns) |
 | long-dependency | [a subject far from its verb, or a verb far from its object](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#long-dependency) |
-| inanimate-subject | [a thing doing a person's action](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#inanimate-subject) |
 | reduced-object-relative | [an object relative clause without "that"](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#reduced-object-relative) |
 | hyphen-compound | [an ad hoc hyphenated noun compound](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#hyphen-compound) |
 | inline-list | [four or more items listed in one sentence](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#inline-list) |
+| inanimate-subject (opt-in) | [a thing doing a person's action](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#inanimate-subject) |
 | participial-clause (opt-in) | [a clause hung on an -ing verb after a comma](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#participial-clause) |
 | nominalization (opt-in) | [an action written as a noun](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#nominalization) |
 | center-embedding (opt-in) | [a clause nested inside a nested clause](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#center-embedding) |
@@ -188,7 +190,7 @@ covers the other keys, the command-line flags, and the opt-in second parser.
 - Hooks and the GitHub Action:
   [docs/hooks.md](https://github.com/arclabs561/readcost/blob/main/docs/hooks.md).
   The hooks cover Claude Code, piku and git; a JSON protocol covers anything
-  else.
+  else. The Action can also check pull request descriptions, as advice.
 - Editors, through `readcost lsp`:
   [docs/editors.md](https://github.com/arclabs561/readcost/blob/main/docs/editors.md).
 - Coding agents that check and rewrite their own prose:
@@ -206,7 +208,12 @@ covers the other keys, the command-line flags, and the opt-in second parser.
   documentation, a majority of model raters judged 15 (23%) correct or
   defensible. The rules were revised after some of those labels were read,
   so 23% is an in-sample estimate, and the record does not say whether the
-  two lenient raters were in that majority.
+  two lenient raters were in that majority. On READMEs the rules had not
+  been tuned on, three model raters accepted 30% (23 to 38%). They called
+  about 2% a cost that an editor would fix; the rest were optional at best.
+  Shown the same sentences without readcost's message, raters saw a problem
+  far less often, and no rule picked out sentences that need work better
+  than taking the longest sentence of each README.
 - Against hand-corrected parses, 81 to 84% of stacked-nouns findings, 60% of
   reduced-object-relative findings and 61 to 67% of long-dependency findings
   name a construction that is there. The rest are parser errors.

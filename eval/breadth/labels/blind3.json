@@ -1,0 +1,4377 @@
+[
+ {
+  "id": 445348,
+  "label": "d",
+  "cause": "SAF acronym undefined"
+ },
+ {
+  "id": 977055,
+  "label": "w",
+  "cause": "parenthetical clear enough"
+ },
+ {
+  "id": 945632,
+  "label": "d",
+  "cause": "SCA acronym unexpanded"
+ },
+ {
+  "id": 448191,
+  "label": "d",
+  "cause": "tangled clause about Maestro's command"
+ },
+ {
+  "id": 115930,
+  "label": "c",
+  "cause": "overlong dense clause, hard to parse"
+ },
+ {
+  "id": 496587,
+  "label": "d",
+  "cause": "terse fragment, CORS unexpanded"
+ },
+ {
+  "id": 580428,
+  "label": "w",
+  "cause": "clear list of location features"
+ },
+ {
+  "id": 600351,
+  "label": "d",
+  "cause": "wordy passive, could be plainer"
+ },
+ {
+  "id": 481698,
+  "label": "w",
+  "cause": "clear, jargon is explained"
+ },
+ {
+  "id": 557418,
+  "label": "d",
+  "cause": "nested parentheticals, dense comment"
+ },
+ {
+  "id": 401865,
+  "label": "d",
+  "cause": "grouping key ambiguous in annotation"
+ },
+ {
+  "id": 327549,
+  "label": "w",
+  "cause": "clear note"
+ },
+ {
+  "id": 268141,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 796129,
+  "label": "w",
+  "cause": "standard license boilerplate"
+ },
+ {
+  "id": 168305,
+  "label": "w",
+  "cause": "clear doc sentence"
+ },
+ {
+  "id": 767581,
+  "label": "w",
+  "cause": "clear parameter description"
+ },
+ {
+  "id": 102251,
+  "label": "d",
+  "cause": "stilted noun-phrase list"
+ },
+ {
+  "id": 365896,
+  "label": "d",
+  "cause": "vague it-referent, could be tightened"
+ },
+ {
+  "id": 481479,
+  "label": "w",
+  "cause": "clear warning"
+ },
+ {
+  "id": 736259,
+  "label": "w",
+  "cause": "clear build instruction"
+ },
+ {
+  "id": 797372,
+  "label": "d",
+  "cause": "compressed tool-manager noun stack"
+ },
+ {
+  "id": 134865,
+  "label": "d",
+  "cause": "reads as dropping Java support entirely"
+ },
+ {
+  "id": 480284,
+  "label": "w",
+  "cause": "clear, jargon is in context"
+ },
+ {
+  "id": 112968,
+  "label": "d",
+  "cause": "vague HDR scope, unclear benefit"
+ },
+ {
+  "id": 283287,
+  "label": "d",
+  "cause": "dense compound term, readable"
+ },
+ {
+  "id": 566187,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 273781,
+  "label": "w",
+  "cause": "clear conditional statement"
+ },
+ {
+  "id": 823997,
+  "label": "w",
+  "cause": "clear, it-referent resolves"
+ },
+ {
+  "id": 579609,
+  "label": "w",
+  "cause": "clear list of layer types"
+ },
+ {
+  "id": 158449,
+  "label": "w",
+  "cause": "terse list, clear for audience"
+ },
+ {
+  "id": 813949,
+  "label": "d",
+  "cause": "long clause, readable but heavy"
+ },
+ {
+  "id": 531481,
+  "label": "w",
+  "cause": "clear note on version"
+ },
+ {
+  "id": 437268,
+  "label": "w",
+  "cause": "clear list"
+ },
+ {
+  "id": 554762,
+  "label": "c",
+  "cause": "very long subject before verb"
+ },
+ {
+  "id": 255557,
+  "label": "w",
+  "cause": "clear parameter description"
+ },
+ {
+  "id": 318746,
+  "label": "w",
+  "cause": "clear rationale"
+ },
+ {
+  "id": 987762,
+  "label": "c",
+  "cause": "garbled clause, unclear meaning"
+ },
+ {
+  "id": 517609,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 268473,
+  "label": "d",
+  "cause": "heavy compound adjective in commit subject"
+ },
+ {
+  "id": 327752,
+  "label": "w",
+  "cause": "clear list of deliverables"
+ },
+ {
+  "id": 636983,
+  "label": "w",
+  "cause": "clear conditional rule"
+ },
+ {
+  "id": 591937,
+  "label": "d",
+  "cause": "on any platform placement slightly awkward"
+ },
+ {
+  "id": 537231,
+  "label": "w",
+  "cause": "clear behavior statement"
+ },
+ {
+  "id": 923331,
+  "label": "w",
+  "cause": "clear commit subject"
+ },
+ {
+  "id": 143802,
+  "label": "c",
+  "cause": "subject-verb disagreement, graphs is"
+ },
+ {
+  "id": 163057,
+  "label": "d",
+  "cause": "terse test-case list, order ambiguous"
+ },
+ {
+  "id": 843943,
+  "label": "w",
+  "cause": "clear default rule"
+ },
+ {
+  "id": 632933,
+  "label": "d",
+  "cause": "ambiguous or-list in parenthetical"
+ },
+ {
+  "id": 377581,
+  "label": "c",
+  "cause": "crammed field list, stray comma"
+ },
+ {
+  "id": 661564,
+  "label": "c",
+  "cause": "dangling participle attaches to libraries"
+ },
+ {
+  "id": 886576,
+  "label": "w",
+  "cause": "dense but clear for its readers"
+ },
+ {
+  "id": 902131,
+  "label": "d",
+  "cause": "example runs into next sentence"
+ },
+ {
+  "id": 415905,
+  "label": "c",
+  "cause": "overlong nested sentence, needs splitting"
+ },
+ {
+  "id": 133453,
+  "label": "w",
+  "cause": "clear ownership statement"
+ },
+ {
+  "id": 363779,
+  "label": "w",
+  "cause": "clear marketing line"
+ },
+ {
+  "id": 497917,
+  "label": "d",
+  "cause": "colon and so-clause tangle"
+ },
+ {
+  "id": 299870,
+  "label": "d",
+  "cause": "dense but precise technical chain"
+ },
+ {
+  "id": 282876,
+  "label": "d",
+  "cause": "fragment in dense list item"
+ },
+ {
+  "id": 914829,
+  "label": "w",
+  "cause": "clear behavior statement"
+ },
+ {
+  "id": 327682,
+  "label": "w",
+  "cause": "clear list of rejections"
+ },
+ {
+  "id": 715265,
+  "label": "w",
+  "cause": "clear purpose statement"
+ },
+ {
+  "id": 285294,
+  "label": "d",
+  "cause": "closed containment unexplained jargon"
+ },
+ {
+  "id": 413013,
+  "label": "w",
+  "cause": "clear behavior statement"
+ },
+ {
+  "id": 143232,
+  "label": "c",
+  "cause": "stray comment marker garbles sentence"
+ },
+ {
+  "id": 677025,
+  "label": "d",
+  "cause": "long dashed and nested parentheticals"
+ },
+ {
+  "id": 826482,
+  "label": "w",
+  "cause": "clear, list is parenthetical but readable"
+ },
+ {
+  "id": 337164,
+  "label": "w",
+  "cause": "clear behavior statement"
+ },
+ {
+  "id": 252051,
+  "label": "w",
+  "cause": "clear changelog entry"
+ },
+ {
+  "id": 499921,
+  "label": "w",
+  "cause": "clear tool description"
+ },
+ {
+  "id": 202082,
+  "label": "c",
+  "cause": "run-on explanation, needs splitting"
+ },
+ {
+  "id": 253253,
+  "label": "w",
+  "cause": "clear commit subject"
+ },
+ {
+  "id": 481175,
+  "label": "d",
+  "cause": "less or equal than, grammar slip"
+ },
+ {
+  "id": 422666,
+  "label": "w",
+  "cause": "clear, parenthetical is bounded"
+ },
+ {
+  "id": 988446,
+  "label": "w",
+  "cause": "clear, dashed aside is bounded"
+ },
+ {
+  "id": 864050,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 861607,
+  "label": "d",
+  "cause": "dot-entry array term unexplained"
+ },
+ {
+  "id": 404032,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 499136,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 960948,
+  "label": "d",
+  "cause": "rejects as noun, subject hard to parse"
+ },
+ {
+  "id": 624451,
+  "label": "d",
+  "cause": "vague what ESLint is given"
+ },
+ {
+  "id": 958735,
+  "label": "c",
+  "cause": "missing articles, awkward usage"
+ },
+ {
+  "id": 815610,
+  "label": "w",
+  "cause": "clear contrast statement"
+ },
+ {
+  "id": 499476,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 948693,
+  "label": "d",
+  "cause": "depending may attach to wrong clause"
+ },
+ {
+  "id": 116631,
+  "label": "c",
+  "cause": "garbled doc fragment merged with @return"
+ },
+ {
+  "id": 377486,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 998073,
+  "label": "w",
+  "cause": "clear doc description"
+ },
+ {
+  "id": 101088,
+  "label": "w",
+  "cause": "clear conditional"
+ },
+ {
+  "id": 428881,
+  "label": "c",
+  "cause": "nested clauses, unclear dependents referents"
+ },
+ {
+  "id": 815344,
+  "label": "d",
+  "cause": "test registration term unclear"
+ },
+ {
+  "id": 926766,
+  "label": "w",
+  "cause": "clear rule"
+ },
+ {
+  "id": 350308,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 221276,
+  "label": "w",
+  "cause": "clear scope statement"
+ },
+ {
+  "id": 941756,
+  "label": "w",
+  "cause": "clear change description"
+ },
+ {
+  "id": 888758,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 576823,
+  "label": "w",
+  "cause": "clear result statement"
+ },
+ {
+  "id": 403335,
+  "label": "w",
+  "cause": "clear relative clause"
+ },
+ {
+  "id": 490644,
+  "label": "w",
+  "cause": "clear menu path instruction"
+ },
+ {
+  "id": 393948,
+  "label": "w",
+  "cause": "clear test results"
+ },
+ {
+  "id": 506798,
+  "label": "w",
+  "cause": "clear reproduction note"
+ },
+ {
+  "id": 655101,
+  "label": "w",
+  "cause": "terse comment, clear enough"
+ },
+ {
+  "id": 711844,
+  "label": "w",
+  "cause": "clear attribution"
+ },
+ {
+  "id": 923789,
+  "label": "w",
+  "cause": "clear comparison"
+ },
+ {
+  "id": 685426,
+  "label": "w",
+  "cause": "clear behavior description"
+ },
+ {
+  "id": 496648,
+  "label": "d",
+  "cause": "long conditional, subject far from verb"
+ },
+ {
+  "id": 730767,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 262936,
+  "label": "c",
+  "cause": "which-clause ambiguous, agreement muddled"
+ },
+ {
+  "id": 758753,
+  "label": "w",
+  "cause": "clear for numeric audience"
+ },
+ {
+  "id": 754053,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 690736,
+  "label": "w",
+  "cause": "clear return description"
+ },
+ {
+  "id": 991130,
+  "label": "w",
+  "cause": "clear compatibility statement"
+ },
+ {
+  "id": 567700,
+  "label": "d",
+  "cause": "dense chain, readable for experts"
+ },
+ {
+  "id": 385021,
+  "label": "w",
+  "cause": "clear privacy statement"
+ },
+ {
+  "id": 410972,
+  "label": "w",
+  "cause": "standard warranty disclaimer"
+ },
+ {
+  "id": 565132,
+  "label": "w",
+  "cause": "clear summary"
+ },
+ {
+  "id": 361885,
+  "label": "w",
+  "cause": "clear pointer"
+ },
+ {
+  "id": 222712,
+  "label": "c",
+  "cause": "overlong commit sentence, which-clause ambiguous"
+ },
+ {
+  "id": 667602,
+  "label": "w",
+  "cause": "marketing but clear"
+ },
+ {
+  "id": 578481,
+  "label": "c",
+  "cause": "table cell text broken across rows"
+ },
+ {
+  "id": 107304,
+  "label": "w",
+  "cause": "clear rationale"
+ },
+ {
+  "id": 368235,
+  "label": "w",
+  "cause": "clear behavior description"
+ },
+ {
+  "id": 540475,
+  "label": "w",
+  "cause": "clear formatting rule"
+ },
+ {
+  "id": 481601,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 134228,
+  "label": "w",
+  "cause": "clear, sat inside is terse but fine"
+ },
+ {
+  "id": 630429,
+  "label": "w",
+  "cause": "clear, awkward heading phrase only"
+ },
+ {
+  "id": 792317,
+  "label": "w",
+  "cause": "clear project description"
+ },
+ {
+  "id": 487864,
+  "label": "d",
+  "cause": "tangled relative clause about archive"
+ },
+ {
+  "id": 521912,
+  "label": "c",
+  "cause": "long subject with embedded relative clause"
+ },
+ {
+  "id": 315776,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 384619,
+  "label": "w",
+  "cause": "clear return description"
+ },
+ {
+  "id": 423969,
+  "label": "w",
+  "cause": "clear cross-reference"
+ },
+ {
+  "id": 736417,
+  "label": "w",
+  "cause": "clear, semicolon aside is bounded"
+ },
+ {
+  "id": 782728,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 798828,
+  "label": "w",
+  "cause": "clear summary of bug"
+ },
+ {
+  "id": 855150,
+  "label": "w",
+  "cause": "clear, referent is prior option"
+ },
+ {
+  "id": 419754,
+  "label": "d",
+  "cause": "dangling read participle in comment"
+ },
+ {
+  "id": 938288,
+  "label": "d",
+  "cause": "bare citation key in prose"
+ },
+ {
+  "id": 866784,
+  "label": "w",
+  "cause": "clear license clause"
+ },
+ {
+  "id": 904968,
+  "label": "w",
+  "cause": "informal but clear"
+ },
+ {
+  "id": 496812,
+  "label": "w",
+  "cause": "clear rule"
+ },
+ {
+  "id": 332020,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 793403,
+  "label": "w",
+  "cause": "clear list of failure cases"
+ },
+ {
+  "id": 878133,
+  "label": "d",
+  "cause": "dense but-chain, subject and cause blur"
+ },
+ {
+  "id": 250357,
+  "label": "w",
+  "cause": "clear change description"
+ },
+ {
+  "id": 798124,
+  "label": "w",
+  "cause": "clear default behavior"
+ },
+ {
+  "id": 250891,
+  "label": "w",
+  "cause": "clear for developer audience"
+ },
+ {
+  "id": 584690,
+  "label": "c",
+  "cause": "run-on, missing connective after reallocate"
+ },
+ {
+  "id": 569344,
+  "label": "c",
+  "cause": "broken heading fragment, unclear as text"
+ },
+ {
+  "id": 220774,
+  "label": "w",
+  "cause": "clear pointer"
+ },
+ {
+  "id": 121181,
+  "label": "d",
+  "cause": "ungrammatical commit subject, similar format"
+ },
+ {
+  "id": 444039,
+  "label": "d",
+  "cause": "long semicolon list, dense"
+ },
+ {
+  "id": 175569,
+  "label": "w",
+  "cause": "clear, list of conditions readable"
+ },
+ {
+  "id": 930671,
+  "label": "d",
+  "cause": "typo and unclear list in instruction"
+ },
+ {
+  "id": 615935,
+  "label": "w",
+  "cause": "standard license boilerplate"
+ },
+ {
+  "id": 674159,
+  "label": "w",
+  "cause": "clear preview notice"
+ },
+ {
+  "id": 857494,
+  "label": "w",
+  "cause": "clear license clause"
+ },
+ {
+  "id": 790778,
+  "label": "d",
+  "cause": "fragment with missing verb"
+ },
+ {
+  "id": 333771,
+  "label": "d",
+  "cause": "unexplained w/f abbreviation"
+ },
+ {
+  "id": 554836,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 910696,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 728102,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 684479,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 226500,
+  "label": "w",
+  "cause": "clear commit subject"
+ },
+ {
+  "id": 308971,
+  "label": "w",
+  "cause": "clear, i.e. punctuation minor"
+ },
+ {
+  "id": 415641,
+  "label": "w",
+  "cause": "clear rationale"
+ },
+ {
+  "id": 697058,
+  "label": "w",
+  "cause": "dense but clear for build audience"
+ },
+ {
+  "id": 688114,
+  "label": "w",
+  "cause": "clear rationale"
+ },
+ {
+  "id": 756331,
+  "label": "w",
+  "cause": "clear commit subject"
+ },
+ {
+  "id": 904415,
+  "label": "w",
+  "cause": "clear checklist item"
+ },
+ {
+  "id": 365293,
+  "label": "w",
+  "cause": "clear parameter description"
+ },
+ {
+  "id": 344548,
+  "label": "d",
+  "cause": "if any differs, referent loose"
+ },
+ {
+  "id": 446281,
+  "label": "w",
+  "cause": "clear behavior list"
+ },
+ {
+  "id": 878517,
+  "label": "w",
+  "cause": "clear rationale"
+ },
+ {
+  "id": 658957,
+  "label": "d",
+  "cause": "subject unclear, units unexplained"
+ },
+ {
+  "id": 305109,
+  "label": "w",
+  "cause": "clear bug description"
+ },
+ {
+  "id": 748880,
+  "label": "w",
+  "cause": "clear behavior description"
+ },
+ {
+  "id": 485106,
+  "label": "w",
+  "cause": "clear consequence statement"
+ },
+ {
+  "id": 355423,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 951665,
+  "label": "d",
+  "cause": "stacked reduced relative clauses"
+ },
+ {
+  "id": 150136,
+  "label": "w",
+  "cause": "clear list"
+ },
+ {
+  "id": 983108,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 162626,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 548588,
+  "label": "c",
+  "cause": "garbled clause, exchanges only one a"
+ },
+ {
+  "id": 833039,
+  "label": "w",
+  "cause": "clear behavior description"
+ },
+ {
+  "id": 893492,
+  "label": "d",
+  "cause": "very long clause, readable but heavy"
+ },
+ {
+  "id": 234601,
+  "label": "w",
+  "cause": "clear feature list"
+ },
+ {
+  "id": 981969,
+  "label": "c",
+  "cause": "footnote split across lines, stray quote"
+ },
+ {
+  "id": 463749,
+  "label": "c",
+  "cause": "garbled doc sentence, unclear meaning"
+ },
+ {
+  "id": 659292,
+  "label": "d",
+  "cause": "dense stacked nouns, pristine apostrophe unclear"
+ },
+ {
+  "id": 758390,
+  "label": "w",
+  "cause": "clear list fragment"
+ },
+ {
+  "id": 830624,
+  "label": "w",
+  "cause": "clear lead-in"
+ },
+ {
+  "id": 903880,
+  "label": "w",
+  "cause": "clear JSDoc properties"
+ },
+ {
+  "id": 782795,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 479692,
+  "label": "d",
+  "cause": "parallel reaches clauses confusing"
+ },
+ {
+  "id": 414728,
+  "label": "w",
+  "cause": "clear status note"
+ },
+ {
+  "id": 897674,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 602633,
+  "label": "w",
+  "cause": "clear list item"
+ },
+ {
+  "id": 737282,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 607812,
+  "label": "w",
+  "cause": "clear legal statement"
+ },
+ {
+  "id": 600977,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 164703,
+  "label": "w",
+  "cause": "clear behavior statement"
+ },
+ {
+  "id": 911812,
+  "label": "c",
+  "cause": "convoluted legal sentence, nested phrases"
+ },
+ {
+  "id": 340948,
+  "label": "c",
+  "cause": "unclear antecedent, odd verification wording"
+ },
+ {
+  "id": 337832,
+  "label": "w",
+  "cause": "clear commit body lines"
+ },
+ {
+  "id": 939077,
+  "label": "c",
+  "cause": "fragment with distant subject and verb"
+ },
+ {
+  "id": 739024,
+  "label": "w",
+  "cause": "clear procedure step"
+ },
+ {
+  "id": 564248,
+  "label": "w",
+  "cause": "clear benchmark result"
+ },
+ {
+  "id": 572386,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 170894,
+  "label": "w",
+  "cause": "terse comment, clear enough"
+ },
+ {
+  "id": 248981,
+  "label": "d",
+  "cause": "PGNS unexplained in context"
+ },
+ {
+  "id": 993963,
+  "label": "w",
+  "cause": "long but clear list of purposes"
+ },
+ {
+  "id": 574109,
+  "label": "d",
+  "cause": "dash-joined clause, stacked parentheticals"
+ },
+ {
+  "id": 274563,
+  "label": "d",
+  "cause": "S/SA check names unexplained"
+ },
+ {
+  "id": 379368,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 332682,
+  "label": "w",
+  "cause": "clear example"
+ },
+ {
+  "id": 438007,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 582906,
+  "label": "w",
+  "cause": "clear procedure"
+ },
+ {
+  "id": 641564,
+  "label": "d",
+  "cause": "dense concurrency wording, clear to experts"
+ },
+ {
+  "id": 899201,
+  "label": "w",
+  "cause": "clear, fragment reads fine"
+ },
+ {
+  "id": 705323,
+  "label": "w",
+  "cause": "clear deprecation note"
+ },
+ {
+  "id": 834639,
+  "label": "w",
+  "cause": "clear command list"
+ },
+ {
+  "id": 247742,
+  "label": "w",
+  "cause": "clear field list"
+ },
+ {
+  "id": 226035,
+  "label": "d",
+  "cause": "awkward more importantly also phrasing"
+ },
+ {
+  "id": 288670,
+  "label": "d",
+  "cause": "web address card term unclear"
+ },
+ {
+  "id": 634510,
+  "label": "w",
+  "cause": "clear comparison rule"
+ },
+ {
+  "id": 697967,
+  "label": "w",
+  "cause": "clear behavior statement"
+ },
+ {
+  "id": 127266,
+  "label": "w",
+  "cause": "page navigation text, clear"
+ },
+ {
+  "id": 744861,
+  "label": "w",
+  "cause": "dense but clear commit summary"
+ },
+ {
+  "id": 899265,
+  "label": "w",
+  "cause": "clear stat description"
+ },
+ {
+  "id": 885844,
+  "label": "w",
+  "cause": "clear PR summary"
+ },
+ {
+  "id": 897012,
+  "label": "w",
+  "cause": "clear, Year in Review is a name"
+ },
+ {
+  "id": 659361,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 997633,
+  "label": "c",
+  "cause": "range written as -8-7, misreadable"
+ },
+ {
+  "id": 565773,
+  "label": "w",
+  "cause": "clear feature list"
+ },
+ {
+  "id": 841188,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 918145,
+  "label": "w",
+  "cause": "clear, antecedent is context tags"
+ },
+ {
+  "id": 590167,
+  "label": "w",
+  "cause": "clear build comment"
+ },
+ {
+  "id": 755275,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 662490,
+  "label": "c",
+  "cause": "overlong subject list, dangling or add one"
+ },
+ {
+  "id": 984112,
+  "label": "w",
+  "cause": "clear explanation"
+ },
+ {
+  "id": 167684,
+  "label": "c",
+  "cause": "unclear It antecedent, long clause chain"
+ },
+ {
+  "id": 193466,
+  "label": "w",
+  "cause": "clear doc sentence"
+ },
+ {
+  "id": 107638,
+  "label": "w",
+  "cause": "clear commit subject"
+ },
+ {
+  "id": 291493,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 358243,
+  "label": "w",
+  "cause": "clear rationale"
+ },
+ {
+  "id": 313194,
+  "label": "w",
+  "cause": "clear history note"
+ },
+ {
+  "id": 210086,
+  "label": "d",
+  "cause": "stranded preposition, dense phrasing"
+ },
+ {
+  "id": 706360,
+  "label": "d",
+  "cause": "dense run of test descriptions"
+ },
+ {
+  "id": 959772,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 980779,
+  "label": "w",
+  "cause": "clear commit summary"
+ },
+ {
+  "id": 100978,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 749460,
+  "label": "w",
+  "cause": "clear generated comment"
+ },
+ {
+  "id": 911250,
+  "label": "d",
+  "cause": "long dashed aside inside clause chain"
+ },
+ {
+  "id": 650668,
+  "label": "w",
+  "cause": "clear lead-in"
+ },
+ {
+  "id": 313406,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 234754,
+  "label": "d",
+  "cause": "reduced relative clause, slightly hard"
+ },
+ {
+  "id": 221161,
+  "label": "w",
+  "cause": "clear scope statement"
+ },
+ {
+  "id": 768685,
+  "label": "w",
+  "cause": "clear, comment wrap marker only"
+ },
+ {
+  "id": 261336,
+  "label": "w",
+  "cause": "clear checklist lead-in"
+ },
+ {
+  "id": 616321,
+  "label": "d",
+  "cause": "vague unfinished-feeling may be set"
+ },
+ {
+  "id": 847698,
+  "label": "w",
+  "cause": "clear behavior statement"
+ },
+ {
+  "id": 404274,
+  "label": "d",
+  "cause": "pronoun agreement with directory"
+ },
+ {
+  "id": 258760,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 483490,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 109202,
+  "label": "w",
+  "cause": "clear behavior statement"
+ },
+ {
+  "id": 942984,
+  "label": "w",
+  "cause": "clear, scope of accessible is fine"
+ },
+ {
+  "id": 410453,
+  "label": "c",
+  "cause": "garden-path reduced relative, hard to parse"
+ },
+ {
+  "id": 198843,
+  "label": "w",
+  "cause": "clear feature list"
+ },
+ {
+  "id": 199954,
+  "label": "w",
+  "cause": "clear commit summary"
+ },
+ {
+  "id": 395917,
+  "label": "w",
+  "cause": "clear optimization note"
+ },
+ {
+  "id": 902709,
+  "label": "w",
+  "cause": "clear list lead-in"
+ },
+ {
+  "id": 174070,
+  "label": "w",
+  "cause": "clear script description"
+ },
+ {
+  "id": 434707,
+  "label": "w",
+  "cause": "clear documentation sentence"
+ },
+ {
+  "id": 343163,
+  "label": "w",
+  "cause": "clear pointer to analogous step"
+ },
+ {
+  "id": 163513,
+  "label": "w",
+  "cause": "clear heading"
+ },
+ {
+  "id": 555090,
+  "label": "w",
+  "cause": "clear list of flushes"
+ },
+ {
+  "id": 636583,
+  "label": "w",
+  "cause": "clear limitation statement"
+ },
+ {
+  "id": 893397,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 117557,
+  "label": "w",
+  "cause": "clear list of launch paths"
+ },
+ {
+  "id": 786128,
+  "label": "c",
+  "cause": "merged sentences, missing period"
+ },
+ {
+  "id": 371381,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 991060,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 844022,
+  "label": "w",
+  "cause": "clear rationale"
+ },
+ {
+  "id": 567193,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 316985,
+  "label": "w",
+  "cause": "clear parameter description"
+ },
+ {
+  "id": 277740,
+  "label": "w",
+  "cause": "clear revert note"
+ },
+ {
+  "id": 421708,
+  "label": "w",
+  "cause": "clear validation note"
+ },
+ {
+  "id": 563749,
+  "label": "d",
+  "cause": "long stacked that-clause list"
+ },
+ {
+  "id": 325372,
+  "label": "w",
+  "cause": "clear commit summary"
+ },
+ {
+  "id": 392672,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 503340,
+  "label": "w",
+  "cause": "clear scope note"
+ },
+ {
+  "id": 478894,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 577152,
+  "label": "w",
+  "cause": "clear FAQ question"
+ },
+ {
+  "id": 545831,
+  "label": "w",
+  "cause": "clear cause and effect"
+ },
+ {
+  "id": 141886,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 816676,
+  "label": "d",
+  "cause": "very long checklist, dangling producing"
+ },
+ {
+  "id": 714389,
+  "label": "d",
+  "cause": "awkward weak phrasing, codes"
+ },
+ {
+  "id": 494830,
+  "label": "w",
+  "cause": "clear design statement"
+ },
+ {
+  "id": 559592,
+  "label": "d",
+  "cause": "odd claim, that-clause unclear"
+ },
+ {
+  "id": 178522,
+  "label": "w",
+  "cause": "clear design statement"
+ },
+ {
+  "id": 755269,
+  "label": "c",
+  "cause": "WOW64 to WOW64 garbled"
+ },
+ {
+  "id": 927294,
+  "label": "w",
+  "cause": "code listing line, clear"
+ },
+ {
+  "id": 135106,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 302979,
+  "label": "w",
+  "cause": "clear state description"
+ },
+ {
+  "id": 475198,
+  "label": "w",
+  "cause": "clear FAQ answer"
+ },
+ {
+  "id": 343034,
+  "label": "w",
+  "cause": "clear setup comment"
+ },
+ {
+  "id": 184954,
+  "label": "w",
+  "cause": "clear checklist item"
+ },
+ {
+  "id": 391754,
+  "label": "w",
+  "cause": "clear lead-in"
+ },
+ {
+  "id": 304593,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 243130,
+  "label": "w",
+  "cause": "clear, long subject still parses"
+ },
+ {
+  "id": 858045,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 668785,
+  "label": "w",
+  "cause": "clear file pointer"
+ },
+ {
+  "id": 461386,
+  "label": "w",
+  "cause": "clear privacy statement"
+ },
+ {
+  "id": 349114,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 433466,
+  "label": "w",
+  "cause": "clear lead-in"
+ },
+ {
+  "id": 916081,
+  "label": "w",
+  "cause": "clear commit subject"
+ },
+ {
+  "id": 453165,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 291381,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 466094,
+  "label": "w",
+  "cause": "long legal sentence, readable"
+ },
+ {
+  "id": 943295,
+  "label": "w",
+  "cause": "clear example"
+ },
+ {
+  "id": 257030,
+  "label": "w",
+  "cause": "clear guidance"
+ },
+ {
+  "id": 480962,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 527579,
+  "label": "w",
+  "cause": "standard license boilerplate"
+ },
+ {
+  "id": 921067,
+  "label": "w",
+  "cause": "clear, acronym expanded"
+ },
+ {
+  "id": 468058,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 741845,
+  "label": "w",
+  "cause": "clear status item"
+ },
+ {
+  "id": 225595,
+  "label": "w",
+  "cause": "clear feature list"
+ },
+ {
+  "id": 527970,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 188831,
+  "label": "d",
+  "cause": "garden-path whose-clause, dense"
+ },
+ {
+  "id": 104794,
+  "label": "w",
+  "cause": "dense but clear"
+ },
+ {
+  "id": 683656,
+  "label": "w",
+  "cause": "clear security statement"
+ },
+ {
+  "id": 764366,
+  "label": "w",
+  "cause": "clear compiler behavior"
+ },
+ {
+  "id": 909415,
+  "label": "w",
+  "cause": "clear test list"
+ },
+ {
+  "id": 208278,
+  "label": "d",
+  "cause": "objects information, which objects be deleted"
+ },
+ {
+  "id": 867235,
+  "label": "w",
+  "cause": "clear requirement"
+ },
+ {
+  "id": 300097,
+  "label": "w",
+  "cause": "clear plan"
+ },
+ {
+  "id": 629700,
+  "label": "d",
+  "cause": "informal putzes out, long parenthetical"
+ },
+ {
+  "id": 664080,
+  "label": "d",
+  "cause": "either-and agreement, is with two subjects"
+ },
+ {
+  "id": 791039,
+  "label": "w",
+  "cause": "clear commit subject"
+ },
+ {
+  "id": 475722,
+  "label": "w",
+  "cause": "clear limitation"
+ },
+ {
+  "id": 145220,
+  "label": "d",
+  "cause": "is comprised of, usage slip"
+ },
+ {
+  "id": 624231,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 611243,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 795318,
+  "label": "w",
+  "cause": "clear rationale"
+ },
+ {
+  "id": 288392,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 672734,
+  "label": "w",
+  "cause": "dense but clear commit summary"
+ },
+ {
+  "id": 177701,
+  "label": "w",
+  "cause": "clear test list"
+ },
+ {
+  "id": 100435,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 605185,
+  "label": "d",
+  "cause": "what answers to, dense clause"
+ },
+ {
+  "id": 241586,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 192179,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 950718,
+  "label": "d",
+  "cause": "long nested field list, dense"
+ },
+ {
+  "id": 744011,
+  "label": "w",
+  "cause": "clear status note"
+ },
+ {
+  "id": 451035,
+  "label": "c",
+  "cause": "unclosed template comment, garbled"
+ },
+ {
+  "id": 387303,
+  "label": "d",
+  "cause": "telegraphic list fragment"
+ },
+ {
+  "id": 563396,
+  "label": "w",
+  "cause": "clear explanation"
+ },
+ {
+  "id": 401080,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 846540,
+  "label": "c",
+  "cause": "long subject with embedded relative clause"
+ },
+ {
+  "id": 180797,
+  "label": "w",
+  "cause": "clear list of components"
+ },
+ {
+  "id": 532218,
+  "label": "w",
+  "cause": "clear parenthetical description"
+ },
+ {
+  "id": 767560,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 703814,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 524421,
+  "label": "w",
+  "cause": "clear commit explanation"
+ },
+ {
+  "id": 533585,
+  "label": "w",
+  "cause": "clear lifecycle statement"
+ },
+ {
+  "id": 468315,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 229706,
+  "label": "w",
+  "cause": "clear list of types"
+ },
+ {
+  "id": 625255,
+  "label": "w",
+  "cause": "clear explanation"
+ },
+ {
+  "id": 292487,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 544778,
+  "label": "w",
+  "cause": "clear PR summary"
+ },
+ {
+  "id": 152080,
+  "label": "w",
+  "cause": "clear test outcome"
+ },
+ {
+  "id": 554329,
+  "label": "c",
+  "cause": "scraped UI text with truncated quotes"
+ },
+ {
+  "id": 726342,
+  "label": "w",
+  "cause": "dense but clear for its readers"
+ },
+ {
+  "id": 449554,
+  "label": "d",
+  "cause": "bare citation key in prose"
+ },
+ {
+  "id": 186982,
+  "label": "w",
+  "cause": "clear commit subject"
+ },
+ {
+  "id": 213357,
+  "label": "w",
+  "cause": "long but clear comment"
+ },
+ {
+  "id": 351395,
+  "label": "w",
+  "cause": "clear change description"
+ },
+ {
+  "id": 600234,
+  "label": "d",
+  "cause": "admins workstations, possessive missing"
+ },
+ {
+  "id": 897943,
+  "label": "d",
+  "cause": "missing articles, codes samples"
+ },
+ {
+  "id": 769450,
+  "label": "d",
+  "cause": "long chain of clauses in commit"
+ },
+ {
+  "id": 717838,
+  "label": "c",
+  "cause": "table cell text broken across rows"
+ },
+ {
+  "id": 935326,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 133006,
+  "label": "d",
+  "cause": "long platform list with repeated and"
+ },
+ {
+  "id": 753503,
+  "label": "w",
+  "cause": "clear pointer"
+ },
+ {
+  "id": 959437,
+  "label": "w",
+  "cause": "clear statistic description"
+ },
+ {
+  "id": 352263,
+  "label": "w",
+  "cause": "clear PR scope"
+ },
+ {
+  "id": 291284,
+  "label": "w",
+  "cause": "clear change description"
+ },
+ {
+  "id": 164610,
+  "label": "w",
+  "cause": "clear pointer"
+ },
+ {
+  "id": 836241,
+  "label": "d",
+  "cause": "long dashed sentence with numbers"
+ },
+ {
+  "id": 722591,
+  "label": "w",
+  "cause": "clear scope statement"
+ },
+ {
+  "id": 901088,
+  "label": "w",
+  "cause": "clear test list"
+ },
+ {
+  "id": 434516,
+  "label": "c",
+  "cause": "overloaded sentence, dashed list of checks"
+ },
+ {
+  "id": 533755,
+  "label": "w",
+  "cause": "clear feature statement"
+ },
+ {
+  "id": 675808,
+  "label": "d",
+  "cause": "long two-part finding, dense"
+ },
+ {
+  "id": 478957,
+  "label": "w",
+  "cause": "clear tagline"
+ },
+ {
+  "id": 855749,
+  "label": "w",
+  "cause": "clear cause and effect"
+ },
+ {
+  "id": 531266,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 138688,
+  "label": "c",
+  "cause": "run-together list of fixes in commit body"
+ },
+ {
+  "id": 215369,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 693450,
+  "label": "w",
+  "cause": "clear, repeated word is tolerable"
+ },
+ {
+  "id": 333134,
+  "label": "w",
+  "cause": "clear list of uses"
+ },
+ {
+  "id": 363504,
+  "label": "d",
+  "cause": "served is an odd verb choice"
+ },
+ {
+  "id": 913683,
+  "label": "w",
+  "cause": "clear statistic description"
+ },
+ {
+  "id": 560335,
+  "label": "w",
+  "cause": "clear, optional parameter stated"
+ },
+ {
+  "id": 927513,
+  "label": "w",
+  "cause": "clear list of report contents"
+ },
+ {
+  "id": 255456,
+  "label": "w",
+  "cause": "clear tagline"
+ },
+ {
+  "id": 947831,
+  "label": "w",
+  "cause": "repetitive but clear commit"
+ },
+ {
+  "id": 828429,
+  "label": "d",
+  "cause": "unpunctuated column list, naming ambiguous"
+ },
+ {
+  "id": 331258,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 347918,
+  "label": "d",
+  "cause": "UI label lacks quotation marks"
+ },
+ {
+  "id": 797679,
+  "label": "w",
+  "cause": "clear behavior description"
+ },
+ {
+  "id": 926495,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 834832,
+  "label": "w",
+  "cause": "clear checklist item"
+ },
+ {
+  "id": 730660,
+  "label": "w",
+  "cause": "page title text, clear"
+ },
+ {
+  "id": 857952,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 536176,
+  "label": "d",
+  "cause": "Fragment lacks a subject"
+ },
+ {
+  "id": 586916,
+  "label": "w",
+  "cause": "clear privacy statement"
+ },
+ {
+  "id": 638307,
+  "label": "d",
+  "cause": "missing article, incorrect number"
+ },
+ {
+  "id": 767829,
+  "label": "w",
+  "cause": "clear commit subject"
+ },
+ {
+  "id": 973290,
+  "label": "w",
+  "cause": "clear platform list"
+ },
+ {
+  "id": 348581,
+  "label": "w",
+  "cause": "clear PR summary"
+ },
+ {
+  "id": 491525,
+  "label": "w",
+  "cause": "clear change description"
+ },
+ {
+  "id": 749772,
+  "label": "w",
+  "cause": "clear test description"
+ },
+ {
+  "id": 615988,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 436131,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 313399,
+  "label": "w",
+  "cause": "clear template placeholder"
+ },
+ {
+  "id": 590912,
+  "label": "w",
+  "cause": "clear rationale"
+ },
+ {
+  "id": 308394,
+  "label": "c",
+  "cause": "As natively, unclear, garbled"
+ },
+ {
+  "id": 132733,
+  "label": "w",
+  "cause": "clear rationale and design"
+ },
+ {
+  "id": 603901,
+  "label": "w",
+  "cause": "clear, neither tool prompts the other"
+ },
+ {
+  "id": 414822,
+  "label": "w",
+  "cause": "clear in math context"
+ },
+ {
+  "id": 780205,
+  "label": "w",
+  "cause": "long but clear, dashes bounded"
+ },
+ {
+  "id": 225285,
+  "label": "w",
+  "cause": "clear list of values"
+ },
+ {
+  "id": 568092,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 954406,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 567624,
+  "label": "d",
+  "cause": "clumsy fragment, adds does not affect"
+ },
+ {
+  "id": 220973,
+  "label": "w",
+  "cause": "standard license text"
+ },
+ {
+  "id": 637311,
+  "label": "w",
+  "cause": "clear YARD tags"
+ },
+ {
+  "id": 832415,
+  "label": "w",
+  "cause": "clear package description"
+ },
+ {
+  "id": 405174,
+  "label": "d",
+  "cause": "being send should be sent"
+ },
+ {
+  "id": 839738,
+  "label": "c",
+  "cause": "table cell text broken across rows"
+ },
+ {
+  "id": 500678,
+  "label": "w",
+  "cause": "clear commit subject"
+ },
+ {
+  "id": 430321,
+  "label": "w",
+  "cause": "clear feature line"
+ },
+ {
+  "id": 512016,
+  "label": "w",
+  "cause": "clear list of case kinds"
+ },
+ {
+  "id": 702155,
+  "label": "c",
+  "cause": "jumbled unpunctuated command listing"
+ },
+ {
+  "id": 664461,
+  "label": "d",
+  "cause": "long dense clause chain"
+ },
+ {
+  "id": 796315,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 342883,
+  "label": "d",
+  "cause": "comma splice before imperative"
+ },
+ {
+  "id": 756286,
+  "label": "w",
+  "cause": "clear restore behavior"
+ },
+ {
+  "id": 506440,
+  "label": "w",
+  "cause": "clear, dense but for experts"
+ },
+ {
+  "id": 766525,
+  "label": "w",
+  "cause": "clear mode description"
+ },
+ {
+  "id": 567978,
+  "label": "c",
+  "cause": "unseparated column list, hard to parse"
+ },
+ {
+  "id": 242465,
+  "label": "w",
+  "cause": "clear test result"
+ },
+ {
+  "id": 687008,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 511672,
+  "label": "w",
+  "cause": "clear scope statement"
+ },
+ {
+  "id": 248065,
+  "label": "w",
+  "cause": "clear purpose statement"
+ },
+ {
+  "id": 981715,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 745250,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 267055,
+  "label": "d",
+  "cause": "stray comma before restrictive that"
+ },
+ {
+  "id": 911841,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 462752,
+  "label": "w",
+  "cause": "clear commit subject"
+ },
+ {
+  "id": 864659,
+  "label": "w",
+  "cause": "clear acknowledgement behavior"
+ },
+ {
+  "id": 404118,
+  "label": "w",
+  "cause": "clear validation note"
+ },
+ {
+  "id": 175557,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 700420,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 403944,
+  "label": "d",
+  "cause": "bracketed citation key in prose"
+ },
+ {
+  "id": 348929,
+  "label": "w",
+  "cause": "clear, dense but readable"
+ },
+ {
+  "id": 309799,
+  "label": "w",
+  "cause": "clear behavior with example"
+ },
+ {
+  "id": 554856,
+  "label": "w",
+  "cause": "clear cause and effect"
+ },
+ {
+  "id": 760944,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 803204,
+  "label": "d",
+  "cause": "merged license header lines, missing period"
+ },
+ {
+  "id": 670075,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 840189,
+  "label": "w",
+  "cause": "clear, example bounded by quotes"
+ },
+ {
+  "id": 919544,
+  "label": "w",
+  "cause": "dense but clear commit reasoning"
+ },
+ {
+  "id": 694945,
+  "label": "d",
+  "cause": "parsed clean JUnit reads oddly"
+ },
+ {
+  "id": 354922,
+  "label": "w",
+  "cause": "clear PR purpose"
+ },
+ {
+  "id": 902083,
+  "label": "c",
+  "cause": "placeholder left in naming convention"
+ },
+ {
+  "id": 569225,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 863010,
+  "label": "w",
+  "cause": "clear refactor summary"
+ },
+ {
+  "id": 777059,
+  "label": "d",
+  "cause": "dense list with parenthetical gives clause"
+ },
+ {
+  "id": 412171,
+  "label": "w",
+  "cause": "clear burst definition"
+ },
+ {
+  "id": 929000,
+  "label": "w",
+  "cause": "clear support statement"
+ },
+ {
+  "id": 254175,
+  "label": "w",
+  "cause": "clear behavior statement"
+ },
+ {
+  "id": 628631,
+  "label": "d",
+  "cause": "unclear relevance, DHCP unexplained"
+ },
+ {
+  "id": 814795,
+  "label": "w",
+  "cause": "code listing line, clear"
+ },
+ {
+  "id": 932659,
+  "label": "w",
+  "cause": "clear build rule"
+ },
+ {
+  "id": 200863,
+  "label": "d",
+  "cause": "long commit clause chain"
+ },
+ {
+  "id": 287873,
+  "label": "w",
+  "cause": "clear feature list"
+ },
+ {
+  "id": 776041,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 901565,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 485271,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 870883,
+  "label": "w",
+  "cause": "clear PR description"
+ },
+ {
+  "id": 744276,
+  "label": "w",
+  "cause": "clear rationale"
+ },
+ {
+  "id": 546024,
+  "label": "w",
+  "cause": "clear test list"
+ },
+ {
+  "id": 452362,
+  "label": "w",
+  "cause": "clear test list"
+ },
+ {
+  "id": 819930,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 913892,
+  "label": "w",
+  "cause": "clear requirement"
+ },
+ {
+  "id": 371458,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 142669,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 284693,
+  "label": "c",
+  "cause": "merged list items, stray so, garbled"
+ },
+ {
+  "id": 712302,
+  "label": "w",
+  "cause": "clear, dense but understandable"
+ },
+ {
+  "id": 852254,
+  "label": "w",
+  "cause": "clear cause and fix"
+ },
+ {
+  "id": 886530,
+  "label": "w",
+  "cause": "clear, long but parallel"
+ },
+ {
+  "id": 518051,
+  "label": "c",
+  "cause": "box-drawing border breaks license text"
+ },
+ {
+  "id": 631242,
+  "label": "w",
+  "cause": "clear explanation"
+ },
+ {
+  "id": 159883,
+  "label": "w",
+  "cause": "clear privacy statement"
+ },
+ {
+  "id": 636066,
+  "label": "w",
+  "cause": "clear behavior change"
+ },
+ {
+  "id": 999684,
+  "label": "w",
+  "cause": "clear fallback description"
+ },
+ {
+  "id": 851362,
+  "label": "d",
+  "cause": "a RSA article error"
+ },
+ {
+  "id": 863635,
+  "label": "w",
+  "cause": "clear list of choices"
+ },
+ {
+  "id": 249764,
+  "label": "w",
+  "cause": "clear component description"
+ },
+ {
+  "id": 168364,
+  "label": "w",
+  "cause": "clear, slightly wordy"
+ },
+ {
+  "id": 976599,
+  "label": "w",
+  "cause": "clear, example bounded"
+ },
+ {
+  "id": 281455,
+  "label": "w",
+  "cause": "clear rationale"
+ },
+ {
+  "id": 892158,
+  "label": "w",
+  "cause": "clear example description"
+ },
+ {
+  "id": 604408,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 160078,
+  "label": "w",
+  "cause": "clear verification list"
+ },
+ {
+  "id": 459973,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 943840,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 651215,
+  "label": "w",
+  "cause": "clear scope statement"
+ },
+ {
+  "id": 938223,
+  "label": "w",
+  "cause": "clear validation note"
+ },
+ {
+  "id": 360834,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 795609,
+  "label": "c",
+  "cause": "misplaced subject, comma splice"
+ },
+ {
+  "id": 480093,
+  "label": "w",
+  "cause": "clear fix description"
+ },
+ {
+  "id": 762755,
+  "label": "w",
+  "cause": "clear example"
+ },
+ {
+  "id": 948406,
+  "label": "w",
+  "cause": "clear security property"
+ },
+ {
+  "id": 868741,
+  "label": "w",
+  "cause": "clear precedence rule"
+ },
+ {
+  "id": 156767,
+  "label": "w",
+  "cause": "dense but readable"
+ },
+ {
+  "id": 839159,
+  "label": "w",
+  "cause": "clear purpose statement"
+ },
+ {
+  "id": 327548,
+  "label": "d",
+  "cause": "truncated list item ending in comma"
+ },
+ {
+  "id": 640972,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 389197,
+  "label": "w",
+  "cause": "clear test outcome"
+ },
+ {
+  "id": 513706,
+  "label": "w",
+  "cause": "clear behavior description"
+ },
+ {
+  "id": 837010,
+  "label": "w",
+  "cause": "clear, jargon in context"
+ },
+ {
+  "id": 816218,
+  "label": "w",
+  "cause": "clear javadoc tags"
+ },
+ {
+  "id": 331704,
+  "label": "w",
+  "cause": "clear test note"
+ },
+ {
+  "id": 145813,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 335720,
+  "label": "d",
+  "cause": "dense clause list, parenthetical heavy"
+ },
+ {
+  "id": 953628,
+  "label": "w",
+  "cause": "clear rationale"
+ },
+ {
+  "id": 613130,
+  "label": "w",
+  "cause": "clear test outcome"
+ },
+ {
+  "id": 597399,
+  "label": "w",
+  "cause": "clear list continuation"
+ },
+ {
+  "id": 740526,
+  "label": "w",
+  "cause": "clear rationale"
+ },
+ {
+  "id": 879777,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 661048,
+  "label": "w",
+  "cause": "clear test scope"
+ },
+ {
+  "id": 385159,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 721171,
+  "label": "w",
+  "cause": "standard license disclaimer"
+ },
+ {
+  "id": 376223,
+  "label": "w",
+  "cause": "clear privacy statement"
+ },
+ {
+  "id": 920149,
+  "label": "c",
+  "cause": "T called gigabytes, contradicts 1T example"
+ },
+ {
+  "id": 948833,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 921630,
+  "label": "d",
+  "cause": "long subject before verb, unclear name"
+ },
+ {
+  "id": 282061,
+  "label": "w",
+  "cause": "clear parameter list"
+ },
+ {
+  "id": 731640,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 963898,
+  "label": "d",
+  "cause": "long clause, subject far from verb"
+ },
+ {
+  "id": 104105,
+  "label": "w",
+  "cause": "clear commit subject"
+ },
+ {
+  "id": 615796,
+  "label": "w",
+  "cause": "clear validation note"
+ },
+ {
+  "id": 490871,
+  "label": "w",
+  "cause": "clear default statement"
+ },
+ {
+  "id": 619900,
+  "label": "w",
+  "cause": "clear list entry"
+ },
+ {
+  "id": 496291,
+  "label": "w",
+  "cause": "clear behavior statement"
+ },
+ {
+  "id": 414149,
+  "label": "w",
+  "cause": "clear behavior statement"
+ },
+ {
+  "id": 493648,
+  "label": "w",
+  "cause": "clear parenthetical hedge"
+ },
+ {
+  "id": 853058,
+  "label": "d",
+  "cause": "dashed asides, S3 work agreement"
+ },
+ {
+  "id": 721071,
+  "label": "w",
+  "cause": "clear signature description"
+ },
+ {
+  "id": 306758,
+  "label": "w",
+  "cause": "clear rationale"
+ },
+ {
+  "id": 330219,
+  "label": "w",
+  "cause": "clear endpoint description"
+ },
+ {
+  "id": 869788,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 489142,
+  "label": "w",
+  "cause": "clear, example bounded"
+ },
+ {
+  "id": 553734,
+  "label": "w",
+  "cause": "clear, long but parallel"
+ },
+ {
+  "id": 572497,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 804681,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 749204,
+  "label": "d",
+  "cause": "dense multi-clause commit sentence"
+ },
+ {
+  "id": 291154,
+  "label": "w",
+  "cause": "clear list of libraries"
+ },
+ {
+  "id": 160248,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 388674,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 504324,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 267259,
+  "label": "w",
+  "cause": "clear, parenthetical bounded"
+ },
+ {
+  "id": 256059,
+  "label": "w",
+  "cause": "clear advice"
+ },
+ {
+  "id": 540423,
+  "label": "w",
+  "cause": "clear, dense but readable"
+ },
+ {
+  "id": 555074,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 749211,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 749519,
+  "label": "w",
+  "cause": "clear test list"
+ },
+ {
+  "id": 310647,
+  "label": "w",
+  "cause": "clear license statement"
+ },
+ {
+  "id": 859964,
+  "label": "w",
+  "cause": "clear method doc"
+ },
+ {
+  "id": 689301,
+  "label": "w",
+  "cause": "clear list of screen parts"
+ },
+ {
+  "id": 660812,
+  "label": "w",
+  "cause": "clear summary sentence"
+ },
+ {
+  "id": 630220,
+  "label": "w",
+  "cause": "clear commit subject"
+ },
+ {
+  "id": 669458,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 279274,
+  "label": "w",
+  "cause": "clear behavior description"
+ },
+ {
+  "id": 163588,
+  "label": "c",
+  "cause": "long run of fragments, hard to follow"
+ },
+ {
+  "id": 447309,
+  "label": "w",
+  "cause": "clear definition"
+ },
+ {
+  "id": 899363,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 918491,
+  "label": "w",
+  "cause": "clear behavior description"
+ },
+ {
+  "id": 147138,
+  "label": "w",
+  "cause": "clear, duplicate of earlier item"
+ },
+ {
+  "id": 787834,
+  "label": "w",
+  "cause": "dense jargon, clear to experts"
+ },
+ {
+  "id": 574060,
+  "label": "w",
+  "cause": "clear claim"
+ },
+ {
+  "id": 754385,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 239203,
+  "label": "w",
+  "cause": "clear example"
+ },
+ {
+  "id": 916956,
+  "label": "w",
+  "cause": "clear test note"
+ },
+ {
+  "id": 376733,
+  "label": "w",
+  "cause": "clear tutorial sentence"
+ },
+ {
+  "id": 588823,
+  "label": "w",
+  "cause": "clear pointer"
+ },
+ {
+  "id": 477356,
+  "label": "w",
+  "cause": "clear queueing behavior"
+ },
+ {
+  "id": 192350,
+  "label": "d",
+  "cause": "fragment with dangling for, missing comma"
+ },
+ {
+  "id": 591757,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 560002,
+  "label": "w",
+  "cause": "clear output description"
+ },
+ {
+  "id": 229898,
+  "label": "w",
+  "cause": "clear contribution note"
+ },
+ {
+  "id": 872354,
+  "label": "w",
+  "cause": "clear pointer"
+ },
+ {
+  "id": 260299,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 154473,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 817858,
+  "label": "w",
+  "cause": "clear privacy statement"
+ },
+ {
+  "id": 824113,
+  "label": "w",
+  "cause": "clear privacy statement"
+ },
+ {
+  "id": 491608,
+  "label": "d",
+  "cause": "long noun list in commit subject"
+ },
+ {
+  "id": 792334,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 526387,
+  "label": "w",
+  "cause": "clear behavior description"
+ },
+ {
+  "id": 898294,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 431674,
+  "label": "w",
+  "cause": "clear commit subject"
+ },
+ {
+  "id": 845506,
+  "label": "w",
+  "cause": "clear description"
+ },
+ {
+  "id": 475409,
+  "label": "w",
+  "cause": "clear warning text, code fragment"
+ },
+ {
+  "id": 598709,
+  "label": "w",
+  "cause": "clear test scope"
+ },
+ {
+  "id": 742720,
+  "label": "c",
+  "cause": "unclosed parenthesis, truncated sentence"
+ },
+ {
+  "id": 938128,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 766569,
+  "label": "w",
+  "cause": "clear license clause"
+ },
+ {
+  "id": 870858,
+  "label": "w",
+  "cause": "clear instruction"
+ },
+ {
+  "id": 945398,
+  "label": "d",
+  "cause": "models chart counts noun stack"
+ },
+ {
+  "id": 450134,
+  "label": "w",
+  "cause": "clear capability list"
+ },
+ {
+  "id": 117631,
+  "label": "w",
+  "cause": "clear benchmark setup"
+ },
+ {
+  "id": 138258,
+  "label": "w",
+  "cause": "clear, run-in heading minor"
+ },
+ {
+  "id": 616455,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 997409,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 885877,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 937445,
+  "label": "w",
+  "cause": "clear behavior description"
+ },
+ {
+  "id": 862988,
+  "label": "w",
+  "cause": "clear commit subject"
+ },
+ {
+  "id": 484983,
+  "label": "w",
+  "cause": "clear test note"
+ },
+ {
+  "id": 788109,
+  "label": "w",
+  "cause": "clear test narrative"
+ },
+ {
+  "id": 950773,
+  "label": "w",
+  "cause": "clear marketing line"
+ },
+ {
+  "id": 832258,
+  "label": "w",
+  "cause": "clear filter documentation"
+ },
+ {
+  "id": 309135,
+  "label": "w",
+  "cause": "clear list of actions"
+ },
+ {
+  "id": 722931,
+  "label": "w",
+  "cause": "clear behavior statement"
+ },
+ {
+  "id": 939812,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 732551,
+  "label": "w",
+  "cause": "clear definition"
+ },
+ {
+  "id": 638231,
+  "label": "w",
+  "cause": "clear status note"
+ },
+ {
+  "id": 851708,
+  "label": "w",
+  "cause": "clear disclaimer"
+ },
+ {
+  "id": 813688,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 729619,
+  "label": "w",
+  "cause": "clear error description"
+ },
+ {
+  "id": 875514,
+  "label": "w",
+  "cause": "clear benchmark baseline"
+ },
+ {
+  "id": 542193,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 149578,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 896031,
+  "label": "w",
+  "cause": "dense but clear status rule"
+ },
+ {
+  "id": 290518,
+  "label": "w",
+  "cause": "clear usage comment"
+ },
+ {
+  "id": 458104,
+  "label": "w",
+  "cause": "clear example description"
+ },
+ {
+  "id": 270696,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 884777,
+  "label": "w",
+  "cause": "clear commit description"
+ },
+ {
+  "id": 643648,
+  "label": "c",
+  "cause": "overlong sentence, nested parenthetical"
+ },
+ {
+  "id": 754388,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 405179,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 800240,
+  "label": "w",
+  "cause": "clear cause and fix"
+ },
+ {
+  "id": 770216,
+  "label": "w",
+  "cause": "clear comment"
+ },
+ {
+  "id": 564842,
+  "label": "w",
+  "cause": "clear doc comment"
+ },
+ {
+  "id": 104311,
+  "label": "w",
+  "cause": "standard warranty disclaimer"
+ },
+ {
+  "id": 471005,
+  "label": "w",
+  "cause": "clear cause statement"
+ },
+ {
+  "id": 705053,
+  "label": "w",
+  "cause": "clear example"
+ },
+ {
+  "id": 559345,
+  "label": "w",
+  "cause": "clear cause and effect"
+ },
+ {
+  "id": 364417,
+  "label": "w",
+  "cause": "clear, long but parallel"
+ },
+ {
+  "id": 265359,
+  "label": "w",
+  "cause": "clear feature description"
+ },
+ {
+  "id": 938214,
+  "label": "w",
+  "cause": "clear list of uses"
+ },
+ {
+  "id": 731590,
+  "label": "w",
+  "cause": "clear fallback description"
+ },
+ {
+  "id": 182656,
+  "label": "w",
+  "cause": "clear rationale"
+ },
+ {
+  "id": 686837,
+  "label": "w",
+  "cause": "clear cause and impact"
+ },
+ {
+  "id": 448989,
+  "label": "w",
+  "cause": "clear checklist lead-in"
+ },
+ {
+  "id": 975060,
+  "label": "w",
+  "cause": "clear behavior statement"
+ },
+ {
+  "id": 566704,
+  "label": "w",
+  "cause": "clear statement"
+ },
+ {
+  "id": 695069,
+  "label": "w",
+  "cause": "clear behavior statement"
+ },
+ {
+  "id": 639887,
+  "label": "w",
+  "cause": "clear docstring"
+ },
+ {
+  "id": 214637,
+  "label": "w",
+  "cause": "clear behavior statement"
+ },
+ {
+  "id": 316692,
+  "label": "w",
+  "cause": "clear rationale"
+ },
+ {
+  "id": 743310,
+  "label": "d",
+  "cause": "dense, which-clause stacked on can make"
+ },
+ {
+  "id": 121253,
+  "label": "w",
+  "cause": "clear summary of outcome"
+ },
+ {
+  "id": 835354,
+  "label": "w",
+  "cause": "clear test note"
+ },
+ {
+  "id": 764016,
+  "label": "d",
+  "cause": "Odd 'strays' noun; otherwise readable"
+ },
+ {
+  "id": 545609,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 897348,
+  "label": "w",
+  "cause": "Informal but readable"
+ },
+ {
+  "id": 823013,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 475546,
+  "label": "w",
+  "cause": "Clear commit subject"
+ },
+ {
+  "id": 650938,
+  "label": "d",
+  "cause": "Unclear 'boiled frames' term in parenthetical"
+ },
+ {
+  "id": 128813,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 646444,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 907271,
+  "label": "d",
+  "cause": "Terse; 'address it' is vague"
+ },
+ {
+  "id": 627263,
+  "label": "d",
+  "cause": "Heavy stacked gerunds; readable with effort"
+ },
+ {
+  "id": 341009,
+  "label": "w",
+  "cause": "Clear imperative list item"
+ },
+ {
+  "id": 896862,
+  "label": "c",
+  "cause": "Missing period merges two sentences"
+ },
+ {
+  "id": 218715,
+  "label": "d",
+  "cause": "Opens on a mid-tag fragment; start unclear"
+ },
+ {
+  "id": 813610,
+  "label": "w",
+  "cause": "Clear changelog line"
+ },
+ {
+  "id": 356140,
+  "label": "d",
+  "cause": "Unexpanded SAFE and CPM acronyms; otherwise clear"
+ },
+ {
+  "id": 594664,
+  "label": "d",
+  "cause": "List breaks parallelism: 'has' then 'is familiar'"
+ },
+ {
+  "id": 240789,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 502303,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 561319,
+  "label": "w",
+  "cause": "Clear commit prose"
+ },
+ {
+  "id": 901294,
+  "label": "w",
+  "cause": "Clear commit prose"
+ },
+ {
+  "id": 945064,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 221351,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 128416,
+  "label": "w",
+  "cause": "Clear enough; minor vague phrasing"
+ },
+ {
+  "id": 476136,
+  "label": "d",
+  "cause": "Comma splice joins two clauses"
+ },
+ {
+  "id": 884658,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 768650,
+  "label": "w",
+  "cause": "Clear noun-phrase comment bullet"
+ },
+ {
+  "id": 826725,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 776921,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 999134,
+  "label": "d",
+  "cause": "Long code-heavy sentence lacks clear main verb"
+ },
+ {
+  "id": 674605,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 235016,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 509053,
+  "label": "d",
+  "cause": "Awkward 'deletion exactly once' phrasing"
+ },
+ {
+  "id": 691827,
+  "label": "w",
+  "cause": "Dense but readable"
+ },
+ {
+  "id": 960703,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 819332,
+  "label": "d",
+  "cause": "Telegraphic fragment; 'marshal' unclear"
+ },
+ {
+  "id": 586951,
+  "label": "d",
+  "cause": "Dangling 'taken' subject in long clause chain"
+ },
+ {
+  "id": 784177,
+  "label": "w",
+  "cause": "Dense but readable"
+ },
+ {
+  "id": 883118,
+  "label": "d",
+  "cause": "Fragment list with no main verb"
+ },
+ {
+  "id": 595443,
+  "label": "w",
+  "cause": "Clear commit title"
+ },
+ {
+  "id": 441140,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 407800,
+  "label": "d",
+  "cause": "'book' used as verb; unclear jargon"
+ },
+ {
+  "id": 248206,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 904970,
+  "label": "d",
+  "cause": "Nested parenthetical; slangy 'putzes out'"
+ },
+ {
+  "id": 629055,
+  "label": "c",
+  "cause": "Overlong sentence packs unrelated figures"
+ },
+ {
+  "id": 982125,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 440872,
+  "label": "c",
+  "cause": "Overlong sentence with stacked clauses"
+ },
+ {
+  "id": 823618,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 278503,
+  "label": "w",
+  "cause": "Clear commit prose"
+ },
+ {
+  "id": 346712,
+  "label": "w",
+  "cause": "Clear commit prose"
+ },
+ {
+  "id": 924547,
+  "label": "w",
+  "cause": "Clear UI label"
+ },
+ {
+  "id": 834378,
+  "label": "d",
+  "cause": "Long clause chain; distant 'it' reference"
+ },
+ {
+  "id": 389721,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 877167,
+  "label": "w",
+  "cause": "Readable chained clauses"
+ },
+ {
+  "id": 886275,
+  "label": "w",
+  "cause": "Clear commit subject"
+ },
+ {
+  "id": 197025,
+  "label": "c",
+  "cause": "List breaks parallelism: 'check' vs 'checking'"
+ },
+ {
+  "id": 646721,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 338128,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 721847,
+  "label": "d",
+  "cause": "Dangling subject for 'Often results in'"
+ },
+ {
+  "id": 744757,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 354764,
+  "label": "w",
+  "cause": "Nested but readable"
+ },
+ {
+  "id": 388395,
+  "label": "d",
+  "cause": "Dense jargon; tp and KV unexpanded"
+ },
+ {
+  "id": 548211,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 143957,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 401420,
+  "label": "w",
+  "cause": "Clear checklist item"
+ },
+ {
+  "id": 955894,
+  "label": "w",
+  "cause": "Clear commit subject"
+ },
+ {
+  "id": 876010,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 478360,
+  "label": "w",
+  "cause": "Clear, slightly elliptical"
+ },
+ {
+  "id": 154350,
+  "label": "c",
+  "cause": "Muddled 'as valid or allows'; unclear 'they'"
+ },
+ {
+  "id": 144636,
+  "label": "w",
+  "cause": "Clear doc fragment"
+ },
+ {
+  "id": 344808,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 459895,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 735952,
+  "label": "c",
+  "cause": "Commit subject uses 'Names', not imperative"
+ },
+ {
+  "id": 920510,
+  "label": "d",
+  "cause": "Long multi-clause sentence; still clear"
+ },
+ {
+  "id": 401299,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 527514,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 537304,
+  "label": "c",
+  "cause": "Fragment: 'give' detached from its subject"
+ },
+ {
+  "id": 447792,
+  "label": "w",
+  "cause": "Clear dash-appositive fragment"
+ },
+ {
+  "id": 720383,
+  "label": "c",
+  "cause": "Overlong nested parenthetical; split it"
+ },
+ {
+  "id": 823089,
+  "label": "w",
+  "cause": "Clear enough; SOC unexpanded"
+ },
+ {
+  "id": 230300,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 973603,
+  "label": "d",
+  "cause": "Vague 'prove that stub goes with it'"
+ },
+ {
+  "id": 477892,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 674072,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 993818,
+  "label": "w",
+  "cause": "Clear summary bullets"
+ },
+ {
+  "id": 563339,
+  "label": "w",
+  "cause": "Clear link text"
+ },
+ {
+  "id": 753302,
+  "label": "d",
+  "cause": "Subject list unclear; 'DELETE' reads as verb"
+ },
+ {
+  "id": 363587,
+  "label": "w",
+  "cause": "Clear commit subject"
+ },
+ {
+  "id": 879316,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 705926,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 996883,
+  "label": "w",
+  "cause": "Readable with elliptical list"
+ },
+ {
+  "id": 361384,
+  "label": "d",
+  "cause": "Very long subject; verb far from core"
+ },
+ {
+  "id": 601372,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 848828,
+  "label": "c",
+  "cause": "Two sentences merged; missing period"
+ },
+ {
+  "id": 239147,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 684127,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 747635,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 380894,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 897670,
+  "label": "w",
+  "cause": "Clear enough; slightly vague"
+ },
+ {
+  "id": 727154,
+  "label": "c",
+  "cause": "Unmatched closing parenthesis; dangling parenthetical"
+ },
+ {
+  "id": 384054,
+  "label": "c",
+  "cause": "Missing spaces and stray capitals; garbled example"
+ },
+ {
+  "id": 326797,
+  "label": "d",
+  "cause": "Repetitive 'Impact' wording; otherwise clear"
+ },
+ {
+  "id": 409653,
+  "label": "w",
+  "cause": "Dense but readable"
+ },
+ {
+  "id": 294769,
+  "label": "d",
+  "cause": "Long parenthetical; vague referent in clause"
+ },
+ {
+  "id": 981119,
+  "label": "w",
+  "cause": "Clear imperative commit subject"
+ },
+ {
+  "id": 854331,
+  "label": "c",
+  "cause": "Stray parenthesis; fragment reads as garbled text"
+ },
+ {
+  "id": 594510,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 691268,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 238651,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 786136,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 672934,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 384721,
+  "label": "d",
+  "cause": "Awkward 'hence that' phrasing"
+ },
+ {
+  "id": 633958,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 712785,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 745123,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 384764,
+  "label": "w",
+  "cause": "Long but readable"
+ },
+ {
+  "id": 194635,
+  "label": "w",
+  "cause": "Clear commit subject"
+ },
+ {
+  "id": 422739,
+  "label": "d",
+  "cause": "'Fails' lacks a clear subject"
+ },
+ {
+  "id": 665090,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 489535,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 899195,
+  "label": "w",
+  "cause": "Clear commit subject"
+ },
+ {
+  "id": 712545,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 124404,
+  "label": "w",
+  "cause": "Clear commit subject"
+ },
+ {
+  "id": 868217,
+  "label": "w",
+  "cause": "Clear navigation text"
+ },
+ {
+  "id": 712548,
+  "label": "d",
+  "cause": "Dangling participle 'answered' in fragment"
+ },
+ {
+  "id": 325482,
+  "label": "w",
+  "cause": "Clear fragment"
+ },
+ {
+  "id": 785557,
+  "label": "d",
+  "cause": "Fragment with trailing 'too'; unclear phrasing"
+ },
+ {
+  "id": 456580,
+  "label": "d",
+  "cause": "Dense colon-semicolon chain; word order awkward"
+ },
+ {
+  "id": 414483,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 837922,
+  "label": "c",
+  "cause": "Overlong sentence; list items ambiguous"
+ },
+ {
+  "id": 309290,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 773248,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 122603,
+  "label": "d",
+  "cause": "Opening 'this' referent unclear"
+ },
+ {
+  "id": 722293,
+  "label": "w",
+  "cause": "Clear marketing fragment"
+ },
+ {
+  "id": 849022,
+  "label": "d",
+  "cause": "Dense colon-and-semicolon list; hard to follow"
+ },
+ {
+  "id": 720002,
+  "label": "d",
+  "cause": "Unexpanded CAS acronym; otherwise clear"
+ },
+ {
+  "id": 948712,
+  "label": "w",
+  "cause": "Informal but clear"
+ },
+ {
+  "id": 163600,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 383620,
+  "label": "w",
+  "cause": "Clear list item"
+ },
+ {
+  "id": 625093,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 272625,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 288808,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 843750,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 142319,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 994430,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 444366,
+  "label": "c",
+  "cause": "Stray 'Xcode' artifact in format example"
+ },
+ {
+  "id": 791232,
+  "label": "w",
+  "cause": "Clear commit subject"
+ },
+ {
+  "id": 461591,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 998977,
+  "label": "w",
+  "cause": "Clear parameter list"
+ },
+ {
+  "id": 779182,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 396411,
+  "label": "w",
+  "cause": "Clear list heading"
+ },
+ {
+  "id": 753268,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 413763,
+  "label": "w",
+  "cause": "Clear docstring"
+ },
+ {
+  "id": 276859,
+  "label": "c",
+  "cause": "Commit subject uses 'Excludes', not imperative"
+ },
+ {
+  "id": 852576,
+  "label": "w",
+  "cause": "Clear count list"
+ },
+ {
+  "id": 669888,
+  "label": "d",
+  "cause": "'to the device' mismatches backend request"
+ },
+ {
+  "id": 367592,
+  "label": "w",
+  "cause": "Dense but readable"
+ },
+ {
+  "id": 250490,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 846600,
+  "label": "d",
+  "cause": "Missing space after comma; otherwise clear"
+ },
+ {
+  "id": 915946,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 675904,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 670634,
+  "label": "w",
+  "cause": "Clear imperative commit subject"
+ },
+ {
+  "id": 223627,
+  "label": "w",
+  "cause": "Clear enough with setup lead-in"
+ },
+ {
+  "id": 503982,
+  "label": "d",
+  "cause": "Typo 'commited' and missing articles"
+ },
+ {
+  "id": 138137,
+  "label": "c",
+  "cause": "Template code fragment; no readable sentence"
+ },
+ {
+  "id": 863522,
+  "label": "c",
+  "cause": "Duplicated 'the the'; overlong sentence"
+ },
+ {
+  "id": 140097,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 992746,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 623351,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 425759,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 279489,
+  "label": "d",
+  "cause": "Garden-path opening: 'A level ... stepped'"
+ },
+ {
+  "id": 144887,
+  "label": "c",
+  "cause": "Overlong list-sentence; repeats 'calling'"
+ },
+ {
+  "id": 392166,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 670123,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 840691,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 884297,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 336429,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 244740,
+  "label": "d",
+  "cause": "'It' referent unclear after code-heavy sentence"
+ },
+ {
+  "id": 362741,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 941600,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 592932,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 652853,
+  "label": "w",
+  "cause": "Clear checklist item"
+ },
+ {
+  "id": 938026,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 541648,
+  "label": "d",
+  "cause": "Dense dashes and parentheticals; hard to follow"
+ },
+ {
+  "id": 514580,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 290423,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 211530,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 165735,
+  "label": "d",
+  "cause": "Lead-in ends abruptly before the code block"
+ },
+ {
+  "id": 908729,
+  "label": "d",
+  "cause": "Long dashed clauses; subject far from verb"
+ },
+ {
+  "id": 868585,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 159426,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 947861,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 585852,
+  "label": "w",
+  "cause": "Clear enough"
+ },
+ {
+  "id": 466375,
+  "label": "d",
+  "cause": "Apostrophe error in 'GUI's'"
+ },
+ {
+  "id": 531249,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 328194,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 405519,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 747287,
+  "label": "d",
+  "cause": "Fragment opens on function name; referent unclear"
+ },
+ {
+  "id": 799026,
+  "label": "w",
+  "cause": "Clear checklist item"
+ },
+ {
+  "id": 999799,
+  "label": "w",
+  "cause": "Clear and complete"
+ },
+ {
+  "id": 423685,
+  "label": "w",
+  "cause": "Long list but readable"
+ }
+]

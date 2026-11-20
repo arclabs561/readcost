@@ -7,6 +7,84 @@ configuration.
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-19
+
+### Added
+
+- Jupyter notebooks (`.ipynb`, `--format notebook`): readcost reads the
+  Markdown cells, and with `comments = "all"` the comments in code cells, in
+  the kernel's language. Lines and columns point into the `.ipynb` file.
+  Before, a notebook was read as plain text, JSON keys and all. The default
+  `include` globs still leave notebooks out.
+- Comment syntax for PHP, Lua, Haskell, Elixir, Julia, R, Dart, Zig and
+  Perl, with their doc-comment conventions (PHPDoc, LDoc, Haddock, `@doc`,
+  docstrings, roxygen, `///`, POD), and for `.zsh`, `.fish`, `.ksh`, `.kts`,
+  `.groovy`, `.gradle`, `.proto`, `.cu`, `.cxx`, `.hh`, `Makefile` and
+  `Dockerfile`. A script with no extension is read by its `#!` line.
+- The GitHub Action checks the pull request title and description with
+  `check-pr-text: "true"`, or only them with `"only"`, on `pull_request` and
+  `pull_request_target` events. The text is read from the event file, never
+  through the shell; the description is read as Markdown, without code or
+  HTML comments, and skipped under `pr-text-min-words` (default 30).
+  Findings go in the comment and the annotations as "pull request
+  description, line N". They do not fail the job unless `pr-text-fail-on`
+  is set. The command line has the same as `readcost check --pr-text
+  EVENT_FILE`, `--pr-text-fail-on` and `--pr-text-min-words`.
+
+### Changed
+
+- The Action edits its summary comment only when `github-actions[bot]`
+  posted it, not any comment that starts with the marker.
+- `-o agent`, and the hooks that use it, put each finding as a question
+  ("Is it hard to follow here?") and tell the model to change a sentence
+  only if it reads badly. Model raters agreed with readcost's message far
+  more often than with the same sentence shown without it, so an order to
+  rewrite would pass that deference on to the agent.
+- The precision beside a finding, in `-o agent`, `-o json` and `readcost
+  explain`, comes from the held-out test across formats, built by
+  `scripts/build_rule_precision.py`, and now says how many findings raters
+  thought an editor would fix as well as how many they accepted.
+- inline-list is off in doc comments and docstrings unless a config sets
+  its level. In the pre-registered test across formats, model raters
+  accepted 1 of 28 of its findings there, against 5 of 16 in Markdown.
+- inanimate-subject is opt-in. In a pre-registered test on READMEs the rules
+  had not been tuned on, model raters accepted none of its 40 findings and
+  judged the construction present in 9 (docs/evaluation.md, "Held-out
+  precision, pre-registered"). Turn it on with `inanimate-subject = "info"`.
+- The Claude Code and piku hooks report a finding once per session and file
+  (`hooks.repeat = "once"`, the default). After an edit, PostToolUse reports
+  only new findings and says nothing when all of them were reported before.
+  In block mode a finding blocks or denies an edit once; after that it gets
+  one advisory line. A finding is its rule and flagged words, so it survives
+  rewording around it. Without a `session_id` the hooks keep no memory.
+  `hooks.repeat = "always"` restores the old behaviour. The memory lives in
+  `~/.cache/readcost/hooks/` and expires after a day.
+- Editor diagnostics and SARIF rules link to the rule's own section in
+  docs/rules.md, not to the README's rule table. long-sentence, which has no
+  section, still links to the table.
+
+### Fixed
+
+- A file whose extension names a programming language readcost has no
+  comment syntax for, such as `.lisp` or `.sql`, was read as prose, code
+  included. It is now not read, and its result has a note.
+- The `#!` line of a shell script was read as a comment.
+- Findings in comments that only `comments = "all"` reads are reported at
+  info, as docs/research.md said they were; a stacked-nouns finding in a
+  Python `#` comment was a warning. A level set in config or a flag still
+  wins. docs/research.md no longer says that `@param` lines in doc comments
+  are skipped: they never were.
+- An inline footnote, `^[text]`, stopped readcost with a `TypeError`: the
+  footnote's paragraph has no line number in the parser's output. A regex
+  such as `^[a-z]` in a doc comment parses as one. The footnote's text is
+  now read at the line of its `^[`, and the words after it in the same
+  paragraph keep their offsets.
+- When readcost fails to extract the prose of one file, that file's result
+  has a note saying so, and the other files are still checked. Any other
+  error on one file is reported on that file and no longer stops the run.
+  Either way the exit status is still 2: a file readcost did not check is
+  not a pass.
+
 ## [0.3.0] - 2026-11-18
 
 ### Added
@@ -44,6 +122,10 @@ configuration.
   phrases, or no clause) and reports a gap of prepositional phrases at info.
   The default, `"words"`, is unchanged. `scripts/eval_gap_content.py` splits
   the labelled findings by gap class.
+- `scripts/rebuild_items.py` rebuilds the rated items of the three precision
+  rounds from their committed pointers, with readcost at each round's frozen
+  commit, and `--verify` compares them field by field with another copy.
+  docs/evaluation.md, "Rebuilding the rated items", has the results.
 - `scripts/dataset_matrix.py` and `scripts/dataset_matrix_report.py`, with
   the `matrix` jobs of the eval workflow: one record per text for fourteen
   datasets of human ratings, revisions and reading times, each analysed on
@@ -267,6 +349,7 @@ First release on PyPI (`pip install readcost`, or `uvx readcost`).
 
 Not published. The first tagged state of the repository.
 
-[Unreleased]: https://github.com/arclabs561/readcost/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/arclabs561/readcost/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/arclabs561/readcost/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/arclabs561/readcost/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/arclabs561/readcost/releases/tag/v0.2.0

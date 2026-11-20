@@ -30,6 +30,7 @@ CHOICES = {
     "mode": ("off", "advise", "block"),
     "stop": ("off", "report", "revise"),
     "display": ("off", "note"),
+    "repeat": ("once", "always"),
     "min_severity": SEVERITIES,
     "advise_severity": (*SEVERITIES, "off"),
     "comments": ("doc", "all"),
@@ -58,6 +59,7 @@ class HookConfig:
     max_items: int = 8
     max_chars: int = 2500
     edited_lines_only: bool = True
+    repeat: str = "once"            # once | always  (report a finding once per session and file)
     timeout_seconds: float = 8.0
 
 
@@ -115,16 +117,18 @@ class Config:
         globs = [*self.src.exclude, *self.src.extend_exclude]
         return any(fnmatch.fnmatch(c, g) for c in _candidates(path) for g in globs)
 
-    def rule_levels(self, path: str | None = None) -> dict[str, str]:
+    def rule_levels(self, path: str | None = None, context: str = "prose") -> dict[str, str]:
         """The level each rule has for ``path``: a severity, "ignore", or "default".
 
         "default" means on, at the detector's own severity. Later sources win:
-        each rule's default, enable/disable, [readcost.rules], every override
-        whose globs match ``path``, then the command line.
+        each rule's default, its default for the kind of text (``context``),
+        enable/disable, [readcost.rules], every override whose globs match
+        ``path``, then the command line.
         """
         from .features import FEATURES
 
         levels = {k: "default" if f.default else "ignore" for k, f in FEATURES.items()}
+        levels.update(CONTEXT_DEFAULTS.get(context, {}))
         levels.update({k: "default" for k in self.enable if k in levels})
         levels.update({k: "ignore" for k in self.disable if k in levels})
 
@@ -143,6 +147,14 @@ class Config:
                 apply(o.get("rules", {}))
         apply(self.cli_rules)
         return levels
+
+
+# Rules that are off by default in one kind of text. In the pre-registered
+# test across formats (docs/evaluation.md, "Precision across formats"),
+# model raters accepted 1 of 28 inline-list findings in doc comments, against
+# 5 of 16 in Markdown. Any setting in [readcost.rules], an override or a flag
+# turns it back on.
+CONTEXT_DEFAULTS: dict[str, dict[str, str]] = {"source": {"inline-list": "ignore"}}
 
 
 def _candidates(path: str) -> tuple[str, str, str]:

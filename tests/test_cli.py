@@ -96,6 +96,7 @@ def test_explain_reports_measured_precision_or_says_it_is_unmeasured():
     data = json.loads(resources.files("readcost").joinpath("data/rule_precision.json").read_text())
     row = data["rules"]["stacked-nouns"]
     out = run(["explain", "stacked-nouns"]).stdout
-    assert f"Measured: {row['accepted']} of {row['labelled']} labelled findings" in out
-    out = run(["explain", "nominalization"]).stdout
+    assert (f"Measured: of {row['labelled']} findings in a held-out test across formats" in out
+            and f"would fix {row['correct']} and called {row['accepted'] - row['correct']} more optional" in out)
+    out = run(["explain", "long-sentence"]).stdout
     assert "Measured: too few labelled findings to measure" in out

@@ -1721,7 +1721,10 @@ hyphenated CSS class name written without backticks, which readcost reads
 as a coined compound (114 and 118 words, six rounds). An agent or hook that
 loops on readcost's feedback should stop when the text stops changing or
 when the same findings come back, and treat what remains as findings to
-judge, not to chase.
+judge, not to chase. The Claude Code and piku hooks now report each finding
+once per session and file, and block on it once (`hooks.repeat`, see
+[hooks](hooks.md#shared-rules)). The loop above was not rerun with that
+change, so its effect on these outcomes is not measured.
 
 Each loop was judged once by one model; the fact counts are small and only
 indicative. The paragraphs had two or more findings to start with, so
@@ -2611,6 +2614,370 @@ Uncorrected, from the same run:
 Limits: Stack Exchange votes judge content and timing as much as prose,
 and ELLIPSE raters score proficiency. No dataset here rates the clarity
 of human-written technical prose at scale.
+
+## Held-out precision, pre-registered
+
+The plan is [docs/prereg/heldout-precision.md](prereg/heldout-precision.md),
+committed before any README was fetched. The rules are frozen at 0.3.0
+(`a57e19e`), with verify_model off. Findings come from READMEs (S1, primary)
+and docs files (S2) of public GitHub repositories created after 1 November
+2026 that no development corpus holds. The sample is 40 findings per default
+rule and 20 per opt-in rule in S1, half that in S2, plus 120 decoys: made-up
+findings with a random span and rule name, on sentences with no finding.
+Three independent, blind Claude instances labelled all 597 items with the
+rubric of `scripts/second_rater.py`. They saw only the rubric and their own
+shuffled batches, and none was told that decoys existed. Labels, pointers
+and the full report are in `eval/heldout/`.
+
+S1, majority of three, with Wilson 95% intervals:
+
+| Rule | Accepted (c or d) | Construction present |
+| --- | --- | --- |
+| stacked-nouns | 22 of 40 (55%; 40 to 69%) | 29 of 40 (72%) |
+| long-dependency | 15 of 40 (38%; 24 to 53%) | 16 of 40 (40%) |
+| inanimate-subject | 0 of 40 (0%; 0 to 9%) | 9 of 40 (22%) |
+| reduced-object-relative | 8 of 40 (20%; 10 to 35%) | 25 of 40 (62%) |
+| hyphen-compound | 14 of 40 (35%; 22 to 50%) | 34 of 40 (85%) |
+| inline-list | 8 of 40 (20%; 10 to 35%) | 24 of 40 (60%) |
+| participial-clause (opt-in) | 15 of 20 (75%; 53 to 89%) | 19 of 20 (95%) |
+| nominalization (opt-in) | 16 of 20 (80%; 58 to 92%) | 20 of 20 (100%) |
+| center-embedding (opt-in) | 2 of 20 (10%; 3 to 30%) | 2 of 20 (10%) |
+| undefined-acronym (opt-in) | 2 of 20 (10%; 3 to 30%) | 19 of 20 (95%) |
+| decoys | 0 of 80 (0%; 0 to 5%) | 1 of 80 (1%) |
+
+- The default rules together, weighted by their share of findings, are 30%
+  accepted on READMEs (bootstrap 95%: 23 to 38%) and 49% on docs files (39
+  to 59%). In-sample, a majority of eight raters on essays and docs gave
+  23%. The two figures use different raters and different text, so neither
+  is a revision of the other.
+- Accepted means almost always defensible, not correct. Each rater called 5
+  or 6 of the 240 findings of default rules in S1 correct, that is, a
+  reading cost that an editor would fix: about 2%.
+- inanimate-subject fails on every count. No finding was accepted, the
+  construction is present in 22%, and it does no better than the decoys.
+  By the pre-registered rules it is proposed for opt-in, and its detector,
+  not only its claim of cost, is the problem. S2 agrees: 1 of 20 accepted.
+- center-embedding (opt-in) is a detection problem: the construction is
+  present in 2 of 20. In S2 it is accepted in 8 of 10, so the proposal may
+  hold for READMEs only, and the counts are small.
+- participial-clause and nominalization meet the rule for "candidate for
+  more testing as a default". For participial-clause this rests on two
+  raters against one (Fleiss' kappa −0.03 for that rule). In S2,
+  nominalization is accepted in 1 of 7. Neither result shows a reading
+  cost.
+- long-dependency's construction is present in 16 of 40 (upper bound 55%),
+  just above the detection floor.
+- Agreement over all S1 findings is Fleiss' kappa 0.55 (accepted against
+  wrong) with 80% pairwise agreement, above the pre-registered guard. One
+  rater was much more lenient on `reduced-object-relative`, `hyphen-compound`
+  and `inline-list`; the majority vote does not show that.
+- The decoy check was too easy. All 120 decoys were rejected, probably
+  because a random 2 to 4 word span with a made-up message is plainly wrong,
+  as the plan warned. So every rule except inanimate-subject passes
+  "accepted over decoys", which shows only that the raters do not accept at
+  random. Decoys closer to real findings would be a stronger baseline.
+
+The raters are one model family, the same family as rater 1 of the in-sample
+labels; no person labelled anything. Against rater 1 in-sample, the held-out
+raters accept inanimate-subject less and differ on the other rules only when
+the lenient rater is counted.
+
+## Held-out precision: a wider panel and unprimed raters
+
+An amendment to the plan above ("a wider panel", committed before any of
+these labels existed) added nine raters on the same 597 items: three each of
+Claude Sonnet 5.5, Haiku 5.5 and Fable 5.2, with fresh shuffles and the same
+rubric. With the first three (Opus 5.5) they make twelve primed raters. Three
+more raters (Opus, Sonnet, Haiku) saw each item without readcost's rule name
+or message, and were asked only whether an editor would change the marked
+text ("unprimed"). All are one family of models. Labels and the full report
+are in `eval/heldout/` (`panel-report.md`).
+
+On READMEs (S1), majority of twelve:
+
+| Rule | Accepted, primed | Correct, primed | Accepted, unprimed |
+| --- | --- | --- | --- |
+| stacked-nouns | 23 of 40 (57%) | 0 | 5 of 40 (12%) |
+| long-dependency | 16 of 40 (40%) | 3 | 15 of 40 (38%) |
+| inanimate-subject | 0 of 40 | 0 | 8 of 40 (20%) |
+| reduced-object-relative | 19 of 40 (48%) | 0 | 8 of 40 (20%) |
+| hyphen-compound | 26 of 40 (65%) | 0 | 8 of 40 (20%) |
+| inline-list | 10 of 40 (25%) | 0 | 6 of 40 (15%) |
+| participial-clause (opt-in) | 19 of 20 (95%) | 0 | 0 of 20 |
+| nominalization (opt-in) | 17 of 20 (85%) | 0 | 3 of 20 (15%) |
+| decoys, random span | 0 of 40 | 0 | 0 of 40 |
+| decoys, longest sentence | 1 of 40 | 0 | 13 of 40 (33%) |
+
+- The pre-registered results. inanimate-subject has none accepted by the
+  twelve (upper bound 9%), so its move to opt-in stands. No other default
+  rule meets the rule for opt-in. Under the unprimed rubric a "correct"
+  label is too rare to test anything: 13 of the 240 findings of default
+  rules, and 2 of 80 decoys. By point estimate, stacked-nouns, long-dependency and
+  inanimate-subject do no better than the decoys; with intervals, no rule
+  does better.
+- Priming decides most of the acceptance. Told the rule and its message,
+  the twelve accept 57% of stacked-nouns findings and 95% of
+  participial-clause findings; shown the same sentences without them, the
+  unprimed raters see a problem in 12% and 0%. A model reading readcost's
+  message tends to agree with it. This bears on agents that act on
+  readcost's feedback (see the edit test, PR #96), and it means the primed
+  acceptance figures above, in the first report and in the in-sample
+  labels, measure partly the message and not the sentence.
+- Exploratory, not pre-registered: unprimed acceptance against the decoys.
+  On READMEs, only long-dependency (+21 points, 95% interval +5 to +38) and
+  center-embedding (+24, +3 to +46) are accepted more often than all
+  decoys, and neither more often than the longest-sentence decoys alone
+  (long-dependency +5, −15 to +25). On READMEs, then, no rule picks out
+  sentences that need work better than choosing the longest sentence that
+  has no finding. On docs files (S2), two rules do better than the long
+  decoys, from small cells: reduced-object-relative (17 of 20, against 8 of
+  20 long decoys) and center-embedding (9 of 10).
+- The four models differ in leniency more than they disagree on order.
+  Primed, Haiku accepts least (12% of stacked-nouns findings), Sonnet and
+  Fable most (78%, 62%); the agreement between the four model majorities is
+  kappa 0.51, the same as within the twelve (0.51). "Correct" is rare for
+  every model: no model's majority calls more than 12% of any default
+  rule's S1 findings correct.
+- One Haiku rater wrote its last batch before reading the items and then
+  rewrote it from the sentences; its labels are kept as it left them.
+
+## Precision across formats, pre-registered
+
+The plan is [docs/prereg/breadth-precision.md](prereg/breadth-precision.md),
+committed before any text was fetched. It extends the held-out test to every
+format readcost reads, from 608 established public repositories (at least
+200 stars) that no development corpus holds, with text written after 1
+November 2026 where the format allows it. There are 875 items: 655 findings
+across Markdown docs, reStructuredText, HTML, doc comments in seven
+languages, commit messages and pull request descriptions; 195 near misses,
+constructions one step under a rule's threshold that readcost does not
+report, shown in the rule's own message format; and 25 random decoys. The
+same fifteen raters as the panel above labelled every item: twelve primed
+(three each of Claude Opus 5.5, Sonnet 5.5, Haiku 5.5 and Fable 5.2) and
+three unprimed. The primary outcome is the share that at least 7 of the 12
+call correct, that is, a reading cost an editor would fix. Labels and the
+full report are in `eval/breadth/`.
+
+Pooled over formats, majority of twelve:
+
+| Rule | Correct | Accepted | Near misses accepted |
+| --- | --- | --- | --- |
+| stacked-nouns | 0 of 100 | 36 of 100 | 0 of 50 |
+| long-dependency | 5 of 91 | 28 of 91 | 15 of 46 |
+| reduced-object-relative | 4 of 85 | 43 of 85 | no threshold |
+| hyphen-compound | 0 of 87 | 42 of 87 | no threshold |
+| inline-list | 5 of 100 | 21 of 100 | 6 of 50 |
+| inanimate-subject (opt-in) | 0 of 42 | 0 of 42 | no threshold |
+| participial-clause (opt-in) | 0 of 50 | 16 of 50 | no threshold |
+| nominalization (opt-in) | 2 of 19 | 13 of 19 | no threshold |
+| center-embedding (opt-in) | 4 of 30 | 13 of 30 | 2 of 25 |
+| undefined-acronym (opt-in) | 0 of 50 | 4 of 50 | 2 of 25 |
+
+- A finding that an editor would fix is rare in every format: no rule's correct
+  share exceeds 13%, and the default rules' shares are 0 to 6%. "Correct" is
+  too rare for the primary comparison with near misses to decide anything,
+  so the plan's fallback compares accepted shares.
+- The thresholds. stacked-nouns' earns its place: no near miss (a two-noun
+  stack) was accepted, against 36% of findings (difference +36 points, +25
+  to +46). long-dependency's does not: a gap two words shorter is accepted
+  as often as one readcost reports (33% against 31%). inline-list's and
+  undefined-acronym's are not supported either.
+- Without priming, the pre-registered test reports every rule as no better
+  than chance placement. That test is weak: the 25 random decoys give an
+  upper bound of 13%, wider than most rules' unprimed shares.
+  center-embedding is the one rule clearly above the decoys unprimed (+27
+  points, +8 to +44), and above its near misses primed (43% against 8%).
+- inanimate-subject has none of 42 accepted across formats, as on READMEs.
+- Per format, two pre-registered decisions apply. inline-list is proposed
+  off in doc comments: 1 of 28 accepted, against 5 of 16 in Markdown
+  (difference −28 points, −52 to −6). long-dependency has a detection
+  problem in reStructuredText (the construction is present in 1 of 12
+  findings) and in doc comments (6 of 28), so those findings should go to
+  the second parser.
+- Commit messages and pull request descriptions do not differ much from
+  Markdown docs. reduced-object-relative is accepted in 14 of 16 commit
+  findings, against 8 of 16 in Markdown, from small cells.
+- The models differ in leniency as before: pooled, Sonnet and Fable accept
+  two thirds of stacked-nouns findings, Opus 22% and Haiku 12%. No model's
+  majority calls more than 12% of any default rule's findings correct.
+- One finding was drawn twice; every rater gave both copies the same label,
+  and the report counts it once (an amendment records this).
+
+Across both held-out tests, then: readcost points at constructions that
+model raters, told what the rule is, often call optional, and rarely call a
+cost worth fixing; without that telling, they find a problem there little
+more often than elsewhere. center-embedding, which is opt-in, is the
+exception the data support.
+
+## Precision by kind of document, pre-registered
+
+The plan is [docs/prereg/kinds-precision.md](prereg/kinds-precision.md),
+committed before any text was fetched. It draws from eleven kinds of
+document: tutorials, reference, explanation, design documents, runbooks,
+changelogs, blog posts, Internet-Drafts, doc comments, ordinary code
+comments, and a non-technical contrast (site policies). There are 1,694
+items: 1,153 findings, near misses and random decoys (16 decoys per kind,
+176 in all), and 541 sentences for a test of ranking, shown only to the
+unprimed raters. The same fifteen raters labelled every item. Labels and the
+full report are in `eval/kinds/`.
+
+Pooled over the ten technical kinds, majority of twelve:
+
+| Rule | Correct | Accepted | Near misses accepted | Unprimed problem |
+| --- | --- | --- | --- | --- |
+| stacked-nouns | 1 of 120 | 34 of 120 | 0 of 40 | 25% |
+| long-dependency | 15 of 119 | 53 of 119 | 12 of 40 | 37% |
+| reduced-object-relative | 1 of 116 | 40 of 116 | no threshold | 39% |
+| hyphen-compound | 0 of 120 | 35 of 120 | no threshold | 17% |
+| inline-list | 0 of 96 | 19 of 96 | 2 of 32 | 25% |
+| inanimate-subject (opt-in) | 0 of 40 | 4 of 40 | no threshold | 35% |
+| participial-clause (opt-in) | 0 of 40 | 13 of 40 | no threshold | 25% |
+| nominalization (opt-in) | 2 of 35 | 28 of 35 | no threshold | 43% |
+| center-embedding (opt-in) | 4 of 16 | 11 of 16 | 4 of 20 | 81% |
+| undefined-acronym (opt-in) | 0 of 40 | 12 of 40 | 3 of 20 | 28% |
+| random decoys | 0 of 160 | 0 of 160 | | 10% |
+
+"Unprimed problem" is the share the unprimed majority labelled c or d,
+rounded to the nearest point; the report has the exact counts.
+
+- A finding that an editor would fix is again rare. long-dependency is the
+  exception among the default rules: 15 of 119 (13%), against none of its
+  near misses (+13 points, +3 to +20), so its threshold earns its place here,
+  where in the test across formats it did not.
+- stacked-nouns' threshold earns its place again: no near miss accepted,
+  against 28% of findings.
+- Ranking. In each of 192 documents the unprimed raters saw the sentence
+  ranked first by a composite fixed in advance (length, longest dependency,
+  embedding depth and findings), the longest sentence, and a random one. They
+  saw a problem in 48% of the composite's picks, 54% of the longest
+  sentences and 13% of the random ones. The composite beats a random
+  sentence (+35 points, +26 to +43) but not the longest (−6, −16 to +4), so
+  by the plan it is not worth shipping: choosing the longest sentence does at
+  least as well.
+- Defaults across rounds. By the rule fixed before this round's data, a
+  default rule stays on if its findings beat its near misses, or if the
+  unprimed raters see a problem in them more often than in random decoys,
+  pooling rounds 1 to 3. Every default rule stays default. Four opt-in rules
+  meet the rule for becoming default: center-embedding, nominalization,
+  participial-clause and inanimate-subject.
+- The second criterion is weaker than intended. The ranking test shows the
+  unprimed raters see a problem in a random sentence 13% of the time and in
+  the longest sentence 54% of the time, and readcost's findings fall on
+  longer, denser sentences than random decoys do. A rule can pass "more than
+  random decoys" by flagging long sentences, whatever its construction:
+  inanimate-subject passes it (+17 points over decoys) though primed raters
+  accepted 4 of its 82 findings across rounds 2 and 3, and called none
+  correct. Only center-embedding beats the longest sentence: its
+  findings are a problem to 81% of unprimed raters, against 54%.
+- So only center-embedding's proposal is taken: it meets both criteria in
+  every round (over its near misses by +39 points, +20 to +54; over decoys by
+  +55, +42 to +66). Three proposals are not taken, because they rest on the
+  second criterion alone: nominalization, participial-clause and
+  inanimate-subject stay opt-in. This departs from the plan's decisions, and the reason
+  is recorded here; the plan's table is in `eval/kinds/report.md` as it was
+  computed.
+- Per kind, stacked-nouns meets the plan's rule for being off in blog posts
+  (none of 12 accepted, against 35% elsewhere, from a small cell), and
+  long-dependency has a detection problem in ordinary code comments (the
+  construction present in 1 of 12). Neither is acted on yet: readcost has no
+  notion of a blog post, and long-dependency in ordinary comments already
+  reports at info.
+- The models differ in leniency as before: pooled, Fable accepts 60% of
+  hyphen-compound findings and Haiku 3%.
+- One primed rater may have marked some three-item lists as present for
+  inline-list in its first 15 batches; its labels are kept (see the plan's
+  amendments).
+
+## Re-rating with open models from other families, pre-registered
+
+Every rater above was a Claude model. The plan
+[docs/prereg/open-family-raters.md](prereg/open-family-raters.md),
+committed before any model call, re-rates every item of rounds 1 to 3 with
+four open-weight models from four other families, each pinned to a commit:
+Qwen3.8 27B, Gemma 4 31B, GLM-4.7 Flash and Ministral 3 14B. Each item was
+rated alone, with the round's rubric, three sampled raters per family and
+one greedy sample, on Hugging Face Jobs (one H200, vLLM 0.34.0, run
+`full-20261119`, about 45 minutes and $4). 3,151 of the 3,166 items were
+rebuilt from their pointers; the other 15 come from repositories that have
+since gone or pull requests since edited. Every reply but one parsed. The
+report is `eval/open-raters/report.md`; the label files are in the private
+Hugging Face dataset `arclabs561/readcost-labels`, under
+`runs/full-20261119/`.
+
+- Two of the four families are poor raters by the plan's own checks. GLM
+  accepted 46% of random decoys and agrees with the Claude panel at Cohen's
+  kappa 0.06; Ministral accepted 11% of random decoys, kappa 0.15. Qwen and
+  Gemma accepted 1 to 2% of random decoys and agree with Claude at kappa
+  0.39 and 0.56. The plan counts all four in the open panel's majority, so
+  its answers carry GLM's and Ministral's noise.
+- The priming effect replicates outside Claude: pooled over rules, the open
+  panel accepts findings shown with readcost's message 5 points more often
+  than it sees a problem in them without it (+2 to +8), against 7 points for
+  Claude. It is largest for participial-clause, nominalization,
+  stacked-nouns and hyphen-compound in both panels.
+- No rule's findings beat the longest sentence unprimed with the open panel
+  either. inanimate-subject, participial-clause and nominalization still
+  fail that test, and the composite ranking still does not beat sentence
+  length (+1 point, −9 to +10).
+- center-embedding does not hold up outside Claude. Unprimed, its round 3
+  findings beat the longest sentence by 16 points with an interval of −9 to
+  +30, from 16 findings. Primed, the open families accept few of them:
+  Qwen 32%, Gemma 7%, Ministral 11%, against Claude's 45%. Unprimed, they
+  see a problem in 81% of the same sentences. So the open models find these
+  sentences hard, but mostly do not find the construction readcost names.
+  By the plan's rule this proposes turning center-embedding off by default,
+  reversing #107; the plan changes no default itself, and the proposal goes
+  to its own pull request.
+- inanimate-subject stays opt-in: the open panel accepts 7 of its 142
+  findings primed.
+
+## Rebuilding the rated items
+
+The repository holds pointers to the items of the three precision rounds,
+not their text. Each row of `eval/heldout/sample.jsonl`,
+`eval/breadth/sample.jsonl` and `eval/kinds/sample.jsonl` names a file at a
+commit of a repository. It gives the file's hash and the item's offsets in
+that file. `scripts/rebuild_items.py` turns them back
+into the items as the raters saw them:
+
+```bash
+python3 scripts/rebuild_items.py --round all        # ref/rebuild/items/round{1,2,3}.jsonl.gz
+python3 scripts/rebuild_items.py --round all --verify DIR --no-build
+```
+
+It fetches each file from a blobless clone of its pinned commit and checks
+its Git hash. Commit messages come from `git log`, and pull request bodies
+from GitHub's issue search, checked against the SHA-256 in the pointer.
+`GITHUB_TOKEN` is optional; with it the search waits less between calls.
+The script then runs readcost at the commit each plan froze (`a57e19e`,
+`fa4a42c`, `663e0cc`). Each one is a checkout under `ref/rebuild/`,
+installed with `uv sync --locked`, so the job does not install this
+checkout. For each item it regenerates every field a rater saw, from the
+rule and message to the context on each side, the way each draw did, near
+misses and decoys included. It needs git, uv, GitHub and the Python package index. An item
+whose source is gone or has changed is unrecoverable: it is listed in
+`round{N}.missing.jsonl` with the reason, and nothing takes its place.
+
+Run on 19 November 2026 and compared, field by field, with copies built
+from the batch files that went to the raters:
+
+| Round | Items | Match exactly | Unrecoverable | Other |
+| --- | --- | --- | --- | --- |
+| 1 | 597 | 585 | 12: their 10 repositories are gone | none |
+| 2 | 875 | 871 | 3: pull request bodies edited since the draw | 1, see below |
+| 3 | 1,694 | 1,694 | none | none |
+
+The odd item in round 2 is id 768685, which the sample holds twice
+(round 2's amendments). The rebuild keeps the first row, the one with
+the stray `//`. The reference copy took its primed fields from the second
+row, which a rater's batches happened to show first, and its unprimed
+excerpt from the first.
+
+Pull request bodies are the weak part: authors can edit them. A run 40
+minutes earlier found two edited bodies; by this run a third had changed.
+A clean run of all three rounds took 10.5 minutes on two cores, with uv's
+download cache and the spaCy model already in place: 3 minutes for round
+1, 4.5 for round 2 (the search waits between calls) and 3 for round 3.
 
 ## Not yet evaluated
 

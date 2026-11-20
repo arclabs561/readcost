@@ -1,6 +1,7 @@
 """The PR comment output, the false-positive link, and SARIF help links."""
 
 import json
+import re
 
 from readcost import report
 from readcost.config import Config
@@ -111,10 +112,11 @@ def test_hook_feedback_and_other_formats_have_no_link():
 
 # --- SARIF -------------------------------------------------------------------------
 
-def test_sarif_rules_link_to_readme_and_results_stay_plain():
+def test_sarif_rules_link_to_their_section_and_results_stay_plain():
     doc = json.loads(report.sarif([Result(path="a.md", findings=[finding()])]))
-    rules = doc["runs"][0]["tool"]["driver"]["rules"]
-    assert rules and all(rule["helpUri"] == report.RULES_URL for rule in rules)
+    rules = {rule["id"]: rule["helpUri"] for rule in doc["runs"][0]["tool"]["driver"]["rules"]}
+    assert rules["stacked-nouns"] == "https://github.com/arclabs561/readcost/blob/main/docs/rules.md#stacked-nouns"
+    assert rules["long-sentence"] == report.RULES_URL
     assert report.RULES_URL.startswith("https://github.com/arclabs561/readcost")
     assert all("properties" not in res for res in doc["runs"][0]["results"])
 
@@ -140,10 +142,37 @@ def test_json_and_agent_output_carry_measured_precision():
     for f in rows:
         row = data.get(f["feature"])
         if row and row["labelled"] >= 5:
-            assert f["precision"] == {"accepted": row["accepted"], "labelled": row["labelled"]}
+            assert f["precision"] == {"correct": row["correct"], "accepted": row["accepted"],
+                                      "labelled": row["labelled"]}
         else:
             assert f["precision"] is None
     assert any(f["precision"] for f in rows)
     first = next(f for f in rows if f["precision"])
     p = first["precision"]
-    assert f"(raters accepted {p['accepted']} of {p['labelled']} such findings)" in report.agent([r])
+    out = report.agent([r])
+    assert (f"Raters said an editor would fix {p['correct']} of {p['labelled']} such findings, "
+            f"and called {p['accepted'] - p['correct']} more optional." in out)
+    assert "Is it hard to follow here?" in out and "These are questions, not errors" in out
+
+
+def test_rule_precision_matches_the_committed_labels():
+    # data/rule_precision.json is built from eval/breadth/ by a script; a
+    # hand edit or a stale file fails here.
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    proc = subprocess.run([sys.executable, str(root / "scripts/build_rule_precision.py"), "--check"],
+                          capture_output=True, text=True, check=False)
+    assert proc.returncode == 0, proc.stderr
+
+
+def test_rule_sections_match_the_headings_in_rules_md():
+    # Each rule_url anchor must exist: GitHub anchors a "### stacked-nouns"
+    # heading as #stacked-nouns.
+    from pathlib import Path
+    text = (Path(__file__).parents[1] / "docs" / "rules.md").read_text()
+    notes = text.split("## Notes on each rule", 1)[1].split("\n## ", 1)[0]
+    headings = set(re.findall(r"^### ([a-z][a-z-]+)$", notes, re.MULTILINE))
+    assert report.RULE_SECTIONS == headings & set(report.FEATURES)

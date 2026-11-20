@@ -1,0 +1,810 @@
+{
+ "md": {
+  "findings": {
+   "stacked-nouns": 2472,
+   "long-dependency": 268,
+   "undefined-acronym": 2725,
+   "inline-list": 1774,
+   "reduced-object-relative": 290,
+   "participial-clause": 529,
+   "hyphen-compound": 524,
+   "inanimate-subject": 391,
+   "nominalization": 27,
+   "center-embedding": 10
+  },
+  "deduped": {
+   "inline-list": 1771,
+   "undefined-acronym": 2247,
+   "stacked-nouns": 2361,
+   "long-dependency": 264,
+   "hyphen-compound": 493,
+   "reduced-object-relative": 283,
+   "inanimate-subject": 383,
+   "participial-clause": 524,
+   "nominalization": 25,
+   "center-embedding": 10
+  },
+  "near": {
+   "stacked-nouns": 18835,
+   "inline-list": 2497,
+   "long-dependency": 251,
+   "center-embedding": 1266,
+   "undefined-acronym": 268
+  },
+  "near_deduped": {
+   "stacked-nouns": 14555,
+   "inline-list": 2491,
+   "center-embedding": 1262,
+   "long-dependency": 250,
+   "undefined-acronym": 255
+  },
+  "sampled": {
+   "stacked-nouns": 16,
+   "long-dependency": 16,
+   "reduced-object-relative": 16,
+   "hyphen-compound": 16,
+   "inline-list": 16,
+   "inanimate-subject": 8,
+   "participial-clause": 8,
+   "nominalization": 8,
+   "center-embedding": 8,
+   "undefined-acronym": 8
+  },
+  "sampled_near": {
+   "stacked-nouns": 8,
+   "long-dependency": 8,
+   "inline-list": 8,
+   "center-embedding": 4,
+   "undefined-acronym": 4
+  },
+  "decoy_pool": 22855,
+  "decoys": 4
+ },
+ "rst": {
+  "findings": {
+   "undefined-acronym": 80,
+   "stacked-nouns": 76,
+   "inanimate-subject": 2,
+   "inline-list": 30,
+   "long-dependency": 13,
+   "participial-clause": 13,
+   "reduced-object-relative": 6,
+   "hyphen-compound": 20,
+   "nominalization": 1
+  },
+  "deduped": {
+   "participial-clause": 13,
+   "stacked-nouns": 74,
+   "inline-list": 30,
+   "reduced-object-relative": 6,
+   "long-dependency": 13,
+   "undefined-acronym": 56,
+   "hyphen-compound": 19,
+   "inanimate-subject": 2,
+   "nominalization": 1
+  },
+  "near": {
+   "stacked-nouns": 558,
+   "inline-list": 59,
+   "long-dependency": 8,
+   "center-embedding": 43,
+   "undefined-acronym": 5
+  },
+  "near_deduped": {
+   "inline-list": 59,
+   "stacked-nouns": 450,
+   "center-embedding": 43,
+   "undefined-acronym": 5,
+   "long-dependency": 8
+  },
+  "sampled": {
+   "stacked-nouns": 16,
+   "long-dependency": 12,
+   "reduced-object-relative": 6,
+   "hyphen-compound": 8,
+   "inline-list": 16,
+   "inanimate-subject": 2,
+   "participial-clause": 8,
+   "nominalization": 1,
+   "center-embedding": 0,
+   "undefined-acronym": 8
+  },
+  "sampled_near": {
+   "stacked-nouns": 8,
+   "long-dependency": 8,
+   "inline-list": 8,
+   "center-embedding": 4,
+   "undefined-acronym": 4
+  },
+  "decoy_pool": 705,
+  "decoys": 4
+ },
+ "html": {
+  "findings": {
+   "stacked-nouns": 20,
+   "inline-list": 32,
+   "participial-clause": 7,
+   "undefined-acronym": 22,
+   "long-dependency": 3,
+   "reduced-object-relative": 4,
+   "nominalization": 1,
+   "inanimate-subject": 2,
+   "hyphen-compound": 3
+  },
+  "deduped": {
+   "inline-list": 32,
+   "undefined-acronym": 21,
+   "stacked-nouns": 19,
+   "participial-clause": 7,
+   "inanimate-subject": 2,
+   "reduced-object-relative": 4,
+   "long-dependency": 3,
+   "hyphen-compound": 3,
+   "nominalization": 1
+  },
+  "near": {
+   "stacked-nouns": 172,
+   "center-embedding": 16,
+   "inline-list": 44,
+   "undefined-acronym": 2
+  },
+  "near_deduped": {
+   "stacked-nouns": 139,
+   "center-embedding": 16,
+   "inline-list": 44,
+   "undefined-acronym": 2
+  },
+  "sampled": {
+   "stacked-nouns": 8,
+   "long-dependency": 3,
+   "reduced-object-relative": 4,
+   "hyphen-compound": 3,
+   "inline-list": 8,
+   "inanimate-subject": 2,
+   "participial-clause": 4,
+   "nominalization": 1,
+   "center-embedding": 0,
+   "undefined-acronym": 4
+  },
+  "sampled_near": {
+   "stacked-nouns": 4,
+   "long-dependency": 0,
+   "inline-list": 4,
+   "center-embedding": 2,
+   "undefined-acronym": 2
+  },
+  "decoy_pool": 335,
+  "decoys": 2
+ },
+ "src-py": {
+  "findings": {
+   "stacked-nouns": 180,
+   "participial-clause": 30,
+   "reduced-object-relative": 55,
+   "inline-list": 84,
+   "undefined-acronym": 220,
+   "inanimate-subject": 27,
+   "long-dependency": 28,
+   "hyphen-compound": 44
+  },
+  "deduped": {
+   "stacked-nouns": 170,
+   "long-dependency": 28,
+   "undefined-acronym": 185,
+   "inline-list": 81,
+   "hyphen-compound": 44,
+   "participial-clause": 28,
+   "reduced-object-relative": 52,
+   "inanimate-subject": 27
+  },
+  "near": {
+   "stacked-nouns": 1431,
+   "inline-list": 153,
+   "center-embedding": 168,
+   "long-dependency": 33,
+   "undefined-acronym": 19
+  },
+  "near_deduped": {
+   "stacked-nouns": 1105,
+   "inline-list": 149,
+   "center-embedding": 163,
+   "undefined-acronym": 18,
+   "long-dependency": 29
+  },
+  "sampled": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "reduced-object-relative": 4,
+   "hyphen-compound": 4,
+   "inline-list": 4,
+   "inanimate-subject": 2,
+   "participial-clause": 2,
+   "nominalization": 0,
+   "center-embedding": 0,
+   "undefined-acronym": 2
+  },
+  "sampled_near": {
+   "stacked-nouns": 2,
+   "long-dependency": 2,
+   "inline-list": 2,
+   "center-embedding": 1,
+   "undefined-acronym": 1
+  },
+  "decoy_pool": 1745,
+  "decoys": 1
+ },
+ "src-rs": {
+  "findings": {
+   "inanimate-subject": 36,
+   "stacked-nouns": 66,
+   "participial-clause": 47,
+   "reduced-object-relative": 48,
+   "undefined-acronym": 67,
+   "inline-list": 33,
+   "long-dependency": 15,
+   "nominalization": 1,
+   "hyphen-compound": 19,
+   "center-embedding": 1
+  },
+  "deduped": {
+   "hyphen-compound": 19,
+   "stacked-nouns": 65,
+   "undefined-acronym": 57,
+   "reduced-object-relative": 47,
+   "inline-list": 31,
+   "participial-clause": 47,
+   "inanimate-subject": 36,
+   "long-dependency": 15,
+   "nominalization": 1,
+   "center-embedding": 1
+  },
+  "near": {
+   "stacked-nouns": 718,
+   "inline-list": 73,
+   "center-embedding": 125,
+   "long-dependency": 14,
+   "undefined-acronym": 7
+  },
+  "near_deduped": {
+   "inline-list": 71,
+   "stacked-nouns": 586,
+   "center-embedding": 124,
+   "long-dependency": 14,
+   "undefined-acronym": 7
+  },
+  "sampled": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "reduced-object-relative": 4,
+   "hyphen-compound": 4,
+   "inline-list": 4,
+   "inanimate-subject": 2,
+   "participial-clause": 2,
+   "nominalization": 1,
+   "center-embedding": 1,
+   "undefined-acronym": 2
+  },
+  "sampled_near": {
+   "stacked-nouns": 2,
+   "long-dependency": 2,
+   "inline-list": 2,
+   "center-embedding": 1,
+   "undefined-acronym": 1
+  },
+  "decoy_pool": 1141,
+  "decoys": 1
+ },
+ "src-go": {
+  "findings": {
+   "inanimate-subject": 15,
+   "stacked-nouns": 84,
+   "reduced-object-relative": 18,
+   "participial-clause": 43,
+   "undefined-acronym": 80,
+   "hyphen-compound": 15,
+   "long-dependency": 13,
+   "inline-list": 8
+  },
+  "deduped": {
+   "long-dependency": 13,
+   "undefined-acronym": 72,
+   "hyphen-compound": 14,
+   "stacked-nouns": 78,
+   "participial-clause": 31,
+   "inanimate-subject": 15,
+   "reduced-object-relative": 18,
+   "inline-list": 8
+  },
+  "near": {
+   "stacked-nouns": 626,
+   "undefined-acronym": 6,
+   "long-dependency": 15,
+   "inline-list": 64,
+   "center-embedding": 51
+  },
+  "near_deduped": {
+   "stacked-nouns": 491,
+   "center-embedding": 51,
+   "inline-list": 58,
+   "long-dependency": 13,
+   "undefined-acronym": 4
+  },
+  "sampled": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "reduced-object-relative": 4,
+   "hyphen-compound": 4,
+   "inline-list": 4,
+   "inanimate-subject": 2,
+   "participial-clause": 2,
+   "nominalization": 0,
+   "center-embedding": 0,
+   "undefined-acronym": 2
+  },
+  "sampled_near": {
+   "stacked-nouns": 2,
+   "long-dependency": 2,
+   "inline-list": 2,
+   "center-embedding": 1,
+   "undefined-acronym": 1
+  },
+  "decoy_pool": 887,
+  "decoys": 1
+ },
+ "src-js": {
+  "findings": {
+   "inline-list": 95,
+   "reduced-object-relative": 70,
+   "stacked-nouns": 210,
+   "long-dependency": 55,
+   "undefined-acronym": 271,
+   "center-embedding": 3,
+   "inanimate-subject": 62,
+   "hyphen-compound": 66,
+   "participial-clause": 32
+  },
+  "deduped": {
+   "stacked-nouns": 186,
+   "inline-list": 67,
+   "inanimate-subject": 56,
+   "undefined-acronym": 216,
+   "hyphen-compound": 62,
+   "participial-clause": 31,
+   "long-dependency": 53,
+   "reduced-object-relative": 63,
+   "center-embedding": 3
+  },
+  "near": {
+   "stacked-nouns": 1701,
+   "center-embedding": 208,
+   "inline-list": 175,
+   "long-dependency": 33,
+   "undefined-acronym": 48
+  },
+  "near_deduped": {
+   "stacked-nouns": 1320,
+   "long-dependency": 32,
+   "center-embedding": 204,
+   "inline-list": 161,
+   "undefined-acronym": 39
+  },
+  "sampled": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "reduced-object-relative": 4,
+   "hyphen-compound": 4,
+   "inline-list": 4,
+   "inanimate-subject": 2,
+   "participial-clause": 2,
+   "nominalization": 0,
+   "center-embedding": 2,
+   "undefined-acronym": 2
+  },
+  "sampled_near": {
+   "stacked-nouns": 2,
+   "long-dependency": 2,
+   "inline-list": 2,
+   "center-embedding": 1,
+   "undefined-acronym": 1
+  },
+  "decoy_pool": 2386,
+  "decoys": 1
+ },
+ "src-jvm": {
+  "findings": {
+   "inline-list": 143,
+   "inanimate-subject": 63,
+   "reduced-object-relative": 67,
+   "stacked-nouns": 365,
+   "long-dependency": 67,
+   "participial-clause": 60,
+   "undefined-acronym": 335,
+   "hyphen-compound": 28,
+   "nominalization": 1,
+   "center-embedding": 1
+  },
+  "deduped": {
+   "inanimate-subject": 50,
+   "long-dependency": 65,
+   "reduced-object-relative": 60,
+   "stacked-nouns": 343,
+   "participial-clause": 58,
+   "undefined-acronym": 225,
+   "inline-list": 68,
+   "hyphen-compound": 27,
+   "center-embedding": 1,
+   "nominalization": 1
+  },
+  "near": {
+   "stacked-nouns": 2169,
+   "inline-list": 178,
+   "long-dependency": 42,
+   "center-embedding": 230,
+   "undefined-acronym": 38
+  },
+  "near_deduped": {
+   "stacked-nouns": 1678,
+   "center-embedding": 212,
+   "inline-list": 151,
+   "undefined-acronym": 34,
+   "long-dependency": 38
+  },
+  "sampled": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "reduced-object-relative": 4,
+   "hyphen-compound": 4,
+   "inline-list": 4,
+   "inanimate-subject": 2,
+   "participial-clause": 2,
+   "nominalization": 1,
+   "center-embedding": 1,
+   "undefined-acronym": 2
+  },
+  "sampled_near": {
+   "stacked-nouns": 2,
+   "long-dependency": 2,
+   "inline-list": 2,
+   "center-embedding": 1,
+   "undefined-acronym": 1
+  },
+  "decoy_pool": 3781,
+  "decoys": 1
+ },
+ "src-c": {
+  "findings": {
+   "stacked-nouns": 336,
+   "undefined-acronym": 529,
+   "inanimate-subject": 63,
+   "hyphen-compound": 27,
+   "participial-clause": 55,
+   "inline-list": 215,
+   "nominalization": 3,
+   "long-dependency": 49,
+   "reduced-object-relative": 29
+  },
+  "deduped": {
+   "stacked-nouns": 304,
+   "inline-list": 101,
+   "undefined-acronym": 343,
+   "inanimate-subject": 56,
+   "long-dependency": 49,
+   "participial-clause": 55,
+   "hyphen-compound": 27,
+   "reduced-object-relative": 29,
+   "nominalization": 3
+  },
+  "near": {
+   "stacked-nouns": 2345,
+   "inline-list": 267,
+   "long-dependency": 54,
+   "center-embedding": 190,
+   "undefined-acronym": 65
+  },
+  "near_deduped": {
+   "center-embedding": 184,
+   "stacked-nouns": 1671,
+   "undefined-acronym": 57,
+   "inline-list": 218,
+   "long-dependency": 46
+  },
+  "sampled": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "reduced-object-relative": 4,
+   "hyphen-compound": 4,
+   "inline-list": 4,
+   "inanimate-subject": 2,
+   "participial-clause": 2,
+   "nominalization": 2,
+   "center-embedding": 0,
+   "undefined-acronym": 2
+  },
+  "sampled_near": {
+   "stacked-nouns": 2,
+   "long-dependency": 2,
+   "inline-list": 2,
+   "center-embedding": 1,
+   "undefined-acronym": 1
+  },
+  "decoy_pool": 3485,
+  "decoys": 1
+ },
+ "src-rb": {
+  "findings": {
+   "undefined-acronym": 260,
+   "hyphen-compound": 57,
+   "reduced-object-relative": 45,
+   "participial-clause": 32,
+   "stacked-nouns": 219,
+   "long-dependency": 34,
+   "inanimate-subject": 35,
+   "inline-list": 95,
+   "nominalization": 1,
+   "center-embedding": 3
+  },
+  "deduped": {
+   "reduced-object-relative": 43,
+   "undefined-acronym": 221,
+   "stacked-nouns": 201,
+   "long-dependency": 33,
+   "inanimate-subject": 34,
+   "participial-clause": 31,
+   "inline-list": 82,
+   "hyphen-compound": 55,
+   "center-embedding": 2,
+   "nominalization": 1
+  },
+  "near": {
+   "stacked-nouns": 1673,
+   "center-embedding": 172,
+   "undefined-acronym": 27,
+   "inline-list": 183,
+   "long-dependency": 35
+  },
+  "near_deduped": {
+   "stacked-nouns": 1280,
+   "inline-list": 175,
+   "center-embedding": 170,
+   "long-dependency": 33,
+   "undefined-acronym": 26
+  },
+  "sampled": {
+   "stacked-nouns": 4,
+   "long-dependency": 4,
+   "reduced-object-relative": 4,
+   "hyphen-compound": 4,
+   "inline-list": 4,
+   "inanimate-subject": 2,
+   "participial-clause": 2,
+   "nominalization": 1,
+   "center-embedding": 2,
+   "undefined-acronym": 2
+  },
+  "sampled_near": {
+   "stacked-nouns": 2,
+   "long-dependency": 2,
+   "inline-list": 2,
+   "center-embedding": 1,
+   "undefined-acronym": 1
+  },
+  "decoy_pool": 1871,
+  "decoys": 1
+ },
+ "commit": {
+  "findings": {
+   "undefined-acronym": 1865,
+   "long-dependency": 267,
+   "hyphen-compound": 741,
+   "stacked-nouns": 2147,
+   "inline-list": 937,
+   "reduced-object-relative": 376,
+   "participial-clause": 318,
+   "inanimate-subject": 426,
+   "center-embedding": 10,
+   "nominalization": 2
+  },
+  "deduped": {
+   "inline-list": 884,
+   "undefined-acronym": 1544,
+   "stacked-nouns": 1979,
+   "long-dependency": 249,
+   "reduced-object-relative": 333,
+   "participial-clause": 281,
+   "hyphen-compound": 644,
+   "center-embedding": 8,
+   "inanimate-subject": 374,
+   "nominalization": 2
+  },
+  "near": {
+   "stacked-nouns": 13074,
+   "inline-list": 1793,
+   "center-embedding": 1307,
+   "long-dependency": 209,
+   "undefined-acronym": 186
+  },
+  "near_deduped": {
+   "stacked-nouns": 9005,
+   "center-embedding": 1189,
+   "inline-list": 1635,
+   "long-dependency": 195,
+   "undefined-acronym": 178
+  },
+  "sampled": {
+   "stacked-nouns": 16,
+   "long-dependency": 16,
+   "reduced-object-relative": 16,
+   "hyphen-compound": 16,
+   "inline-list": 16,
+   "inanimate-subject": 8,
+   "participial-clause": 8,
+   "nominalization": 2,
+   "center-embedding": 8,
+   "undefined-acronym": 8
+  },
+  "sampled_near": {
+   "stacked-nouns": 8,
+   "long-dependency": 8,
+   "inline-list": 8,
+   "center-embedding": 4,
+   "undefined-acronym": 4
+  },
+  "decoy_pool": 8533,
+  "decoys": 4
+ },
+ "pr": {
+  "findings": {
+   "hyphen-compound": 1099,
+   "undefined-acronym": 3024,
+   "participial-clause": 457,
+   "long-dependency": 343,
+   "stacked-nouns": 2349,
+   "reduced-object-relative": 568,
+   "inline-list": 1556,
+   "inanimate-subject": 579,
+   "center-embedding": 20,
+   "nominalization": 2
+  },
+  "deduped": {
+   "participial-clause": 439,
+   "inline-list": 1509,
+   "stacked-nouns": 2135,
+   "undefined-acronym": 2362,
+   "hyphen-compound": 1033,
+   "inanimate-subject": 569,
+   "reduced-object-relative": 563,
+   "long-dependency": 334,
+   "center-embedding": 19,
+   "nominalization": 2
+  },
+  "near": {
+   "stacked-nouns": 19954,
+   "inline-list": 2489,
+   "center-embedding": 2002,
+   "undefined-acronym": 214,
+   "long-dependency": 326
+  },
+  "near_deduped": {
+   "center-embedding": 1964,
+   "inline-list": 2388,
+   "stacked-nouns": 14014,
+   "long-dependency": 323,
+   "undefined-acronym": 207
+  },
+  "sampled": {
+   "stacked-nouns": 16,
+   "long-dependency": 16,
+   "reduced-object-relative": 16,
+   "hyphen-compound": 16,
+   "inline-list": 16,
+   "inanimate-subject": 8,
+   "participial-clause": 8,
+   "nominalization": 2,
+   "center-embedding": 8,
+   "undefined-acronym": 8
+  },
+  "sampled_near": {
+   "stacked-nouns": 8,
+   "long-dependency": 8,
+   "inline-list": 8,
+   "center-embedding": 4,
+   "undefined-acronym": 4
+  },
+  "decoy_pool": 17487,
+  "decoys": 4
+ },
+ "_texts": {
+  "commit: duplicate text": 111,
+  "commit: kept": 5850,
+  "commit: not English": 3,
+  "html: duplicate text": 1,
+  "html: kept": 16,
+  "html: not English": 3,
+  "html: under 100 words": 59,
+  "md: kept": 707,
+  "md: mostly code": 188,
+  "md: not English": 11,
+  "md: under 100 words": 91,
+  "pr: duplicate text": 31,
+  "pr: kept": 2109,
+  "pr: not English": 20,
+  "pr: under 100 words": 1346,
+  "rst: kept": 41,
+  "rst: under 100 words": 27,
+  "src-c: duplicate text": 2,
+  "src-c: kept": 283,
+  "src-c: not English": 2,
+  "src-c: too large": 4,
+  "src-c: under 40 words": 182,
+  "src-go: kept": 104,
+  "src-go: under 40 words": 80,
+  "src-js: duplicate text": 9,
+  "src-js: kept": 234,
+  "src-js: too large": 21,
+  "src-js: under 40 words": 465,
+  "src-jvm: kept": 357,
+  "src-jvm: not English": 3,
+  "src-jvm: too large": 3,
+  "src-jvm: under 40 words": 349,
+  "src-py: duplicate text": 9,
+  "src-py: kept": 212,
+  "src-py: too large": 4,
+  "src-py: under 40 words": 403,
+  "src-rb: duplicate text": 3,
+  "src-rb: kept": 314,
+  "src-rb: not English": 1,
+  "src-rb: too large": 4,
+  "src-rb: under 40 words": 609,
+  "src-rs: duplicate text": 1,
+  "src-rs: kept": 87,
+  "src-rs: under 40 words": 122
+ },
+ "_walk": {
+  "owner cap": 16,
+  "picked": 720
+ },
+ "_repos": {
+  "README under 100 words": 81,
+  "kept": 608,
+  "no README": 5,
+  "README not English": 26
+ },
+ "_items": {
+  "commit: decoy": 4,
+  "commit: finding": 114,
+  "commit: near": 32,
+  "html: decoy": 2,
+  "html: finding": 37,
+  "html: near": 12,
+  "md: decoy": 4,
+  "md: finding": 120,
+  "md: near": 32,
+  "pr: decoy": 4,
+  "pr: finding": 114,
+  "pr: near": 32,
+  "rst: decoy": 4,
+  "rst: finding": 77,
+  "rst: near": 32,
+  "src-c: decoy": 1,
+  "src-c: finding": 28,
+  "src-c: near": 8,
+  "src-go: decoy": 1,
+  "src-go: finding": 26,
+  "src-go: near": 8,
+  "src-js: decoy": 1,
+  "src-js: finding": 28,
+  "src-js: near": 8,
+  "src-jvm: decoy": 1,
+  "src-jvm: finding": 28,
+  "src-jvm: near": 8,
+  "src-py: decoy": 1,
+  "src-py: finding": 26,
+  "src-py: near": 8,
+  "src-rb: decoy": 1,
+  "src-rb: finding": 29,
+  "src-rb: near": 8,
+  "src-rs: decoy": 1,
+  "src-rs: finding": 28,
+  "src-rs: near": 8
+ }
+}
