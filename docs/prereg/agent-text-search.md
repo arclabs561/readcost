@@ -8,6 +8,7 @@ changes after that commit. Any change made later goes in a dated
 
 ## Why
 
+<!-- readcost: ignore stacked-nouns -->
 The factorial in [agent-text-factorial.md](agent-text-factorial.md) found
 that the rule's own fix was the largest part of readcost's agent feedback.
 Compared with a generic fix, it cut edits that change content by 14.9 points
@@ -193,3 +194,11 @@ means easier according to two model judges from families that took no part
 in the search.
 
 ## Amendments
+
+### 20 November 2026, before any model call: a readcost directive
+
+readcost's own check of this file read "A scope line cut content changes" as
+five stacked nouns: its parser took "cut" for a noun. That error made the
+file fail the repository's documentation check. A
+`<!-- readcost: ignore stacked-nouns -->` comment now comes before the
+paragraph under "Why". No word of the plan changed.
