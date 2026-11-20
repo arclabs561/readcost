@@ -58,13 +58,13 @@ def first_order(rows: list[dict]) -> list[str]:
 
 
 def walk_on(order: list[str], files_for, analyzer, seen: set[str], newer: str, n: int = N_NEW,
-            workers: int = 16) -> tuple[list[dict], list[dict]]:
+            workers: int = 16, start: int = OLD_WALKED) -> tuple[list[dict], list[dict]]:
     """The edit test's walk, from the 785th repository, with the plan's extra drop reason.
 
     ``files_for`` runs ahead in a pool; repositories are still taken in order, and one fetched
     beyond the stop is neither recorded nor used.
     """
-    rest = order[OLD_WALKED:]
+    rest = order[start:]
     picked, log = [], []
     with ThreadPoolExecutor(workers) as pool:
         todo = [r for r in rest]
