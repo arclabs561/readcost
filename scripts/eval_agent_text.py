@@ -434,3 +434,272 @@ def render(res: dict, status: dict, calls: dict) -> str:
             out.append(f"| {ed} | {o} | " + " | ".join(fmt(r[o][f]) for f in FACTORS) + " |")
     return "\n".join(out) + "\n"
 
+
+
+# ---- stage 2, part 1: the search (docs/prereg/agent-text-search.md) ------------
+
+SEARCH_SEED = "20261120:agent-text-search"
+SEARCH_CALL_CAP = 70_000
+SEARCH_HOURS = 1.75
+SEED_ARM = "HsFpX"
+MARGIN = 0.02
+FIX_CANDIDATES = {
+    "stacked-nouns": [
+        ("Unpack the run of nouns with a preposition or a verb: 'the cache eviction policy threshold' becomes "
+        "'the threshold at which the cache evicts'. Leave an established term as it is."),
+        ("Keep at most two nouns together; say how the others relate with 'of', 'for' or a verb. Leave an "
+        "established term as it is."),
+        "Keep at most two nouns together."],
+    "long-dependency": [
+        ("Put the subject next to its verb: move the long phrase between them to the end of the sentence, or "
+        "into a sentence of its own."),
+        ("Bring the two words together. Move what separates them after the verb, or split the sentence, and keep "
+        "every fact in one of the two."),
+        "Put the subject next to its verb."],
+    "reduced-object-relative": [
+        "Add the 'that' back: 'the file the tool writes' becomes 'the file that the tool writes'.",
+        "Keep the 'that'. If the clause is long, make it a sentence of its own.",
+        "Add 'that' at the start of the clause."],
+    "hyphen-compound": [
+        "Write the relationship out: 'a user-config-driven step' becomes 'a step driven by the user's config'.",
+        "Say how the hyphenated words relate, with a preposition or a verb; keep an established hyphenated term.",
+        "Replace the hyphenated chain with a phrase that says how its words relate."],
+    "inline-list": [
+        "Use a bulleted list, one item per line, after a sentence that says what the items are.",
+        ("If there are more than three items or they are long, use a bulleted list; otherwise keep them in the "
+        "sentence."),
+        "Use a bulleted list, and keep every item."],
+}
+SCOPE_CANDIDATES = ["", " Leave the other sentences as they are.", " Change other sentences only where they need it.",
+                    " Keep the other sentences unless a change helps the reader."]
+
+
+def base_fixes() -> dict:
+    from readcost.features import FEATURES
+    return {r: FEATURES[r].fix for r in FIX_CANDIDATES}
+
+
+def fix_for(rule: str, sentence: str, base: str) -> str:
+    """readcost's `suggestion` with another base fix: the same reminder to keep a reason."""
+    from readcost.features import RATIONALE
+    m = RATIONALE.search(sentence) if rule in ("long-dependency", "inline-list") else None
+    if not m:
+        return base
+    return (f"{base} Split the sentence and keep the reason: the '{m.group(1).lower()}' "
+            "clause can be a sentence of its own.")
+
+
+def text_of(result, fixes: dict, scope: str, precision: bool = False, max_items: int = 8,
+            max_chars: int = 2500) -> str:
+    """The seed's form (head orders, the finding's message), with these fixes, scope line and note."""
+    from readcost.report import _worst_first
+    items = _worst_first([result])
+    if not items:
+        return ""
+    total = len(items)
+    head = HEAD_ORDER.format(n=total, s="s" if total != 1 else "", words=result.words) + scope
+    lines = [head]
+    for f in items[:max_items]:
+        loc = f"line {f.line}" if f.line else (f.label or f.path)
+        base = fixes.get(f.feature)
+        fix = fix_for(f.feature, f.sentence, base) if base is not None else f.suggestion
+        lines.append(_line(loc, f.feature, f.message, _note(f.feature) if precision else "", fix))
+    if total > max_items:
+        lines.append(f"- ...and {total - max_items} more (run `readcost check` for the full list)")
+    body = "\n".join(lines)
+    return body[: max_chars - 3] + "..." if len(body) > max_chars else body
+
+
+def species() -> list[tuple[str, str]]:
+    """(species, candidate) pairs; v0 of every species is the seed."""
+    out = [("seed", "v0")]
+    for r in FIX_CANDIDATES:
+        out += [(r, f"v{i}") for i in range(1, 4)]
+    out += [("scope", f"v{i}") for i in range(1, 4)]
+    return out
+
+
+def candidate_text(result, sp: str, cand: str) -> str:
+    fixes = base_fixes()
+    scope = ""
+    if sp in FIX_CANDIDATES and cand != "v0":
+        fixes[sp] = FIX_CANDIDATES[sp][int(cand[1]) - 1]
+    if sp == "scope" and cand != "v0":
+        scope = SCOPE_CANDIDATES[int(cand[1])]
+    return text_of(result, fixes, scope)
+
+
+def search_plan(analyzer, ref: Path) -> dict:
+    """Every edit prompt of the search, keyed (pid, species, candidate), and each species' paragraphs."""
+    from readcost.report import _worst_first
+    paras = texts(ref)
+    prompts, units = {}, {}
+    for p in paras:
+        result = ea.check(analyzer, p["text"])
+        shown = {f.feature for f in _worst_first([result])[:8]}
+        if not shown:
+            continue
+        for sp, cand in species():
+            if sp in FIX_CANDIDATES and sp not in shown:
+                continue
+            prompts[(p["id"], sp, cand)] = prompt(p["text"], candidate_text(result, sp, cand))
+            units.setdefault(sp, set()).add(p["id"])
+    return {"prompts": prompts, "units": units, "texts": {p["id"]: p["text"] for p in paras}}
+
+
+def run_search(ref: Path, client, analyzer, editors=EDITORS, judges=JUDGES, workers: int = 8,
+               call_editors=None, call_judges=None, phases=None) -> dict:
+    pl = search_plan(analyzer, ref)
+    unique = sorted(set(pl["prompts"].values()))
+    by_prompt = {}
+    for (pid, _sp, _c), pr in pl["prompts"].items():
+        by_prompt.setdefault(pr, pid)
+    ask_e = editors if call_editors is None else call_editors
+    ask_j = judges if call_judges is None else call_judges
+    tx = pl["texts"]
+    status = {}
+
+    def edits():
+        jobs = [(ed, pr) for pr in unique for ed in ask_e]
+        random.Random(f"{SEARCH_SEED}:calls:edits").shuffle(jobs)
+
+        def one(job):
+            client(job[0], ea.SYSTEM, job[1], ea.TEXT_SCHEMA)
+        ok = ea._pool(jobs, one, workers)
+        return ok and ea._pool([j for j in jobs if edit_text(client, *j) is None], one, workers)
+
+    def facts():
+        jobs = [(ed, pr, j) for pr in unique for ed in editors for j in ask_j]
+        random.Random(f"{SEARCH_SEED}:calls:facts").shuffle(jobs)
+
+        def one(job):
+            ed, pr, j = job
+            e = edit_text(client, ed, pr)
+            if e is not None:
+                client(j, None, ea.fact_prompt(tx[by_prompt[pr]], e), ea.fact_schema())
+        ok = ea._pool(jobs, one, workers)
+        again = [jb for jb in jobs if (e := edit_text(client, jb[0], jb[1])) is not None
+                 and facts_of(client, jb[2], tx[by_prompt[jb[1]]], e) is None]
+        return ok and ea._pool(again, one, workers)
+
+    def read():
+        jobs = [(ed, pr, j, o) for pr in unique for ed in editors for j in ask_j for o in (0, 1)]
+        random.Random(f"{SEARCH_SEED}:calls:read").shuffle(jobs)
+
+        def pair(job):
+            ed, pr, _j, o = job
+            e, c = edit_text(client, ed, pr), anchor(client, ed, tx[by_prompt[pr]])
+            if e is None or c is None:
+                return None
+            return (e, c) if o == 0 else (c, e)
+
+        def one(job):
+            got = pair(job)
+            if got:
+                client(job[2], None, ea.pair_prompt(*got), ea.PAIRWISE_SCHEMA)
+        ok = ea._pool(jobs, one, workers)
+        again = [jb for jb in jobs if (got := pair(jb)) and pick(client, jb[2], *got) is None]
+        return ok and ea._pool(again, one, workers)
+
+    for name, phase in (("edits", edits), ("facts", facts), ("read", read)):
+        if phases is not None and name not in phases:
+            continue
+        status[name] = bool(phase())
+        print(name, "done" if status[name] else "stopped", f"{client.calls} calls", flush=True)
+        if not status[name]:
+            break
+    return status
+
+
+def score(client, ed: str, pr: str, original: str, judges=JUDGES) -> tuple[float | None, float | None]:
+    """(change, read) of one edit, as the factorial scores them."""
+    e = edit_text(client, ed, pr)
+    if e is None:
+        return None, None
+    got = [c for c in (facts_of(client, j, original, e) for j in judges) if c]
+    change = float(any(c["lost"] or c["changed"] for c in got)) if got else None
+    c = anchor(client, ed, original)
+    scores = []
+    for j in judges:
+        if c is None:
+            break
+        p0, p1 = pick(client, j, e, c), pick(client, j, c, e)
+        first = {"1": "X", "2": "C", "tie": "tie"}.get(p0) if p0 else None
+        second = {"1": "C", "2": "X", "tie": "tie"}.get(p1) if p1 else None
+        o = ea.outcome(first, second, "X", "C")
+        if o is not None:
+            scores.append(ea.SCORE[o])
+    return change, (sum(scores) / len(scores) if scores else None)
+
+
+def analyse_search(pl: dict, client, editors=EDITORS, judges=JUDGES) -> dict:
+    tx = pl["texts"]
+    cache: dict = {}
+    res: dict = {"species": {}, "choice": {}}
+    for sp in ["scope", *FIX_CANDIDATES]:
+        pids = pl["units"].get(sp, set())
+        rows = {}
+        for cand in ("v0", "v1", "v2", "v3"):
+            key_sp = "seed" if cand == "v0" else sp
+            vals = {"change": {}, "read": {}, "utility": {}}
+            for pid in pids:
+                pr = pl["prompts"].get((pid, key_sp, cand))
+                if pr is None:
+                    continue
+                for ed in editors:
+                    if (ed, pr) not in cache:
+                        cache[(ed, pr)] = score(client, ed, pr, tx[pid], judges)
+                    ch, rd = cache[(ed, pr)]
+                    if ch is not None:
+                        vals["change"][(pid, ed)] = ch
+                    if rd is not None:
+                        vals["read"][(pid, ed)] = rd
+                    if ch is not None and rd is not None:
+                        vals["utility"][(pid, ed)] = rd - ch
+            rows[cand] = {k: ea.cluster_boot(v) if v else None for k, v in vals.items()}
+            rows[cand]["units"] = len(vals["utility"])
+            rows[cand]["_u"] = vals["utility"]
+        seed_u = rows["v0"]["_u"]
+        best, best_gain = "v0", 0.0
+        for cand in ("v1", "v2", "v3"):
+            u = rows[cand]["_u"]
+            both = [k for k in u if k in seed_u]
+            if not both:
+                continue
+            gain = statistics.mean(u[k] for k in both) - statistics.mean(seed_u[k] for k in both)
+            rows[cand]["gain_over_seed"] = round(gain, 4)
+            if gain >= MARGIN and gain > best_gain:
+                best, best_gain = cand, gain
+        for r in rows.values():
+            r.pop("_u")
+        res["species"][sp] = rows
+        res["choice"][sp] = best
+    return res
+
+
+def r_star(choice: dict) -> dict:
+    """R*'s fixes and scope line from the search's choices."""
+    fixes = base_fixes()
+    for r in FIX_CANDIDATES:
+        if choice.get(r, "v0") != "v0":
+            fixes[r] = FIX_CANDIDATES[r][int(choice[r][1]) - 1]
+    scope = SCOPE_CANDIDATES[int(choice.get("scope", "v0")[1])]
+    return {"fixes": fixes, "scope": scope, "precision": False}
+
+
+def render_search(res: dict, status: dict, calls: dict) -> str:
+    out = ["## Agent feedback text, stage 2: the search", "",
+           f"Calls {calls.get('calls')} in the cache (new this run {calls.get('new')}). Phases: "
+           + ", ".join(f"{k} {'done' if v else 'stopped'}" for k, v in status.items()), "",
+           "| Species | Candidate | Units | Change [95%] | Read vs C [95%] | Utility [95%] | Gain over seed | Chosen |",
+           "| --- | --- | --- | --- | --- | --- | --- | --- |"]
+    for sp, rows in res["species"].items():
+        for cand, r in rows.items():
+            out.append(f"| {sp} | {cand} | {r['units']} | {fmt(r['change'])} | {fmt(r['read'])} | "
+                       f"{fmt(r['utility'])} | {r.get('gain_over_seed', '')} | "
+                       f"{'yes' if res['choice'][sp] == cand else ''} |")
+    rs = r_star(res["choice"])
+    out += ["", "R* (the seed, HsFpX, with each species' choice):", "",
+            f"- scope line: {rs['scope'].strip() or '(none)'}"]
+    out += [f"- {r}: {rs['fixes'][r]}" for r in FIX_CANDIDATES]
+    return "\n".join(out) + "\n"
