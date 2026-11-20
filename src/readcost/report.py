@@ -309,15 +309,11 @@ def _precision(rule: str) -> dict | None:
     return {"correct": row.get("correct", 0), "accepted": row["accepted"], "labelled": row["labelled"]}
 
 
-AGENT_HEAD = ("readcost: {n} {what} in {words} words that may be hard to follow. These are questions, not "
-              "errors: in a held-out test, model raters said an editor would fix few such findings. Change "
-              "a sentence only if it reads badly to you, keep its meaning and facts, and leave the rest.")
-
-
-def _measured_note(prec: dict) -> str:
-    """How the raters judged this rule's findings, for a model deciding whether to act."""
-    return (f"Raters said an editor would fix {prec['correct']} of {prec['labelled']} such findings, "
-            f"and called {prec['accepted'] - prec['correct']} more optional.")
+# The wording of 0.3.0, kept because the edit test (docs/evaluation.md, "Editing
+# with readcost's feedback") found that feedback worded as questions made an
+# editor change a paragraph's facts more often, with no gain in reading.
+AGENT_HEAD = ("readcost: {n} hard-to-read construction{s} in {words} words. "
+              "Rewrite these sentences where the finding holds; keep the meaning and the facts.")
 
 
 def as_json(results: list[Result], **_) -> str:
@@ -452,7 +448,7 @@ def agent(results: list[Result], max_items: int = 8, max_chars: int = 2500, feed
     several = len({f.path for f in items}) > 1
     total = len(items)
     words = sum(r.words for r in results)
-    head = AGENT_HEAD.format(n=total, what="sentence" if total == 1 else "sentences", words=words)
+    head = AGENT_HEAD.format(n=total, s="s" if total != 1 else "", words=words)
     lines = [head]
     for f in items[:max_items]:
         if several:
@@ -460,11 +456,9 @@ def agent(results: list[Result], max_items: int = 8, max_chars: int = 2500, feed
         else:
             loc = f"line {f.line}" if f.line else (f.label or f.path)
         prec = _precision(f.feature)
-        # Model raters defer to a finding stated as a verdict (docs/evaluation.md, "a wider panel"), so
-        # the finding is put as a question, with how often raters thought such a finding worth fixing.
-        note = f" {_measured_note(prec)}" if prec else ""
-        fix = f.suggestion[:1].lower() + f.suggestion[1:]
-        lines.append(f"- {loc} [{f.feature}] {f.message}. Is it hard to follow here?{note} If it is, {fix}")
+        # A low share tells the model the finding may be wrong and is worth judging, not obeying.
+        note = f" (raters accepted {prec['accepted']} of {prec['labelled']} such findings)" if prec else ""
+        lines.append(f"- {loc} [{f.feature}] {f.message}{note}. Fix: {f.suggestion}")
     if total > max_items:
         lines.append(f"- ...and {total - max_items} more (run `readcost check` for the full list)")
     body = "\n".join(lines)
