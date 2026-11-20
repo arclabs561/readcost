@@ -1,5 +1,6 @@
 """Rehearse the complete packet handoff with distinct placeholders for the 24 edits."""
 import hashlib
+import os
 import subprocess
 import sys
 from collections import Counter, defaultdict
@@ -13,10 +14,20 @@ check = TestCase()
 
 
 def rehearse(root):
+    # These preferences change a patch's bytes in an otherwise identical checkout.
+    order = root / "diff-order"
+    order.write_text("*.md\n*.toml\n", encoding="utf-8")
+    preferences = {"diff.relative": "true", "diff.suppressBlankEmpty": "true",
+                   "diff.interHunkContext": "100", "diff.orderFile": str(order)}
+    env = dict(os.environ, GIT_CONFIG_COUNT=str(len(preferences)))
+    for i, (key, value) in enumerate(preferences.items()):
+        env[f"GIT_CONFIG_KEY_{i}"] = key
+        env[f"GIT_CONFIG_VALUE_{i}"] = value
+
     def run(stage, *, success=True):
         result = subprocess.run(
             [sys.executable, str(HERE / "packets.py"), stage, str(root)],
-            capture_output=True, text=True,
+            env=env, capture_output=True, text=True,
         )
         check.assertEqual(result.returncode == 0, success, result.stderr)
 

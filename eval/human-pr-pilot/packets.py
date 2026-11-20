@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import os
 import subprocess
 from pathlib import Path
 
@@ -25,7 +26,8 @@ INSTRUCTION = "Revise this pull request description to make it easier to read. K
 
 def frozen_diff(case):
     data = subprocess.check_output([
-        "git", "diff", "--no-color", "--no-ext-diff", "--no-textconv", "--no-renames",
+        "git", "-c", "diff.suppressBlankEmpty=false", "diff", "--no-relative", "-O", os.devnull,
+        "--no-color", "--no-ext-diff", "--no-textconv", "--no-renames", "--inter-hunk-context=0",
         "--full-index", "--diff-algorithm=myers", "--no-indent-heuristic", "--unified=3",
         "--src-prefix=a/", "--dst-prefix=b/", case["base"], case["head"], "--",
     ], cwd=HERE)
