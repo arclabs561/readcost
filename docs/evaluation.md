@@ -2979,6 +2979,58 @@ $4); the report is `eval/edit-localize/report.md`.
   Qwen and +3.2 [−0.8, +7.2] for Gemma. The editors and judges are
   open-weight models, and no person read the edits.
 
+## Which parts of the agent feedback matter, pre-registered
+
+The localization control left the question of readcost's own text open. The
+plan [docs/prereg/agent-text-factorial.md](prereg/agent-text-factorial.md),
+committed before any model call, varies five parts of what `readcost check
+-o agent` prints. Each part has two levels, in a half fraction of 16 arms. The
+editor's task stays the edit test's arm B message.
+
+- H: the first line orders a rewrite, or only reports.
+- S: a scope line ("Leave the other sentences as they are."), or none.
+- F: the rule's own fix, or a generic one ("Rewrite the sentence so it is
+  easier to read.").
+- P: the rater precision note, or none.
+- X: the finding's message with its excerpt, or the rule's title.
+
+Today's text is one of the arms (HsFPX). Each arm edited the same 100
+paragraphs with two editors (gpt-oss-120b and Mistral Small 4). Qwen and
+Gemma judged the facts, and readability against the edit test's arm C. GLM
+was left out as a judge, since it flagged nearly every edit. Decoy findings
+on 40 more paragraphs measured deference. One Hugging Face Job, 45 minutes,
+about $4; the report is `eval/agent-text/report.md`.
+
+| Part | Effect on edits changing content [95%] | On readability against C [95%] |
+| --- | --- | --- |
+| F, the rule's own fix | −14.9 points [−19.1, −10.9] | +0.163 [+0.126, +0.199] |
+| S, scope line | −9.9 points [−12.7, −7.2] | −0.085 [−0.103, −0.068] |
+| X, the finding's message | −4.1 points [−7.1, −1.2] | −0.023 [−0.038, −0.008] |
+| H, an order in the head | −2.8 points [−5.4, −0.2] | −0.020 [−0.031, −0.009] |
+| P, the precision note | +2.1 points [+0.1, +4.1] | −0.003 [−0.014, +0.008] |
+
+- **The rule's fix is by far the largest part.** A fix written for the
+  construction both kept facts better and read better than a generic
+  request to rewrite, for both editors. What readcost says about how to fix
+  a finding matters, not just that it names a sentence. The localization
+  control's arm E agrees: its fix ("Split it into shorter sentences") was
+  concrete too. So the gain may come from a concrete fix rather than from
+  the rule being right about the sentence. This test cannot tell those
+  apart.
+- **A scope line trades readability for facts.** It cut content changes by
+  10 points but made edits read worse against C. On the plan's utility
+  (readability minus change) it is a wash.
+- **The precision note slightly hurt.** It added content changes and lowered
+  utility (−0.024 [−0.045, −0.004]), below the plan's smallest difference.
+- **No sign of deference to decoys.** Editors rewrote 77% of decoy sentences
+  but about as many unflagged control sentences (index −0.039 [−0.125,
+  +0.042]). When every line shows only the rule's title, these editors
+  rewrite most sentences whatever is flagged.
+- No two-part interaction was larger than a main effect. By the plan, stage 2
+  starts from today's text without the precision note (HsFpX) and searches
+  part by part. This test used paragraphs from the earlier tests, so it
+  ships nothing by itself.
+
 ## Re-rating with open models from other families, pre-registered
 
 Every rater above was a Claude model. The plan
