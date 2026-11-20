@@ -3031,6 +3031,43 @@ about $4; the report is `eval/agent-text/report.md`.
   part by part. This test used paragraphs from the earlier tests, so it
   ships nothing by itself.
 
+## Searching readcost's fix texts, with a held-out test, pre-registered
+
+The plan [docs/prereg/agent-text-search.md](prereg/agent-text-search.md),
+committed before any model call, is stage 2 of the factorial above. The
+**search** tried three rewordings of each default rule's fix and three scope
+lines. It started from the factorial's seed (today's text without the
+precision note) and ran on the factorial's 200 paragraphs, editors and judges.
+The **held-out test** compared the chosen text, R\*, with today's on 100 new
+paragraphs. It used a third editor (Olmo 3.1 32B) and two judge families that
+no earlier test had used (Nemotron 3.5 Lightning 30B and Phi-4). Two Hugging
+Face Jobs, about 1.6 hours in all; the reports are
+`eval/agent-text-search/report.md` and `eval/agent-text-heldout/report.md`.
+
+- **The search mostly kept today's fixes.** Two candidates passed the plan's
+  margin of 0.02 in utility. reduced-object-relative's "Keep the 'that'. If
+  the clause is long, make it a sentence of its own." gained 0.033 on 120
+  units. hyphen-compound's "Replace the hyphenated chain with a phrase that
+  says how its words relate." gained 0.059 on 68. Both gains are well inside
+  the noise: utility intervals per candidate were about ±0.1. Worked examples
+  in a fix and shorter fixes both did worse. No scope line beat none; the
+  factorial's scope line again kept facts better, by 9 points, and read
+  worse.
+- **The held-out test decided nothing useful.** By the plan's rule, R\* does
+  not replace today's text, so today's text stays. But the new judges did not
+  discriminate. 94% to 95% of pairwise outcomes were splits, the same version
+  picked by position in both orders. Both judges called about 96% of edits
+  content-changing in every arm, C included. Earlier tests separated C from
+  readcost's feedback by 14 points. The held-out test therefore says nothing
+  about whether R\* is better or worse. The plan's fallback covered judges
+  that fail to load or parse, not judges that answer by position.
+- **What this means for the search.** With these judges, rewordings of a
+  concrete fix differ by less than the measurement can resolve. A later
+  search needs more sensitive scoring: each candidate judged against the
+  seed directly, judge probabilities averaged over both orders, and
+  successive halving. It also needs held-out judges checked first for
+  position bias and for flagging nearly every edit.
+
 ## Re-rating with open models from other families, pre-registered
 
 Every rater above was a Claude model. The plan

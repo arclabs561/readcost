@@ -1,0 +1,20 @@
+{
+ "fixes": {
+  "stacked-nouns": "Keep at most two nouns together. Unpack the rest with a preposition or a relative clause, if the result reads naturally; leave an established term as it is.",
+  "long-dependency": "Put the subject next to its verb. Move long modifiers after the verb or into a second sentence.",
+  "reduced-object-relative": "Keep the 'that'. If the clause is long, make it a sentence of its own.",
+  "hyphen-compound": "Replace the hyphenated chain with a phrase that says how its words relate.",
+  "inline-list": "Use a bulleted list."
+ },
+ "scope": "",
+ "precision": false,
+ "choice": {
+  "scope": "v0",
+  "stacked-nouns": "v0",
+  "long-dependency": "v0",
+  "reduced-object-relative": "v2",
+  "hyphen-compound": "v3",
+  "inline-list": "v0"
+ },
+ "from": "agent-text-search/main-1/search.json"
+}

@@ -1,0 +1,8 @@
+{
+ "replace": false,
+ "rule": "docs/prereg/agent-text-search.md, part 2, decision",
+ "reads": false,
+ "content": true,
+ "note": "The held-out judges did not discriminate: 94-95% of pairwise outcomes were position splits and about 96% of edits in every arm were called content-changing, including C, which earlier tests separated from R0 by 14 points. Today's text stays.",
+ "from": "agent-text-heldout/main-1/heldout.json"
+}
