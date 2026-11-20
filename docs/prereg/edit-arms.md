@@ -732,3 +732,77 @@ benchmark of editing prose was checked. The judges are now the three
 newest models. That should make the judgements less noisy, and it narrows
 further what the result can say about strong editors. The primary
 comparison, B against C, still holds the editor fixed within each pair.
+
+### 20 November 2026, after the primary result of run main-1 was seen: resuming main-1
+
+This amendment is written after the report of run `main-1` was read,
+primary outcome included. It changes one cap, so that the phases
+planned above can finish, and nothing else.
+
+*What main-1 found.* The job started at 22:21 UTC on 19 November from
+`d613308`. B against C, over all three judges, was **0.542 [0.482,
+0.601]**: 151 wins, 1 tie, 279 splits, 106 losses, 3 missing;
+inconclusive. So neither of the first two claims holds, and the fact
+checks cannot change that: the first claim needs "B better" before its
+content bound is read. The report also gave B against A, C against A
+and D's comparisons from Qwen and Gemma alone. Those were seen too.
+
+*Why it stopped.* Not time and not money. It ran 2,306 seconds of its
+4 hours, and the owner reports about $3.30 of its $20. It stopped at
+the call cap of the original phases, 5,200, which counts every reply in
+the cache, D's included (amendment 7). The amendment of 19 November
+kept that cap and moved D's phases into the same pass as the original
+ones. In the third pass, each judge runs its original phases and then
+its D phases before the next judge starts. So when GLM-4.7-Flash, the
+last judge, began its fact checks, the cache already held 6,274
+replies. About 2,690 of them came from D's edits and from Qwen's and
+Gemma's D phases. The first call over the cap stopped the phase, and
+GLM made no call in that pass. Without D's replies the original phases
+would have needed about 4,660 calls, under the cap. Calls asked again
+played almost no part: there were 6 in the whole run, 3 by OLMo and 3
+by Qwen, and GLM-4.7-Flash answered all 358 of its calls the first
+time. The stop followed the rules as written; the mistake was in the
+plan, which did not check how the old cap and the new order interact.
+
+*What changes, for one resumed run only.*
+
+- The call cap of the original phases rises from 5,200 to **7,500**,
+  counted as before over every reply in the cache. GLM's three original
+  phases need 1,074 calls (358 fact checks, 358 for B against A, 358
+  for C against A), so the cache reaches 7,348. The other 152 are room
+  for calls asked again.
+- The cap for the whole run stays at 9,160. GLM's D phases need 1,253
+  more calls, 8,601 in all.
+- The resumed job has a timeout of **1.5 hours** ($7.50 at $5 an hour).
+  With the pilot (at most 1.5 hours) and main-1 (under 0.7 hours
+  billed), the test stays under its 6 GPU hours.
+
+The amendment of 19 November allows no other job without a further
+amendment. This is that amendment, for one job, with the run id
+`main-1b`.
+
+*How it resumes.* The job starts with main-1's replies as its cache
+(`edit-arms/main-1/replies.jsonl` in the dataset). Where main-1 finished
+a phase for a model, the job asks that model nothing in that phase. A
+model left with nothing to ask is not loaded. So no edit and no B
+against C judgement is asked again. That includes three OLMo edits (B,
+C and D of one paragraph) and two of Qwen's later calls, which failed
+twice in main-1. They stay missing: the rule above, to ask once more at
+the end of the phase, has already been applied to them. Only
+GLM-4.7-Flash loads, for its fact checks, B against A, C against A, D
+against B, D's fact checks, D against C and D against A. Its revision,
+prompts, settings, phase order and seeds are those of main-1. The
+outputs go to `edit-arms/main-1b/` and hold every reply of both runs.
+
+*What stays.* Everything else. The primary outcome stays as main-1
+measured it. The resumed run asks no B against C call, and its report
+computes B against C from the same replies with the same code, so it
+should give the same numbers. If it does not, main-1's numbers stand and
+the report says why they differ. The secondary results this run
+completes are reported with a note that they were completed after the
+primary result was seen. That covers:
+
+- GLM's judgements and fact checks;
+- the content measures, which need two of three judges;
+- B against A and C against A over all three judges;
+- all of arm D's comparisons and readings.
