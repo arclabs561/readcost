@@ -24,7 +24,7 @@ its rule.
 | inline-list | "`durability` provides filesystem and in-memory directories, atomic writes, WALs, record logs, checkpoint files, CRC validation, and sync helpers." | a bulleted list |
 | participial-clause (opt-in) | "The page updates automatically when the file changes on disk, highlighting what changed." | "The page updates automatically when the file changes on disk and highlights what changed." |
 | nominalization (opt-in, constructed) | "The tool performs validation of the input." | "The tool validates the input." |
-| center-embedding (constructed) | "The job that the script that the team maintains starts fails when the disk is full." | "The team maintains a script that starts the job, and the job fails when the disk is full." |
+| center-embedding (opt-in, constructed) | "The job that the script that the team maintains starts fails when the disk is full." | "The team maintains a script that starts the job, and the job fails when the disk is full." |
 | undefined-acronym (opt-in, constructed) | "Each shard writes its changes to the WAL before it updates the index." | "Each shard writes its changes to the write-ahead log (WAL) before it updates the index." |
 
 Turn any opt-in rule on with a level, such as `--info nominalization` or
@@ -115,8 +115,11 @@ share a sentence. Language models use it more often than people
 
 A clause nested two deep inside clauses that continue after it, which people
 judge hard in constructed sentences unless the innermost subject is I, you or
-we (Gibson 1998, 2000). It is on by default since the held-out tests
-([evaluation](evaluation.md#precision-by-kind-of-document-pre-registered)).
+we (Gibson 1998, 2000). Opt-in. Claude raters supported it in every held-out
+round, and it was briefly on by default; open models from other families,
+re-rating the same items, mostly rejected it, and its findings did not beat
+the longest sentence without the rule's message
+([evaluation](evaluation.md#re-rating-with-open-models-from-other-families-pre-registered)).
 
 ### undefined-acronym
 

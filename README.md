@@ -144,7 +144,7 @@ Other commands:
 | inanimate-subject (opt-in) | [a thing doing a person's action](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#inanimate-subject) |
 | participial-clause (opt-in) | [a clause hung on an -ing verb after a comma](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#participial-clause) |
 | nominalization (opt-in) | [an action written as a noun](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#nominalization) |
-| center-embedding | [a clause nested inside a nested clause](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#center-embedding) |
+| center-embedding (opt-in) | [a clause nested inside a nested clause](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#center-embedding) |
 | undefined-acronym (opt-in) | [an acronym used before it is spelled out](https://github.com/arclabs561/readcost/blob/main/docs/rules.md#undefined-acronym) |
 
 [docs/rules.md](https://github.com/arclabs561/readcost/blob/main/docs/rules.md)
