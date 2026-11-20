@@ -28,6 +28,11 @@ on:
       - eval/derived/README.md
       - scripts/eval_repetition_prereg.py
       - scripts/fetch_repetition_data.sh
+      - scripts/eval_edit_arms.py
+      - scripts/rater_ensemble.py
+      - scripts/eval_agent_loop.py
+      - eval/edit-arms/paragraphs.jsonl
+      - eval/edit-arms/rule_precision.json
 
 permissions:
   contents: read
@@ -579,3 +584,96 @@ jobs:
         with:
           name: stack-terms-tech
           path: stack-terms-tech.md
+
+  # Does readcost's feedback make an agent's edit easier to read than a plain
+  # request for clarity, and than the original? Pre-registered in
+  # docs/prereg/edit-arms.md. Since the amendment of 19 November 2026 the run
+  # uses open-weight models in a Hugging Face Job (scripts/edit_arms_job.py),
+  # not this job. This job stays as a fallback for the original plan's
+  # OpenRouter models and runs only when started by hand; using it would need
+  # a further amendment. It needs the secret OPENROUTER_API_KEY in the
+  # environment openrouter. Arm D (the prereg's amendment 7) words the
+  # feedback as questions and runs after the original phases. Those stay
+  # capped at $60 and 5,200 calls; the whole run, D included, at $106 and
+  # 9,160, counted over every reply in the cache. A run cut off by the time
+  # limit resumes from the cache when run again. The paragraphs and the edits
+  # stay in the runner; the artifact holds the report only.
+  edit-arms:
+    # Only by hand. On pull requests the job is skipped before it asks for
+    # the environment, so no pull request waits for an approval.
+    if: github.event_name == 'workflow_dispatch'
+    # The key lives in this environment, whose required reviewer approves each
+    # run before the key is handed to it.
+    environment: openrouter
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - name: Skip without a model key
+        id: gate
+        env:
+          KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          if [ -z "$KEY" ]; then
+            echo "edit-arms: skipped, the secret OPENROUTER_API_KEY is not set in the environment openrouter." >> "$GITHUB_STEP_SUMMARY"
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.gate.outputs.run == 'true'
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # The branch itself, not the merge with main: verify compares src/
+          # with a57e19e, and main has moved on since.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - if: steps.gate.outputs.run == 'true'
+        uses: ./.github/actions/setup
+        with:
+          sync-args: --no-dev --group eval
+      - name: readcost matches the pre-registration
+        if: steps.gate.outputs.run == 'true'
+        run: uv run python scripts/eval_edit_arms.py verify
+      - id: texts
+        if: steps.gate.outputs.run == 'true'
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: |
+            ref/edit-arms/texts.jsonl
+            ref/edit-arms/missing.json
+          key: eval-edit-arms-texts-${{ hashFiles('eval/edit-arms/paragraphs.jsonl') }}-v1
+      - name: Fetch the paragraphs at their commits
+        if: steps.gate.outputs.run == 'true' && steps.texts.outputs.cache-hit != 'true'
+        run: uv run python scripts/eval_edit_arms.py fetch eval/edit-arms ref/edit-arms
+      # Replies, with their cost, carry over between runs: a rerun pays only
+      # for what is missing, and the caps count what was paid before.
+      - if: steps.gate.outputs.run == 'true'
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/edit-arms/replies.jsonl
+          key: eval-edit-arms-replies-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: eval-edit-arms-replies-
+      - name: Edits and judgements
+        if: steps.gate.outputs.run == 'true'
+        env:
+          EVAL_OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: uv run python scripts/eval_edit_arms.py run ref/edit-arms --workers 12
+      - if: always() && steps.gate.outputs.run == 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ref/edit-arms/replies.jsonl
+          key: eval-edit-arms-replies-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Report
+        if: always() && steps.gate.outputs.run == 'true'
+        run: |
+          uv run python scripts/eval_edit_arms.py report ref/edit-arms --json edit-arms.json --pointers eval/edit-arms | tee edit-arms.md
+          cat edit-arms.md >> "$GITHUB_STEP_SUMMARY"
+          cp ref/edit-arms/status.json ref/edit-arms/missing.json . 2>/dev/null || true
+      - if: always() && steps.gate.outputs.run == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: edit-arms
+          path: |
+            edit-arms.md
+            edit-arms.json
+            status.json
+            missing.json
