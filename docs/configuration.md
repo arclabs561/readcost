@@ -40,6 +40,10 @@ useful ones:
   report a finding once per session and file, and block or deny on it once;
   `"always"` reports every finding after every edit. See
   [hooks](hooks.md#shared-rules).
+- `hooks.track`: `true` (the default) makes the Claude Code and piku hooks
+  count, per rule and on this machine only, how many reported findings a later
+  edit removed. `readcost stats` prints the counts; `false` turns this off.
+  See [hooks](hooks.md#shared-rules).
 - `feedback_link`: `false` drops the line that text and agent output end
   with, which points to the false-positive form.
 - `language_check`: `false` checks text that looks like another language

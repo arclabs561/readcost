@@ -166,10 +166,12 @@ class Memory:
         _prune(d)
 
 
-# Only files this module writes: a session key (32 hex digits) or a
-# temporary file left by an interrupted write. Anything else in the directory,
-# which READCOST_HOOK_STATE may point anywhere, is never touched.
-_OURS = re.compile(r"(?:[0-9a-f]{32}|\.tmp-[^/]*)\.json")
+# Only files this module and actions.py write: a session key (32 hex digits),
+# a session's action ledger (the key plus ".actions") or a temporary file left
+# by an interrupted write. Anything else in the directory, which
+# READCOST_HOOK_STATE may point anywhere, is never touched; nor are the
+# action counters (action-stats.json), which add up across sessions.
+_OURS = re.compile(r"(?:[0-9a-f]{32}(?:\.actions)?|\.tmp-[^/]*)\.json")
 
 
 def _prune(d: Path) -> None:

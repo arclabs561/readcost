@@ -27,6 +27,7 @@ from dataclasses import replace
 from pathlib import Path
 
 from . import _log, emit, read_payload
+from .actions import Ledger
 from .common import analyze, changed_lines, config_for, feedback, relpath
 from .repeats import Memory, earlier, repeat_note
 
@@ -87,6 +88,7 @@ def pre_tool_use(payload: dict, cfg, cwd: str) -> int:
                                          "additionalContext": repeat_note(len(old))}})
         return 0
     memory.remember(result.findings)
+    Ledger(payload, cfg, rel, cwd).record(new[: cfg.hooks.max_items])
     shown = replace(result, findings=new)
     if blocking:
         again = (" Where a finding does not hold, make the same write again: readcost denies "
@@ -117,7 +119,9 @@ def post_tool_use(payload: dict, cfg, cwd: str) -> int:
     if not full.is_file():
         return 0
     # Read from the checked path: piku's process cwd need not be the payload cwd.
-    result = analyze(cfg, path=target[0], text=full.read_text(encoding="utf-8", errors="ignore"))
+    text = full.read_text(encoding="utf-8", errors="ignore")
+    Ledger(payload, cfg, target[0], cwd).observe(text)
+    result = analyze(cfg, path=target[0], text=text)
     log = Path(cwd) / ".piku" / "readcost.jsonl"
     log.parent.mkdir(exist_ok=True)
     with open(log, "a", encoding="utf-8") as fh:

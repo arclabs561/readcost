@@ -91,6 +91,33 @@ gets no memory: the hook reports every time, as with `hooks.repeat =
 another. git hooks and `readcost hook generic` keep no memory; a harness that
 loops on the generic protocol should stop when the same findings come back.
 
+**Which findings get acted on.** With `hooks.track = true` (the default), the
+Claude Code and piku hooks also count, per rule, how often a finding they
+reported was acted on. Tools for static analysis judge usefulness the same way:
+Infer counts a report as acted on when a later version of the code no longer
+has it, and Google's Tricorder treats a report that drew no action as an
+effective false positive. readcost records each finding it reports, once per
+session and file. Then, each time a hook sees that whole file again in the same
+session (Claude Code's or piku's PostToolUse), it checks whether the flagged
+words are still there:
+
+- gone: the finding was **acted on**;
+- back after being gone: it was **reintroduced**, and counts as not acted on;
+- still there: it was **ignored**.
+
+The check compares words, not findings, so it costs no parse. Rewording around
+the flagged words counts as ignored, and deleting them counts as acted on
+whether or not the new sentence reads better. `readcost stats` prints the
+counts and each rule's action rate; `-o json` gives the same as JSON, and
+`--reset` deletes them. A rule that agents seldom act on in your project is
+a candidate to turn down under `[readcost.rules]`.
+
+The counts are kept in `action-stats.json` next to the session memory
+described above: rule names and numbers, nothing else. Each session's list of
+what it reported holds only hashes and is deleted with the session memory
+after a day. Nothing is sent anywhere. Set `hooks.track = false` to keep no
+counts.
+
 **Short feedback.** A model gets at most 8 findings and 2,500 characters, worst
 first, each with its fix (`hooks.max_items`, `hooks.max_chars`). Claude Code
 caps `additionalContext` at 10,000 characters.
