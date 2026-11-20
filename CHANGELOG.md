@@ -7,16 +7,6 @@ configuration.
 
 ## [Unreleased]
 
-### Changed
-
-- `-o agent`, and the hooks that use it, are worded as in 0.3.0 again:
-  "Rewrite these sentences where the finding holds", and each finding's fix,
-  with how often raters accepted the rule's findings (now from the held-out
-  test across formats). The questions of 0.4.0 are gone. In the
-  pre-registered edit test, edits made from the questions read no better
-  and changed the paragraph's facts more often (docs/evaluation.md,
-  "Editing with readcost's feedback").
-
 ## [0.4.0] - 2026-11-19
 
 ### Added
@@ -45,15 +35,15 @@ configuration.
 
 - The Action edits its summary comment only when `github-actions[bot]`
   posted it, not any comment that starts with the marker.
-- `-o agent`, and the hooks that use it, put each finding as a question
-  ("Is it hard to follow here?") and tell the model to change a sentence
-  only if it reads badly. Model raters agreed with readcost's message far
-  more often than with the same sentence shown without it, so an order to
-  rewrite would pass that deference on to the agent.
-- The precision beside a finding, in `-o agent`, `-o json` and `readcost
-  explain`, comes from the held-out test across formats, built by
-  `scripts/build_rule_precision.py`, and now says how many findings raters
-  thought an editor would fix as well as how many they accepted.
+- The precision beside a finding, in `-o agent` ("raters accepted N of M
+  such findings"), `-o json` and `readcost explain`, comes from the held-out
+  test across formats, built by `scripts/build_rule_precision.py`. `-o json`
+  and `readcost explain` also say how many findings raters thought an
+  editor would fix. `-o agent` keeps the wording of 0.3.0: a version that
+  put each finding as a question was tested before this release and
+  dropped, because edits made from it read no better and changed the
+  paragraph's facts more often (docs/evaluation.md, "Editing with
+  readcost's feedback").
 - inline-list is off in doc comments and docstrings unless a config sets
   its level. In the pre-registered test across formats, model raters
   accepted 1 of 28 of its findings there, against 5 of 16 in Markdown.
