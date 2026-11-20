@@ -2888,6 +2888,50 @@ rounded to the nearest point; the report has the exact counts.
   inline-list in its first 15 batches; its labels are kept (see the plan's
   amendments).
 
+## Editing with readcost's feedback, pre-registered
+
+The question is whether readcost's feedback makes an agent's edits better
+than a plain instruction to make the text clearer. The plan is
+[docs/prereg/edit-arms.md](prereg/edit-arms.md), committed before any
+paragraph was drawn or model called, with dated amendments before the run.
+Sixty paragraphs from READMEs and docs of repositories created after 1
+November 2026 were each edited by three open-weight models from three
+families (gpt-oss-120b, Mistral Small 4, Olmo 3.1 32B), in four arms: A,
+the original; B, an edit given readcost's `-o agent` feedback as it was at
+0.3.0; C, an edit given "Revise this paragraph to make it easier to read.
+Keep every fact." with the same word limit; and D, B's findings worded as
+questions with held-out precision, as #102 shipped them. Judges from three
+other families (Qwen3.8 27B, Gemma 4 31B, GLM-4.7 Flash) compared versions
+blind, in both orders, and listed facts lost, added or changed. It ran on
+Hugging Face Jobs (runs `main-1` and `main-1b`, about $5 in all); the
+report is `eval/edit-arms/report.md`.
+
+`main-1` stopped after the primary comparison at the original phases' call
+cap, which counted arm D's calls too. An amendment written after that result
+was seen raised the cap only to finish the pre-registered phases, and
+`main-1b` finished them from `main-1`'s cached replies; the primary result is
+`main-1`'s, unchanged.
+
+- Primary: B against C is 0.542 (95% interval 0.482 to 0.601), which the plan
+  calls inconclusive. readcost's feedback is not shown to make edits read
+  better than a generic instruction does, nor shown to add nothing.
+- Content: edits made with readcost's feedback changed the paragraph's
+  facts less often, 47.5% of edits against 58.1% (difference −10.6 points,
+  −19.4 to −2.2). Specific findings seem to keep an editor's changes narrow.
+  The share is high in every arm because GLM lists lost facts freely; the
+  difference is what the plan measures.
+- Both edits read better than the original by the judges' pairwise votes
+  (0.87 and 0.82). The plan's claim that an edit beats the original also
+  needs its content to hold, and neither arm meets that.
+- Question wording, arm D: no better than B on reading (0.494, "no
+  meaningful advantage"), and worse on content: 8.4 points more edits
+  changed content (+1.1 to +15.6) and 0.33 more facts were lost per edit.
+  By the plan's rule the question wording should not ship. D differed from
+  B in its wording and in its precision figures (held-out rather than
+  in-sample), so the test cannot say which of the two did it.
+- The judges and editors are open-weight models, weaker than the closed
+  ones first planned, and no person read any edit.
+
 ## Re-rating with open models from other families, pre-registered
 
 Every rater above was a Claude model. The plan
