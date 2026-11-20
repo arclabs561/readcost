@@ -7,6 +7,8 @@ configuration.
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-19
+
 ### Added
 
 - Jupyter notebooks (`.ipynb`, `--format notebook`): readcost reads the
@@ -31,15 +33,8 @@ configuration.
 
 ### Changed
 
-- center-embedding is opt-in again, after a short time on by default. Claude
-  raters supported it in every held-out round, but four open models from
-  other families, re-rating the same items, mostly rejected its findings
-  when told the rule, and its findings did not beat the longest sentence
-  without it (docs/evaluation.md, "Re-rating with open models"). Turn it on
-  with `center-embedding = "info"`.
 - The Action edits its summary comment only when `github-actions[bot]`
   posted it, not any comment that starts with the marker.
-
 - `-o agent`, and the hooks that use it, put each finding as a question
   ("Is it hard to follow here?") and tell the model to change a sentence
   only if it reads badly. Model raters agreed with readcost's message far
@@ -354,6 +349,7 @@ First release on PyPI (`pip install readcost`, or `uvx readcost`).
 
 Not published. The first tagged state of the repository.
 
-[Unreleased]: https://github.com/arclabs561/readcost/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/arclabs561/readcost/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/arclabs561/readcost/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/arclabs561/readcost/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/arclabs561/readcost/releases/tag/v0.2.0

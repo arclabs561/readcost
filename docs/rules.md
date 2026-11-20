@@ -66,7 +66,7 @@ subject, such as own or decide, with a file or a function as its subject. It use
 WordNet, so treat its findings as prompts to reread, not verdicts. An
 identifier as a subject (`` `parse()` returns ``) is not reported.
 
-It is opt-in after 0.3.0. On READMEs the rules had not been tuned on, three
+It is opt-in since 0.4.0. On READMEs the rules had not been tuned on, three
 blind model raters accepted none of 40 of its findings, and judged the
 construction present in 9
 ([evaluation](evaluation.md#held-out-precision-pre-registered)). The
