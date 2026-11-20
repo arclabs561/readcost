@@ -418,3 +418,27 @@ def test_transcript_finding_is_reported_on_its_own_record(analyzer, tmp_path):
     assert "Tell me about" not in shown
     assert json.loads(render([result], "json"))
 
+
+# ----------------------------------------------------------- byte order mark
+
+def test_markdown_with_bom_parses_like_markdown_without_it():
+    """A BOM must not turn a heading into prose or hide front matter."""
+    body = "---\ntitle: Notes\n---\n\n# Heading words here\n\nA short paragraph of prose.\n"
+    plain = extract(body, "a.md")
+    with_bom = extract("﻿" + body, "a.md")
+    assert [s.text for s in with_bom] == [s.text for s in plain]
+    assert all("Heading words" not in s.text for s in with_bom)
+    assert all("title: Notes" not in s.text for s in with_bom)
+
+    after = "A short paragraph of prose.\n"
+    heading_first = extract("\ufeff# Heading words here\n\n" + after, "a.md")
+    assert [s.text for s in heading_first] == [s.text for s in extract(after, "a.md")]
+
+
+def test_markdown_with_bom_keeps_offsets_into_the_original_text():
+    src = "﻿# Heading\n\nFirst sentence here. Second one.\n"
+    segs = check_segments(src, "a.md")
+    assert segs
+    seg = segs[0]
+    start = seg.starts[0]
+    assert src[start:start + 5] == "First"

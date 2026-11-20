@@ -621,12 +621,17 @@ def markdown_lines(lines: Iterable[tuple], path: str, label: str = "") -> list[S
 
 
 def extract_markdown(text: str, path: str, label: str = "") -> list[Segment]:
-    first = line_starts(text)
+    # A byte order mark is not Markdown. Left in, "\ufeff# Title" is a
+    # paragraph instead of a heading and front matter is not recognised. Parse
+    # without it; ``bom`` keeps the spans pointing into ``text`` as given.
+    bom = 1 if text.startswith("\ufeff") else 0
+    body = text[bom:]
+    first = line_starts(body)
 
     def at(k: int, col: int) -> Span:
-        return (first[k] + col, first[k] + col + 1) if k < len(first) else UNKNOWN
+        return (first[k] + col + bom, first[k] + col + 1 + bom) if k < len(first) else UNKNOWN
 
-    return _markdown(text, path, label, lambda k: k + 1, at)
+    return _markdown(body, path, label, lambda k: k + 1, at)
 
 
 # --------------------------------------------------------------- plain text
