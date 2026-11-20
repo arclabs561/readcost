@@ -24,7 +24,6 @@ from .config import Config, load_config
 from .engine import Analyzer, LineIndex, Result
 from .extract import detect_format
 from .features import Finding
-from .report import RULE_SECTIONS, rule_url
 
 SOURCE = "readcost"
 SEVERITY = {
@@ -32,9 +31,14 @@ SEVERITY = {
     "warn": types.DiagnosticSeverity.Warning,
     "error": types.DiagnosticSeverity.Error,
 }
-# Features with a section in docs/rules.md. long-sentence has none, so its
-# diagnostics carry no link.
-DOCUMENTED = RULE_SECTIONS
+# Features with a row in the README's "What it flags" table. long-sentence has
+# none; test_lsp checks this set against the README.
+DOCUMENTED = frozenset({
+    "stacked-nouns", "long-dependency", "inanimate-subject", "reduced-object-relative",
+    "hyphen-compound", "inline-list", "nominalization", "participial-clause", "center-embedding",
+    "undefined-acronym",
+})
+DOCS_URL = "https://github.com/arclabs561/readcost#what-it-flags"
 CHANGE_DELAY = 0.5  # seconds of no typing before a changed document is checked again
 
 
@@ -74,7 +78,7 @@ def to_diagnostic(f: Finding, lines: list[str],
         message=message,
         severity=SEVERITY.get(f.severity, types.DiagnosticSeverity.Information),
         code=f.feature,
-        code_description=types.CodeDescription(href=rule_url(f.feature)) if f.feature in DOCUMENTED else None,
+        code_description=types.CodeDescription(href=DOCS_URL) if f.feature in DOCUMENTED else None,
         source=SOURCE,
     )
 

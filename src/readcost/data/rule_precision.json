@@ -1,57 +1,31 @@
 {
- "run": "breadth-precision",
- "raters": 12,
- "method": "findings drawn from Markdown, reStructuredText and HTML docs, doc comments, commit messages and pull request descriptions of repositories no rule was tuned on; correct means at least 7 of 12 model raters said an editor would fix it, accepted means at least 7 said correct or defensible (docs/evaluation.md, Precision across formats)",
+ "run": "results-coredep",
+ "raters": 8,
+ "method": "findings sampled from essays and documentation by well-regarded writers; accepted means a majority of the raters labelled it correct or defensible",
  "rules": {
-  "center-embedding": {
-   "labelled": 30,
-   "correct": 4,
-   "accepted": 13
-  },
-  "hyphen-compound": {
-   "labelled": 87,
-   "correct": 0,
-   "accepted": 42
+  "stacked-nouns": {
+   "labelled": 19,
+   "accepted": 3
   },
   "inanimate-subject": {
-   "labelled": 42,
-   "correct": 0,
-   "accepted": 0
+   "labelled": 12,
+   "accepted": 2
+  },
+  "hyphen-compound": {
+   "labelled": 13,
+   "accepted": 2
   },
   "inline-list": {
-   "labelled": 100,
-   "correct": 5,
-   "accepted": 21
+   "labelled": 15,
+   "accepted": 7
   },
   "long-dependency": {
-   "labelled": 91,
-   "correct": 5,
-   "accepted": 28
-  },
-  "nominalization": {
-   "labelled": 19,
-   "correct": 2,
-   "accepted": 13
-  },
-  "participial-clause": {
-   "labelled": 50,
-   "correct": 0,
-   "accepted": 16
+   "labelled": 3,
+   "accepted": 0
   },
   "reduced-object-relative": {
-   "labelled": 85,
-   "correct": 4,
-   "accepted": 43
-  },
-  "stacked-nouns": {
-   "labelled": 100,
-   "correct": 0,
-   "accepted": 36
-  },
-  "undefined-acronym": {
-   "labelled": 50,
-   "correct": 0,
-   "accepted": 4
+   "labelled": 2,
+   "accepted": 1
   }
  }
 }

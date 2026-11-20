@@ -9,7 +9,7 @@ Python API::
         print(f.line, f.feature, f.message)
 """
 
-__version__ = "0.4.0"
+__version__ = "0.3.0"
 
 from .config import Config, load_config  # noqa: E402
 from .engine import Analyzer, Result, check_file, check_text  # noqa: E402

@@ -14,28 +14,10 @@ from urllib.parse import quote
 
 from .engine import LineIndex, Result
 from .features import FEATURES
-from .prtext import BODY as PR_BODY
-from .prtext import PATHS as PR_TEXT
-from .prtext import TITLE as PR_TITLE
-from .prtext import where as _where
 
 OUTPUTS = ("full", "concise", "json", "sarif", "github", "agent", "pr-comment")
 REPO_URL = "https://github.com/arclabs561/readcost"
 RULES_URL = REPO_URL + "#what-it-flags"
-# Rules with a section of their own in docs/rules.md; test_outputs checks this
-# set against the file's headings.
-RULE_SECTIONS = frozenset({
-    "stacked-nouns", "long-dependency", "inanimate-subject", "reduced-object-relative",
-    "hyphen-compound", "inline-list", "participial-clause", "nominalization", "center-embedding",
-    "undefined-acronym",
-})
-
-
-def rule_url(rule: str) -> str:
-    """The rule's section in docs/rules.md, or the README's rule table."""
-    if rule in RULE_SECTIONS:
-        return f"{REPO_URL}/blob/main/docs/rules.md#{rule}"
-    return RULES_URL
 # The template chooser, which lists the false-positive form; short enough for a terminal line.
 FEEDBACK_URL = REPO_URL + "/issues/new/choose"
 FEEDBACK_LINE = f"readcost: a finding is wrong? Report it at {FEEDBACK_URL}"
@@ -302,18 +284,9 @@ def rule_precision() -> dict:
 
 
 def _precision(rule: str) -> dict | None:
-    """{correct, accepted, labelled} for a rule with at least 5 labelled findings, else None."""
+    """{accepted, labelled} for a rule with at least 5 labelled findings, else None."""
     row = rule_precision().get("rules", {}).get(rule)
-    if not row or row["labelled"] < 5:
-        return None
-    return {"correct": row.get("correct", 0), "accepted": row["accepted"], "labelled": row["labelled"]}
-
-
-# The wording of 0.3.0, kept because the edit test (docs/evaluation.md, "Editing
-# with readcost's feedback") found that feedback worded as questions made an
-# editor change a paragraph's facts more often, with no gain in reading.
-AGENT_HEAD = ("readcost: {n} hard-to-read construction{s} in {words} words. "
-              "Rewrite these sentences where the finding holds; keep the meaning and the facts.")
+    return {"accepted": row["accepted"], "labelled": row["labelled"]} if row and row["labelled"] >= 5 else None
 
 
 def as_json(results: list[Result], **_) -> str:
@@ -351,19 +324,15 @@ def github(results: list[Result], **_) -> str:
     lines = []
     for r in results:
         for f in r.findings:
-            if f.path in PR_TEXT:
-                # Not a file: the annotation names the text and the line within it.
-                props = f"title={_gh_property(f'readcost {f.feature} in the {_where(f.path, f.line)}')}"
-            else:
-                props = (f"file={_gh_property(f.path)},line={max(f.line, 1)},"
-                         f"title={_gh_property(f'readcost {f.feature}')}")
+            props = (f"file={_gh_property(f.path)},line={max(f.line, 1)},"
+                     f"title={_gh_property(f'readcost {f.feature}')}")
             lines.append(f"::{level[f.severity]} {props}::{_gh_data(f'{f.message}. {f.suggestion}')}")
     return "\n".join(lines)
 
 
 def _artifact_location(path: str) -> dict:
     """A SARIF artifactLocation: a valid URI reference, relative to %SRCROOT% when relative."""
-    if path in PR_TEXT or (path.startswith("<") and path.endswith(">")):  # <stdin>, <text>: not a file
+    if path.startswith("<") and path.endswith(">"):  # <stdin>, <text>: not a file
         return {"uri": quote(path, safe="")}
     if Path(path).is_absolute():
         return {"uri": Path(path).as_uri()}
@@ -396,7 +365,7 @@ def sarif(results: list[Result], **_) -> str:
         "shortDescription": {"text": f.title},
         "fullDescription": {"text": f.why},
         "help": {"text": f.fix},
-        "helpUri": rule_url(f.id),
+        "helpUri": RULES_URL,
         "defaultConfiguration": {"level": level[f.severity]},
     } for f in FEATURES.values()]
     runs_results = []
@@ -448,7 +417,8 @@ def agent(results: list[Result], max_items: int = 8, max_chars: int = 2500, feed
     several = len({f.path for f in items}) > 1
     total = len(items)
     words = sum(r.words for r in results)
-    head = AGENT_HEAD.format(n=total, s="s" if total != 1 else "", words=words)
+    head = (f"readcost: {total} hard-to-read construction{'s' if total != 1 else ''} "
+            f"in {words} words. Rewrite these sentences where the finding holds; keep the meaning and the facts.")
     lines = [head]
     for f in items[:max_items]:
         if several:
@@ -486,13 +456,9 @@ def pr_comment(results: list[Result], max_items: int = 8, **_) -> str:
     else:
         verdicts = {v: sum(r.verdict == v for r in results) for v in ("block", "advise", "pass")}
         counts = ", ".join(f"{n} {v}" for v, n in verdicts.items() if n)
-        n_files = sum(r.path not in PR_TEXT for r in results)
-        what = [f"{n_files} file{'s' if n_files != 1 else ''}"] if n_files else []
-        what += [p for p in (PR_TITLE, PR_BODY) if any(r.path == p for r in results)]
-        checked = " and ".join(what) if len(what) < 3 else ", ".join(what[:-1]) + " and " + what[-1]
+        files = f"{len(results)} file{'s' if len(results) != 1 else ''}"
         items = _worst_first(results)
-        lines.append(f"{checked[:1].upper()}{checked[1:]} checked: {counts}. "
-                     f"{len(items) or 'No'} finding{'s' if len(items) != 1 else ''}.")
+        lines.append(f"{files} checked: {counts}. {len(items) or 'No'} finding{'s' if len(items) != 1 else ''}.")
         timed = [r for r in results if r.reading_seconds is not None]
         if timed:
             words = sum(r.words for r in timed)
@@ -503,7 +469,8 @@ def pr_comment(results: list[Result], max_items: int = 8, **_) -> str:
             shown = items[: max(max_items, 0)]
             lines += ["", "| Where | Rule | Message |", "| --- | --- | --- |"]
             for f in shown:
-                lines.append(f"| {_cell(_where(f.path, f.line))} | {_cell(f.feature)} | {_cell(f.message)} |")
+                where = f"{f.path}:{f.line}" if f.line else f.path
+                lines.append(f"| {_cell(where)} | {_cell(f.feature)} | {_cell(f.message)} |")
             if len(items) > len(shown):
                 lines += ["", f"...and {len(items) - len(shown)} more; the job's annotations list them all."]
     lines += ["", f"readcost is advisory and can be wrong. [Report a false positive]({FEEDBACK_URL})."]

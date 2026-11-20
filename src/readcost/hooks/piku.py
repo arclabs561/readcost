@@ -13,9 +13,6 @@ piku's contract today:
 So readcost advises in piku at PreToolUse time, on the text about to be
 written, and can log at PostToolUse. docs/hooks.md proposes the two piku
 changes that would allow review of final answers.
-
-With ``hooks.repeat = "once"`` (default) PreToolUse reports a finding once
-per ``session_id`` and file and denies on it once (see repeats.py).
 """
 
 from __future__ import annotations
@@ -23,12 +20,10 @@ from __future__ import annotations
 import json
 import os
 import time
-from dataclasses import replace
 from pathlib import Path
 
 from . import _log, emit, read_payload
 from .common import analyze, changed_lines, config_for, feedback, relpath
-from .repeats import Memory, earlier, repeat_note
 
 FILE_TOOLS = {"write_file", "edit_file"}
 
@@ -77,30 +72,15 @@ def pre_tool_use(payload: dict, cfg, cwd: str) -> int:
     result = analyze(cfg, path=rel, text=text, lines=lines)
     if result.verdict == "pass":
         return 0
-    memory = Memory(payload, cfg, rel, cwd)
-    new, old = memory.split(result.findings)
-    blocking = result.verdict == "block" and cfg.hooks.mode == "block"
-    if not new:
-        # piku's PostToolUse cannot advise, so the one-line note goes here.
-        if blocking:
-            emit({"hookSpecificOutput": {"permissionDecision": "allow",
-                                         "additionalContext": repeat_note(len(old))}})
-        return 0
-    memory.remember(result.findings)
-    shown = replace(result, findings=new)
-    if blocking:
-        again = (" Where a finding does not hold, make the same write again: readcost denies "
-                 "a write for a finding once.") if memory.active else ""
+    if result.verdict == "block" and cfg.hooks.mode == "block":
         emit({"hookSpecificOutput": {
             "permissionDecision": "deny",
-            "permissionDecisionReason": feedback(cfg, shown, where=where,
-                                                 suffix=earlier(len(old)) + "\nRewrite the text and try again."
-                                                 + again),
+            "permissionDecisionReason": feedback(cfg, result, where=where,
+                                                 suffix="\nRewrite the text and try again."),
         }})
     else:
         emit({"hookSpecificOutput": {"permissionDecision": "allow",
-                                     "additionalContext": feedback(cfg, shown, where=where,
-                                                                   suffix=earlier(len(old)))}})
+                                     "additionalContext": feedback(cfg, result, where=where)}})
     return 0
 
 

@@ -14,9 +14,6 @@ Contract (code.claude.com/docs/en/hooks, read 2026-10-26):
 - Stop stdin has ``stop_hook_active`` and ``last_assistant_message``.
   ``decision: "block"`` with ``reason`` makes Claude continue; ``systemMessage``
   shows a warning to the user without continuing.
-- Every event's stdin has ``session_id`` and ``transcript_path``; inside a
-  subagent, tool events add ``agent_id`` (read 2026-11-18). ``repeats.Memory``
-  keys on them.
 - MessageDisplay stdin has ``message_id``, ``index``, ``final`` and ``delta``;
   ``displayContent`` replaces the delta on screen only.
 
@@ -30,7 +27,6 @@ import json
 import os
 import stat
 import time
-from dataclasses import replace
 from pathlib import Path
 
 from . import _log, emit, read_payload
@@ -43,7 +39,6 @@ from .common import (
     relpath,
     summary_line,
 )
-from .repeats import Memory, earlier, repeat_note
 
 FILE_TOOLS = {"Write", "Edit"}
 STALE_SECONDS = 86400  # MessageDisplay state older than a day belongs to an interrupted message
@@ -94,23 +89,12 @@ def post_tool_use(payload: dict, cfg, cwd: str) -> int:
     result = analyze(cfg, path=rel, text=text, lines=lines)
     if result.verdict == "pass":
         return 0
-    memory = Memory(payload, cfg, path, cwd)
-    new, old = memory.split(result.findings)
-    blocking = result.verdict == "block" and cfg.hooks.mode == "block"
-    if not new:
-        # Everything here was reported before: say nothing, or, where it would
-        # block again, say once more in one line that it does not.
-        if blocking:
-            emit(_context("PostToolUse", repeat_note(len(old))))
-        return 0
-    message = feedback(cfg, replace(result, findings=new), suffix=earlier(len(old)))
-    memory.remember(result.findings)
-    emit({"decision": "block", "reason": message} if blocking else _context("PostToolUse", message))
+    message = feedback(cfg, result)
+    out: dict = {"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": message}}
+    if result.verdict == "block" and cfg.hooks.mode == "block":
+        out = {"decision": "block", "reason": message}
+    emit(out)
     return 0
-
-
-def _context(event: str, text: str) -> dict:
-    return {"hookSpecificOutput": {"hookEventName": event, "additionalContext": text}}
 
 
 def pre_tool_use(payload: dict, cfg, cwd: str) -> int:
@@ -135,19 +119,11 @@ def pre_tool_use(payload: dict, cfg, cwd: str) -> int:
     result = analyze(cfg, path=rel, text=text, lines=lines)
     if result.verdict != "block":
         return 0
-    memory = Memory(payload, cfg, ti.get("file_path", ""), cwd)
-    new, old = memory.split(result.findings)
-    if not new:
-        return 0  # denied on these already; let it through, PostToolUse notes it
-    memory.remember(result.findings)
-    again = ("\nRewrite the text and try the edit again. Where a finding does not hold, "
-             "make the same edit again: readcost denies an edit for a finding once.") if memory.active \
-        else "\nRewrite the text and try the edit again."
     emit({"hookSpecificOutput": {
         "hookEventName": "PreToolUse",
         "permissionDecision": "deny",
-        "permissionDecisionReason": feedback(cfg, replace(result, findings=new), where=where,
-                                             suffix=earlier(len(old)) + again),
+        "permissionDecisionReason": feedback(cfg, result, where=where,
+                                             suffix="\nRewrite the text and try the edit again."),
     }})
     return 0
 
