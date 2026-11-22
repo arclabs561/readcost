@@ -52,7 +52,7 @@ def _git_files(root: Path) -> list[Path] | None:
     if proc.returncode != 0:
         return None
     out = []
-    for name in proc.stdout.decode("utf-8", "replace").split("\0"):
+    for name in os.fsdecode(proc.stdout).split("\0"):
         if not name:
             continue
         p = root / name

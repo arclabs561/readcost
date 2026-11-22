@@ -5,6 +5,7 @@ Each test names the defect it pins. They exercise the public entry points
 """
 
 import json
+import os
 import subprocess
 from pathlib import Path
 
@@ -710,3 +711,12 @@ def test_verbless_sentence_reads_the_same_with_and_without_an_inline_footnote():
     assert [(f.feature, f.line, f.column) for f in with_fn.findings] == \
         [(f.feature, f.line, f.column) for f in without.findings]
     assert (with_fn.words, with_fn.sentences) == (without.words, without.sentences)
+
+@pytest.mark.skipif(os.name != "posix" or not HAS_GIT, reason="requires POSIX Git paths")
+def test_git_walk_preserves_undecodable_filename(tmp_path):
+    from readcost.cli import _walk
+
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    name = os.fsdecode(b"notes-\xff.md")
+    (tmp_path / name).write_text(PLAIN)
+    assert tmp_path / name in _walk(tmp_path)
