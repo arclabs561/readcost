@@ -31,7 +31,9 @@ useful ones:
 - `[readcost.src]`: `include` and `exclude` globs choose the files that
   `readcost check DIR`, the hooks and the language server read;
   `extend_exclude` adds to the default excludes; `respect_ignore_files`
-  (default on) skips what `.gitignore` excludes.
+  (default on) uses Git to skip ignored files inside a work tree. When Git
+  is unavailable, directory checks still apply the configured excludes and
+  skip hidden files and directories.
 - `advise_severity`: the verdict is at least `advise` when any finding reaches
   this severity; `off` turns that rule off.
 - `profile`: a relative path is read from the config file's directory.

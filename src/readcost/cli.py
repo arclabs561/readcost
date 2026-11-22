@@ -44,8 +44,11 @@ def _git_files(root: Path) -> list[Path] | None:
     Untracked nested repositories come back from git as directory entries
     ("sub/"); their own files are listed with their own ignore rules.
     """
-    proc = subprocess.run(["git", "-C", str(root), "ls-files", "-z", "--cached", "--others",
-                           "--exclude-standard"], capture_output=True)
+    try:
+        proc = subprocess.run(["git", "-C", str(root), "ls-files", "-z", "--cached", "--others",
+                               "--exclude-standard"], capture_output=True)
+    except FileNotFoundError:
+        return None
     if proc.returncode != 0:
         return None
     out = []
@@ -76,9 +79,11 @@ def _walk(root: Path, respect_ignore_files: bool = True, prune=lambda path: Fals
     for dirpath, dirnames, filenames in os.walk(root):
         here = Path(dirpath)
         if respect_ignore_files and here != root and (here / ".git").exists():
-            out.extend(_git_files(here) or [])
-            dirnames[:] = []
-            continue
+            files = _git_files(here)
+            if files is not None:
+                out.extend(files)
+                dirnames[:] = []
+                continue
         dirnames[:] = sorted(d for d in dirnames if not d.startswith(".") and not prune(str(here / d) + "/"))
         out.extend(here / f for f in filenames if not f.startswith("."))
     return sorted(out)

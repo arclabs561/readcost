@@ -382,6 +382,18 @@ def test_number_unit_modifiers_are_not_stacked_nouns(sentence, excerpts):
     assert [f.excerpt for f in findings if f.feature == "stacked-nouns"] == excerpts
 
 
+def test_directory_check_without_git_includes_nested_prose(tmp_path, monkeypatch):
+    (tmp_path / "guide.md").write_text(PLAIN)
+    repo = tmp_path / "nested"
+    (repo / ".git").mkdir(parents=True)
+    (repo / "notes.md").write_text(PLAIN)
+    (repo / ".git" / "hidden.md").write_text(PLAIN)
+    monkeypatch.setenv("PATH", str(tmp_path))
+    proc = run_cli(["check", ".", "--output", "json", "--fail-on", "never"], cwd=tmp_path)
+    assert proc.returncode == 0, proc.stderr
+    assert {result["path"] for result in json.loads(proc.stdout)} == {"guide.md", str(Path("nested/notes.md"))}
+
+
 def test_directory_walk_prunes_excluded_dirs_and_reads_nested_repos(tmp_path):
     from readcost.cli import _walk
     from readcost.config import Config
