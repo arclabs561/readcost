@@ -61,7 +61,9 @@ More on a rule: readcost explain stacked-nouns
 Wrong finding? https://github.com/arclabs561/readcost/issues/new/choose
 ```
 
-The rewrite that README adopted keeps every fact and passes:
+The [sporse README edit](https://github.com/arclabs561/sporse/commit/ed325a9668468c5ed200135098ceb207bb21d789)
+splits the sentence in two. Both excerpts here shorten the Cargo command to
+“the example.” The revised passage gets zero findings:
 
 ```text
 To measure a store restart, the example reopens a checkpointed store and
@@ -70,9 +72,11 @@ with the persisted WAND sidecars present, and once after deleting those
 sidecars, which forces each segment to be rebuilt from its source vectors.
 ```
 
-It is also longer, so readcost predicts less time per word but more in total;
-[docs/reading-time.md](https://github.com/arclabs561/readcost/blob/main/docs/reading-time.md)
-shows the comparison and how to weigh the two.
+To check the meaning, look at the
+[benchmark timer](https://github.com/arclabs561/sporse/blob/ed325a9668468c5ed200135098ceb207bb21d789/examples/store_reopen_diagnostics.rs#L91-L96).
+It starts after the snapshot opens and measures the first query. The
+rewrite preserves that distinction. It is longer, so readcost predicts less
+time per word but more in total. [Compare the two versions](https://github.com/arclabs561/readcost/blob/main/docs/reading-time.md#comparing-two-versions).
 
 ## Install
 

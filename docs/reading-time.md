@@ -22,10 +22,13 @@ tested.
 
 To judge a rewrite, compare it with the original. `readcost compare` reports
 both the time per word and the total: a rewrite can read slower per word yet
-faster in total, or the reverse when it is much longer. Cekini et al. 2026
-found model rewrites took 1.6% longer per word but 1.2% less in total, being
-shorter. For the sentence in the README's example and the rewrite it adopted
-(`tests/test_compare.py` checks that this output is current):
+faster in total, or the reverse when it is much longer. For example, Cekini et al. (2026) predicted 1.6% more time per
+word for model rewrites of news stories, but 1.2% less in total because
+the rewrites were shorter.
+
+To reproduce the comparison below, save the two prose passages from the
+[README example](../README.md#readcost) in `cmp-old.md` and `cmp-new.md`,
+in that order. Run this command with readcost installed from main:
 
 ```text
 $ readcost compare cmp-old.md cmp-new.md
@@ -45,6 +48,20 @@ by rule: hyphen-compound 1 -> 0, stacked-nouns 1 -> 0
 total, and `--fail-on worse` also when it has more weighted findings, which
 suits a check on model rewrites. `-o json` gives both results in full. The
 old text can come from git: `readcost compare HEAD:README.md README.md`.
+
+A shorter sentence can change the measurement. Try this counterexample
+from the same directory:
+
+```sh
+printf '%s\n' 'The example measures how long the store takes to reopen.' |
+  readcost compare --fail-on worse cmp-old.md -
+```
+
+This returns 0 with zero findings in the rewrite. Yet the
+[benchmark](https://github.com/arclabs561/sporse/blob/ed325a9668468c5ed200135098ceb207bb21d789/examples/store_reopen_diagnostics.rs#L91-L96)
+opens the snapshot *before* it starts the clock. The timer covers the
+query. Check the timed operation and the two sidecar conditions against
+the implementation before adopting an edit.
 
 ## Hotspots
 
