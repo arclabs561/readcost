@@ -37,6 +37,21 @@ def test_real_object_relative_is_still_flagged(analyzer):
     assert found(analyzer, "Keep the reason why the cache exists next to the code.", "reduced-object-relative") == []
 
 
+@pytest.mark.parametrize("determiner", ["this", "that"])
+def test_determiner_inside_relative_clause_is_not_its_marker(analyzer, determiner):
+    clause = f"book the editor of {determiner} journal recommended"
+    text = f"We read the {clause}."
+    finding, = found(analyzer, text, "reduced-object-relative")
+    assert text[finding.start:finding.end] == clause
+    overt = text.replace("book the editor", "book that the editor")
+    assert found(analyzer, overt, "reduced-object-relative") == []
+
+
+def test_clause_initial_that_mistagged_as_a_determiner_still_blocks_finding(analyzer):
+    text = "There is an emerging consensus that noise was present in the recording."
+    assert found(analyzer, text, "reduced-object-relative") == []
+
+
 def test_verb_misread_as_plural_noun_does_not_close_a_stack(analyzer):
     # "prints" is the verb; the parser makes it the head of "bench command prints".
     assert found(analyzer, "The bench command prints how long the first search takes on each corpus.",

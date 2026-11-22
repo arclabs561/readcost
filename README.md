@@ -1,19 +1,22 @@
 # readcost
 
-readcost marks constructions in English technical prose that recent
-language models use more often than people do, such as a run of three or more
-nouns or a subject far from its verb. For each one it quotes the line, marks
-the words, and suggests a rewrite. The constructions come from "Why is
-AI-generated language so hard to understand?"
-([arXiv 2610.29162](https://arxiv.org/abs/2610.29162)), which finds that
-models use them more often than paraphrases of the same content do; against
-human corpora, the difference is consistent only for inanimate subjects.
-Studies of constructed sentences tie each construction to harder reading. In
-real prose that has not been shown: on the reading-time and rating datasets
-tested so far, sentences with findings were not rated harder, and at most
-slightly slower to read, once length and word frequency were held
-([Limits](#limits)). Treat a finding as a place to reread, not as a measured
-cost.
+readcost highlights constructions in English technical prose, such as three
+nouns in a row or a subject far from its verb. It quotes the words and
+suggests a rewrite.
+
+The rules draw on "Why is AI-generated language so hard to understand?"
+([arXiv 2610.29162](https://arxiv.org/abs/2610.29162)). The authors compared
+model output with paraphrases and with human writing. In essays, all nine
+frontier and near-frontier models used rare word sequences more often
+than students did. They also used inanimate subjects more often with verbs
+that usually take an animate subject. Other patterns varied by model and
+genre. The study counted constructions and did not measure how long
+people spent reading the model output.
+
+Treat a finding as a place to reread. On the datasets tested so far,
+sentences with findings received similar difficulty ratings and showed
+little difference in reading time after accounting for length and word
+frequency ([Limits](#limits)).
 
 For example, this sentence from a README:
 
