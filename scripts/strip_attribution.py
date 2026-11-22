@@ -92,17 +92,29 @@ def fix_review(gh, number: int, review: dict) -> bool:
 
 
 def run(gh, event_name: str, event: dict) -> int:
+    owner = event.get("repository", {}).get("owner", {}).get("id")
+    if not owner or event.get("sender", {}).get("id") != owner:
+        return 0
+
+    def owned(item: dict) -> bool:
+        return (item.get("user") or {}).get("id") == owner
+
     changed = 0
     if event_name in ("pull_request_target", "pull_request"):
         pr = event["pull_request"]
-        changed += fix_pr(gh, pr["number"], pr.get("body"))
+        if owned(pr):
+            changed += fix_pr(gh, pr["number"], pr.get("body"))
     elif event_name == "pull_request_review":
-        changed += fix_review(gh, event["pull_request"]["number"], event["review"])
+        review = event["review"]
+        if owned(review):
+            changed += fix_review(gh, event["pull_request"]["number"], review)
     elif event_name == "workflow_dispatch":
         for pr in gh.pages("pulls?state=all"):
-            changed += fix_pr(gh, pr["number"], pr.get("body"))
+            if owned(pr):
+                changed += fix_pr(gh, pr["number"], pr.get("body"))
             for review in gh.pages(f"pulls/{pr['number']}/reviews"):
-                changed += fix_review(gh, pr["number"], review)
+                if owned(review):
+                    changed += fix_review(gh, pr["number"], review)
     print(f"{changed} item(s) changed")
     return changed
 

@@ -51,16 +51,32 @@ class FakeGitHub:
         return iter(self.reviews.get(int(path.split("/")[1]), []))
 
 
+OWNER = {"id": 1}
+OWNER_EVENT = {"repository": {"owner": OWNER}, "sender": OWNER}
+
+
 def test_sweep_edits_only_what_needs_it():
     m = _mod()
-    gh = FakeGitHub([{"number": 1, "body": f"A.\n\n---\n{FOOT}"}, {"number": 2, "body": "B."}],
-                    {1: [{"id": 9, "body": f"Looks fine.\n\n{LINK}"}], 2: [{"id": 10, "body": "Fine."}]})
-    assert m.run(gh, "workflow_dispatch", {}) == 2
+    gh = FakeGitHub([{"number": 1, "user": OWNER, "body": f"A.\n\n---\n{FOOT}"}, {"number": 2, "user": {"id": 2}, "body": FOOT}],
+                    {1: [{"id": 9, "user": OWNER, "body": f"Looks fine.\n\n{LINK}"}], 2: [{"id": 10, "user": {"id": 2}, "body": FOOT}]})
+    assert m.run(gh, "workflow_dispatch", OWNER_EVENT) == 2
     assert gh.calls == [("PATCH", "pulls/1", {"body": "A.\n"}), ("PUT", "pulls/1/reviews/9", {"body": "Looks fine.\n"})]
 
 
 def test_pull_request_event_edits_that_description():
     m = _mod()
     gh = FakeGitHub([], {})
-    m.run(gh, "pull_request_target", {"pull_request": {"number": 5, "body": f"C.\n{FOOT}"}})
+    m.run(gh, "pull_request_target", {**OWNER_EVENT, "pull_request": {"number": 5, "user": OWNER, "body": f"C.\n{FOOT}"}})
     assert gh.calls == [("PATCH", "pulls/5", {"body": "C.\n"})]
+
+
+def test_contributor_and_unknown_events_do_not_write():
+    m = _mod()
+    gh = FakeGitHub([], {})
+    pr = {"number": 1, "user": {"id": 2}, "body": FOOT}
+    for event in [{}, {**OWNER_EVENT, "pull_request": pr},
+                  {**OWNER_EVENT, "sender": {"id": 2}, "pull_request": {**pr, "user": OWNER}}]:
+        assert m.run(gh, "pull_request_target", event) == 0
+    assert m.run(gh, "pull_request_review", {**OWNER_EVENT, "pull_request": pr,
+        "review": {"id": 3, "user": {"id": 2}, "body": FOOT}}) == 0
+    assert gh.calls == []
