@@ -72,7 +72,10 @@ def fix_pr(gh, number: int, body: str | None) -> bool:
     new = strip(body)
     if new is None:
         return False
-    gh.call("PATCH", f"pulls/{number}", {"body": new})
+    path = f"pulls/{number}"
+    if gh.call("GET", path).get("body") != body:
+        return False
+    gh.call("PATCH", path, {"body": new})
     print(f"pull request #{number}: removed attribution")
     return True
 
@@ -82,7 +85,10 @@ def fix_review(gh, number: int, review: dict) -> bool:
     if new is None:
         return False
     try:
-        gh.call("PUT", f"pulls/{number}/reviews/{review['id']}", {"body": new})
+        path = f"pulls/{number}/reviews/{review['id']}"
+        if gh.call("GET", path).get("body") != review.get("body"):
+            return False
+        gh.call("PUT", path, {"body": new})
     except urllib.error.HTTPError as exc:
         # Only a review's author can edit it; GitHub refuses the repository token.
         print(f"::warning::review {review['id']} on #{number}: could not edit ({exc.code}); edit it by hand")

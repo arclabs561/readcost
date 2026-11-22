@@ -13,6 +13,10 @@ permissions:
   contents: read
   pull-requests: write
 
+concurrency:
+  group: strip-attribution-${{ github.repository }}
+  cancel-in-progress: false
+
 jobs:
   strip:
     if: github.event.sender.id == github.event.repository.owner.id

@@ -43,6 +43,12 @@ class FakeGitHub:
         self.prs, self.reviews, self.calls = prs, reviews, []
 
     def call(self, method, path, data=None):
+        if method == "GET":
+            parts = path.split("/")
+            number = int(parts[1])
+            if len(parts) == 2:
+                return next(pr for pr in self.prs if pr["number"] == number)
+            return next(r for r in self.reviews[number] if r["id"] == int(parts[3]))
         self.calls.append((method, path, data))
 
     def pages(self, path):
@@ -65,8 +71,9 @@ def test_sweep_edits_only_what_needs_it():
 
 def test_pull_request_event_edits_that_description():
     m = _mod()
-    gh = FakeGitHub([], {})
-    m.run(gh, "pull_request_target", {**OWNER_EVENT, "pull_request": {"number": 5, "user": OWNER, "body": f"C.\n{FOOT}"}})
+    pr = {"number": 5, "user": OWNER, "body": f"C.\n{FOOT}"}
+    gh = FakeGitHub([pr], {})
+    m.run(gh, "pull_request_target", {**OWNER_EVENT, "pull_request": pr})
     assert gh.calls == [("PATCH", "pulls/5", {"body": "C.\n"})]
 
 
@@ -79,4 +86,15 @@ def test_contributor_and_unknown_events_do_not_write():
         assert m.run(gh, "pull_request_target", event) == 0
     assert m.run(gh, "pull_request_review", {**OWNER_EVENT, "pull_request": pr,
         "review": {"id": 3, "user": {"id": 2}, "body": FOOT}}) == 0
+    assert gh.calls == []
+
+def test_stale_events_preserve_newer_description_and_review():
+    m = _mod()
+    pr = {"number": 2, "user": OWNER, "body": "Updated benchmark"}
+    review = {"id": 3, "user": OWNER, "body": "New caveat"}
+    gh = FakeGitHub([pr], {2: [review]})
+    old = f"First draft\n{FOOT}"
+    assert m.run(gh, "pull_request_target", {**OWNER_EVENT, "pull_request": {**pr, "body": old}}) == 0
+    assert m.run(gh, "pull_request_review", {**OWNER_EVENT, "pull_request": pr,
+        "review": {**review, "body": old}}) == 0
     assert gh.calls == []
