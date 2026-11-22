@@ -73,16 +73,33 @@ shows the comparison and how to weigh the two.
 
 ## Install
 
+Try readcost in an empty directory with [uv](https://docs.astral.sh/uv/).
+The first run downloads the English model.
+
 ```sh
-uvx readcost check README.md    # run without installing
-uv tool install readcost        # or install it; pip install readcost also works
+printf '%s\n' 'We tune the shard compaction retry budget by hand before each release.' |
+  uvx readcost check - -o concise
 ```
 
-This README describes the main branch, which can be ahead of the release on
-PyPI; run main with
-`uvx --from git+https://github.com/arclabs561/readcost readcost`. readcost is
-experimental: before 1.0, output and configuration can change between minor
-versions.
+The first line points to the construction:
+
+```text
+<stdin>:1:19: warn: [stacked-nouns] 3 nouns stacked: 'compaction retry budget'
+```
+
+Install the PyPI release with `uv tool install readcost` or
+`pip install readcost`. This README follows the main branch. For commands
+such as `compare` and `style` that are missing from the 0.2.0 release,
+install main in a fresh virtual environment:
+
+```sh
+uv venv .venv
+uv pip install --python .venv 'git+https://github.com/arclabs561/readcost'
+. .venv/bin/activate
+readcost --help
+```
+
+Before 1.0, output and configuration can change between minor versions.
 
 It needs Python 3.11 or later; its main dependencies are spaCy and
 markdown-it-py. On first use readcost downloads spaCy's English
@@ -100,14 +117,27 @@ notebooks, and a model's answers on stdin or in a transcript
 
 ```sh
 readcost check README.md docs/
-readcost check ~/src                         # a whole tree; git-aware, parallel
 readcost check --lines 40-80 README.md       # only sentences touching these lines
-some-model-cli "explain X" | readcost check -    # model output on stdin
-readcost check --format transcript --last session.jsonl
-readcost check src/lib.rs                    # doc comments
+readcost check examples/revise_loop.py       # Python docstrings
 readcost explain stacked-nouns               # why a rule fires, and how to fix it
-readcost compare HEAD:README.md README.md    # findings and reading time, before and after
+readcost compare HEAD:README.md README.md    # compare a tracked file with its committed version
 ```
+
+These paths work from a checkout of this repository. To check a saved
+assistant transcript, run `readcost check --format transcript --last`
+with the path to your JSONL file. To score these two model responses,
+pipe one JSON object per line into the shell example:
+
+```sh
+printf '%s\n' '{"response":"The index stores one list for each term."}' \
+  '{"response":"We tune the shard compaction retry budget by hand before each release."}' |
+  sh examples/score_eval_outputs.sh
+```
+
+The output is a JSON array with one result per response. The first has
+empty `counts`; the second has `"stacked-nouns": 1`. For a Python example,
+run `python examples/revise_loop.py` to print feedback on a sample draft.
+The `answer` function in that file shows where to pass your own model call.
 
 ![readcost check output in a terminal, with the rule names and carets in colour](https://raw.githubusercontent.com/arclabs561/readcost/main/docs/images/check.svg)
 
@@ -176,7 +206,7 @@ nominalization = "info"          # turn on an opt-in rule
 hyphen-compound = "ignore"
 
 [[readcost.overrides]]
-include = ["CHANGELOG.md"]
+include = ["docs/reference/*.md"]
 rules = { inline-list = "ignore" }
 ```
 
