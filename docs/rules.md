@@ -34,14 +34,15 @@ in 0.3 ([evaluation](evaluation.md#opt-in-rules-on-every-corpus-provisional)).
 
 ## Notes on each rule
 
-The first four rules come from "Why is AI-generated language so hard to
-understand?" ([arXiv 2610.29162](https://arxiv.org/abs/2610.29162)). The
-paper finds that recent language models use these constructions more often
-than paraphrases of the same content do. Against human corpora, the
-difference is consistent only for inanimate subjects. Earlier studies, mostly
-of constructed sentences, tie each construction to harder reading, some with
-reading times and some with brain responses. `hyphen-compound` and
-`inline-list` are derived from where those constructions show up in technical writing.
+The first four rules draw on "Why is AI-generated language so hard to
+understand?" ([arXiv 2610.29162](https://arxiv.org/abs/2610.29162)).
+In essays, all nine frontier and near-frontier models used rare word
+sequences more often than students did. They also used inanimate subjects
+more often with verbs that usually take an animate subject. Reduced
+object relatives often appeared more in model output than in paraphrases
+made by translating it to Japanese and back. The paper measured word
+sequences in general. The derived `hyphen-compound` rule checks a narrower
+set of pairs in technical prose. The `inline-list` rule is also derived.
 
 ### stacked-nouns
 
@@ -76,9 +77,20 @@ with `inanimate-subject = "info"` under `[readcost.rules]`.
 
 ### reduced-object-relative
 
-An object relative clause without "that" (the format the reader expects).
-Object relatives cost more to read than subject relatives, and dropping the
-optional "that" removes the cue that one has started.
+In "the format the reader expects", the reader expects the format. The
+head noun ("format") is the object of the verb inside the clause. Adding "that" before
+"the reader" marks the start of the clause. A demonstrative inside the
+clause ("the report the editors of that journal rejected") serves a
+different purpose.
+
+In two eye-tracking experiments, readers often looked back from the
+subject of an object relative. Omitting "that" increased this tendency
+([Staub 2010](https://doi.org/10.1016/j.cognition.2010.04.002)). Whether
+adding it helps in a particular document is an editorial judgment.
+In readcost's Natural Stories evaluation, only ten sentences had this
+finding. Their estimated extra reading time was 4 ms per word, with a
+95% interval from −4.8 to +12.1 ms
+([evaluation](evaluation.md#natural-stories-reading-time)).
 
 ### hyphen-compound
 
@@ -204,11 +216,10 @@ info[reduced-object-relative]: object relative clause without 'that'
    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |                                      object relative without 'that'
    |
-   = why: Object relatives (the house the contractors built) cost more to read
-          than subject relatives; dropping the optional 'that' removes the cue
-          that one has started.
-   = help: Keep the 'that', or turn it into a subject relative or a separate
-           sentence.
+   = why: In eye-tracking experiments, readers more often looked back from the
+          subject of an object relative when the clause began without 'that'.
+   = help: If the start of the clause is hard to see, try adding 'that' before
+           its subject.
    = example: 'the format the reader expects' -> 'the format that the reader
               expects'
 

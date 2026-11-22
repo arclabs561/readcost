@@ -89,10 +89,9 @@ FEATURES: dict[str, Feature] = {f.id: f for f in [
     ),
     Feature(
         "reduced-object-relative", "Object relative clause without 'that'", "info", True, "paper",
-        "Object relatives (the house the contractors built) cost more to read "
-        "than subject relatives; dropping the optional 'that' removes the cue "
-        "that one has started.",
-        "Keep the 'that', or turn it into a subject relative or a separate sentence.",
+        "In eye-tracking experiments, readers more often looked back from the "
+        "subject of an object relative when the clause began without 'that'.",
+        "If the start of the clause is hard to see, try adding 'that' before its subject.",
         "the format the reader expects",
         "the format that the reader expects",
     ),
@@ -819,8 +818,13 @@ def inanimate_subjects(sent, ctx: Context) -> list[tuple[str, str, list]]:
 LIGHT_RELATIVE_HEADS = {"time", "way", "all", "reason", "day", "moment", "place"}
 
 
-def _relativizer(verb):
+def _relativizer(verb, subject):
     for t in verb.subtree:
+        # In "the editors of that journal rejected", "that" follows the
+        # subject and determines "journal". A clause-initial "that" can
+        # be mistagged as a determiner, so keep treating it as a cue.
+        if t.lower_ == "that" and t.dep_ == "det" and subject.i < t.i:
+            continue
         if t.lower_ in ("that", "which", "who", "whom") and t.i < verb.i and t.tag_ in ("WDT", "WP", "IN", "DT"):
             return t
     return None
@@ -833,9 +837,8 @@ def reduced_object_relatives(sent, ctx: Context) -> list[tuple[str, str, list]]:
             continue
         if _opens_with_wh(t):
             continue  # "prints how long the search takes", "the reason why it exists"
-        rel = _relativizer(t)
-        subj = [c for c in t.children if c.dep_ in ("nsubj", "nsubjpass") and (rel is None or c.i != rel.i)]
-        if not subj or rel is not None or subj[0].i <= t.head.i:
+        subj = [c for c in t.children if c.dep_ in ("nsubj", "nsubjpass")]
+        if not subj or subj[0].i <= t.head.i or _relativizer(t, subj[0]) is not None:
             continue
         if t.head.dep_ == "ROOT":
             # "The help output begins with": with the noun as the root, the
