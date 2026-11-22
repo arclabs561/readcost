@@ -55,6 +55,17 @@ def test_compare_shows_findings_only_in_the_rewrite(tmp_path):
     assert "Only in" not in run(["compare", old, new], tmp_path).stdout
 
 
+def test_compare_color_preserves_new_findings(tmp_path):
+    import re
+
+    old, new = files(tmp_path)
+    plain = run(["compare", "--color", "never", new, old], tmp_path)
+    colored = run(["compare", "--color", "always", new, old], tmp_path)
+    assert colored.returncode == plain.returncode == 0
+    assert "\x1b[" in colored.stdout
+    assert re.sub(r"\x1b\[[0-9;]*m", "", colored.stdout) == plain.stdout
+
+
 def test_word_times_add_up_to_the_estimate():
     para = " ".join(NEW.split())
     times = readtime.word_times(para)

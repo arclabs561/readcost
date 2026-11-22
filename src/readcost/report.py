@@ -574,5 +574,5 @@ def compare(old: Result, new: Result, color: bool = False) -> str:
                           sentences=new.sentences, verdict=new.verdict)
         blocks = full([new_only], color=color).split("\n\n")
         out += ["", paint(f"Only in {new.path}:", "bold"), ""]
-        out += ["\n\n".join(b for b in blocks if b.lstrip().startswith(("error[", "warn[", "info[")))]
+        out += ["\n\n".join(b for b in blocks if _ANSI.sub("", b).lstrip().startswith(("error[", "warn[", "info[")))]
     return "\n".join(out)
