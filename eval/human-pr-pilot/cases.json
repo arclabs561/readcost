@@ -1,0 +1,182 @@
+[
+  {
+    "case": "A",
+    "pr": 101,
+    "base": "83901dbaaa5199a37de8b3ae70efb58d88a3732a",
+    "head": "663e0cc16d86f5fdf0e019eb27d147708e51538b",
+    "diff_sha256": "ff632f3b0c946084c2bc074b328a5d407f28deab76f0ab0fa697389288b0c49c",
+    "source": "Follows the test across formats in #100, whose decision rules were fixed before the data. In doc comments and docstrings, the twelve-rater majority accepted 1 of 28 inline-list findings, against 5 of 16 in Markdown (difference −28 points, −52 to −6), which meets the pre-registered rule for turning a rule off in one format.\n\nThe default sits under every user setting: a level for inline-list in `[readcost.rules]`, an override or a flag turns it back on. Markdown, commit messages and the other formats are unchanged. A test covers all four cases.\n\nUncertain: the cells are small (28 and 16 findings), and the raters are one model family.",
+    "feedback": "readcost: 1 sentence in 102 words that may be hard to follow. These are questions, not errors: in a held-out test, model raters said an editor would fix few such findings. Change a sentence only if it reads badly to you, keep its meaning and facts, and leave the rest.\n- line 1 [hyphen-compound] coined compound modifier: 'inline-list findings'. Is it hard to follow here? Raters said an editor would fix 0 of 87 such findings, and called 42 more optional. If it is, write the relationship out.\nreadcost: a finding is wrong? Report it at https://github.com/arclabs561/readcost/issues/new/choose",
+    "question": "An existing project has a Python docstring and a Markdown page with the same inline list. Which one changes under the new defaults? Can an explicit inline-list setting turn the rule on in the affected format?",
+    "key": [
+      "Only the source docstring changes to ignored by default. The Markdown rule stays active.",
+      "Yes. An explicit enabled level, matching override or enabling flag can restore it. One valid route suffices."
+    ],
+    "evidence": "test_inline_list_is_off_in_doc_comments_unless_asked_for"
+  },
+  {
+    "case": "B",
+    "pr": 106,
+    "base": "67e47abe4901b3f86036338166b42cd449b9ca04",
+    "head": "44bc26cdbdfde0e4543f70ed21db5c6ddea4c1ce",
+    "diff_sha256": "997535c9b8c9c0070abc4b350d386979c24946c9e0c5021cc825f55439f1ea76",
+    "source": "readcost raised a TypeError in `_markdown` on any inline footnote, `^[text]`. markdown-it's footnote plugin builds the footnote's paragraph at the end of the token stream with no line map. A regex such as `^[a-z]` in a doc comment or a Markdown file parses as one. This dropped three files from the draw for the kinds precision test (#103): a Python docstring, a TypeScript doc comment and a Markdown file.\n\nFix: before reading, a token without a map gets one. The footnote's paragraph takes the line of its `^[` in the paragraph that holds it; any other token without a map takes the map of the nearest enclosing token that has one. The words after an inline footnote also had wrong offsets, because the reference was skipped by searching for `[^`; that is fixed, and the offsets fuzz test now includes inline footnotes.\n\nGuard: an extraction error on one file becomes a note on that file's result, and any other error on one file is reported for that file. The other files are still checked. The exit status stays 2, as `test_crash_exits_2_not_the_findings_code` requires, so a file that was not checked does not pass.\n\nTested: the three dropped files (same blobs as the draw records) crash on main and check cleanly on this branch. The regression tests use made-up fixtures with the same shapes, and all of them fail on main. The full suite passes locally.\n\nNot changed: GitHub does not render `^[...]` as a footnote, so in a README a regex like `^[a-z]` loses those characters from its sentence. Turning inline footnotes off (`footnote_plugin(inline=False)`) would change what readcost reads, so it is left for a measured change.",
+    "feedback": "readcost: 1 sentence in 277 words that may be hard to follow. These are questions, not errors: in a held-out test, model raters said an editor would fix few such findings. Change a sentence only if it reads badly to you, keep its meaning and facts, and leave the rest.\n- line 1 [stacked-nouns] 3 nouns stacked: 'kinds precision test'. Is it hard to follow here? Raters said an editor would fix 0 of 100 such findings, and called 36 more optional. If it is, keep at most two nouns together. Unpack the rest with a preposition or a relative clause, if the result reads naturally; leave an established term as it is.\nreadcost: a finding is wrong? Report it at https://github.com/arclabs561/readcost/issues/new/choose",
+    "question": "A batch contains two files. An unexpected internal extraction error occurs in the first. What happens to the second file, and which process exit code should CI receive?",
+    "key": [
+      "The batch still checks the second file.",
+      "CI receives exit status 2. A findings-level failure or a successful run is incorrect."
+    ],
+    "evidence": "test_other_error_on_one_file_is_reported_and_the_rest_are_checked"
+  },
+  {
+    "case": "C",
+    "pr": 105,
+    "base": "ed9709688f007e0937d169b4984f7b407e916604",
+    "head": "67e47abe4901b3f86036338166b42cd449b9ca04",
+    "diff_sha256": "5148e34c02264fba393d2910437355e301cdd66464a9078595aa33b1e78faf38",
+    "source": "Two extraction bugs and one mismatch between code and docs.\n\n- Notebooks. `readcost check nb.ipynb` read the raw JSON as text, keys and all. A new `notebook` format reads the Markdown cells. With `comments = \"all\"` it also reads comments in code cells, using the kernel's language (`kernelspec.language`, else `language_info.name`). Outputs and raw cells are skipped. A small JSON reader built on the standard library keeps the offset of every string, so offsets, lines and columns point at the characters inside the `.ipynb` file. An escaped character maps to its whole escape. Bad JSON gives a note and no findings. The default `include` globs still leave notebooks out.\n- Languages. A suffix missing from `LANG_BY_EXT` fell through to `text`, so code was read as prose. This adds comment syntax for PHP, Lua, Haskell, Elixir, Julia, R, Dart, Zig and Perl (POD), each with the way it writes doc comments. It also adds a few extensions to the existing C and `#` families. Swift, Kotlin, Scala and shell were already there, and they keep their old rules. A list of other code extensions (`.lisp`, `.sql`, `.css`, ...) now gives a note and no findings. A file with no extension is read by its `#!` line. Prose in `.txt` files, or in files with no extension, is still read as text.\n- Inline comments. docs/research.md said findings in comments that `comments = \"all\"` reads are at info. The code kept each rule's own level (a stacked-nouns warn in a Python `#` comment, as the report found). I changed the code to match the docs, not the reverse. The research doc gives reasons for treating these comments as weaker, and the setting is opt-in, so default output does not change. A level set in config or a flag still wins. C-family and shell comments are read by default, so they keep their levels. The same table said `@param` lines are skipped in doc comments; they are not (checked on a Java fixture), so I corrected the docs there.\n- Also fixed: the `#!` line of a shell script was read as a comment.\n\nTests: `tests/test_formats.py`, made-up fixtures for each language, and notebook tests that check line and column in concise, LSP and SARIF output.\n\nNot sure about:\n- The comment readers use regular expressions, not a parser. Comment markers inside strings and nested block comments can be misread; docs/configuration.md lists the known cases.\n- The list of code extensions is a judgment call (`.d`, `.v` and `.m` each have more than one meaning).\n- No measurement supports the info level for inline comments. It follows the doc's reasons, not labelled data.",
+    "feedback": "readcost: 2 sentences in 403 words that may be hard to follow. These are questions, not errors: in a held-out test, model raters said an editor would fix few such findings. Change a sentence only if it reads badly to you, keep its meaning and facts, and leave the rest.\n- line 4 [inline-list] 9 items listed in one sentence. Is it hard to follow here? Raters said an editor would fix 5 of 100 such findings, and called 16 more optional. If it is, use a bulleted list.\n- line 4 [inline-list] 4 items listed in one sentence. Is it hard to follow here? Raters said an editor would fix 5 of 100 such findings, and called 16 more optional. If it is, use a bulleted list.\nreadcost: a finding is wrong? Report it at https://github.com/arclabs561/readcost/issues/new/choose",
+    "question": "A Python notebook has a Markdown cell, a Python comment in a code cell and text printed as output. Which of these does the default extraction read? Which additional text does comments = \"all\" read?",
+    "key": [
+      "Only the Markdown cell is read by default.",
+      "The code comment is added. Printed output is still skipped."
+    ],
+    "evidence": "test_notebook_code_cells_need_comments_all_and_outputs_are_skipped"
+  },
+  {
+    "case": "D",
+    "pr": 97,
+    "base": "d8c3e727665356c68cfede9f3ea9e451754bb1e5",
+    "head": "6af92432f1651c0fab6d0772523c022dfe887e4a",
+    "diff_sha256": "cfb30209b71b3f012aca899c6809bb4514df7ecd8042087b727dcce029402f14",
+    "source": "docs/evaluation.md (\"Agents editing in a loop\") found that agents fed readcost's feedback either fix the findings in one round or get stuck: they leave a finding they judge wrong while the hook repeats it, or they alternate between two wordings around it. The hooks re-checked and re-reported after every edit, and in block mode PreToolUse could deny the same finding again and again.\n\nWhat changes (default `hooks.repeat = \"once\"`; `\"always\"` keeps the old behaviour):\n\n- Claude Code PostToolUse reports only findings not yet reported for that file in this session, with one line counting the older ones it left out. If every finding is old, it says nothing.\n- In block mode a finding blocks or denies once. A repeat gets one advisory line instead. PreToolUse lets the same edit through on the next attempt, and the deny reason tells the model so. piku's PreToolUse follows the same rules.\n- A finding is its rule plus its flagged words, lowercased without punctuation, so it survives moving or rewording the text around it.\n- The key is `session_id`, else `transcript_path`, plus `agent_id` for a subagent. Without a session there is no memory and every report repeats, so findings are never hidden from a session the hook cannot identify.\n- State: one JSON file of hashes per session under `$XDG_CACHE_HOME/readcost/hooks` (or `READCOST_HOOK_STATE`), owner-only, written by rename, ignored and deleted after a day. Read or write errors are logged and the hook carries on without memory.\n- The Stop hook is unchanged: it already revises once per turn, and each turn is new text. git hooks and the generic protocol keep no memory.\n\nTests: `tests/test_hooks_repeat.py` uses made-up payloads for first report, silence on repeat, a reworded sentence keeping its finding, a new finding after a rewrite, block once, deny once followed by the PostToolUse note, Edit and Write sharing identities, a missing session id, `transcript_path`, session and subagent isolation, per-file isolation, `\"always\"`, five kinds of corrupted state, an unwritable state dir, stale state pruning, piku, and config validation. conftest points `READCOST_HOOK_STATE` at a temp dir so no test touches the real cache.\n\nNot measured: the agent loop in docs/evaluation.md was not rerun with this change. Uncertain: PreToolUse uses per-finding memory, not per-set memory, so an attempt that only drops findings already denied is allowed rather than denied again. Two hooks running at once can lose each other's update, which only means a repeat report.",
+    "feedback": "readcost: 3 sentences in 402 words that may be hard to follow. These are questions, not errors: in a held-out test, model raters said an editor would fix few such findings. Change a sentence only if it reads badly to you, keep its meaning and facts, and leave the rest.\n- line 1 [inline-list] 4 items listed in one sentence. Is it hard to follow here? Raters said an editor would fix 5 of 100 such findings, and called 16 more optional. If it is, use a bulleted list.\n- line 8 [reduced-object-relative] 'session hook identify': object relative without 'that'. Is it hard to follow here? Raters said an editor would fix 4 of 85 such findings, and called 39 more optional. If it is, keep the 'that', or turn it into a subject relative or a separate sentence.\n- line 12 [inline-list] 5 items listed in one sentence. Is it hard to follow here? Raters said an editor would fix 5 of 100 such findings, and called 16 more optional. If it is, use a bulleted list.\nreadcost: a finding is wrong? Report it at https://github.com/arclabs561/readcost/issues/new/choose",
+    "question": "A Claude Code advisory hook sees the same finding twice in the same file. There is no session_id. What happens on the second report if a stable transcript_path is supplied? What happens if neither identifier is supplied?",
+    "key": [
+      "With the same transcript path, the repeat is silent.",
+      "With neither identifier the finding is reported again."
+    ],
+    "evidence": "test_transcript_path_stands_in_for_session_id and test_without_a_session_every_report_repeats"
+  },
+  {
+    "case": "E",
+    "pr": 89,
+    "base": "07ba689da763373f8ac336c636591467b5a5af2d",
+    "head": "18f55ac0686468c0e9b71703d013bc0b4ae7b714",
+    "diff_sha256": "b8c1d8aa23a7236b1fc77465e539f351e53f685f4ba4d6d8567d56698c33dd7b",
+    "source": "#82 and #87 crossed: the stack-terms job still passed the setup action's removed `extras` input and ran bare `python`, which cannot import readcost after the move to uv. Each step now uses `uv run`. The job runs on this pull request because the workflow changed.",
+    "feedback": "readcost: 1 sentence in 46 words that may be hard to follow. These are questions, not errors: in a held-out test, model raters said an editor would fix few such findings. Change a sentence only if it reads badly to you, keep its meaning and facts, and leave the rest.\n- line 1 [hyphen-compound] coined compound modifier: 'stack-terms job'. Is it hard to follow here? Raters said an editor would fix 0 of 87 such findings, and called 42 more optional. If it is, write the relationship out.\nreadcost: a finding is wrong? Report it at https://github.com/arclabs561/readcost/issues/new/choose",
+    "question": "When porting another step of the stack-terms job, what should replace bare python for running a project script? Should the setup action still receive extras: test?",
+    "key": [
+      "Invoke the script with uv run. The spelling uv run python also conveys the intended environment.",
+      "Remove the extras input from the setup action."
+    ],
+    "evidence": ".github/workflows/eval.yml, shared setup and List the stacks to count"
+  },
+  {
+    "case": "F",
+    "pr": 83,
+    "base": "18f55ac0686468c0e9b71703d013bc0b4ae7b714",
+    "head": "468cbf6499e920c60e7263df3a6f71f23691ac14",
+    "diff_sha256": "3f17e9394d33acaee1e377e82aef2c8ec24f5fa3db72a1b2c2cf5bc47e1dc87b",
+    "source": "Experiment pull request. It adds an eval job and records the results; it changes no default behaviour.\n\nQuestion: readcost's sentence constructions show no reader cost in any test so far. Do the patterns people complain about in model text (contrast framing, lists of three, restatement, uniform structure) track readers instead?\n\n- `src/readcost/patterns.py`: detectors that read the parse and closed-class words, with no phrase lists. Nothing in readcost imports it; a test checks that.\n- `scripts/eval_patterns.py` and the `patterns` job: rates for people and models writing to the same prompt (HAP-E, HC3), and tests against writers' edits and scores of model paragraphs (LAMP), users' preferences between two model answers (two Chatbot Arena sets) and reading times (EMTeC, OneStop, Provo). Construction findings go through the same tests with the same controls.\n\nResults (docs/evaluation.md, \"Discourse patterns and redundancy\"):\n- Instruction-tuned models write 2 to 4 times as many contrasts as the people they continue (GPT-4o 2.49 against 0.67 per 1,000 words). The base model does not.\n- No counted pattern tracks any reader outcome once length and word frequency are held.\n- Uniform sentence length, repeated openers and compressibility go with lower preference or more editing in three sets of model-only text, |rho| 0.06 to 0.12, with no multiple-comparison correction.\n- Construction findings add at most 0.001 variance explained anywhere.\n\nRecommendation: add none of the patterns, and keep the uniformity measures out until a test chosen in advance repeats them on technical text. The README's claim that findings mark sentences that cost readers time needs restating; that is a separate change.\n\nUncertain: no technical documentation in any reader set; about 20 measures against 9 outcomes, uncorrected.",
+    "feedback": "readcost: 2 sentences in 250 words that may be hard to follow. These are questions, not errors: in a held-out test, model raters said an editor would fix few such findings. Change a sentence only if it reads badly to you, keep its meaning and facts, and leave the rest.\n- line 3 [inline-list] 4 items listed in one sentence. Is it hard to follow here? Raters said an editor would fix 5 of 100 such findings, and called 16 more optional. If it is, use a bulleted list.\n- line 3 [reduced-object-relative] 'patterns people complain': object relative without 'that'. Is it hard to follow here? Raters said an editor would fix 4 of 85 such findings, and called 39 more optional. If it is, keep the 'that', or turn it into a subject relative or a separate sentence.\nreadcost: a finding is wrong? Report it at https://github.com/arclabs561/readcost/issues/new/choose",
+    "question": "After this experiment, will an ordinary readcost check warn on the new discourse patterns? What was the largest gain in variance explained from adding the existing construction findings to the controls?",
+    "key": [
+      "No. The new pattern detectors run in the experiment and are outside the default checks.",
+      "At most 0.001 (one tenth of a percentage point)."
+    ],
+    "evidence": "test_default_rules_do_not_report_the_patterns and docs/evaluation.md, Discourse patterns and redundancy"
+  },
+  {
+    "case": "G",
+    "pr": 82,
+    "base": "1d46e19f4c2a12b17bd92657a7689042fa724302",
+    "head": "07ba689da763373f8ac336c636591467b5a5af2d",
+    "diff_sha256": "488f342d15ad0768a207ff69e798522ae943401e54250781f25b048e095b20df",
+    "source": "Experiment; it changes no rule. It adds a `stack-terms` job to the eval workflow, two scripts, and the result in docs/evaluation.md (\"Noun stacks: established term or coined?\").\n\nWhy: stacked-nouns and hyphen-compound report established terms (`goroutine call stack`, `thread-state API`) as readily as coined stacks. The idea was to use word-pair counts to decide whether a stack is an attested term.\n\nWhat was measured (job run of 18 Nov, one FineWeb-Edu shard, 799,175 documents):\n\n- The shipped pair data cannot do this. `hyphen_pairs.txt.gz` holds hyphenated pairs only, without counts, so `scripts/build_open_pairs.py` counts open pairs (\"call stack\") instead.\n- Labelled findings: 27 distinct stacked-nouns stacks (15 bench, 18 sample; 10 accepted, 37%, 95% interval 22 to 56) and 25 hyphen-compound (14 bench, 13 sample; 6 accepted, 24%, 11 to 43).\n- Pair attestation does not separate accepted from rejected: AUC 0.58 and 0.53 for the weakest pair's PMI. \"Every adjacent pair in 20+ documents with PMI 3+\" drops 1 of 10 accepted and 4 of 17 rejected. Raters accepted stacks made of common pairs (\"core team member\").\n- Bracketing by pair strength (adjacency or dependency model) predicts nothing.\n- Recurrence in the document does not help; accepted stacks recur too.\n- The whole stack as a phrase in 20+ documents drops 0 of 10 accepted and 3 of 17 rejected (precision 37% to 42%, intervals 22 to 56 and 24 to 61). That is the only candidate with no accepted loss, and three findings prove nothing.\n- Web text holds none of the Go and CPython terms that cause the false positives.\n\nSo no exemption or setting is added. docs/research.md has the design for the human-label study: sample by evidence group, count in technical text too, ask raters whether the phrase is a known term, and the thresholds decided beforehand.\n\nUncertain: every label is a model rater's or one maintainer's; the sample join covers only findings the current rules still report; PMI uses a pair's document count as its frequency.\n\nAlso: `scripts/fetch_rulebench.py` now writes each source's sentences to `documents.jsonl`, which the recurrence test reads.",
+    "feedback": "readcost: 2 sentences in 304 words that may be hard to follow. These are questions, not errors: in a held-out test, model raters said an editor would fix few such findings. Change a sentence only if it reads badly to you, keep its meaning and facts, and leave the rest.\n- line 3 [hyphen-compound] coined compound modifier: 'hyphen-compound report'. Is it hard to follow here? Raters said an editor would fix 0 of 87 such findings, and called 42 more optional. If it is, write the relationship out.\n- line 17 [reduced-object-relative] 'findings rules report': object relative without 'that'. Is it hard to follow here? Raters said an editor would fix 4 of 85 such findings, and called 39 more optional. If it is, keep the 'that', or turn it into a subject relative or a separate sentence.\nreadcost: a finding is wrong? Report it at https://github.com/arclabs561/readcost/issues/new/choose",
+    "question": "Suppose a reviewer exempts a whole noun stack when the complete phrase appears in at least 20 documents. In the labelled stacked-nouns sample, how many accepted findings would the exemption drop? How many rejected findings would it drop?",
+    "key": [
+      "Zero of the ten accepted findings.",
+      "Three of the seventeen rejected findings. Correct counts suffice."
+    ],
+    "evidence": "docs/evaluation.md, row whole stack in 20+ documents"
+  },
+  {
+    "case": "H",
+    "pr": 80,
+    "base": "da6c85f476addb77595b7f7208924bf7686dfad1",
+    "head": "2fd2f8b314c375cf570aeb2d6a15e06d4e8d215a",
+    "diff_sha256": "d9111be0789ad2acc5185f4b60db442f18c39cef7abdb9b7b95f0a626282a0a7",
+    "source": "The three workflows each installed readcost a different way and cached nothing.\n\nA shared `.github/actions/setup` now installs Python and readcost with the pip cache and keeps the spaCy model in the Actions cache. The eval job caches the per-text reading times it builds from the OSF downloads, so a rerun downloads nothing. CI cancels a superseded run on a pull request, and one Python version failing no longer cancels the other.\n\n`CLAUDE.md` records the convention for evaluation jobs: download under `ref/`, cache by a key that names the data, write to the run summary, gate nothing.\n\nThe first run on this pull request fills the caches; a rerun shows the saving.",
+    "feedback": "readcost: 1 sentence in 112 words that may be hard to follow. These are questions, not errors: in a held-out test, model raters said an editor would fix few such findings. Change a sentence only if it reads badly to you, keep its meaning and facts, and leave the rest.\n- line 3 [stacked-nouns] 3 nouns stacked: 'text reading times'. Is it hard to follow here? Raters said an editor would fix 0 of 100 such findings, and called 36 more optional. If it is, keep at most two nouns together. Unpack the rest with a preposition or a relative clause, if the result reads naturally; leave an established term as it is.\nreadcost: a finding is wrong? Report it at https://github.com/arclabs561/readcost/issues/new/choose",
+    "question": "A new commit arrives while CI is running for the same pull request. What happens to the older run? Within the new run, what happens to the other Python version if one version fails?",
+    "key": [
+      "The superseded pull-request run is cancelled.",
+      "The other Python version continues because matrix fail-fast is disabled."
+    ],
+    "evidence": ".github/workflows/ci.yml, concurrency and fail-fast"
+  },
+  {
+    "case": "I",
+    "pr": 33,
+    "base": "7dfea29a3a5651becbfad9b00203508d54d53e8a",
+    "head": "7906d0aa1010993aedfcf44087111968c479df31",
+    "diff_sha256": "e6253adf155e6968c9a9cc255b3ccd7e477630ee061c9f5d3dcc1eaf5ec0c261",
+    "source": "rust-lang/rust#123 was read as the coined compound 'rust-lang'. Found on PR descriptions; hyphen-compound findings there fall from 2.11 to 0.72 per 1k words.",
+    "feedback": "readcost: 1 sentence in 22 words that may be hard to follow. These are questions, not errors: in a held-out test, model raters said an editor would fix few such findings. Change a sentence only if it reads badly to you, keep its meaning and facts, and leave the rest.\n- line 1 [hyphen-compound] coined compound modifier: 'hyphen-compound findings'. Is it hard to follow here? Raters said an editor would fix 0 of 87 such findings, and called 42 more optional. If it is, write the relationship out.\nreadcost: a finding is wrong? Report it at https://github.com/arclabs561/readcost/issues/new/choose",
+    "question": "How is rust-lang/rust#123 treated when the text is checked? A separate coined compound in the same sentence would normally be flagged. Can the rule still flag that compound?",
+    "key": [
+      "The entire issue reference counts as one word, so its rust-lang prefix is not treated as a coined compound.",
+      "Yes. A separate coined compound can still be reported."
+    ],
+    "evidence": "test_issue_references_are_single_words and test_a_coined_compound_next_to_an_issue_reference_is_still_reported"
+  },
+  {
+    "case": "J",
+    "pr": 25,
+    "base": "97fa89a0155ef98fbfabbe07ecc5a3cc6999202a",
+    "head": "3f07279400afdc32aa781d92ac8c89a2be686224",
+    "diff_sha256": "dbea5aa1fe0b585494d1190395f12db2b8921fe36aad298682a6dcd03a191876",
+    "source": "Adds a tag-triggered publish workflow (trusted publishing, environment `pypi`, refuses a tag that does not match `__version__` or a commit without green CI), dynamic version, PyPI metadata, absolute README links (tested), the uvx/pip install section, and CHANGELOG.md for 0.2.0.\n\nPublishing needs a pending trusted publisher on pypi.org first: project `readcost`, owner `arclabs561`, repository `readcost`, workflow `publish.yml`, environment `pypi`.",
+    "feedback": "readcost: 1 sentence in 57 words that may be hard to follow. These are questions, not errors: in a held-out test, model raters said an editor would fix few such findings. Change a sentence only if it reads badly to you, keep its meaning and facts, and leave the rest.\n- line 1 [inline-list] 5 items listed in one sentence. Is it hard to follow here? Raters said an editor would fix 5 of 100 such findings, and called 16 more optional. If it is, use a bulleted list.\nreadcost: a finding is wrong? Report it at https://github.com/arclabs561/readcost/issues/new/choose",
+    "question": "A maintainer pushes a version tag. Which two checks on the tag and the commit must pass before the workflow can publish?",
+    "key": [
+      "The version in the tag must match readcost.__version__ (allow the leading v).",
+      "CI must already have passed on the exact tagged commit."
+    ],
+    "evidence": ".github/workflows/publish.yml, Require green CI on this commit and tag/version comparison"
+  },
+  {
+    "case": "K",
+    "pr": 15,
+    "base": "30631c7dd2cc88c5cfea3edb5cb75b6ae32e8b55",
+    "head": "28ef4fce7f265c60f1ffe3883957252144819278",
+    "diff_sha256": "4b3370992b1f6d1b01f4118371f36d109e09d7fb0f953fb98ae0af1700d07f74",
+    "source": "Eight more model families (Kimi, Gemini, DeepSeek, Grok, Mistral, GLM, Llama, MiniMax) labelled the 210-finding sample blind, alongside Claude and Codex. Agreement is moderate (Fleiss kappa 0.40 for eight raters; Llama 4 Maverick and MiniMax M3 are lenient outliers). The majority confirms the low base rate, 2 of 210 correct, but disagrees with one of my precision fixes. Lists of short items are the findings it accepts most, and the short-items rule had dropped them. This reverts that rule; the share of reported findings the majority accepts goes from 14.3% to 20.0%. Locally: pytest 274 passed, and both self-check gates pass.",
+    "feedback": "readcost: 2 sentences in 95 words that may be hard to follow. These are questions, not errors: in a held-out test, model raters said an editor would fix few such findings. Change a sentence only if it reads badly to you, keep its meaning and facts, and leave the rest.\n- line 1 [inline-list] 7 items listed in one sentence. Is it hard to follow here? Raters said an editor would fix 5 of 100 such findings, and called 16 more optional. If it is, use a bulleted list.\n- line 1 [reduced-object-relative] 'findings majority accepts': object relative without 'that'. Is it hard to follow here? Raters said an editor would fix 4 of 85 such findings, and called 39 more optional. If it is, keep the 'that', or turn it into a subject relative or a separate sentence.\nreadcost: a finding is wrong? Report it at https://github.com/arclabs561/readcost/issues/new/choose",
+    "question": "After this change, can a list made up of short prose items trigger inline-list? What happened to the share of the reported sample findings that the majority accepted when the short-item exemption was removed?",
+    "key": [
+      "Yes. Lists of short prose items can trigger the rule again.",
+      "The share rose from 14.3% to 20% (9/63 to 15/75 is equivalent)."
+    ],
+    "evidence": "test_list_of_short_items_is_still_an_inline_list and docs/evaluation.md, short-items rule reverted"
+  },
+  {
+    "case": "L",
+    "pr": 8,
+    "base": "20199a97e40623016fc9c960cdc6bc8d791e52d9",
+    "head": "4a62a7ddc4f64fb49d38f39ce4d37b5405a9538f",
+    "diff_sha256": "ecfd5486b55bda7d6bda0b2ac22e337866afe8ad484c3e1de55381a6448117b6",
+    "source": "Adds scripts that fetch a pinned evaluation corpus (13 essayists, language and framework docs, Hacker News and Stack Overflow answers, CPython and Rust std source, plus 42 READMEs and 1,000 Go commit messages) and score it offline. `docs/evaluation.md` reports the results.\n\nMain result: of 210 sampled findings on this text, 3 are correct and 33 are correct or defensible. These labels come from one automated rater, with no second rater, and the texts were chosen for their clarity, so the result says where the rules break rather than how they do on model output. Causes, in order of volume:\n- reduced object relatives with a pronoun subject (\"someone I trust\")\n- settled and phrasal verbs counted as denominal (\"figure out\", \"scale\")\n- comma counts read as inline lists\n- verbs that normally take inanimate subjects (\"the line feels\")\n- names in front of a noun counted as stacked nouns\n\nThe doc ranks 14 rule changes by how many findings each removes. They were simulated as filters, and none dropped a correct finding. They will land in follow-up PRs.\n\nFetched text goes under the ignored `ref/` directory; only derived statistics are in the repository.",
+    "feedback": "readcost: 1 sentence in 177 words that may be hard to follow. These are questions, not errors: in a held-out test, model raters said an editor would fix few such findings. Change a sentence only if it reads badly to you, keep its meaning and facts, and leave the rest.\n- line 1 [inline-list] 8 items listed in one sentence. Is it hard to follow here? Raters said an editor would fix 5 of 100 such findings, and called 16 more optional. If it is, use a bulleted list.\nreadcost: a finding is wrong? Report it at https://github.com/arclabs561/readcost/issues/new/choose",
+    "question": "A teammate proposes using the reported precision on 210 findings to predict accuracy on everyday model output. Who labelled this sample, and how were the source texts chosen?",
+    "key": [
+      "One automated rater (Claude). The model name is optional.",
+      "The source texts were selected for clarity or well-regarded writing, so they are not a representative draw of everyday model output."
+    ],
+    "evidence": "docs/evaluation.md, The rater is Claude and Read the precision column against the selection"
+  }
+]
