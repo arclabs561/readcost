@@ -564,7 +564,6 @@ def _cmd_lsp(args) -> int:
 
 
 def _cmd_label_export(args) -> int:
-    import json
 
     from . import labels
     from .engine import Analyzer
@@ -595,7 +594,7 @@ def _cmd_label_export(args) -> int:
     sheet = Path(args.output)
     key = Path(args.key) if args.key else sheet.with_suffix(".key.jsonl")
     sheet.write_text(labels.dump_sheet(rows, "jsonl" if sheet.suffix == ".jsonl" else "csv"), encoding="utf-8")
-    key.write_text("".join(json.dumps(k, ensure_ascii=False) + "\n" for k in keys), encoding="utf-8")
+    key.write_text("".join(labels.json_line(k) + "\n" for k in keys), encoding="utf-8")
     by_rule: dict[str, int] = {}
     for f in picked:
         by_rule[f.feature] = by_rule.get(f.feature, 0) + 1

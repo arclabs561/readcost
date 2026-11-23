@@ -134,6 +134,12 @@ def loads(text: str, source: str = "<labels>") -> list[Label]:
     return out
 
 
+def json_line(row: dict, *, sort_keys: bool = False) -> str:
+    """Keep Unicode prose readable and escape surrogate-encoded filesystem bytes in JSON."""
+    text = json.dumps(row, ensure_ascii=False, sort_keys=sort_keys)
+    return text.encode("utf-8", "backslashreplace").decode("utf-8")
+
+
 def dumps(labels: Iterable[Label]) -> str:
     """JSONL, one label per line, without the optional fields that are empty."""
     lines = []
@@ -143,7 +149,7 @@ def dumps(labels: Iterable[Label]) -> str:
         for key in ("text", "finding"):
             if not row[key]:
                 del row[key]
-        lines.append(json.dumps(row, ensure_ascii=False, sort_keys=True))
+        lines.append(json_line(row, sort_keys=True))
     return "".join(line + "\n" for line in lines)
 
 
@@ -337,7 +343,7 @@ def sample(findings: list, n: int, seed: int = 0) -> list:
 
 
 def _item_id(doc: str, version: str, start: int, end: int, rule: str) -> str:
-    return hashlib.sha256(f"{doc}\t{version}\t{start}\t{end}\t{rule}".encode()).hexdigest()[:12]
+    return hashlib.sha256(f"{doc}\t{version}\t{start}\t{end}\t{rule}".encode("utf-8", "surrogateescape")).hexdigest()[:12]
 
 
 def marked_sentence(source: str, f) -> str:
