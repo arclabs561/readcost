@@ -3,6 +3,7 @@
 import csv
 import io
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -331,3 +332,17 @@ def test_definition_covers_every_rule():
 
     assert all(labels.definition(rule) and labels.definition(rule) != rule for rule in FEATURES)
     assert labels.definition("stacked-nouns").startswith("three or more nouns")
+
+@pytest.mark.skipif(os.name != "posix", reason="requires POSIX filesystem bytes")
+def test_label_export_and_import_round_trip_undecodable_filename(tmp_path):
+    source = tmp_path / os.fsdecode(b"notes-\xff.md")
+    source.write_text(DOC, encoding="utf-8")
+    sheet, out = tmp_path / "sheet.jsonl", tmp_path / "ratings.jsonl"
+    assert main(["label", "export", str(tmp_path), "-o", str(sheet), "-n", "1"]) == 0
+    row = json.loads(sheet.read_text(encoding="utf-8"))
+    row["label"] = "correct"
+    sheet.write_text(json.dumps(row) + "\n", encoding="utf-8")
+    assert main(["label", "import", str(sheet), "--rater", "test", "-o", str(out)]) == 0
+    [label] = labels.read(out)
+    assert os.fsencode(label.doc) == os.fsencode(source)
+    assert source.read_text(encoding="utf-8")[label.start:label.end] == label.text
